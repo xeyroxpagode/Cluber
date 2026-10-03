@@ -30,7 +30,7 @@ import {
 import { Restricted } from "./management"
 
 export function MorePage() {
-  const { capabilities, actor } = useProduct()
+  const { capabilities, actor, state } = useProduct()
   return (
     <>
       <Header
@@ -68,14 +68,19 @@ export function MorePage() {
             icon={<Trophy size={20} className="text-primary" />}
           />
         )}
-        {(capabilities.sport || capabilities.official) && (
-          <RowLink
-            to="/jornadas/j1"
-            title="Jornadas"
-            detail="Coordinación de partidos"
-            icon={<Users size={20} className="text-primary" />}
-          />
-        )}
+        {(capabilities.sport || capabilities.official) &&
+          (state.jornadas.length > 0 || capabilities.sport) && (
+            <RowLink
+              to={state.jornadas[0] ? `/jornadas/${state.jornadas[0].id}` : "/jornadas/new"}
+              title="Jornadas"
+              detail={
+                state.jornadas[0]
+                  ? `${state.jornadas[0].name} · ${state.jornadas[0].events.length} partidos`
+                  : "Coordinación de partidos · Crear la primera"
+              }
+              icon={<Users size={20} className="text-primary" />}
+            />
+          )}
         {capabilities.management && (
           <RowLink
             to="/audit"

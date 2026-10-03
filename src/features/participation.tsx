@@ -23,6 +23,7 @@ import {
   type AttendanceValue,
   type PlayerStat,
 } from "../mock/model"
+import { stateText } from "../shared/states"
 import {
   Header,
   Surface,
@@ -85,10 +86,9 @@ export function AvailabilityPage() {
             <h2 className="text-base font-semibold">¿Podés participar?</h2>
             {stale && (
               <Alert>
-                <strong>Necesita reconfirmación</strong>
+                <strong>El horario cambió desde tu última respuesta.</strong>
                 <p className="mt-1">
-                  El evento cambió desde tu última respuesta. Tu respuesta
-                  anterior fue {labels[previous.value]}. Confirmá nuevamente
+                  Respuesta anterior: {stateText(previous.value)}. Confirmá nuevamente
                   para este horario.
                 </p>
               </Alert>
@@ -96,7 +96,7 @@ export function AvailabilityPage() {
             {previous && !stale && (
               <p className="text-xs text-muted-foreground">
                 Tu última respuesta confirmada:{" "}
-                <strong>{labels[previous.value]}</strong>
+                <strong>{stateText(previous.value)}</strong>
               </p>
             )}
             <div className="grid grid-cols-3 gap-3">
@@ -118,7 +118,7 @@ export function AvailabilityPage() {
                   ) : (
                     <HelpCircle size={20} />
                   )}
-                  {labels[value]}
+                  {stateText(value)}
                 </button>
               ))}
             </div>

@@ -42,8 +42,14 @@ function sectionActive(to: string, path: string) {
   return (children[to] || []).some((prefix) => path.startsWith(prefix))
 }
 export function Shell() {
-  const { state, actor, toastMessage, capabilities, authenticated, hasAccess } =
+  const { state, actor, toastMessage, capabilities, authenticated, hasAccess, guardianChildren } =
     useProduct()
+  const visibleNav = nav.filter((item) => {
+    if (item.to === "/communication" && !capabilities.chat && guardianChildren.length === 0)
+      return true
+    if (item.to === "/communication" && !capabilities.chat) return false
+    return true
+  })
   const location = useLocation()
   const unread = state.notifications.filter(
     (item) => !noticeRead(actor, item) && canReadNotice(actor, item),
@@ -100,7 +106,7 @@ export function Shell() {
           <CalendarDays size={13} className="text-muted-foreground" />
         </div>
         <nav className="space-y-1 px-3">
-          {nav.map(({ to, label, icon: Icon }) => (
+          {visibleNav.map(({ to, label, icon: Icon }) => (
             <NavLink
               key={to}
               to={to}
@@ -203,7 +209,7 @@ export function Shell() {
             <span className="mx-2 hidden h-5 w-px bg-border sm:block" />
             <Link
               to="/notifications"
-              aria-label={`Notificaciones, ${unread} sin leer`}
+              aria-label={`Avisos, ${unread} sin leer`}
               className="relative rounded-lg p-2.5 text-muted-foreground hover:bg-muted"
             >
               <Bell size={19} />
@@ -257,7 +263,7 @@ export function Shell() {
         aria-label="Navegación principal"
         className="fixed inset-x-0 bottom-0 z-30 flex border-t border-border bg-card pb-[env(safe-area-inset-bottom)] lg:hidden"
       >
-        {nav.map(({ to, label, icon: Icon }) => (
+        {visibleNav.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}

@@ -401,7 +401,7 @@ export function ConversationPage() {
                 : "Grupo"
         } · ${conversation.participants.length} participantes`}
       />
-      <Surface className="flex h-[calc(100dvh-280px)] min-h-[420px] max-w-4xl flex-col">
+      <Surface className="flex min-h-[60dvh] max-w-4xl flex-col lg:h-[calc(100dvh-280px)] lg:min-h-[420px]">
         <div className="flex-1 overflow-y-auto px-4 py-5 sm:px-7">
           <div className="mb-6 text-center">
             <Button
@@ -534,7 +534,7 @@ export function ConversationPage() {
             event.preventDefault()
             send()
           }}
-          className="flex items-center gap-3 border-t border-border p-4"
+          className="sticky bottom-0 flex items-center gap-3 border-t border-border bg-card p-4"
         >
           <input
             aria-label="Mensaje"
@@ -869,8 +869,8 @@ export function Notifications() {
   return (
     <>
       <Header
-        title="Notificaciones"
-        description="Cambios importantes y comunicaciones oficiales."
+        title="Avisos"
+        description="Qué cambió que te afecta. Sin lista de registros: sólo lo que requiere mirar."
         action={
           <Button
             variant="secondary"
@@ -926,14 +926,16 @@ export function Notifications() {
                 navigate(notice.route)
               }}
               className={`flex w-full items-start gap-4 border-b border-border p-5 text-left last:border-0 hover:bg-muted ${
-                !noticeRead(actor, notice) ? "bg-primary-soft/30" : ""
+                !noticeRead(actor, notice)
+                  ? "bg-primary-soft/30 font-semibold"
+                  : "text-muted-foreground"
               }`}
             >
               <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary-soft text-primary">
                 <Bell size={17} />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block text-xs font-semibold">
+                <span className="block text-xs font-semibold text-foreground">
                   {notice.title}
                 </span>
                 <span className="mt-1.5 block text-xs leading-relaxed text-muted-foreground">
@@ -954,7 +956,7 @@ export function Notifications() {
           title="Estás al día"
           detail={
             filter === "unread"
-              ? "No tenés notificaciones sin leer."
+              ? "No tenés avisos sin leer."
               : "Los cambios importantes aparecerán acá."
           }
         />

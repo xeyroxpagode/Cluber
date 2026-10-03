@@ -20,9 +20,17 @@ import {
   Mail,
 } from "lucide-react"
 import { useProduct } from "../mock/store"
-import { dateLabel, eventName, labels, availabilityLabel } from "../mock/model"
+import {
+  dateLabel,
+  eventName,
+  labels,
+  availabilityLabel,
+  eventTargetsText,
+} from "../mock/model"
+import { currentRoles } from "../mock/permissions"
 import { todayIso, todayLabel } from "../mock/clock"
 import { deriveEligibility } from "../mock/eligibility"
+import { stateText } from "../shared/states"
 import { VasInline } from "../shared/vas"
 import {
   Header,
@@ -41,7 +49,7 @@ import {
 } from "../shared/ui"
 
 export function Home() {
-  const { state, actor, capabilities } = useProduct()
+  const { state, actor, capabilities, guardianChildren } = useProduct()
   const myTeam = state.teams.find((team) => team.id === actor.team)
   const teamRoster = state.people.filter(
     (person) =>
@@ -158,6 +166,27 @@ export function Home() {
         <span className="mx-1 size-1 rounded-full bg-border" />
         <span>{labels[actor.role]}</span>
       </div>
+      {guardianChildren.length === 1 && (
+        <p role="status" className="gei-body mb-5 text-muted-foreground">
+          Viendo a {state.people.find((p) => p.id === guardianChildren[0])?.name}
+        </p>
+      )}
+      {guardianChildren.length > 1 && (
+        <label className="mb-5 block max-w-xs text-xs font-medium">
+          <span className="gei-meta">Viendo a</span>
+          <select
+            aria-label="Viendo a"
+            className="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2.5 text-[13px]"
+            defaultValue={guardianChildren[0]}
+          >
+            {guardianChildren.map((id) => (
+              <option key={id} value={id}>
+                {state.people.find((p) => p.id === id)?.name ?? id}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
       <div
         className={`grid items-start gap-8 ${
           actor.team ? "xl:grid-cols-[minmax(0,1fr)_300px]" : ""
@@ -404,11 +433,12 @@ function MessageIcon() {
 
 export function Calendar() {
   const { state, capabilities, actor } = useProduct()
-  const [month, setMonth] = useState(9)
-  const [year, setYear] = useState(2026)
+  const now = new Date(`${todayIso()}T12:00:00`)
+  const [month, setMonth] = useState(now.getMonth())
+  const [year, setYear] = useState(now.getFullYear())
   const [team, setTeam] = useState(actor.team || "all")
   const [type, setType] = useState("all")
-  const [view, setView] = useState("month")
+  const [view, setView] = useState("agenda")
   const events = state.events.filter(
     (event) =>
       event.state !== "DRAFT" &&
@@ -457,8 +487,8 @@ export function Calendar() {
           <Button
             variant="secondary"
             onClick={() => {
-              setMonth(9)
-              setYear(2026)
+              setMonth(now.getMonth())
+              setYear(now.getFullYear())
             }}
           >
             Hoy
@@ -512,7 +542,7 @@ export function Calendar() {
             Club
           </span>
         </div>
-        <div className="hidden gap-1 rounded-lg border border-border bg-card p-1 md:flex">
+        <div className="flex gap-1 rounded-lg border border-border bg-card p-1">
           <IconButton label="Mes" onClick={() => setView("month")}>
             <Grid3X3 size={16} />
           </IconButton>
@@ -574,8 +604,14 @@ export function Calendar() {
                         </span>
                         <span className="mt-0.5 block opacity-65">
                           {event.state === "SCHEDULED"
-                            ? "Sexta A"
-                            : labels[event.state]}
+                            ? event.clubWide
+                              ? "Todo hockey"
+                              : eventTargetsText(
+                                  event,
+                                  (id) =>
+                                    state.teams.find((t) => t.id === id)?.name ?? "Equipo",
+                                )
+                            : stateText(event.state)}
                         </span>
                       </Link>
                     ))}
@@ -629,7 +665,7 @@ export function Teams() {
             detail={`${team.division} · Línea ${team.line} · ${state.people.filter((person) => person.team === team.id && ["PLAYER", "CAPTAIN"].includes(person.role)).length} jugadoras`}
             icon={
               <span className="flex size-12 items-center justify-center rounded-lg bg-primary-soft text-base font-bold text-primary">
-                {team.division.slice(0, 1)}A
+                {team.line}
               </span>
             }
             aside={<Badge value={team.state} />}
@@ -722,12 +758,30 @@ export function TeamDetail() {
           <div className="space-y-6">
             <Section title="Cuerpo técnico">
               <Surface>
-                <RowLink
-                  to="/people/coach"
-                  title="Tomás Beltrán"
-                  detail="Entrenador"
-                  icon={<Avatar name="Tomás Beltrán" blue />}
-                />
+                {state.people
+                  .filter((person) =>
+                    currentRoles(person).some(
+                      (a) => a.role === "COACH" && a.scope === "TEAM" && a.target === team.id,
+                    ),
+                  )
+                  .map((coach) => (
+                    <RowLink
+                      key={coach.id}
+                      to={`/people/${coach.id}`}
+                      title={coach.name}
+                      detail="Entrenador o entrenadora"
+                      icon={<Avatar name={coach.name} blue />}
+                    />
+                  ))}
+                {!state.people.some((person) =>
+                  currentRoles(person).some(
+                    (a) => a.role === "COACH" && a.scope === "TEAM" && a.target === team.id,
+                  ),
+                ) && (
+                  <p className="p-5 text-xs text-muted-foreground">
+                    Sin cuerpo técnico asignado a este equipo.
+                  </p>
+                )}
               </Surface>
             </Section>
             <Section title="Próximos eventos">

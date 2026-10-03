@@ -30,6 +30,8 @@ import {
 import { getAllowedActions } from "../mock/authority"
 import { deriveEligibility } from "../mock/eligibility"
 import { VasInline } from "../shared/vas"
+import { ScopeDialog, type SeriesScope } from "../shared/patterns"
+import { todayIso, addDays } from "../mock/clock"
 import {
   Header,
   Surface,
@@ -743,7 +745,7 @@ export function EventForm() {
   const [draft, setDraft] = useState({
     title: event?.title || "",
     team: event?.team || actor.team || "sexta",
-    date: event?.date || "2026-10-10",
+    date: event?.date || addDays(todayIso(), 7),
     time: event?.time || "18:00",
     end: event?.end || "19:30",
     venue: event?.venue || "GEI · Cancha de hockey",
@@ -757,9 +759,14 @@ export function EventForm() {
     clubWide: event?.clubWide || false,
   })
   const [preview, setPreview] = useState(false)
+  const [scope, setScope] = useState<SeriesScope | null>(null)
+  const [askScope, setAskScope] = useState(false)
   const [pending, setPending] = useState(false)
   const [error, setError] = useState("")
   const baselineVersion = useState(event?.version || 1)[0]
+  const seriesCount = event?.seriesId
+    ? state.events.filter((e) => e.seriesId === event.seriesId).length
+    : 1
   if (
     (!capabilities.sport && !capabilities.official) ||
     (!isNew &&
@@ -803,6 +810,10 @@ export function EventForm() {
       return
     }
     if (event && material && event.state !== "DRAFT" && !confirmed) {
+      if (event.seriesId && !scope) {
+        setAskScope(true)
+        return
+      }
       setPreview(true)
       return
     }
@@ -1074,6 +1085,16 @@ export function EventForm() {
           </Button>
         </div>
       </div>
+      {askScope && event?.seriesId && (
+        <ScopeDialog
+          onClose={() => setAskScope(false)}
+          onPick={(value: SeriesScope) => {
+            setScope(value)
+            setAskScope(false)
+            setPreview(true)
+          }}
+        />
+      )}
       {preview && event && (
         <Modal
           title="Revisar cambio del evento"
@@ -1093,6 +1114,16 @@ export function EventForm() {
             </>
           }
         >
+          {event.seriesId && scope && (
+            <p className="gei-body mb-3 text-muted-foreground">
+              Alcance:{" "}
+              {scope === "ONLY_THIS"
+                ? `Solo este evento (1 de ${seriesCount}).`
+                : scope === "THIS_AND_FOLLOWING"
+                  ? "Este y los siguientes de la serie."
+                  : `Toda la serie (${seriesCount} eventos).`}
+            </p>
+          )}
           <ImpactContent
             event={event}
             patch={patch}
