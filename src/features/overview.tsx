@@ -21,6 +21,9 @@ import {
 } from "lucide-react"
 import { useProduct } from "../mock/store"
 import { dateLabel, eventName, labels, availabilityLabel } from "../mock/model"
+import { todayIso, todayLabel } from "../mock/clock"
+import { deriveEligibility } from "../mock/eligibility"
+import { VasInline } from "../shared/vas"
 import {
   Header,
   Section,
@@ -49,13 +52,14 @@ export function Home() {
     (event) =>
       event.team === actor.team || event.clubWide || capabilities.official,
   )
+  const todayIsoValue = todayIso()
   const today = scope.filter(
-    (event) => event.date === "2026-10-02" && event.state === "SCHEDULED",
+    (event) => event.date === todayIsoValue && event.state === "SCHEDULED",
   )
   const upcoming = scope
     .filter(
       (event) =>
-        event.date > "2026-10-02" &&
+        event.date > todayIsoValue &&
         !["CANCELLED", "DRAFT"].includes(event.state),
     )
     .sort((first, second) => first.date.localeCompare(second.date))
@@ -81,12 +85,12 @@ export function Home() {
         kind: "time",
         action: capabilities.availability ? "Reconfirmar" : "Ver partido",
       })
-    const conflicts = (event.published || []).filter(
-      (id) =>
-        state.people.find((person) => person.id === id)?.eligibility !==
-          "ELIGIBLE" ||
-        state.people.find((person) => person.id === id)?.team !== event.team,
-    )
+    const conflicts = (event.published || []).filter((id) => {
+      const person = state.people.find((p) => p.id === id)
+      if (!person) return true
+      if (deriveEligibility(state.eligibilityConstraints, id) !== "ELIGIBLE") return true
+      return person.team !== event.team
+    })
     if (conflicts.length && capabilities.sport)
       rows.push({
         title: "Convocatoria con situaciones para revisar",
@@ -117,10 +121,18 @@ export function Home() {
       })
     return rows
   })
+  const visibleAttention = attention.slice(0, 3)
+  const pendingVas = [...today, ...upcoming].find(
+    (event) =>
+      event.state === "SCHEDULED" &&
+      capabilities.availability &&
+      (!event.availability[actor.id] ||
+        event.availability[actor.id].revision !== event.revision),
+  )
   return (
     <>
       <Header
-        eyebrow="Viernes 2 de octubre de 2026"
+        eyebrow={todayLabel()}
         title={`Buen día, ${actor.name.split(" ")[0]}`}
         description={
           capabilities.sport
@@ -156,13 +168,13 @@ export function Home() {
             title="Necesita tu atención"
             aside={
               <span className="rounded-md bg-warning-soft px-2 py-0.5 text-[10px] font-semibold text-warning">
-                {attention.length} pendientes
+                {visibleAttention.length} pendientes
               </span>
             }
           >
             <Surface>
-              {attention.length ? (
-                attention.map((item, index) => (
+              {visibleAttention.length ? (
+                visibleAttention.map((item, index) => (
                   <Link
                     key={index}
                     to={item.route}
@@ -202,16 +214,21 @@ export function Home() {
               ) : (
                 <div className="flex items-center gap-3 p-5 text-sm">
                   <CheckCircle2 size={18} className="text-success" />
-                  Todo al día. No tenés pendientes.
+                  Nada pendiente.
                 </div>
               )}
             </Surface>
           </Section>
+          {pendingVas && (
+            <section aria-label="Responder disponibilidad">
+              <VasInline event={pendingVas} />
+            </section>
+          )}
           <Section
             title="Hoy"
             aside={
               <span className="text-[11px] text-muted-foreground">
-                Viernes 2 oct
+                {dateLabel(todayIsoValue)}
               </span>
             }
           >
@@ -531,7 +548,7 @@ export function Calendar() {
                 >
                   <span
                     className={`mb-2 flex size-6 items-center justify-center rounded-full text-[11px] ${
-                      date === "2026-10-02"
+                      date === todayIso()
                         ? "bg-primary font-semibold text-white"
                         : "text-muted-foreground"
                     }`}
@@ -695,7 +712,7 @@ export function TeamDetail() {
                     capabilities.sport ||
                     capabilities.official ||
                     capabilities.management ? (
-                      <Badge value={person.eligibility} />
+                      <Badge value={deriveEligibility(state.eligibilityConstraints, person.id)} />
                     ) : undefined
                   }
                 />
@@ -718,7 +735,7 @@ export function TeamDetail() {
                 {events
                   .filter(
                     (event) =>
-                      event.date >= "2026-10-02" && event.state === "SCHEDULED",
+                      event.date >= todayIso() && event.state === "SCHEDULED",
                   )
                   .slice(0, 3)
                   .map((event) => (
@@ -793,7 +810,7 @@ export function PersonDetail() {
         <Avatar name={person.name} size="lg" />
         <div className="mt-5 flex gap-2">
           <Badge value={person.role} />
-          {capabilities.sport && <Badge value={person.eligibility} />}
+          {capabilities.sport && <Badge value={deriveEligibility(state.eligibilityConstraints, person.id)} />}
         </div>
         {(capabilities.sport ||
           actor.role === "CAPTAIN" ||

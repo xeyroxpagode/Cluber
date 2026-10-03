@@ -95,7 +95,7 @@ export function MorePage() {
   )
 }
 export function ProfilePage() {
-  const { actor, state, update, toast } = useProduct()
+  const { actor, state, update, changePassword, toast } = useProduct()
   const [edit, setEdit] = useState("")
   const [phone, setPhone] = useState(actor.phone)
   const [email, setEmail] = useState(actor.email)
@@ -130,13 +130,23 @@ export function ProfilePage() {
         "Editar contacto propio",
         actor.name,
       )
+    if (edit === "password") {
+      const result = changePassword(actor.id, current, password)
+      setPending(false)
+      if (!result.ok) {
+        setError(result.error ?? "No pudimos cambiar la contraseña.")
+        return
+      }
+      setEdit("")
+      setCurrent("")
+      setPassword("")
+      setConfirm("")
+      toast("Contraseña actualizada")
+      return
+    }
     setPending(false)
     setEdit("")
-    toast(
-      edit === "contact"
-        ? "Contacto actualizado"
-        : "Contraseña actualizada en esta simulación local",
-    )
+    toast("Contacto actualizado")
   }
   return (
     <>
@@ -196,6 +206,32 @@ export function ProfilePage() {
           </Button>
         </div>
       </Surface>
+      {state.guardianRelationships.filter((r) => r.guardianId === actor.id && !r.validUntil).length > 0 && (
+        <Surface className="mt-6 max-w-3xl p-6">
+          <h2 className="gei-section-title">Personas a cargo</h2>
+          <p className="gei-body mt-1 text-muted-foreground">
+            Delegación para responder disponibilidad y ver información operativa del menor. Sin DNI, sin motivos de elegibilidad, sin chats privados.
+          </p>
+          <div className="mt-4 space-y-2">
+            {state.guardianRelationships
+              .filter((r) => r.guardianId === actor.id && !r.validUntil)
+              .map((r) => {
+                const child = state.people.find((p) => p.id === r.childId)
+                return (
+                  <div key={r.id} className="flex items-center justify-between gap-3 rounded-lg border border-border px-4 py-3">
+                    <div>
+                      <p className="text-[13px] font-semibold">{child?.name ?? r.childId}</p>
+                      <p className="gei-meta mt-0.5">
+                        {r.relation}
+                        {r.canRespondAvailability ? " · Puede responder ¿Vas?" : ""}
+                      </p>
+                    </div>
+                  </div>
+                )
+              })}
+          </div>
+        </Surface>
+      )}
       {edit && (
         <Modal
           title={edit === "contact" ? "Editar contacto" : "Cambiar contraseña"}

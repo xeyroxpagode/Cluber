@@ -23,8 +23,13 @@ import {
   eventName,
   labels,
   availabilityLabel,
+  venueAddressOf,
+  eventTargetsText,
   type Event,
 } from "../mock/model"
+import { getAllowedActions } from "../mock/authority"
+import { deriveEligibility } from "../mock/eligibility"
+import { VasInline } from "../shared/vas"
 import {
   Header,
   Surface,
@@ -100,12 +105,17 @@ export function EventDetail() {
   const reconfirm = replies.filter(
     (person) => event.availability[person.id].revision !== event.revision,
   ).length
-  const conflicts = (event.published || []).filter(
-    (id) =>
-      state.people.find((person) => person.id === id)?.eligibility !==
-        "ELIGIBLE" ||
-      state.people.find((person) => person.id === id)?.team !== event.team,
-  )
+  const conflicts = (event.published || []).filter((id) => {
+    const person = state.people.find((p) => p.id === id)
+    if (!person) return true
+    if (deriveEligibility(state.eligibilityConstraints, id) !== "ELIGIBLE") return true
+    return person.team !== event.team
+  })
+  const allowed = getAllowedActions(actor, event)
+  const venueAddress = venueAddressOf(state, event)
+  const targetsText = event.clubWide
+    ? "Todo hockey"
+    : eventTargetsText(event, (id) => state.teams.find((t) => t.id === id)?.name ?? "Equipo")
   const attendance = Object.values(event.attendance)
   const primary =
     sport && event.type === "MATCH"
@@ -302,11 +312,14 @@ export function EventDetail() {
               </p>
             </Alert>
           )}
-          {conflicts.length > 0 && (
+          {conflicts.length > 0 && allowed.canViewEligibilityDetail && (
             <Alert tone="error">
               Esta convocatoria tiene {conflicts.length} situación para revisar.
               La publicación histórica se conserva.
             </Alert>
+          )}
+          {capabilities.availability && event.state === "SCHEDULED" && (
+            <VasInline event={event} />
           )}
           <Surface>
             <div className="grid gap-6 p-6 sm:grid-cols-2">
@@ -342,7 +355,7 @@ export function EventDetail() {
                   </span>
                   <p className="mt-1 text-sm font-semibold">{event.venue}</p>
                   <p className="mt-1 text-[11px] text-muted-foreground">
-                    Alvear 1240 · Ituzaingó
+                    {venueAddress || "Dirección a confirmar"}
                   </p>
                 </div>
               </div>
@@ -353,7 +366,7 @@ export function EventDetail() {
                     {event.clubWide ? "Audiencia" : "Equipo"}
                   </span>
                   <p className="mt-1 text-sm font-semibold">
-                    {event.clubWide ? "Todo hockey" : `${teamName} 2026`}
+                    {event.clubWide ? "Todo hockey" : `${targetsText} 2026`}
                   </p>
                 </div>
               </div>

@@ -16,6 +16,7 @@ import {
 import { useProduct, wait } from "../mock/store"
 import { canReadNotice, noticeRead } from "../mock/permissions"
 import { labels, dateLabel } from "../mock/model"
+import { todayIso } from "../mock/clock"
 import {
   Header,
   Surface,
@@ -182,6 +183,7 @@ export function NewConversation() {
   const [selected, setSelected] = useState<string[]>([])
   const [query, setQuery] = useState("")
   const [pending, setPending] = useState(false)
+  const [duplicateId, setDuplicateId] = useState("")
   if (!capabilities.chat)
     return (
       <Empty
@@ -212,7 +214,10 @@ export function NewConversation() {
           item.participants.includes(selected[0]),
       )
     if (existing) {
-      navigate(`/conversations/${existing.id}`)
+      const other = state.people.find((p) => p.id === selected[0])
+      setDuplicateId(existing.id)
+      toast(`Ya tenés una conversación con ${other?.name ?? "esa persona"}.`)
+      setPending(false)
       return
     }
     const id = crypto.randomUUID()
@@ -313,6 +318,19 @@ export function NewConversation() {
             ? "persona seleccionada"
             : "personas seleccionadas"}
         </p>
+        {duplicateId && type === "DIRECT" && selected.length === 1 && (
+          <div role="status" className="rounded-xl border border-primary/15 bg-primary-soft p-4">
+            <p className="text-[13px] font-semibold text-primary">
+              Ya tenés una conversación con {state.people.find((p) => p.id === selected[0])?.name}.
+            </p>
+            <button
+              onClick={() => navigate(`/conversations/${duplicateId}`)}
+              className="mt-2 text-[13px] font-semibold text-primary underline"
+            >
+              Abrir conversación
+            </button>
+          </div>
+        )}
         <Button disabled={!valid || pending} onClick={create}>
           {pending ? "Creando…" : "Crear conversación"}
         </Button>
@@ -714,7 +732,7 @@ export function AnnouncementForm() {
             current.audience = audience
             current.state = publish ? "PUBLISHED" : "DRAFT"
           }
-        } else
+          } else
           draft.announcements.push({
             id: resourceId,
             title,
@@ -722,7 +740,7 @@ export function AnnouncementForm() {
             audience,
             state: publish ? "PUBLISHED" : "DRAFT",
             publisher: `${actor.name} · Subcomisión`,
-            date: "2026-10-02",
+            date: todayIso(),
           })
       },
       correction

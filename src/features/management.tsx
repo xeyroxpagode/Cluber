@@ -17,6 +17,8 @@ import {
 import { useProduct, wait } from "../mock/store"
 import { roleAssignments, currentRoles, hasRole } from "../mock/permissions"
 import { labels, type Person } from "../mock/model"
+import { todayIso } from "../mock/clock"
+import { deriveEligibility } from "../mock/eligibility"
 import {
   Header,
   Surface,
@@ -95,7 +97,7 @@ export function ManagementHome() {
   )
 }
 export function StructurePage() {
-  const { state, capabilities, update, toast } = useProduct()
+  const { state, capabilities, update, renameVenueMetadata, toast } = useProduct()
   const [tab, setTab] = useState("Temporada")
   const [edit, setEdit] = useState("")
   const [name, setName] = useState("")
@@ -134,6 +136,32 @@ export function StructurePage() {
     }
     setPending(true)
     await wait()
+    if (edit !== "new" && (tab === "División" || tab === "Línea")) {
+      const item = state.structure.find((s) => s.id === edit)
+      if (item && item.name !== name) {
+        const inUse =
+          tab === "División"
+            ? state.teams.some((t) => t.division === item.name && t.state === "ACTIVE")
+            : state.teams.some((t) => t.line === item.name && t.state === "ACTIVE")
+        if (inUse) {
+          setPending(false)
+          setError(
+            "La identidad del equipo no cambia por renombrar División/Línea. Para una nueva identidad, creá un nuevo equipo. El nombre histórico se conserva.",
+          )
+          return
+        }
+      }
+    }
+    if (edit !== "new" && tab === "Sede") {
+      const venue = state.venues.find((v) => v.id === edit || v.name === state.structure.find((s) => s.id === edit)?.name)
+      if (venue) {
+        renameVenueMetadata(venue.id, name)
+        setPending(false)
+        setEdit("")
+        toast("Nombre de sede corregido. Los eventos conservan su sede asignada.")
+        return
+      }
+    }
     update(
       (draft) => {
         if (edit === "new")
@@ -145,26 +173,7 @@ export function StructurePage() {
           })
         else {
           const item = draft.structure.find((item) => item.id === edit)!
-          const old = item.name
           item.name = name
-          if (item.type === "Sede")
-            draft.events
-              .filter((event) => event.venue === old)
-              .forEach((event) => (event.venue = name))
-          if (item.type === "División")
-            draft.teams
-              .filter((team) => team.division === old)
-              .forEach((team) => {
-                team.division = name
-                team.name = `${name} ${team.line}`
-              })
-          if (item.type === "Línea")
-            draft.teams
-              .filter((team) => team.line === old)
-              .forEach((team) => {
-                team.line = name
-                team.name = `${team.division} ${name}`
-              })
         }
       },
       "Actualizar estructura",
@@ -585,11 +594,12 @@ export function PersonAdminDetail() {
     update(
       (draft) => {
         const item = draft.people.find((item) => item.id === id)!
+        const today = todayIso()
         if (operation === "Asignar equipo") {
           item.roleAssignments = roleAssignments(item).map((assignment) =>
             ["PLAYER", "CAPTAIN"].includes(assignment.role) &&
             !assignment.validUntil
-              ? { ...assignment, validUntil: "2026-10-02" }
+              ? { ...assignment, validUntil: today }
               : assignment,
           )
           item.roleAssignments.push({
@@ -597,21 +607,26 @@ export function PersonAdminDetail() {
             role: "PLAYER",
             scope: "TEAM",
             target,
-            validFrom: "2026-10-02",
+            validFrom: today,
             validUntil: null,
           })
           item.team = target
           item.role = "PLAYER"
+          const ta = draft.teamAssignments.find((t) => t.personId === item.id && !t.validUntil)
+          if (ta) ta.validUntil = today
+          draft.teamAssignments.push({ id: crypto.randomUUID(), personId: item.id, teamId: target, validFrom: today, validUntil: null })
         }
         if (operation === "Finalizar pertenencia al equipo") {
           item.roleAssignments = roleAssignments(item).map((assignment) =>
             ["PLAYER", "CAPTAIN"].includes(assignment.role) &&
             !assignment.validUntil
-              ? { ...assignment, validUntil: "2026-10-02" }
+              ? { ...assignment, validUntil: today }
               : assignment,
           )
           item.team = ""
           if (item.role === "CAPTAIN") item.role = "PLAYER"
+          const ta = draft.teamAssignments.find((t) => t.personId === item.id && !t.validUntil)
+          if (ta) ta.validUntil = today
         }
         if (operation === "Deshabilitar cuenta") item.account = "DISABLED"
         if (operation === "Reactivar cuenta") item.account = "ACTIVE"
@@ -622,8 +637,27 @@ export function PersonAdminDetail() {
           item.username = username || item.username
           item.account = "PENDING"
         }
-        if (operation === "Actualizar elegibilidad")
+        if (operation === "Actualizar elegibilidad") {
+          const today = todayIso()
+          draft.eligibilityConstraints.forEach((c) => {
+            if (c.personId === item.id && !c.validUntil) c.validUntil = today
+          })
+          if (eligibility !== "ELIGIBLE") {
+            draft.eligibilityConstraints.push({
+              id: crypto.randomUUID(),
+              personId: item.id,
+              state: eligibility,
+              scope: "CLUB",
+              scopeRefId: null,
+              source: "INTERNAL",
+              reason: "ADMIN",
+              note: reason || "Actualización administrativa.",
+              validFrom: today,
+              validUntil: null,
+            })
+          }
           item.eligibility = eligibility
+        }
         if (operation === "Asignar rol") {
           item.roleAssignments = roleAssignments(item)
           item.roleAssignments.push({
@@ -631,7 +665,7 @@ export function PersonAdminDetail() {
             role,
             scope: ["ADMIN", "SUBCOMMITTEE"].includes(role) ? "CLUB" : "TEAM",
             target: ["ADMIN", "SUBCOMMITTEE"].includes(role) ? "club" : target,
-            validFrom: "2026-10-02",
+            validFrom: todayIso(),
             validUntil: null,
           })
           if (!item.team && role === "COACH") item.team = target
@@ -639,7 +673,7 @@ export function PersonAdminDetail() {
         if (operation === "Finalizar rol")
           item.roleAssignments = roleAssignments(item).map((assignment) =>
             assignment.role === role && !assignment.validUntil
-              ? { ...assignment, validUntil: "2026-10-02" }
+              ? { ...assignment, validUntil: todayIso() }
               : assignment,
           )
       },

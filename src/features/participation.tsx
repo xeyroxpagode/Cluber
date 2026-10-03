@@ -12,6 +12,8 @@ import {
 import { useProduct, canOperateEvent, wait } from "../mock/store"
 import { useEvent } from "./events"
 import { scenario } from "../mock/scenarios"
+import { getAllowedActions } from "../mock/authority"
+import { deriveEligibility, activeConstraintsFor, constraintUserText } from "../mock/eligibility"
 import {
   availabilityLabel,
   eventName,
@@ -272,15 +274,14 @@ export function SelectionPage() {
       person.team === event.team && ["PLAYER", "CAPTAIN"].includes(person.role),
   )
   const blocked = selected.filter((id) => {
-    const person = people.find((item) => item.id === id)
-    return !person || person.eligibility !== "ELIGIBLE"
+    return deriveEligibility(state.eligibilityConstraints, id) !== "ELIGIBLE"
   })
-  const publishedConflicts = (event.published || []).filter(
-    (id) =>
-      !people.some(
-        (person) => person.id === id && person.eligibility === "ELIGIBLE",
-      ),
-  )
+  const publishedConflicts = (event.published || []).filter((id) => {
+    const person = people.find((p) => p.id === id)
+    if (!person) return true
+    if (deriveEligibility(state.eligibilityConstraints, id) !== "ELIGIBLE") return true
+    return !people.some((p) => p.id === id)
+  })
   const visible = people.filter(
     (person) =>
       person.name.toLowerCase().includes(query.toLowerCase()) &&
@@ -288,16 +289,11 @@ export function SelectionPage() {
   )
   async function publish() {
     if (!event) return
-    if (blocked.length) {
-      setError(
-        `No se puede publicar la convocatoria porque ${blocked.length} jugadora tiene un bloqueo o una situación pendiente actual.`,
-      )
-      return
-    }
     setPublishing(true)
     if (saving.current) await saving.current
     await wait()
     generation.current++
+    const now = new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })
     updateEvent(
       event.id,
       (item) => {
@@ -307,20 +303,23 @@ export function SelectionPage() {
           id: crypto.randomUUID(),
           players: [...selected],
           author: actor.name,
-          date: "2 oct 2026 · Ahora",
+          date: `${now} · Hoy`,
         })
       },
-      "Publicar convocatoria",
+      blocked.length
+        ? `Publicar convocatoria con ${blocked.length} situación actual`
+        : "Publicar convocatoria",
     )
     notify(
       "Convocatoria publicada",
-      `${eventName(event)} · ${selected.length} jugadoras convocadas`,
+      `${eventName(event)} · ${selected.length} jugadoras convocadas${blocked.length ? ` · ${blocked.length} con situación actual` : ""}`,
       `/events/${event.id}`,
+      "SELECTION_PUBLISHED",
     )
     setPublishing(false)
     setConfirm(false)
-    setSaveState("Guardado")
-    toast("Convocatoria publicada")
+    setSaveState(`Guardado ${now}`)
+    toast(blocked.length ? "Convocatoria publicada con situaciones para revisar" : "Convocatoria publicada")
   }
   return (
     <>
@@ -336,6 +335,21 @@ export function SelectionPage() {
           <Alert tone="error">
             Esta convocatoria tiene {publishedConflicts.length} situación para
             revisar. La publicación anterior se conserva.
+            <span className="mt-2 block text-[12px] font-normal">
+              {publishedConflicts.slice(0, 3).map((id) => {
+                const p = state.people.find((x) => x.id === id)
+                const cs = activeConstraintsFor(state.eligibilityConstraints, id)
+                return (
+                  <span key={id} className="mt-1 block">
+                    · {p?.name ?? id}
+                    {cs.length ? ` — ${constraintUserText(cs[0])}` : " — ya no pertenece al destino actual."}
+                  </span>
+                )
+              })}
+              {publishedConflicts.length > 3 && (
+                <span className="mt-1 block">· y {publishedConflicts.length - 3} más en la tabla.</span>
+              )}
+            </span>
           </Alert>
         )}
         {!mutable && (
@@ -386,7 +400,9 @@ export function SelectionPage() {
           </div>
           {visible.map((person) => {
             const checked = selected.includes(person.id)
-            const ineligible = person.eligibility !== "ELIGIBLE"
+            const eligibility = deriveEligibility(state.eligibilityConstraints, person.id)
+            const ineligible = eligibility !== "ELIGIBLE"
+            const constraints = activeConstraintsFor(state.eligibilityConstraints, person.id)
             return (
               <label
                 key={person.id}
@@ -406,8 +422,10 @@ export function SelectionPage() {
                       </span>
                     )}
                     {ineligible && (
-                      <span className="mt-1 block text-[10px] text-danger">
-                        No puede seleccionarse
+                      <span className="mt-1 block text-[10px] font-medium text-warning">
+                        {constraints.length
+                          ? constraintUserText(constraints[0])
+                          : "Tiene una situación para revisar."}
                       </span>
                     )}
                   </span>
@@ -415,12 +433,12 @@ export function SelectionPage() {
                 <span className="text-[10px] text-muted-foreground">
                   {availabilityLabel(event, person.id)}
                 </span>
-                <Badge value={person.eligibility} />
+                <Badge value={eligibility} />
                 <input
                   type="checkbox"
                   aria-label={`Seleccionar a ${person.name}`}
                   checked={checked}
-                  disabled={!allowed || !mutable || (ineligible && !checked)}
+                  disabled={!allowed || !mutable}
                   onChange={() => {
                     setError("")
                     setSelected((previous) =>
@@ -446,13 +464,7 @@ export function SelectionPage() {
             </span>
             <Button
               disabled={!mutable || !selected.length || publishing}
-              onClick={() => {
-                if (blocked.length)
-                  setError(
-                    `No se puede publicar: ${blocked.length} jugadora tiene elegibilidad bloqueada o pendiente.`,
-                  )
-                else setConfirm(true)
-              }}
+              onClick={() => setConfirm(true)}
             >
               <Send size={14} />
               {event.published
@@ -486,6 +498,16 @@ export function SelectionPage() {
             <strong>{selected.length} jugadoras</strong> para {eventName(event)}
             .
           </p>
+          {blocked.length > 0 && (
+            <div className="mt-3 rounded-lg border border-warning/20 bg-warning-soft p-3">
+              <p className="text-[12px] font-semibold text-warning">
+                {blocked.length} {blocked.length === 1 ? "jugadora tiene" : "jugadoras tienen"} una situación actual.
+              </p>
+              <p className="mt-1 text-[12px] leading-relaxed text-warning">
+                Se publica igual y queda marcada para revisar. La publicación histórica se conserva; los conflictos se muestran como actuales.
+              </p>
+            </div>
+          )}
           <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
             La publicación queda registrada y las personas correspondientes
             recibirán una notificación. La disponibilidad no cambia.
@@ -509,7 +531,7 @@ export function SelectionPage() {
 }
 
 export function AttendancePage() {
-  const { event, state, actor, updateEvent, toast } = useEvent()
+  const { event, state, actor, updateEvent, markAttendance, toast } = useEvent()
   const [confirm, setConfirm] = useState(false)
   const [correction, setCorrection] = useState(false)
   const [reason, setReason] = useState("")
@@ -540,7 +562,7 @@ export function AttendancePage() {
     }
     setPending(true)
     await wait(130)
-    updateEvent(event.id, (item) => (item.attendance[id] = value))
+    markAttendance(event.id, id, value)
     setPending(false)
   }
   async function close() {
@@ -736,15 +758,20 @@ export function AttendancePage() {
                       onClick={async () => {
                         setPending(true)
                         await wait()
+                        Object.entries(entries).forEach(([pid, value]) => {
+                          if (event.attendance[pid] !== value) {
+                            markAttendance(event.id, pid, value, reason)
+                          }
+                        })
                         updateEvent(
                           event.id,
-                          (item) => (item.attendance = entries),
+                          () => {},
                           "Corregir asistencia",
                           reason,
                         )
                         setPending(false)
                         setCorrection(false)
-                        toast("Corrección guardada con su motivo")
+                        toast("Corrección guardada con su motivo. El historial conserva antes y después.")
                       }}
                     >
                       {pending ? "Guardando…" : "Guardar corrección"}
@@ -809,7 +836,7 @@ export function AttendancePage() {
 }
 
 export function MatchRecordPage() {
-  const { event, state, actor, updateEvent, toast } = useEvent()
+  const { event, state, actor, updateEvent, correctRecord, toast } = useEvent()
   const [record, setRecord] = useState(event?.record)
   const [correction, setCorrection] = useState(false)
   const [reason, setReason] = useState("")
@@ -862,43 +889,46 @@ export function MatchRecordPage() {
       setError("Indicá el motivo de la corrección.")
       return
     }
-    const goals = Object.values(record.stats).reduce(
-      (total, value) => total + (value.played ? value.goals : 0),
-      0,
-    )
-    if (record.status === "PLAYED" && goals > record.gei) {
-      setError(
-        "Los goles de las jugadoras no pueden superar el resultado de GEI.",
-      )
-      return
-    }
     setPending(true)
     await wait()
-    updateEvent(
-      event.id,
-      (item) => {
+    const afterLabel = `GEI ${record.gei}-${record.opponent} (${finalize || final ? "FINAL" : "Borrador"})`
+    if (correction) {
+      const snapshot = { ...record }
+      correctRecord(event.id, afterLabel, reason, (item) => {
         item.record = {
-          ...record,
-          state: finalize || final ? "FINAL" : "DRAFT",
+          ...snapshot,
+          state: "FINAL",
           stats:
-            record.status === "PLAYED"
+            snapshot.status === "PLAYED"
               ? Object.fromEntries(
-                  Object.entries(record.stats).filter(
-                    ([, value]) => value.played,
-                  ),
+                  Object.entries(snapshot.stats).filter(([, value]) => value.played),
                 )
               : {},
         }
-        if (finalize && !final)
-          item.state = record.status === "ABANDONED" ? "ABANDONED" : "COMPLETED"
-      },
-      correction
-        ? "Corregir resultado final"
-        : finalize
-          ? "Finalizar resultado"
-          : "Guardar resultado borrador",
-      reason,
-    )
+      })
+    } else {
+      updateEvent(
+        event.id,
+        (item) => {
+          item.record = {
+            ...record,
+            state: finalize || final ? "FINAL" : "DRAFT",
+            stats:
+              record.status === "PLAYED"
+                ? Object.fromEntries(
+                    Object.entries(record.stats).filter(
+                      ([, value]) => value.played,
+                    ),
+                  )
+                : {},
+          }
+          if (finalize && !final)
+            item.state = record.status === "ABANDONED" ? "ABANDONED" : "COMPLETED"
+        },
+        finalize ? "Finalizar resultado" : "Guardar resultado borrador",
+        reason,
+      )
+    }
     setConfirm(false)
     setCorrection(false)
     setPending(false)
