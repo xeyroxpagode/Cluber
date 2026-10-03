@@ -1,0 +1,10 @@
+{
+  "description": "Centralized operational platform for managing hockey teams, events, communications, and player participation with real-time interactive workflows for coaches and admins.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
