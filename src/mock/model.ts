@@ -26,7 +26,65 @@ export interface Person {
   roleAssignments?: RoleAssignment[]
   eligibilityReason?: string
   eligibilitySource?: string
+  /** Stage 4: credencial mock real (P0-4). version++ en cada cambio. */
+  credentialVersion?: number
+  passwordSet?: boolean
 }
+export interface Venue {
+  id: string
+  name: string
+  address: string
+  fieldLabel?: string
+  archived?: boolean
+}
+export interface Membership {
+  id: string
+  personId: string
+  validFrom: string
+  validUntil: string | null
+}
+export interface TeamAssignment {
+  id: string
+  personId: string
+  teamId: string
+  validFrom: string
+  validUntil: string | null
+}
+export interface GuardianRelationship {
+  id: string
+  guardianId: string
+  childId: string
+  relation: string
+  canViewChildInfo: boolean
+  canRespondAvailability: boolean
+  validFrom: string
+  validUntil: string | null
+}
+export interface EligibilityConstraint {
+  id: string
+  personId: string
+  state: "PENDING" | "BLOCKED"
+  scope: "CLUB" | "COMPETITION" | "ENTRY" | "EVENT"
+  scopeRefId: string | null
+  source: "INTERNAL" | "AHBA" | "OTHER"
+  reason: "ADMIN" | "DISCIPLINE" | "FEDERATION" | "MEDICAL_CLEARANCE" | "OTHER"
+  note?: string
+  validFrom: string
+  validUntil: string | null
+}
+export interface EventSeries {
+  id: string
+  name: string
+  status: "ACTIVE" | "ENDED"
+}
+export type NotificationType =
+  | "EVENT_CHANGED"
+  | "EVENT_POSTPONED"
+  | "EVENT_RESCHEDULED"
+  | "EVENT_CANCELLED"
+  | "EVENT_RESTORED"
+  | "SELECTION_PUBLISHED"
+  | "ANNOUNCEMENT_PUBLISHED"
 export interface Team {
   id: string
   name: string
@@ -49,10 +107,17 @@ export interface Event {
   title: string
   type: EventType
   team: string
+  /** Stage 4: targets plurales. `team` se conserva como compat y equivale a targetTeams[0]. */
+  targetTeams?: string[]
+  targetPersonIds?: string[]
+  seriesId?: string | null
+  venueId?: string
   date: string
   time: string
   end: string
   venue: string
+  /** Dirección derivada del Venue (no literal en UI). */
+  venueAddress?: string
   opponent: string
   state: EventState
   revision: number
@@ -76,6 +141,17 @@ export interface Event {
   attendance: Record<string, AttendanceValue>
   attendanceOpened: boolean
   attendanceClosed: boolean
+  /** P0-2: historial before/after, nunca sobrescribe. */
+  attendanceHistory?: Array<{
+    id: string
+    personId: string
+    before: AttendanceValue | null
+    after: AttendanceValue
+    actor: string
+    date: string
+    reason?: string
+    correction?: boolean
+  }>
   record: {
     state: "DRAFT" | "FINAL"
     status: "PLAYED" | "FORFEIT" | "ABANDONED"
@@ -84,6 +160,15 @@ export interface Event {
     observations: string
     stats: Record<string, PlayerStat>
   }
+  /** P0-3: historial del acta, FINAL solo se corrige explícitamente. */
+  recordHistory?: Array<{
+    id: string
+    before: string
+    after: string
+    actor: string
+    date: string
+    reason: string
+  }>
   history: string[]
 }
 export interface Announcement {
@@ -122,6 +207,8 @@ export interface Notice {
   route: string
   date: string
   read: boolean
+  /** Stage 4: tipo real §22. Opcional para seed legacy. */
+  type?: NotificationType
 }
 export interface StructureItem {
   id: string
@@ -168,6 +255,13 @@ export interface State {
   competitions: Competition[]
   jornadas: Jornada[]
   audit: AuditEntry[]
+  /** Stage 4 canonical mock */
+  venues: Venue[]
+  eligibilityConstraints: EligibilityConstraint[]
+  memberships: Membership[]
+  teamAssignments: TeamAssignment[]
+  guardianRelationships: GuardianRelationship[]
+  eventSeries: EventSeries[]
 }
 export const labels: Record<string, string> = {
   DRAFT: "Borrador",
@@ -229,3 +323,34 @@ export const availabilityLabel = (event: Event, person: string) =>
     : event.availability[person].revision !== event.revision
       ? "Necesita reconfirmación"
       : labels[event.availability[person].value]
+
+/** Stage 4 helpers: fuente plural sin exponer implementación en UI. */
+export function eventTeamIds(event: Event): string[] {
+  if (event.targetTeams && event.targetTeams.length > 0) return event.targetTeams
+  return event.team ? [event.team] : []
+}
+export function eventPersonIds(event: Event): string[] {
+  return event.targetPersonIds ?? []
+}
+/** Texto usuario para targets: "Sexta A", "Sexta A + 2 personas", "Todo hockey". */
+export function eventTargetsText(
+  event: Event,
+  teamNameOf: (id: string) => string,
+): string {
+  if (event.clubWide) return "Todo hockey"
+  const teams = eventTeamIds(event).map(teamNameOf)
+  const extra = eventPersonIds(event).length
+  if (teams.length === 0 && extra === 0) return "Sin destino"
+  if (extra === 0) return teams.join(" · ")
+  return `${teams.join(" · ")} + ${extra} ${extra === 1 ? "persona" : "personas"}`
+}
+export function venueAddressOf(state: State, event: Event): string {
+  if (event.venueAddress) return event.venueAddress
+  const byId = event.venueId
+    ? state.venues.find((v) => v.id === event.venueId)
+    : undefined
+  if (byId) return byId.address
+  const byName = state.venues.find((v) => v.name === event.venue)
+  if (byName) return byName.address
+  return ""
+}

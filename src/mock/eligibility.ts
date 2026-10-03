@@ -1,21 +1,6 @@
-import type { Person } from "../mock/model"
+import type { Person, EligibilityConstraint } from "./model"
 
-/**
- * Modelo canónico mock: EligibilityConstraint[] (Stage 4 §33, Freeze §13 v1.0.1).
- * ELIGIBLE es derivado: sin constraint activa aplicable.
- */
-export interface EligibilityConstraint {
-  id: string
-  personId: string
-  state: "PENDING" | "BLOCKED"
-  scope: "CLUB" | "COMPETITION" | "ENTRY" | "EVENT"
-  scopeRefId: string | null
-  source: "INTERNAL" | "AHBA" | "OTHER"
-  reason: "ADMIN" | "DISCIPLINE" | "FEDERATION" | "MEDICAL_CLEARANCE" | "OTHER"
-  note?: string
-  validFrom: string
-  validUntil: string | null
-}
+export type { EligibilityConstraint }
 
 export type DerivedEligibility = "ELIGIBLE" | "PENDING" | "BLOCKED"
 

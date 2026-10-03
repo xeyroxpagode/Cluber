@@ -35,7 +35,12 @@ const baseEvent = (
   title:
     type === "TRAINING" ? "Entrenamiento de Sexta A" : "Encuentro de hockey",
   team: "sexta",
+  targetTeams: ["sexta"],
+  targetPersonIds: [],
+  seriesId: null,
+  venueId: "v1",
   venue: "GEI · Cancha de hockey",
+  venueAddress: "Av. Mitre 1240, Ituzaingó",
   opponent,
   state: "SCHEDULED",
   revision: 1,
@@ -149,6 +154,11 @@ export function createSeed(): State {
   const club = baseEvent("club-event", "CLUB_EVENT", "2026-10-11", "10:00")
   club.title = "Encuentro de familias de hockey"
   club.clubWide = true
+  club.targetTeams = []
+  club.targetPersonIds = []
+  training.seriesId = "series-sexta"
+  const trainingNext = baseEvent("training-next", "TRAINING", "2026-10-06", "19:00")
+  trainingNext.seriesId = "series-sexta"
   return {
     people: [
       ...names.map((name, index) => ({
@@ -168,6 +178,8 @@ export function createSeed(): State {
         birth: "2010-05-12",
         account: "ACTIVE" as const,
         username: `jugadora${index}`,
+        credentialVersion: 1,
+        passwordSet: true,
       })),
       {
         id: "coach",
@@ -181,6 +193,8 @@ export function createSeed(): State {
         birth: "1986-08-21",
         account: "ACTIVE",
         username: "tomas.beltran",
+        credentialVersion: 1,
+        passwordSet: true,
       },
       {
         id: "admin",
@@ -194,6 +208,8 @@ export function createSeed(): State {
         birth: "1984-04-10",
         account: "ACTIVE",
         username: "mariana.costa",
+        credentialVersion: 1,
+        passwordSet: true,
       },
       {
         id: "subcommittee",
@@ -207,6 +223,24 @@ export function createSeed(): State {
         birth: "1985-07-01",
         account: "ACTIVE",
         username: "carolina.sanchez",
+        credentialVersion: 1,
+        passwordSet: true,
+      },
+      {
+        id: "guardian",
+        name: "Marcela Fernández",
+        role: "PLAYER",
+        team: "",
+        eligibility: "ELIGIBLE",
+        phone: "11 5000 0000",
+        email: "marcela@ejemplo.com",
+        dni: "28999888",
+        birth: "1980-02-02",
+        account: "ACTIVE",
+        username: "marcela.fernandez",
+        roleAssignments: [],
+        credentialVersion: 1,
+        passwordSet: true,
       },
     ],
     teams: [
@@ -225,7 +259,7 @@ export function createSeed(): State {
     events: [
       training,
       match,
-      baseEvent("training-next", "TRAINING", "2026-10-06", "19:00"),
+      trainingNext,
       club,
       postponed,
       completed,
@@ -331,6 +365,7 @@ export function createSeed(): State {
     notifications: [
       {
         id: "n1",
+        type: "EVENT_RESCHEDULED",
         title: "Partido reprogramado",
         body: "GEI vs. CUBA pasó de las 16:00 a las 18:00. Las jugadoras deben reconfirmar su disponibilidad.",
         route: "/events/match-cuba",
@@ -339,6 +374,7 @@ export function createSeed(): State {
       },
       {
         id: "n2",
+        type: "ANNOUNCEMENT_PUBLISHED",
         title: "Comunicado publicado",
         body: "Todo listo para la próxima fecha · Sexta A",
         route: "/announcements/a1",
@@ -347,6 +383,7 @@ export function createSeed(): State {
       },
       {
         id: "n3",
+        type: "SELECTION_PUBLISHED",
         title: "Convocatoria publicada",
         body: "La convocatoria de GEI vs. CUBA ya está disponible.",
         route: "/events/match-cuba",
@@ -417,5 +454,68 @@ export function createSeed(): State {
         date: "28 sep 2026 · 10:15",
       },
     ],
+    venues: [
+      { id: "v1", name: "GEI · Cancha de hockey", address: "Av. Mitre 1240, Ituzaingó", fieldLabel: "Cancha 1" },
+      { id: "v2", name: "CUBA · Villa de Mayo", address: "Av. San Martín 4250, Villa de Mayo" },
+    ],
+    eligibilityConstraints: [
+      {
+        id: "ec-p4",
+        personId: "p4",
+        state: "BLOCKED",
+        scope: "ENTRY",
+        scopeRefId: "entry1",
+        source: "AHBA",
+        reason: "FEDERATION",
+        note: "Pase pendiente de registración federativa.",
+        validFrom: "2026-03-01",
+        validUntil: null,
+      },
+      {
+        id: "ec-p12",
+        personId: "p12",
+        state: "PENDING",
+        scope: "CLUB",
+        scopeRefId: null,
+        source: "INTERNAL",
+        reason: "MEDICAL_CLEARANCE",
+        note: "Apto médico en revisión.",
+        validFrom: "2026-09-01",
+        validUntil: null,
+      },
+    ],
+    memberships: [
+      ...names.map((_, index) => ({
+        id: `mem-p${index}`,
+        personId: `p${index}`,
+        validFrom: "2026-03-01",
+        validUntil: null as string | null,
+      })),
+      { id: "mem-coach", personId: "coach", validFrom: "2026-03-01", validUntil: null as string | null },
+      { id: "mem-admin", personId: "admin", validFrom: "2026-03-01", validUntil: null as string | null },
+      { id: "mem-sub", personId: "subcommittee", validFrom: "2026-03-01", validUntil: null as string | null },
+    ],
+    teamAssignments: [
+      ...names.map((_, index) => ({
+        id: `ta-p${index}`,
+        personId: `p${index}`,
+        teamId: "sexta",
+        validFrom: "2026-03-01",
+        validUntil: null as string | null,
+      })),
+    ],
+    guardianRelationships: [
+      {
+        id: "gr-1",
+        guardianId: "guardian",
+        childId: "p2",
+        relation: "Madre",
+        canViewChildInfo: true,
+        canRespondAvailability: true,
+        validFrom: "2026-03-01",
+        validUntil: null as string | null,
+      },
+    ],
+    eventSeries: [{ id: "series-sexta", name: "Entrenamientos Sexta A", status: "ACTIVE" as const }],
   }
 }
