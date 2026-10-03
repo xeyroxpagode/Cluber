@@ -27,6 +27,7 @@ import {
   initials,
   type Event,
 } from "../mock/model"
+import { stateText, stateTone } from "./states"
 import { useProduct } from "../mock/store"
 export function Button({
   children,
@@ -101,28 +102,22 @@ export function Badge({
   value?: string
   children?: ReactNode
 }) {
-  const style = [
-    "COMPLETED",
-    "FINAL",
-    "PUBLISHED",
-    "ELIGIBLE",
-    "ACTIVE",
-    "YES",
-    "PRESENT",
-  ].includes(value || "")
-    ? "bg-success-soft text-success"
-    : ["POSTPONED", "PENDING", "RECONFIRM", "MAYBE"].includes(value || "")
-      ? "bg-warning-soft text-warning"
-      : ["CANCELLED", "BLOCKED", "DISABLED", "NO", "ABSENT"].includes(
-            value || "",
-          )
-        ? "bg-danger-soft text-danger"
-        : "bg-muted text-muted-foreground"
+  const tone = stateTone(value || "")
+  const style =
+    tone === "success"
+      ? "bg-success-soft text-success"
+      : tone === "warning"
+        ? "bg-warning-soft text-warning"
+        : tone === "danger"
+          ? "bg-danger-soft text-danger"
+          : tone === "info"
+            ? "bg-primary-soft text-primary"
+            : "bg-muted text-muted-foreground"
   return (
     <span
       className={`inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[10px] font-semibold leading-tight ${style}`}
     >
-      {children || labels[value || ""] || value}
+      {children || (value ? stateText(value) : "")}
     </span>
   )
 }
@@ -297,14 +292,18 @@ export function Empty({
   title,
   detail,
   children,
+  icon,
 }: {
   title: string
   detail: string
   children?: ReactNode
+  icon?: ReactNode
 }) {
   return (
     <div className="rounded-xl border border-dashed border-border bg-card px-6 py-14 text-center">
-      <CalendarDays className="mx-auto mb-4 text-muted-foreground" size={26} />
+      <div className="mx-auto mb-4 flex justify-center text-muted-foreground">
+        {icon ?? <CalendarDays size={26} />}
+      </div>
       <h3 className="text-sm font-semibold">{title}</h3>
       <p className="mx-auto mt-2 max-w-sm text-xs leading-relaxed text-muted-foreground">
         {detail}

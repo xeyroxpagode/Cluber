@@ -23,8 +23,9 @@ import {
 import { useProduct } from "../mock/store"
 import { canReadNotice, noticeRead } from "../mock/permissions"
 import { scenario, scenarioLabels } from "../mock/scenarios"
-import { Avatar, Alert, Button } from "../shared/ui"
+import { Avatar, Alert } from "../shared/ui"
 import { labels } from "../mock/model"
+import { routeContext } from "../shared/nav-context"
 const nav = [
   { to: "/home", label: "Inicio", icon: House },
   { to: "/calendar", label: "Calendario", icon: CalendarDays },
@@ -125,7 +126,7 @@ export function Shell() {
         </nav>
         <div className="mx-6 mt-8 border-t border-border pt-6">
           <div className="mb-3 text-[9px] font-semibold tracking-[1.4px] text-muted-foreground">
-            MI ESPACIO
+            MI EQUIPO
           </div>
           {actor.team && (
             <Link
@@ -167,7 +168,9 @@ export function Shell() {
               </span>
               <span className="mt-1 block text-[10px] text-muted-foreground">
                 {labels[actor.role]}
-                {actor.team ? " · Sexta A" : ""}
+                {actor.team
+                  ? ` · ${state.teams.find((team) => team.id === actor.team)?.name ?? ""}`
+                  : ""}
               </span>
             </span>
             <ChevronDown size={13} className="text-muted-foreground" />
@@ -179,20 +182,7 @@ export function Shell() {
           <div className="hidden text-xs text-muted-foreground sm:block">
             Hockey <span className="mx-2 text-border">/</span>
             <span className="font-medium text-foreground">
-              {location.pathname.startsWith("/events")
-                ? "Eventos"
-                : location.pathname.startsWith("/teams")
-                  ? "Equipos"
-                  : location.pathname.startsWith("/calendar")
-                    ? "Calendario"
-                    : location.pathname.startsWith("/communication") ||
-                        location.pathname.startsWith("/conversations")
-                      ? "Comunicación"
-                      : location.pathname.startsWith("/management")
-                        ? "Administración"
-                        : location.pathname === "/home"
-                          ? "Inicio"
-                          : "Mi espacio"}
+              {routeContext(location.pathname)}
             </span>
           </div>
           <Link to="/home" className="text-sm font-bold text-primary sm:hidden">
