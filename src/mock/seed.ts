@@ -1,363 +1,705 @@
-import type { Event, State } from "./model"
+import type {
+  AttendanceValue,
+  Availability,
+  Event,
+  Person,
+  Response,
+  State,
+} from "./model"
+import { addDays, todayIso } from "./clock"
 
-const names = [
-  "Victoria Berg",
-  "Pilar Gómez",
-  "Lucía Fernández",
-  "Martina López",
-  "Sofía Romero",
-  "Camila Suárez",
-  "Valentina Rossi",
-  "Josefina Díaz",
-  "Julieta Acosta",
-  "Delfina Torres",
-  "Catalina Ruiz",
-  "Agustina Molina",
-  "Malena Castro",
-  "Milagros Pérez",
-  "Clara Méndez",
-  "Florencia Vidal",
-  "Lola Martínez",
-  "Paula Benítez",
+const today = todayIso()
+
+/** Timestamp ISO con offset simulado respecto al día real. */
+const at = (dayOffset: number, hour: number, minute = 0) => {
+  const [y, m, d] = addDays(today, dayOffset).split("-").map(Number)
+  return new Date(y, m - 1, d, hour, minute, 0).toISOString()
+}
+
+const peopleNames = [
+  ["p0", "Victoria Berg", "Victoria", "Berg", "CAPTAIN", "sexta"],
+  ["p1", "Pilar Gómez", "Pilar", "Gómez", "PLAYER", "sexta"],
+  ["p2", "Lucía Fernández", "Lucía", "Fernández", "PLAYER", "sexta"],
+  ["p3", "Martina López", "Martina", "López", "PLAYER", "sexta"],
+  ["p4", "Sofía Romero", "Sofía", "Romero", "PLAYER", "sexta"],
+  ["p5", "Camila Suárez", "Camila", "Suárez", "PLAYER", "sexta"],
+  ["p6", "Valentina Rossi", "Valentina", "Rossi", "PLAYER", "sexta"],
+  ["p7", "Josefina Díaz", "Josefina", "Díaz", "PLAYER", "sexta"],
+  ["p8", "Julieta Acosta", "Julieta", "Acosta", "PLAYER", "septima"],
+  ["p9", "Delfina Torres", "Delfina", "Torres", "PLAYER", "septima"],
+  ["p10", "Catalina Ruiz", "Catalina", "Ruiz", "PLAYER", "septima"],
+  ["p11", "Agustina Molina", "Agustina", "Molina", "PLAYER", "septima"],
+  ["p12", "Malena Castro", "Malena", "Castro", "PLAYER", "septima"],
+  ["p13", "Milagros Pérez", "Milagros", "Pérez", "PLAYER", "septima"],
+  ["p14", "Clara Méndez", "Clara", "Méndez", "PLAYER", "septima"],
+  ["p15", "Florencia Vidal", "Florencia", "Vidal", "PLAYER", "quinta"],
+  ["p16", "Lola Martínez", "Lola", "Martínez", "PLAYER", "quinta"],
+  ["p17", "Rocío Peña", "Rocío", "Peña", "PLAYER", "quinta"],
 ]
-const baseEvent = (
+
+const playerIds = peopleNames.map(([id]) => id)
+
+const availabilityFor = (
+  ids: string[],
+  answers: Record<string, Response>,
+  revision: number,
+): Record<string, Availability> =>
+  Object.fromEntries(
+    ids.map((id) => [
+      id,
+      {
+        value: answers[id] ?? "YES",
+        coordinationRevision: revision,
+        answeredAt: at(-1, 19),
+      },
+    ]),
+  )
+
+const noAnswers = (): Record<string, Availability> => ({})
+
+interface EventOverrides {
+  state?: Event["state"]
+  title?: string
+  date?: string
+  time?: string
+  end?: string
+  venueId?: string
+  opponent?: string
+  seriesId?: string | null
+  clubWide?: boolean
+  targetTeams?: string[]
+  targetPersonIds?: string[]
+  coordinationRevision?: number
+  meeting?: string
+  departure?: string
+  point?: string
+  transport?: string
+  arrival?: string
+  availability?: Record<string, Availability>
+  published?: string[] | null
+  attendance?: Record<string, AttendanceValue>
+  attendanceOpened?: boolean
+  attendanceClosedAt?: string | null
+  record?: Event["record"]
+  history?: string[]
+}
+
+function makeEvent(
   id: string,
   type: Event["type"],
-  date: string,
+  dayOffset: number,
   time: string,
-  opponent = "",
-): Event => ({
-  id,
-  type,
-  date,
-  time,
-  end: type === "MATCH" ? "19:30" : "20:30",
-  title:
-    type === "TRAINING" ? "Entrenamiento de Sexta A" : "Encuentro de hockey",
-  team: "sexta",
-  targetTeams: ["sexta"],
-  targetPersonIds: [],
-  seriesId: null,
-  venueId: "v1",
-  venue: "GEI · Cancha de hockey",
-  venueAddress: "Av. Mitre 1240, Ituzaingó",
-  opponent,
-  state: "SCHEDULED",
-  revision: 1,
-  version: 1,
-  competition: "Torneo AHBA 2026 · Damas",
-  meeting: "17:00",
-  departure: "",
-  point: "Entrada de la cancha",
-  transport: "Nos encontramos directamente en el club.",
-  arrival: "Llegar con 30 minutos de anticipación y ambas camisetas.",
-  clubWide: false,
-  availability: Object.fromEntries(names.slice(0, 15).map((_, index) => [
-      `p${index}`,
-      {
-        value: index < 11 ? "YES" : index < 13 ? "MAYBE" : "NO",
-        revision: 1,
+  overrides: EventOverrides = {},
+): Event {
+  const date = overrides.date ?? addDays(today, dayOffset)
+  const targetTeams = overrides.targetTeams ?? ["sexta"]
+  const coordinationRevision = overrides.coordinationRevision ?? 1
+  const responders = targetTeams.includes("sexta")
+    ? playerIds.slice(0, 8)
+    : targetTeams.includes("septima")
+      ? playerIds.slice(8, 15)
+      : []
+  return {
+    id,
+    type,
+    title:
+      overrides.title ??
+      (type === "TRAINING" ? "Entrenamiento" : "Encuentro de hockey"),
+    targetTeams,
+    targetPersonIds: overrides.targetPersonIds ?? [],
+    seriesId: overrides.seriesId ?? null,
+    venueId: overrides.venueId ?? "v1",
+    date,
+    time,
+    end: overrides.end ?? (type === "MATCH" ? "19:30" : "20:30"),
+    opponent: overrides.opponent ?? "",
+    state: overrides.state ?? "SCHEDULED",
+    coordinationRevision,
+    version: 1,
+    competitionId: type === "MATCH" ? "ahba" : null,
+    competitionEntryId: type === "MATCH" ? "entry-line-sexta-a" : null,
+    meeting: overrides.meeting ?? "17:00",
+    departure: overrides.departure ?? "",
+    point: overrides.point ?? "Entrada de la cancha",
+    transport:
+      overrides.transport ?? "Nos encontramos directamente en el club.",
+    arrival:
+      overrides.arrival ??
+      "Llegar con 30 minutos de anticipación y ambas camisetas.",
+    clubWide: overrides.clubWide ?? false,
+    availability:
+      overrides.availability ??
+      availabilityFor(responders, {}, coordinationRevision),
+    selection: [],
+    selectionDraftAt: null,
+    published: overrides.published ?? null,
+    publishedAt: null,
+    selectionRevisions: [],
+    attendance: overrides.attendance ?? {},
+    attendanceOpened: overrides.attendanceOpened ?? false,
+    attendanceClosedAt: overrides.attendanceClosedAt ?? null,
+    attendanceHistory: [],
+    record:
+      overrides.record ?? {
+        state: "DRAFT",
+        status: "PLAYED",
+        gei: 0,
+        opponent: 0,
+        observations: "",
+        stats: {},
       },
-    ])),
-  selection: names.slice(0, 12).map((_, index) => `p${index}`),
-  published: null,
-  selectionRevisions: [],
-  attendance: {},
-  attendanceOpened: false,
-  attendanceClosed: false,
-  record: {
-    state: "DRAFT",
-    status: "PLAYED",
-    gei: 0,
-    opponent: 0,
-    observations: "",
-    stats: {},
-  },
-  history: ["Evento programado por Tomás Beltrán · 28 sep 2026"],
-})
+    recordHistory: [],
+    history: overrides.history ?? [],
+    divergedFromSeries: false,
+  }
+}
+
 export function createSeed(): State {
-  const match = baseEvent("match-cuba", "MATCH", "2026-10-10", "18:00", "CUBA")
-  match.revision = 2
-  match.published = [...match.selection]
-  match.selectionRevisions = [
+  const matchCuba = makeEvent("match-cuba", "MATCH", 6, "18:00", {
+    opponent: "CUBA",
+    coordinationRevision: 3,
+    published: playerIds.slice(0, 8),
+    meeting: "17:00",
+  })
+  // Una sola persona quedó con la confirmación del horario anterior.
+  matchCuba.availability.p0 = {
+    value: "YES",
+    coordinationRevision: 1,
+    answeredAt: at(-3, 19),
+  }
+  matchCuba.publishedAt = at(-1, 10)
+  matchCuba.selection = [...(matchCuba.published ?? [])]
+  matchCuba.selectionDraftAt = null
+  matchCuba.selectionRevisions = [
     {
-      id: "selection-r1",
-      players: [...match.selection],
+      id: "sel-r1",
+      players: playerIds.slice(0, 8),
+      added: playerIds.slice(0, 8),
+      removed: [],
       author: "Tomás Beltrán",
-      date: "1 oct 2026 · 10:00",
+      at: at(-1, 10),
+      conflicts: ["p4"],
     },
   ]
-  match.history.unshift("Horario actualizado de 16:00 a 18:00 · 1 oct 2026")
-  const completed = baseEvent(
-    "match-sic",
-    "MATCH",
-    "2026-09-26",
-    "16:00",
-    "SIC",
-  )
-  completed.state = "COMPLETED"
-  completed.attendanceOpened = true
-  completed.attendanceClosed = true
-  completed.attendance = Object.fromEntries(
-    names
-      .slice(0, 14)
-      .map((_, index) => [`p${index}`, index < 12 ? "PRESENT" : "JUSTIFIED"]),
-  )
-  completed.record = {
-    state: "FINAL",
-    status: "PLAYED",
-    gei: 3,
-    opponent: 1,
-    observations: "Buen trabajo colectivo. Dos goles en el último cuarto.",
-    stats: {
-      p0: { played: true, goals: 2, assists: 0 },
-      p2: { played: true, goals: 1, assists: 1 },
-      p1: { played: true, goals: 0, assists: 1 },
+  matchCuba.history = [
+    "Horario cambiado de 16:00 a 18:00 · Tomás Beltrán · hace 2 días",
+    "Convocatoria publicada · Tomás Beltrán · hace 2 días",
+    "Evento programado · Carolina Sánchez · hace 8 días",
+  ]
+
+  const matchLomas = makeEvent("match-lomas", "MATCH", 0, "17:00", {
+    opponent: "Lomas",
+    state: "IN_PROGRESS",
+    availability: availabilityFor(
+      playerIds.slice(0, 8),
+      { p0: "YES", p1: "YES", p2: "YES", p3: "MAYBE", p4: "NO" },
+      1,
+    ),
+    attendanceOpened: true,
+    attendance: {
+      p0: "PRESENT",
+      p1: "PRESENT",
+      p2: "PRESENT",
+      p3: "JUSTIFIED",
+      p4: "ABSENT",
     },
-  }
-  const training = baseEvent(
-    "training-today",
-    "TRAINING",
-    "2026-10-02",
-    "19:00",
+    record: {
+      state: "DRAFT",
+      status: "PLAYED",
+      gei: 1,
+      opponent: 1,
+      observations: "",
+      stats: { p0: { played: true, goals: 1, assists: 0 } },
+    },
+  })
+  matchLomas.history = [
+    "Partido iniciado · Tomás Beltrán · hoy",
+    "Convocatoria publicada · Tomás Beltrán · hace 4 días",
+  ]
+
+  const matchSic = makeEvent("match-sic", "MATCH", -6, "16:00", {
+    opponent: "SIC",
+    state: "COMPLETED",
+    attendanceOpened: true,
+    attendanceClosedAt: at(-6, 20),
+    attendance: {
+      p0: "PRESENT",
+      p1: "PRESENT",
+      p2: "PRESENT",
+      p3: "PRESENT",
+      p4: "ABSENT",
+      p5: "PRESENT",
+      p6: "JUSTIFIED",
+    },
+    record: {
+      state: "FINAL",
+      status: "PLAYED",
+      gei: 3,
+      opponent: 1,
+      observations: "Buen trabajo colectivo. Dos goles en el último cuarto.",
+      stats: {
+        p0: { played: true, goals: 2, assists: 0 },
+        p1: { played: true, goals: 0, assists: 1 },
+        p2: { played: true, goals: 1, assists: 1 },
+      },
+    },
+    history: [
+      "Resultado corregido de 3-1 a 4-1 · Tomás Beltrán · hace 5 días",
+      "Resultado finalizado · Tomás Beltrán · hace 6 días",
+      "Asistencia cerrada · Tomás Beltrán · hace 6 días",
+    ],
+  })
+  matchSic.recordHistory = [
+    {
+      id: "rh-1",
+      before: "GEI vs. SIC 3-1 (Final)",
+      after: "GEI vs. SIC 4-1 (Final)",
+      actor: "Tomás Beltrán",
+      at: at(-5, 21),
+      reason: "Gol de먼트氏 corregido con el acta de la árbitra.",
+    },
+  ]
+  matchSic.attendanceHistory = [
+    {
+      id: "ah-1",
+      personId: "p6",
+      before: "ABSENT",
+      after: "JUSTIFIED",
+      actor: "Tomás Beltrán",
+      at: at(-6, 20, 5),
+      reason: "Envió el certificado médico",
+      correction: true,
+    },
+  ]
+
+  const matchBanco = makeEvent("match-banco", "MATCH", 12, "16:00", {
+    opponent: "Banco Nación",
+    state: "POSTPONED",
+    history: ["Partido postergado · Carolina Sánchez · hace 1 día"],
+  })
+
+  // Serie de 4 ocurrencias: obliga a que "Toda la serie" mute 4.
+  const trainingSeries = [-3, 2, 5, 9].map((offset, index) =>
+    makeEvent(`training-serie-${index + 1}`, "TRAINING", offset, "19:00", {
+      title: "Entrenamiento Sexta A",
+      seriesId: "series-sexta",
+      availability: availabilityFor(
+        playerIds.slice(0, 8),
+        { p4: "MAYBE", p6: "NO" },
+        1,
+      ),
+      history: index === 0 ? ["Entrenamiento registrado · Carolina Sánchez · hace 3 días"] : [],
+    }),
   )
-  training.attendanceOpened = true
-  training.attendance = {
-    p0: "PRESENT",
-    p1: "PRESENT",
-    p2: "PRESENT",
-    p3: "JUSTIFIED",
-  }
-  const postponed = baseEvent(
-    "match-banco",
-    "MATCH",
-    "2026-10-17",
-    "16:00",
-    "Banco Nación",
-  )
-  postponed.state = "POSTPONED"
-  const cancelled = baseEvent(
-    "training-cancelled",
-    "TRAINING",
-    "2026-10-01",
-    "19:00",
-  )
-  cancelled.state = "CANCELLED"
-  const unresolved = baseEvent(
-    "match-lomas",
-    "MATCH",
-    "2026-09-30",
-    "17:00",
-    "Lomas",
-  )
-  unresolved.state = "IN_PROGRESS"
-  const club = baseEvent("club-event", "CLUB_EVENT", "2026-10-11", "10:00")
-  club.title = "Encuentro de familias de hockey"
-  club.clubWide = true
-  club.targetTeams = []
-  club.targetPersonIds = []
-  training.seriesId = "series-sexta"
-  const trainingNext = baseEvent("training-next", "TRAINING", "2026-10-06", "19:00")
-  trainingNext.seriesId = "series-sexta"
+
+  const septimaMatch = makeEvent("match-septima-quinta", "MATCH", 8, "11:00", {
+    opponent: "Quinta B",
+    targetTeams: ["septima"],
+    coordinationRevision: 2,
+    published: playerIds.slice(8, 13),
+    meeting: "10:15",
+    departure: "10:00",
+    point: "Estacionamiento interno",
+    history: ["Entrenamiento reprogramado · Carolina Sánchez · ayer"],
+  })
+
+  const clubEvent = makeEvent("club-familias", "CLUB_EVENT", 4, "10:00", {
+    title: "Encuentro de familias de hockey",
+    clubWide: true,
+    targetTeams: [],
+    availability: noAnswers(),
+    history: [],
+  })
+
+  const cancelled = makeEvent("training-cancelado", "TRAINING", -1, "19:00", {
+    state: "CANCELLED",
+    history: ["Entrenamiento cancelado · Carolina Sánchez · ayer"],
+  })
+
+  const people: Person[] = [
+    ...peopleNames.map(
+      ([id, name, firstName, lastName, role, team], index) => ({
+        id: id as string,
+        name: name as string,
+        firstName: firstName as string,
+        lastName: lastName as string,
+        // Perfil incompleto deliberado para poder verificar D6.
+        dni: id === "p17" ? "" : `45${String(100000 + index)}`,
+        birth: id === "p17" ? "" : "2010-05-12",
+        phone: id === "p17" ? "" : `11 5402 ${2100 + index}`,
+        email: `${(firstName as string).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}@ejemplo.com`,
+        account: id === "p16" ? ("PENDING" as const) : ("ACTIVE" as const),
+        username: `${(firstName as string).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`,
+        credentialVersion: 1,
+        passwordSet: true,
+        lastActivityAt: at(index % 5 === 0 ? 0 : -1, 9 + (index % 8), 12),
+        sessions: [
+          {
+            id: `sess-${id}-1`,
+            device: "Chrome · Windows",
+            createdAt: at(-6, 8),
+            lastSeenAt: at(0, 8 + (index % 6)),
+            current: true,
+          },
+          {
+            id: `sess-${id}-2`,
+            device: "Chrome · Android",
+            createdAt: at(-14, 21),
+            lastSeenAt: at(-3, 22),
+            current: false,
+          },
+        ],
+        setupToken: null,
+        roleAssignments: [
+          {
+            id: `${id}-player`,
+            role: (role === "CAPTAIN" ? "PLAYER" : role) as
+              | "PLAYER"
+              | "CAPTAIN",
+            scope: "TEAM" as const,
+            target: team,
+            validFrom: addDays(today, -200),
+            validUntil: null,
+          },
+          ...(role === "CAPTAIN"
+            ? [
+                {
+                  id: `${id}-captain`,
+                  role: "CAPTAIN" as const,
+                  scope: "TEAM" as const,
+                  target: team,
+                  validFrom: addDays(today, -200),
+                  validUntil: null,
+                },
+              ]
+            : []),
+        ],
+      }),
+    ),
+    {
+      id: "coach",
+      name: "Tomás Beltrán",
+      firstName: "Tomás",
+      lastName: "Beltrán",
+      dni: "32145678",
+      birth: "1986-08-21",
+      phone: "11 6042 1870",
+      email: "tomas.beltran@gei.com.ar",
+      account: "ACTIVE",
+      username: "tomas.beltran",
+      credentialVersion: 2,
+      passwordSet: true,
+      lastActivityAt: at(0, 7, 40),
+      sessions: [
+        {
+          id: "sess-coach-1",
+          device: "Chrome · Windows",
+          createdAt: at(-3, 7),
+          lastSeenAt: at(0, 7, 40),
+          current: true,
+        },
+        {
+          id: "sess-coach-2",
+          device: "Safari · iPad",
+          createdAt: at(-30, 18),
+          lastSeenAt: at(-9, 20),
+          current: false,
+        },
+      ],
+      setupToken: null,
+      roleAssignments: [
+        {
+          id: "coach-sexta",
+          role: "COACH",
+          scope: "TEAM",
+          target: "sexta",
+          validFrom: addDays(today, -200),
+          validUntil: null,
+        },
+        {
+          id: "coach-septima",
+          role: "COACH",
+          scope: "TEAM",
+          target: "septima",
+          validFrom: addDays(today, -120),
+          validUntil: null,
+        },
+      ],
+    },
+    {
+      id: "admin",
+      name: "Mariana Costa",
+      firstName: "Mariana",
+      lastName: "Costa",
+      dni: "30123456",
+      birth: "1984-04-10",
+      phone: "11 4021 5620",
+      email: "mariana@gei.com.ar",
+      account: "ACTIVE",
+      username: "mariana.costa",
+      credentialVersion: 1,
+      passwordSet: true,
+      lastActivityAt: at(0, 8, 5),
+      sessions: [
+        {
+          id: "sess-admin-1",
+          device: "Chrome · Windows",
+          createdAt: at(-2, 8),
+          lastSeenAt: at(0, 8, 5),
+          current: true,
+        },
+      ],
+      setupToken: null,
+      roleAssignments: [
+        {
+          id: "admin-club",
+          role: "ADMIN",
+          scope: "CLUB",
+          target: "club",
+          validFrom: addDays(today, -400),
+          validUntil: null,
+        },
+      ],
+    },
+    {
+      id: "subcommittee",
+      name: "Carolina Sánchez",
+      firstName: "Carolina",
+      lastName: "Sánchez",
+      dni: "31234567",
+      birth: "1985-07-01",
+      phone: "11 4562 2391",
+      email: "carolina@gei.com.ar",
+      account: "ACTIVE",
+      username: "carolina.sanchez",
+      credentialVersion: 1,
+      passwordSet: true,
+      lastActivityAt: at(0, 7, 15),
+      sessions: [
+        {
+          id: "sess-sub-1",
+          device: "Chrome · Windows",
+          createdAt: at(-1, 7),
+          lastSeenAt: at(0, 7, 15),
+          current: true,
+        },
+      ],
+      setupToken: null,
+      roleAssignments: [
+        {
+          id: "sub-club",
+          role: "SUBCOMMITTEE",
+          scope: "CLUB",
+          target: "club",
+          validFrom: addDays(today, -400),
+          validUntil: null,
+        },
+      ],
+    },
+    {
+      id: "guardian",
+      name: "Marcela Fernández",
+      firstName: "Marcela",
+      lastName: "Fernández",
+      dni: "28999888",
+      birth: "1980-02-02",
+      phone: "11 5000 0000",
+      email: "marcela@ejemplo.com",
+      account: "ACTIVE",
+      username: "marcela.fernandez",
+      credentialVersion: 1,
+      passwordSet: false,
+      lastActivityAt: at(-2, 20),
+      sessions: [
+        {
+          id: "sess-guardian-1",
+          device: "Chrome · Windows",
+          createdAt: at(-2, 20),
+          lastSeenAt: at(-2, 20),
+          current: true,
+        },
+      ],
+      setupToken: null,
+      // Guardian no es Role: no tiene RoleAssignment deportivo.
+      roleAssignments: [],
+    },
+  ]
+
   return {
-    people: [
-      ...names.map((name, index) => ({
-        id: `p${index}`,
-        name,
-        team: "sexta",
-        role: index === 0 ? "CAPTAIN" as const : "PLAYER" as const,
-        eligibility:
-          index === 4
-            ? "BLOCKED" as const
-            : index === 12
-              ? "PENDING" as const
-              : "ELIGIBLE" as const,
-        phone: `11 5402 ${String(2100 + index)}`,
-        email: `${name.split(" ")[0].toLowerCase()}@ejemplo.com`,
-        dni: `${45000000 + index}`,
-        birth: "2010-05-12",
-        account: "ACTIVE" as const,
-        username: `jugadora${index}`,
-        credentialVersion: 1,
-        passwordSet: true,
-      })),
+    people,
+    structure: [
+      { id: "s1", type: "SEASON", name: "2026", archived: false },
+      { id: "s2", type: "SEASON", name: "2025", archived: false },
+      { id: "d1", type: "DIVISION", name: "Primera", parentId: "s1", archived: false },
+      { id: "d2", type: "DIVISION", name: "Quinta", parentId: "s1", archived: false },
+      { id: "d3", type: "DIVISION", name: "Sexta", parentId: "s1", archived: false },
+      { id: "d4", type: "DIVISION", name: "Séptima", parentId: "s1", archived: false },
+      { id: "l1", type: "LINE", name: "A", archived: false },
+      { id: "l2", type: "LINE", name: "B", archived: false },
+      { id: "l3", type: "LINE", name: "Proyección", archived: false },
+    ],
+    venues: [
       {
-        id: "coach",
-        name: "Tomás Beltrán",
-        role: "COACH",
-        team: "sexta",
-        eligibility: "ELIGIBLE",
-        phone: "11 6042 1870",
-        email: "tomas.beltran@gei.com.ar",
-        dni: "32145678",
-        birth: "1986-08-21",
-        account: "ACTIVE",
-        username: "tomas.beltran",
-        credentialVersion: 1,
-        passwordSet: true,
+        id: "v1",
+        name: "GEI · Cancha de hockey",
+        address: "Av. Mitre 1240, Ituzaingó",
+        fieldLabel: "Cancha 1",
       },
       {
-        id: "admin",
-        name: "Mariana Costa",
-        role: "ADMIN",
-        team: "",
-        eligibility: "ELIGIBLE",
-        phone: "11 4021 5620",
-        email: "mariana@gei.com.ar",
-        dni: "30123456",
-        birth: "1984-04-10",
-        account: "ACTIVE",
-        username: "mariana.costa",
-        credentialVersion: 1,
-        passwordSet: true,
+        id: "v2",
+        name: "CUBA · Villa de Mayo",
+        address: "Av. San Martín 4250, Villa de Mayo",
+        fieldLabel: "Cancha 2",
       },
       {
-        id: "subcommittee",
-        name: "Carolina Sánchez",
-        role: "SUBCOMMITTEE",
-        team: "",
-        eligibility: "ELIGIBLE",
-        phone: "11 4562 2391",
-        email: "carolina@gei.com.ar",
-        dni: "31234567",
-        birth: "1985-07-01",
-        account: "ACTIVE",
-        username: "carolina.sanchez",
-        credentialVersion: 1,
-        passwordSet: true,
-      },
-      {
-        id: "guardian",
-        name: "Marcela Fernández",
-        role: "PLAYER",
-        team: "",
-        eligibility: "ELIGIBLE",
-        phone: "11 5000 0000",
-        email: "marcela@ejemplo.com",
-        dni: "28999888",
-        birth: "1980-02-02",
-        account: "ACTIVE",
-        username: "marcela.fernandez",
-        roleAssignments: [],
-        credentialVersion: 1,
-        passwordSet: true,
+        id: "v3",
+        name: "Quinta · Club Atlético",
+        address: "Av. 25 de Mayo 812, Ituzaingó",
+        fieldLabel: "Cancha 1",
       },
     ],
     teams: [
-      ["primera", "Primera"],
-      ["quinta", "Quinta"],
-      ["sexta", "Sexta"],
-      ["septima", "Séptima"],
-    ].map(([id, division]) => ({
-      id,
-      division,
-      line: "A",
-      season: "2026",
-      name: `${division} A`,
-      state: "ACTIVE",
-    })),
-    events: [
-      training,
-      match,
-      trainingNext,
-      club,
-      postponed,
-      completed,
-      cancelled,
-      unresolved,
+      { id: "primera", divisionId: "d1", lineId: "l1", seasonId: "s1", state: "ACTIVE" },
+      { id: "quinta", divisionId: "d2", lineId: "l2", seasonId: "s1", state: "ACTIVE" },
+      { id: "sexta", divisionId: "d3", lineId: "l1", seasonId: "s1", state: "ACTIVE" },
+      { id: "septima", divisionId: "d4", lineId: "l1", seasonId: "s1", state: "ACTIVE" },
     ],
+    events: [
+      matchLomas,
+      trainingSeries[0],
+      cancelled,
+      matchSic,
+      trainingSeries[1],
+      clubEvent,
+      matchCuba,
+      matchBanco,
+      septimaMatch,
+      trainingSeries[2],
+      trainingSeries[3],
+    ],
+    eventSeries: [
+      {
+        id: "series-sexta",
+        name: "Entrenamientos Sexta A",
+        status: "ACTIVE",
+        createdAt: at(-30, 9),
+      },
+    ],
+    eventOccurrenceOverrides: [],
     announcements: [
       {
         id: "a1",
         title: "Todo listo para la próxima fecha",
         body: "El sábado recibimos a CUBA en nuestra cancha. Recordamos traer ambas camisetas, protector bucal y botella de agua.\n\nLas familias pueden acompañar desde el sector de espectadores. Por favor, mantengamos libres los accesos a la cancha.\n\n¡Nos vemos en el club!",
-        audience: "Sexta A",
+        audience: { kind: "TEAMS", teamIds: ["sexta"] },
+        audienceSnapshot: {
+          clubWide: false,
+          teamIds: ["sexta"],
+          label: "Sexta A",
+          at: at(-1, 9),
+        },
         state: "PUBLISHED",
-        publisher: "Carolina Sánchez · Subcomisión",
-        date: "2026-10-01",
+        publisher: "Carolina Sánchez",
+        at: at(-1, 9),
+        corrections: [],
       },
       {
         id: "a2",
         title: "Encuentro de familias de hockey",
-        body: "El domingo 11 de octubre compartiremos una mañana de hockey en GEI. El encuentro comienza a las 10:00. Invitamos a todas las familias a participar.",
-        audience: "Todo hockey",
+        body: "El domingo compartimos una mañana de hockey en GEI. El encuentro comienza a las 10:00. Invitamos a todas las familias a participar.",
+        audience: { kind: "CLUB" },
+        audienceSnapshot: {
+          clubWide: true,
+          teamIds: [],
+          label: "Todo el hockey",
+          at: at(-3, 9),
+        },
         state: "PUBLISHED",
-        publisher: "Subcomisión de hockey",
-        date: "2026-09-30",
+        publisher: "Carolina Sánchez",
+        at: at(-3, 9),
+        corrections: [],
       },
       {
         id: "a3",
         title: "Cierre de temporada 2026",
         body: "Estamos coordinando el encuentro de cierre de temporada. Próximamente compartiremos la fecha.",
-        audience: "Todo hockey",
+        audience: { kind: "CLUB" },
+        audienceSnapshot: null,
         state: "DRAFT",
         publisher: "Carolina Sánchez",
-        date: "2026-10-02",
+        at: at(-1, 16),
+        corrections: [],
       },
     ],
     conversations: [
       {
-        id: "c1",
+        id: "c-team-sexta",
         teamId: "sexta",
-        title: "Sexta A · Equipo",
         kind: "TEAM",
-        participants: ["coach", ...names.map((_, index) => `p${index}`)],
-        unread: 2,
+        participants: ["coach", ...playerIds.slice(0, 8)],
+        unread: { coach: 2, p2: 1 },
+        state: "ACTIVE",
         messages: [
           {
             id: "m1",
             author: "p0",
             body: "¿Llevamos las dos camisetas el sábado?",
-            time: "10:32",
+            at: at(0, 10, 32),
+            state: "SENT",
           },
           {
             id: "m2",
             author: "coach",
-            body: "Sí, las dos. Nos encontramos en la cancha a las 17:00.",
-            time: "10:35",
+            body: "Sí, las dos. Nos encontramos en la cancha 45 minutos antes.",
+            at: at(0, 10, 35),
+            state: "SENT",
           },
           {
             id: "m3",
             author: "p2",
-            body: "Perfecto, gracias Tomi. ¡Nos vemos hoy!",
-            time: "11:04",
+            body: "Perfecto, gracias Tomi.",
+            at: at(0, 11, 4),
+            state: "SENT",
           },
         ],
       },
       {
-        id: "c2",
-        title: "Victoria Berg",
+        id: "c-direct-vicky",
         kind: "DIRECT",
         participants: ["coach", "p0"],
-        unread: 0,
+        unread: {},
+        state: "ACTIVE",
         messages: [
           {
             id: "m4",
             author: "p0",
             body: "Ya avisé al equipo el cambio de horario.",
-            time: "09:48",
+            at: at(-1, 9, 48),
+            state: "SENT",
           },
           {
             id: "m5",
             author: "coach",
             body: "Buenísimo, Vicky. Gracias por coordinar.",
-            time: "09:50",
+            at: at(-1, 9, 50),
+            state: "SENT",
           },
         ],
       },
       {
-        id: "c3",
+        id: "c-event-cuba",
         eventId: "match-cuba",
-        title: "GEI vs. CUBA · 10 oct",
         kind: "EVENT",
         participants: ["coach", "p0", "p2"],
-        unread: 0,
+        unread: { p2: 1 },
+        state: "ACTIVE",
         messages: [
           {
             id: "m6",
             author: "coach",
             body: "Este espacio es para coordinar la logística del partido.",
-            time: "Ayer",
+            at: at(-1, 8, 30),
+            state: "SENT",
           },
         ],
       },
@@ -366,49 +708,33 @@ export function createSeed(): State {
       {
         id: "n1",
         type: "EVENT_RESCHEDULED",
-        title: "Partido reprogramado",
-        body: "GEI vs. CUBA pasó de las 16:00 a las 18:00. Las jugadoras deben reconfirmar su disponibilidad.",
+        title: "El horario del partido cambió",
+        body: "GEI vs. CUBA pasó de 16:00 a 18:00. Hay que volver a confirmar la disponibilidad.",
         route: "/events/match-cuba",
-        date: "Hace 1 hora",
-        read: false,
+        at: at(-2, 18, 5),
+        recipients: ["coach", ...playerIds.slice(0, 8)],
+        readBy: ["coach"],
       },
       {
         id: "n2",
         type: "ANNOUNCEMENT_PUBLISHED",
-        title: "Comunicado publicado",
-        body: "Todo listo para la próxima fecha · Sexta A",
+        title: "Comunicado para Sexta A",
+        body: "Todo listo para la próxima fecha",
         route: "/announcements/a1",
-        date: "Ayer",
-        read: false,
+        at: at(-1, 9, 5),
+        recipients: [...playerIds.slice(0, 8)],
+        readBy: [],
       },
       {
         id: "n3",
         type: "SELECTION_PUBLISHED",
         title: "Convocatoria publicada",
         body: "La convocatoria de GEI vs. CUBA ya está disponible.",
-        route: "/events/match-cuba",
-        date: "Ayer",
-        read: true,
+        route: "/events/match-cuba/selection",
+        at: at(-2, 10, 0),
+        recipients: ["coach", ...playerIds.slice(0, 8)],
+        readBy: [...playerIds.slice(0, 8)],
       },
-    ],
-    structure: [
-      { id: "s1", type: "Temporada", name: "2026", archived: false },
-      ...["Primera", "Quinta", "Sexta", "Séptima"].map((name, index) => ({
-        id: `d${index}`,
-        type: "División",
-        name,
-        archived: false,
-      })),
-      { id: "l1", type: "Línea", name: "A", archived: false },
-      { id: "l2", type: "Línea", name: "B", archived: false },
-      { id: "l3", type: "Línea", name: "Proyección", archived: false },
-      {
-        id: "v1",
-        type: "Sede",
-        name: "GEI · Cancha de hockey",
-        archived: false,
-      },
-      { id: "v2", type: "Sede", name: "CUBA · Villa de Mayo", archived: false },
     ],
     competitions: [
       {
@@ -418,11 +744,44 @@ export function createSeed(): State {
         state: "ACTIVE",
         entries: [
           {
-            id: "entry1",
+            id: "entry-line-sexta-a",
             scope: "LINE",
-            team: "A",
+            divisionId: "d3",
+            lineId: "l1",
+            seasonId: "s1",
             state: "ACTIVE",
-            reference: "AHBA · Línea A · 2026",
+            reference: "AHBA-L6A-2026",
+          },
+          {
+            id: "entry-team-quinta-b",
+            scope: "TEAM",
+            teamId: "quinta",
+            state: "ACTIVE",
+            reference: "AHBA-5B-2026",
+          },
+          {
+            id: "entry-team-primera-a",
+            scope: "TEAM",
+            teamId: "primera",
+            state: "PENDING",
+            reference: "AHBA-1A-2026",
+          },
+        ],
+      },
+      {
+        id: "copa-gei",
+        name: "Copa GEI 2026",
+        organizer: "Gimnasia y Esgrima de Ituzaingó",
+        state: "ACTIVE",
+        entries: [
+          {
+            id: "entry-line-primera-a",
+            scope: "LINE",
+            divisionId: "d1",
+            lineId: "l1",
+            seasonId: "s1",
+            state: "ACTIVE",
+            reference: "COPA-1A-2026",
           },
         ],
       },
@@ -430,10 +789,15 @@ export function createSeed(): State {
     jornadas: [
       {
         id: "j1",
-        name: "Fecha 18 · GEI vs. CUBA",
-        season: "2026",
-        competition: "ahba",
+        name: `Fecha ${todayIso().slice(8, 10)} · GEI vs. CUBA`,
+        seasonId: "s1",
+        competitionId: "ahba",
         events: ["match-cuba"],
+        at: today,
+        venueId: "v1",
+        meeting: "17:00",
+        departure: "",
+        point: "Entrada de la cancha",
       },
     ],
     audit: [
@@ -442,21 +806,34 @@ export function createSeed(): State {
         actor: "Tomás Beltrán",
         action: "Reprogramar partido",
         resource: "GEI vs. CUBA",
-        reason: "Cambio de horario confirmado por el club visitante",
-        date: "01 oct 2026 · 14:20",
+        before: "16:00",
+        after: "18:00",
+        source: "Celular del entrenador",
+        at: at(-2, 18, 0),
+        route: "/events/match-cuba",
       },
       {
         id: "audit2",
         actor: "Mariana Costa",
         action: "Asignar equipo",
-        resource: "Lucía Fernández · Sexta A",
-        reason: "Alta de temporada",
-        date: "28 sep 2026 · 10:15",
+        resource: "Lucía Fernández",
+        before: "—",
+        after: "Sexta A",
+        source: "Alta de temporada",
+        at: at(-200, 10, 15),
+        route: "/management/people/p2",
       },
-    ],
-    venues: [
-      { id: "v1", name: "GEI · Cancha de hockey", address: "Av. Mitre 1240, Ituzaingó", fieldLabel: "Cancha 1" },
-      { id: "v2", name: "CUBA · Villa de Mayo", address: "Av. San Martín 4250, Villa de Mayo" },
+      {
+        id: "audit3",
+        actor: "Carolina Sánchez",
+        action: "Publicar comunicado",
+        resource: "Todo listo para la próxima fecha",
+        before: "Borrador",
+        after: "Publicado",
+        source: "Subcomisión de hockey",
+        at: at(-1, 9, 0),
+        route: "/announcements/a1",
+      },
     ],
     eligibilityConstraints: [
       {
@@ -464,12 +841,14 @@ export function createSeed(): State {
         personId: "p4",
         state: "BLOCKED",
         scope: "ENTRY",
-        scopeRefId: "entry1",
+        scopeRefId: "entry-line-sexta-a",
         source: "AHBA",
         reason: "FEDERATION",
         note: "Pase pendiente de registración federativa.",
-        validFrom: "2026-03-01",
+        validFrom: addDays(today, -60),
         validUntil: null,
+        createdAt: at(-60, 10),
+        createdBy: "Carolina Sánchez",
       },
       {
         id: "ec-p12",
@@ -480,29 +859,48 @@ export function createSeed(): State {
         source: "INTERNAL",
         reason: "MEDICAL_CLEARANCE",
         note: "Apto médico en revisión.",
-        validFrom: "2026-09-01",
-        validUntil: null,
+        validFrom: addDays(today, -20),
+        validUntil: addDays(today, 30),
+        createdAt: at(-20, 10),
+        createdBy: "Carolina Sánchez",
+      },
+      {
+        id: "ec-p9",
+        personId: "p9",
+        state: "BLOCKED",
+        scope: "COMPETITION",
+        scopeRefId: "ahba",
+        source: "INTERNAL",
+        reason: "DISCIPLINE",
+        note: "Sanción de una fecha.",
+        validFrom: addDays(today, -10),
+        validUntil: addDays(today, 4),
+        createdAt: at(-10, 10),
+        createdBy: "Carolina Sánchez",
       },
     ],
     memberships: [
-      ...names.map((_, index) => ({
-        id: `mem-p${index}`,
-        personId: `p${index}`,
-        validFrom: "2026-03-01",
-        validUntil: null as string | null,
-      })),
-      { id: "mem-coach", personId: "coach", validFrom: "2026-03-01", validUntil: null as string | null },
-      { id: "mem-admin", personId: "admin", validFrom: "2026-03-01", validUntil: null as string | null },
-      { id: "mem-sub", personId: "subcommittee", validFrom: "2026-03-01", validUntil: null as string | null },
+      // p16 tiene cuenta pendiente de activar: todavía no existe Membership (D2).
+      ...people
+        .filter((person) => person.id !== "p16")
+        .map((person) => ({
+          id: `mem-${person.id}`,
+          personId: person.id,
+          validFrom: addDays(today, -200),
+          validUntil: null as string | null,
+        })),
     ],
     teamAssignments: [
-      ...names.map((_, index) => ({
-        id: `ta-p${index}`,
-        personId: `p${index}`,
-        teamId: "sexta",
-        validFrom: "2026-03-01",
-        validUntil: null as string | null,
-      })),
+      // p16 tiene cuenta pendiente: todavía no hay TeamAssignment (D2).
+      ...playerIds
+        .filter((id) => id !== "p16")
+        .map((id) => ({
+          id: `ta-${id}`,
+          personId: id,
+          teamId: peopleNames[playerIds.indexOf(id)][5] as string,
+          validFrom: addDays(today, -200),
+          validUntil: null as string | null,
+        })),
     ],
     guardianRelationships: [
       {
@@ -512,10 +910,23 @@ export function createSeed(): State {
         relation: "Madre",
         canViewChildInfo: true,
         canRespondAvailability: true,
-        validFrom: "2026-03-01",
-        validUntil: null as string | null,
+        validFrom: addDays(today, -200),
+        validUntil: null,
+      },
+      {
+        id: "gr-2",
+        guardianId: "guardian",
+        childId: "p8",
+        relation: "Madre",
+        canViewChildInfo: true,
+        canRespondAvailability: false,
+        validFrom: addDays(today, -200),
+        validUntil: null,
       },
     ],
-    eventSeries: [{ id: "series-sexta", name: "Entrenamientos Sexta A", status: "ACTIVE" as const }],
   }
+}
+
+function state0Membership(ids: string[]) {
+  return ids.filter((id) => id !== "p16")
 }
