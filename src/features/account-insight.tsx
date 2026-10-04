@@ -1,826 +1,1181 @@
-import { useEffect, useState } from "react"
-import { Link, useNavigate, Navigate } from "react-router"
+import { useMemo, useState } from "react"
+import { Link, useNavigate } from "react-router"
 import {
-  UserRound,
-  BarChart3,
-  ShieldCheck,
-  LogOut,
-  Trophy,
-  KeyRound,
-  CheckCircle2,
   ArrowRight,
+  CheckCircle2,
+  FileText,
+  KeyRound,
+  LogOut,
+  ShieldCheck,
   Users,
 } from "lucide-react"
-import { useProduct, wait } from "../mock/store"
-import { labels, dateLabel } from "../mock/model"
+import { useProduct } from "../mock/store"
+import { todayIso } from "../mock/clock"
 import {
-  Header,
-  Surface,
-  Section,
-  Button,
+  dateLabel,
+  dateTimeLabel,
+  eventName,
+  periodLabel,
+  relativeLabel,
+  teamName,
+  type Event,
+} from "../mock/model"
+import {
+  activeGuardianRelations,
+  activeMemberships,
+  activeRoleAssignments,
+  activeTeamAssignments,
+  guardiansOf,
+  membershipOf,
+  profileCompleteness,
+  roleScopeLabel,
+  visibleEvents,
+} from "../mock/derive"
+import {
   Avatar,
-  RowLink,
-  TextField,
-  TextArea,
-  Select,
-  Alert,
+  Banner,
+  Button,
   Empty,
-  Modal,
+  Expander,
+  KeyValue,
+  RowLink,
+  RowStatic,
+  Select,
+  Sheet,
+  StateBadge,
+  Surface,
+  Tag,
+  TextField,
+  cx,
 } from "../shared/ui"
-import { Restricted } from "./management"
+import {
+  DetailSection,
+  HistoryList,
+  PageContextHeader,
+  SectionHeader,
+} from "../shared/patterns"
+import { useQueryState } from "../shared/use-query-state"
+
+const ROLE_LABEL: Record<string, string> = {
+  PLAYER: "Jugadora",
+  CAPTAIN: "Capitana",
+  COACH: "Entrenador",
+  ADMIN: "Administración",
+  SUBCOMMITTEE: "Subcomisión",
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MÁS
+   ═══════════════════════════════════════════════════════════════ */
 
 export function MorePage() {
-  const { capabilities, actor, state } = useProduct()
+  const { authority, state, actor } = useProduct()
+  const links: Array<{ to: string; label: string; detail: string; show: boolean }> = [
+    {
+      to: "/more/profile",
+      label: "Mi perfil",
+      detail: "Identidad, roles, cuenta y seguridad",
+      show: true,
+    },
+    {
+      to: "/reports",
+      label: "Informes",
+      detail: "Asistencia y rendimiento",
+      show: authority.canOpen("reports"),
+    },
+    {
+      to: "/audit",
+      label: "Historial de cambios",
+      detail: "Quién hizo qué y cuándo",
+      show: authority.canOpen("audit"),
+    },
+    {
+      to: "/management/people",
+      label: "Personas",
+      detail: "Altas, cuentas, roles y habilitación",
+      show: authority.canOpen("people"),
+    },
+    {
+      to: "/management/structure",
+      label: "Estructura del club",
+      detail: "Temporadas, divisiones, líneas y sedes",
+      show: authority.canOpen("structure"),
+    },
+    {
+      to: "/management/competitions",
+      label: "Competencias",
+      detail: "Inscripciones por equipo y por línea",
+      show: authority.canOpen("competitions"),
+    },
+  ]
+  const pending = state.jornadas.filter((jornada) =>
+    visibleEvents(state, actor.id, null).some((event) =>
+      jornada.events.includes(event.id),
+    ),
+  )
+
   return (
-    <>
-      <Header
+    <div className="gei-stack-page mx-auto max-w-3xl">
+      <PageContextHeader
+        context="Más"
         title="Más"
-        description="Tu perfil y las herramientas de tu alcance."
+        lead="Todo lo que no es el día a día: informes, administración y tu cuenta."
       />
-      <Surface className="max-w-3xl">
-        <RowLink
-          to="/more/profile"
-          title="Mi perfil"
-          detail={`${actor.name} · ${labels[actor.role]}`}
-          icon={<UserRound size={20} className="text-primary" />}
-        />
-        {capabilities.report && (
-          <RowLink
-            to="/reports"
-            title="Reportes"
-            detail="Asistencia y rendimiento"
-            icon={<BarChart3 size={20} className="text-primary" />}
-          />
-        )}
-        {capabilities.management && (
-          <RowLink
-            to="/management"
-            title="Administración"
-            detail="Personas, estructura y accesos"
-            icon={<ShieldCheck size={20} className="text-primary" />}
-          />
-        )}
-        {(capabilities.sport || capabilities.official) && (
-          <RowLink
-            to="/management/competitions"
-            title="Competiciones"
-            detail="Contexto e inscripciones vigentes"
-            icon={<Trophy size={20} className="text-primary" />}
-          />
-        )}
-        {(capabilities.sport || capabilities.official) &&
-          (state.jornadas.length > 0 || capabilities.sport) && (
+      <div className="grid gap-1">
+        {links
+          .filter((link) => link.show)
+          .map((link) => (
             <RowLink
-              to={state.jornadas[0] ? `/jornadas/${state.jornadas[0].id}` : "/jornadas/new"}
-              title="Jornadas"
-              detail={
-                state.jornadas[0]
-                  ? `${state.jornadas[0].name} · ${state.jornadas[0].events.length} partidos`
-                  : "Coordinación de partidos · Crear la primera"
-              }
-              icon={<Users size={20} className="text-primary" />}
+              key={link.to}
+              to={link.to}
+              title={link.label}
+              detail={link.detail}
             />
-          )}
-        {capabilities.management && (
-          <RowLink
-            to="/audit"
-            title="Auditoría"
-            detail="Historial inmutable de acciones"
-            icon={<ShieldCheck size={20} className="text-primary" />}
-          />
-        )}
-        <RowLink
-          to="/login"
-          title="Cerrar sesión"
-          detail="Volver a la pantalla de ingreso"
-          icon={<LogOut size={20} className="text-muted-foreground" />}
-        />
-      </Surface>
-    </>
+          ))}
+      </div>
+      {pending.length > 0 && (
+        <DetailSection title="Jornadas">
+          <div className="grid gap-1">
+            {pending.map((jornada) => (
+              <RowLink
+                key={jornada.id}
+                to={`/jornadas/${jornada.id}`}
+                title={jornada.name}
+                detail={`${jornada.events.length} ${
+                  jornada.events.length === 1 ? "partido" : "partidos"
+                }`}
+              />
+            ))}
+          </div>
+        </DetailSection>
+      )}
+    </div>
   )
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   PERFIL — mi identidad y mi acceso al club
+   ═══════════════════════════════════════════════════════════════ */
+
 export function ProfilePage() {
-  const { actor, state, update, changePassword, toast } = useProduct()
-  const [edit, setEdit] = useState("")
-  const [phone, setPhone] = useState(actor.phone)
-  const [email, setEmail] = useState(actor.email)
-  const [current, setCurrent] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirm, setConfirm] = useState("")
-  const [pending, setPending] = useState(false)
-  const [error, setError] = useState("")
-  async function save() {
-    setError("")
-    if (
-      edit === "password" &&
-      (!current ||
-        password.length < 12 ||
-        password.length > 128 ||
-        password !== confirm)
-    ) {
-      setError(
-        "Ingresá la contraseña actual y una nueva de 12 a 128 caracteres. La confirmación debe coincidir.",
-      )
-      return
-    }
-    setPending(true)
-    await wait()
-    if (edit === "contact")
-      update(
-        (draft) => {
-          const person = draft.people.find((item) => item.id === actor.id)!
-          person.phone = phone
-          person.email = email
-        },
-        "Editar contacto propio",
-        actor.name,
-      )
-    if (edit === "password") {
-      const result = changePassword(actor.id, current, password)
-      setPending(false)
-      if (!result.ok) {
-        setError(result.error ?? "No pudimos cambiar la contraseña.")
-        return
-      }
-      setEdit("")
-      setCurrent("")
-      setPassword("")
-      setConfirm("")
-      toast("Contraseña actualizada")
-      return
-    }
-    setPending(false)
-    setEdit("")
-    toast("Contacto actualizado")
-  }
+  const {
+    state,
+    actor,
+    authority,
+    changePassword,
+    endOtherSession,
+    updateOwnContact,
+    logout,
+    childId,
+  } = useProduct()
+  const [passwordOpen, setPasswordOpen] = useState(false)
+  const [contactOpen, setContactOpen] = useState(false)
+  const [childSheet, setChildSheet] = useState(false)
+  const query = useQueryState()
+
+  const memberships = activeMemberships(state, actor.id)
+  const membership = membershipOf(state, actor.id)
+  const teams = activeTeamAssignments(state, actor.id)
+  const roles = activeRoleAssignments(state, actor.id)
+  const completeness = profileCompleteness(actor)
+  const relations = activeGuardianRelations(state, actor.id)
+  const myGuardians = guardiansOf(state, actor.id)
+  const currentSession = actor.sessions.find((session) => session.current)
+  const otherSessions = actor.sessions.filter((session) => !session.current)
+  const attentionSection = query.get("section")
+  void attentionSection
+
   return (
-    <>
-      <Header
-        back="/more"
-        title="Mi perfil"
-        description="Tus datos de contacto y tu acceso a GEI Hockey."
+    <div className="gei-stack-page mx-auto max-w-3xl">
+      <PageContextHeader
+        context="Mi perfil"
+        title={actor.name}
+        lead="Quién sos, qué permisos tenés y cómo entrar a tu cuenta."
+        action={<Avatar name={actor.name} size="lg" selected />}
       />
-      <Surface className="max-w-3xl p-6">
-        <div className="flex items-center gap-5">
-          <Avatar name={actor.name} size="lg" blue />
-          <div>
-            <h2 className="text-lg font-semibold">{actor.name}</h2>
-            <p className="mt-2 text-xs text-muted-foreground">
-              {labels[actor.role]}
-              {actor.team
-                ? ` · ${state.teams.find((team) => team.id === actor.team)?.name} 2026`
-                : " · Club"}
-            </p>
+
+      {!completeness.complete && (
+        <Banner tone="attention" title="Tu perfil necesita algunos datos para poder ser asignada correctamente">
+          <div className="grid gap-1">
+            <span className="text-ink-strong">
+              No podemos asignarte a un equipo porque faltan datos que administra
+              el club:
+            </span>
+            <ul className="list-disc pl-5">
+              {completeness.missing.map((item) => (
+                <li key={item.key}>{item.label}</li>
+              ))}
+            </ul>
           </div>
-        </div>
-        <dl className="mt-7 grid gap-6 border-t border-border pt-6 text-xs sm:grid-cols-2">
-          {[
-            ["Usuario", actor.username],
-            ["Email", actor.email],
-            ["Teléfono", actor.phone],
-            [
-              "Contexto",
-              actor.team ? "Pertenencia vigente · 2026" : "Acceso de club",
-            ],
-          ].map(([label, value]) => (
-            <div key={label}>
-              <dt className="text-[10px] text-muted-foreground">{label}</dt>
-              <dd className="mt-2 font-medium">{value}</dd>
-            </div>
-          ))}
-        </dl>
-        <div className="mt-7 flex flex-wrap gap-3">
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setEdit("contact")
-              setError("")
-            }}
-          >
-            Editar contacto
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setEdit("password")
-              setError("")
-            }}
-          >
-            <KeyRound size={14} />
-            Cambiar contraseña
-          </Button>
-        </div>
-      </Surface>
-      {state.guardianRelationships.filter((r) => r.guardianId === actor.id && !r.validUntil).length > 0 && (
-        <Surface className="mt-6 max-w-3xl p-6">
-          <h2 className="gei-section-title">Personas a cargo</h2>
-          <p className="gei-body mt-1 text-muted-foreground">
-            Delegación para responder disponibilidad y ver información operativa del menor. Sin DNI, sin motivos de elegibilidad, sin chats privados.
-          </p>
-          <div className="mt-4 space-y-2">
-            {state.guardianRelationships
-              .filter((r) => r.guardianId === actor.id && !r.validUntil)
-              .map((r) => {
-                const child = state.people.find((p) => p.id === r.childId)
-                return (
-                  <div key={r.id} className="flex items-center justify-between gap-3 rounded-lg border border-border px-4 py-3">
-                    <div>
-                      <p className="text-[13px] font-semibold">{child?.name ?? r.childId}</p>
-                      <p className="gei-meta mt-0.5">
-                        {r.relation}
-                        {r.canRespondAvailability ? " · Puede responder ¿Vas?" : ""}
-                      </p>
-                    </div>
-                  </div>
-                )
-              })}
-          </div>
+        </Banner>
+      )}
+
+      {relations.length > 0 && (
+        <Surface className="grid gap-3">
+          <SectionHeader
+            title="A quién estás mirando"
+            meta={
+              relations.length > 1 ? `${relations.length} menores` : undefined
+            }
+          />
+          <ul className="grid gap-1">
+            {relations.map((relation) => {
+              const child = state.people.find(
+                (person) => person.id === relation.childId,
+              )
+              const active = childId === relation.childId
+              return (
+                <li key={relation.id}>
+                  <button
+                    type="button"
+                    onClick={() => setChildSheet(true)}
+                    className={cx(
+                      "gei-target flex w-full items-center gap-3 rounded-control px-3 text-left transition-colors",
+                      active ? "bg-selected-soft" : "hover:bg-control",
+                    )}
+                  >
+                    <Avatar name={child?.name ?? "—"} size="sm" />
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-body font-semibold text-ink">
+                        {child?.name ?? "—"}
+                      </span>
+                      <span className="gei-meta block">
+                        {relation.relation} · ve información:{" "}
+                        {relation.canViewChildInfo ? "sí" : "no"} · responde ¿Vas?:{" "}
+                        {relation.canRespondAvailability ? "sí" : "no"}
+                      </span>
+                    </span>
+                    {active && <Tag tone="selected">Mirando</Tag>}
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
         </Surface>
       )}
-      {edit && (
-        <Modal
-          title={edit === "contact" ? "Editar contacto" : "Cambiar contraseña"}
-          onClose={() => !pending && setEdit("")}
-          footer={
-            <>
-              <Button variant="secondary" onClick={() => setEdit("")}>
-                Volver
-              </Button>
-              <Button disabled={pending} onClick={save}>
-                {pending ? "Guardando…" : "Guardar cambios"}
-              </Button>
-            </>
-          }
-        >
-          <div className="space-y-4">
-            {edit === "contact" ? (
-              <>
-                <TextField
-                  label="Teléfono"
-                  value={phone}
-                  onChange={(event) => setPhone(event.target.value)}
-                />
-                <TextField
-                  label="Email"
-                  type="email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-              </>
-            ) : (
-              <>
-                <TextField
-                  label="Contraseña actual"
-                  type="password"
-                  value={current}
-                  onChange={(event) => setCurrent(event.target.value)}
-                />
-                <TextField
-                  label="Nueva contraseña"
-                  type="password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                />
-                <TextField
-                  label="Confirmar nueva contraseña"
-                  type="password"
-                  value={confirm}
-                  onChange={(event) => setConfirm(event.target.value)}
-                />
-                <p className="text-xs text-muted-foreground">
-                  Entre 12 y 128 caracteres. Podés usar espacios.
-                </p>
-              </>
-            )}
-            {error && <Alert tone="error">{error}</Alert>}
+
+      <DetailSection title="Identidad">
+        <KeyValue
+          items={[
+            { label: "Nombre", value: actor.name },
+            { label: "Nombre de usuario", value: actor.username || "Sin definir" },
+            {
+              label: "Cuenta",
+              value: <StateBadge value={actor.account} emphasis />,
+            },
+          ]}
+        />
+      </DetailSection>
+
+      <DetailSection title="Pertenencia" meta="Tu vínculo con el club">
+        {memberships.length === 0 ? (
+          <Banner tone="attention" title="No tenés una pertenencia vigente">
+            <span className="text-ink-strong">
+              La pertenencia es el vínculo con el club. Sin ella no podés entrar a
+              la temporada. La administra el club.
+            </span>
+          </Banner>
+        ) : (
+          <KeyValue
+            items={memberships.map((item) => ({
+              label: "Vigencia",
+              value: periodLabel(item.validFrom, item.validUntil),
+            }))}
+          />
+        )}
+        {teams.length > 0 ? (
+          <div className="mt-3">
+            <p className="gei-meta mb-1">Equipos vigentes</p>
+            <ul className="grid gap-1">
+              {teams.map((assignment) => (
+                <li key={assignment.id}>
+                  <RowStatic
+                    title={teamName(state, assignment.teamId)}
+                    detail={periodLabel(assignment.validFrom, assignment.validUntil)}
+                  />
+                </li>
+              ))}
+            </ul>
           </div>
-        </Modal>
+        ) : (
+          <p className="gei-meta mt-3">
+            No tenés equipos asignados. La asignación deportiva la hace el club.
+          </p>
+        )}
+      </DetailSection>
+
+      <DetailSection title="Roles y alcance">
+        {roles.length === 0 ? (
+          <p className="gei-meta">
+            {relations.length > 0
+              ? "No tenés roles deportivos. Entrás al club para ver la información de los menores a tu cargo."
+              : "No tenés roles deportivos vigentes."}
+          </p>
+        ) : (
+          <ul className="grid">
+            {roles.map((role) => (
+              <li key={role.id}>
+                <RowStatic
+                  title={ROLE_LABEL[role.role] ?? role.role}
+                  detail={`${roleScopeLabel(state, role)} · ${periodLabel(
+                    role.validFrom,
+                    role.validUntil,
+                  )}`}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+      </DetailSection>
+
+      {myGuardians.length > 0 && (
+        <DetailSection title="Personas que pueden actuar por mí">
+          <ul className="grid">
+            {myGuardians.map((relation) => {
+              const guardian = state.people.find(
+                (person) => person.id === relation.guardianId,
+              )
+              return (
+                <li key={relation.id}>
+                  <RowStatic
+                    title={guardian?.name ?? "—"}
+                    detail={`${relation.relation} · puede ver tu información: ${
+                      relation.canViewChildInfo ? "sí" : "no"
+                    } · puede responder tu disponibilidad: ${
+                      relation.canRespondAvailability ? "sí" : "no"
+                    }`}
+                  />
+                </li>
+              )
+            })}
+          </ul>
+        </DetailSection>
       )}
-    </>
+
+      <DetailSection
+        title="Contacto"
+        action={
+          <Button variant="secondary" size="sm" onClick={() => setContactOpen(true)}>
+            Editar
+          </Button>
+        }
+      >
+        <KeyValue
+          items={[
+            { label: "Correo", value: actor.email || "Sin correo" },
+            { label: "Teléfono", value: actor.phone || "Sin teléfono" },
+          ]}
+        />
+      </DetailSection>
+
+      <DetailSection
+        title="Seguridad"
+        action={
+          <Button variant="secondary" size="sm" onClick={() => setPasswordOpen(true)}>
+            <KeyRound size={14} aria-hidden />
+            Cambiar contraseña
+          </Button>
+        }
+      >
+        <div className="grid gap-3">
+          <KeyValue
+            items={[
+              {
+                label: "Credencial",
+                value: actor.passwordSet ? "Configurada" : "Sin configurar",
+              },
+              {
+                label: "Última actividad",
+                value: `${dateTimeLabel(actor.lastActivityAt)} (${relativeLabel(
+                  actor.lastActivityAt,
+                  new Date(),
+                ).toLowerCase()})`,
+              },
+            ]}
+          />
+          <div>
+            <p className="gei-body-strong">Sesiones activas</p>
+            <ul className="mt-2 grid gap-2">
+              {currentSession && (
+                <li className="flex flex-wrap items-center gap-3 rounded-control border border-selected-line bg-selected-soft px-3 py-2.5">
+                  <div className="min-w-0 flex-1">
+                    <p className="gei-body-strong text-ink">
+                      {currentSession.device}
+                    </p>
+                    <p className="gei-meta">
+                      Esta sesión · abierta el {dateTimeLabel(currentSession.createdAt)}
+                    </p>
+                  </div>
+                  <Tag tone="selected">Actual</Tag>
+                </li>
+              )}
+              {otherSessions.map((session) => (
+                <li
+                  key={session.id}
+                  className="flex flex-wrap items-center gap-3 rounded-control border border-line bg-surface px-3 py-2.5"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="gei-body-strong text-ink">{session.device}</p>
+                    <p className="gei-meta">
+                      Última actividad {relativeLabel(session.lastSeenAt, new Date()).toLowerCase()}
+                    </p>
+                  </div>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => endOtherSession(session.id)}
+                  >
+                    Cerrar sesión
+                  </Button>
+                </li>
+              ))}
+              {!currentSession && otherSessions.length === 0 && (
+                <li className="gei-meta">No hay sesiones registradas.</li>
+              )}
+            </ul>
+          </div>
+        </div>
+      </DetailSection>
+
+      {!completeness.complete && (
+        <Banner tone="attention" title="Siguiente paso">
+          <span className="text-ink-strong">
+            Avisale a la administración del club para que complete esos datos.
+            Desde tu perfil no se pueden cambiar.
+          </span>
+        </Banner>
+      )}
+
+      <div className="flex flex-wrap gap-2 border-t border-line pt-5">
+        <Button variant="danger" onClick={logout}>
+          <LogOut size={16} aria-hidden />
+          Cerrar sesión
+        </Button>
+      </div>
+
+      {passwordOpen && (
+        <PasswordDialog
+          onClose={() => setPasswordOpen(false)}
+          onSubmit={(current, next) => changePassword(current, next)}
+        />
+      )}
+
+      {contactOpen && (
+        <ContactDialog
+          phone={actor.phone}
+          email={actor.email}
+          onClose={() => setContactOpen(false)}
+          onSubmit={(data) => {
+            updateOwnContact(data)
+            setContactOpen(false)
+          }}
+        />
+      )}
+
+      {childSheet && (
+        <Sheet
+          title="Personas a cargo"
+          description="Elegí con qué menor querés trabajar."
+          onClose={() => setChildSheet(false)}
+        >
+          <ul className="grid gap-1">
+            {relations.map((relation) => {
+              const child = state.people.find(
+                (person) => person.id === relation.childId,
+              )
+              return (
+                <li key={relation.id}>
+                  <RowStatic
+                    title={child?.name ?? "—"}
+                    detail={`${relation.relation} · responde ¿Vas?: ${
+                      relation.canRespondAvailability ? "sí" : "no"
+                    }`}
+                  />
+                </li>
+              )
+            })}
+          </ul>
+          <p className="gei-meta mt-3">
+            Cambiar de menor se gestiona desde administración. Esta vista es sólo
+            de consulta.
+          </p>
+        </Sheet>
+      )}
+    </div>
   )
 }
-export function LoginPage() {
-  const { login, state, logout } = useProduct()
-  const navigate = useNavigate()
-  const [username, setUsername] = useState("tomas.beltran")
-  const [password, setPassword] = useState("")
-  const [pending, setPending] = useState(false)
+
+function PasswordDialog({
+  onClose,
+  onSubmit,
+}: {
+  onClose: () => void
+  onSubmit: (current: string, next: string) => { ok: boolean; error?: string }
+}) {
+  const [current, setCurrent] = useState("")
+  const [next, setNext] = useState("")
   const [error, setError] = useState("")
-  useEffect(() => {
-    logout()
-  }, [])
-  async function submit() {
-    setPending(true)
-    setError("")
-    await wait()
-    const person = state.people.find(
-      (item) => item.username === username || item.id === username,
-    )
-    if (!password || !login(username)) {
-      setError(
-        "No pudimos ingresar. Revisá tu usuario y contraseña o consultá con administración.",
-      )
-      setPending(false)
-      return
-    }
-    navigate(
-      person?.team || ["ADMIN", "SUBCOMMITTEE"].includes(person?.role || "")
-        ? person?.role === "ADMIN"
-          ? "/management"
-          : "/home"
-        : "/no-access",
-    )
-  }
   return (
-    <PublicFrame>
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold">Ingresar</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Tu equipo, en un mismo lugar.
-        </p>
+    <Sheet
+      title="Cambiar contraseña"
+      description="Necesita al menos 12 caracteres."
+      onClose={onClose}
+      footer={
+        <>
+          <Button variant="quiet" onClick={onClose}>
+            Cancelar
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              const result = onSubmit(current, next)
+              if (result.ok) onClose()
+              else setError(result.error ?? "No pudimos cambiarla.")
+            }}
+          >
+            Cambiar contraseña
+          </Button>
+        </>
+      }
+    >
+      <div className="grid gap-4">
+        <TextField
+          label="Contraseña actual"
+          type="password"
+          value={current}
+          error={error && !current ? error : undefined}
+          onChange={(event) => {
+            setCurrent(event.target.value)
+            setError("")
+          }}
+        />
+        <TextField
+          label="Contraseña nueva"
+          type="password"
+          value={next}
+          hint="Mínimo 12 caracteres."
+          error={error && current ? error : undefined}
+          onChange={(event) => {
+            setNext(event.target.value)
+            setError("")
+          }}
+        />
+      </div>
+    </Sheet>
+  )
+}
+
+function ContactDialog({
+  phone,
+  email,
+  onClose,
+  onSubmit,
+}: {
+  phone: string
+  email: string
+  onClose: () => void
+  onSubmit: (data: { phone: string; email: string }) => void
+}) {
+  const [form, setForm] = useState({ phone, email })
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  return (
+    <Sheet
+      title="Editar contacto"
+      onClose={onClose}
+      footer={
+        <>
+          <Button variant="quiet" onClick={onClose}>
+            Cancelar
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              const found: Record<string, string> = {}
+              if (!form.phone.trim()) found.phone = "Escribí un teléfono."
+              if (!form.email.includes("@")) found.email = "Revisá el correo."
+              setErrors(found)
+              if (Object.keys(found).length === 0) onSubmit(form)
+            }}
+          >
+            Guardar contacto
+          </Button>
+        </>
+      }
+    >
+      <div className="grid gap-4">
+        <TextField
+          label="Teléfono"
+          required
+          value={form.phone}
+          error={errors.phone}
+          onChange={(event) =>
+            setForm((current) => ({ ...current, phone: event.target.value }))
+          }
+        />
+        <TextField
+          label="Correo"
+          type="email"
+          required
+          value={form.email}
+          error={errors.email}
+          onChange={(event) =>
+            setForm((current) => ({ ...current, email: event.target.value }))
+          }
+        />
+      </div>
+    </Sheet>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACCESO
+   ═══════════════════════════════════════════════════════════════ */
+
+export function LoginPage() {
+  const { login } = useProduct()
+  const navigate = useNavigate()
+  const [username, setUsername] = useState("")
+  const [error, setError] = useState("")
+  return (
+    <main className="mx-auto grid min-h-dvh max-w-md content-center gap-5 px-4">
+      <div className="flex items-center gap-3">
+        <span className="flex size-11 items-center justify-center rounded-control bg-brand text-body-strong text-brand-ink">
+          GEI
+        </span>
+        <div>
+          <p className="gei-page-title">GEI Hockey</p>
+          <p className="gei-meta">Gimnasia y Esgrima de Ituzaingó</p>
+        </div>
       </div>
       <form
         onSubmit={(event) => {
           event.preventDefault()
-          submit()
+          if (login(username.trim())) navigate("/home")
+          else setError("No encontramos esa cuenta activa.")
         }}
-        className="space-y-5"
+        className="grid gap-4"
       >
         <TextField
-          label="Usuario"
-          autoComplete="username"
+          label="Nombre de usuario"
           required
           value={username}
-          onChange={(event) => setUsername(event.target.value)}
+          error={error}
+          placeholder="vgerg"
+          onChange={(event) => {
+            setUsername(event.target.value)
+            setError("")
+          }}
         />
-        <TextField
-          label="Contraseña"
-          autoComplete="current-password"
-          required
-          type="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-        />
-        {error && <Alert tone="error">{error}</Alert>}
-        <Button type="submit" className="w-full" disabled={pending}>
-          {pending ? "Ingresando…" : "Ingresar"}
-          <ArrowRight size={15} />
+        <Button type="submit" variant="primary">
+          Entrar
         </Button>
       </form>
-      <div className="mt-7 border-t border-border pt-6 text-center text-xs">
-        <span className="text-muted-foreground">¿Es tu primera vez?</span>
-        <Link to="/activate" className="ml-2 font-semibold text-primary">
-          Activar cuenta
-        </Link>
-      </div>
-      <details className="mt-7 text-[10px] text-muted-foreground">
-        <summary className="cursor-pointer">
-          Información de la demostración local
-        </summary>
-        <p className="mt-3 leading-relaxed">
-          Usá tomas.beltran (entrenador), mariana.costa (administración),
-          carolina.sanchez (subcomisión) o jugadora2 (jugadora). Ingresá
-          cualquier contraseña no vacía. No se envían ni almacenan credenciales.
-        </p>
-      </details>
-    </PublicFrame>
+      <p className="gei-meta">
+        ¿No tenés cuenta? La administración del club te emite un código de
+        activación.
+      </p>
+    </main>
   )
 }
-function PublicFrame({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex min-h-dvh items-center justify-center bg-background px-5 py-12">
-      <div className="w-full max-w-sm">
-        <Link
-          to="/login"
-          className="mb-10 flex items-center justify-center gap-3"
-        >
-          <span className="flex size-11 items-center justify-center rounded-lg bg-primary text-lg font-bold text-white">
-            GEI
-          </span>
-          <span>
-            <span className="block text-lg font-bold">GEI Hockey</span>
-            <span className="mt-0.5 block text-[9px] uppercase tracking-[1.2px] text-muted-foreground">
-              Gestión deportiva
-            </span>
-          </span>
-        </Link>
-        <Surface className="p-7">{children}</Surface>
-        <p className="mt-7 text-center text-[10px] text-muted-foreground">
-          Gimnasia y Esgrima de Ituzaingó · Hockey
-        </p>
-      </div>
-    </div>
-  )
-}
+
 export function ActivatePage() {
-  const { state, update } = useProduct()
-  const [form, setForm] = useState({
-    username: "",
-    code: "",
-    password: "",
-    confirm: "",
-  })
-  const [complete, setComplete] = useState(false)
-  const [pending, setPending] = useState(false)
+  const { state, activateAccount } = useProduct()
+  const navigate = useNavigate()
+  const [code, setCode] = useState("")
   const [error, setError] = useState("")
-  async function activate() {
-    setError("")
-    const person = state.people.find((item) => item.username === form.username)
-    if (
-      !person ||
-      person.account !== "PENDING" ||
-      form.code !== "GEI-2026-4812"
-    ) {
-      setError(
-        "El usuario o el código de activación no son válidos. Consultá con administración.",
-      )
-      return
-    }
-    if (
-      form.password.length < 12 ||
-      form.password.length > 128 ||
-      form.password !== form.confirm
-    ) {
-      setError(
-        "Usá entre 12 y 128 caracteres. Las contraseñas deben coincidir.",
-      )
-      return
-    }
-    setPending(true)
-    await wait()
-    update(
-      (draft) =>
-        (draft.people.find((item) => item.id === person.id)!.account =
-          "ACTIVE"),
-      "Activar cuenta",
-      person.name,
-    )
-    setPending(false)
-    setComplete(true)
-  }
+  const [ok, setOk] = useState(false)
   return (
-    <PublicFrame>
-      {complete ? (
-        <div className="space-y-5 text-center">
-          <CheckCircle2 className="mx-auto text-success" size={36} />
-          <h1 className="text-xl font-semibold">Cuenta activada</h1>
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            Ya podés ingresar con tu usuario y contraseña.
-          </p>
-          <Link to="/login">
-            <Button className="mt-4 w-full">Ir a Ingresar</Button>
-          </Link>
-        </div>
+    <main className="mx-auto grid min-h-dvh max-w-md content-center gap-5 px-4">
+      <PageContextHeader
+        context="Activar cuenta"
+        title="Activá tu cuenta"
+        lead="Usá el código que te dio la administración del club."
+      />
+      {ok ? (
+        <Banner tone="success" title="Cuenta activada">
+          <span className="text-ink-strong">
+            Ya podés entrar con tu nombre de usuario.
+          </span>
+        </Banner>
       ) : (
-        <>
-          <h1 className="mb-2 text-xl font-semibold">Activar cuenta</h1>
-          <p className="mb-6 text-xs leading-relaxed text-muted-foreground">
-            Usá el código que te entregó administración.
-          </p>
-          <form
-            onSubmit={(event) => {
-              event.preventDefault()
-              activate()
+        <form
+          onSubmit={(event) => {
+            event.preventDefault()
+            const result = activateAccount(code.trim())
+            if (result.ok) setOk(true)
+            else setError(result.error ?? "Ese código no sirve.")
+          }}
+          className="grid gap-4"
+        >
+          <TextField
+            label="Código de activación"
+            required
+            value={code}
+            error={error}
+            placeholder="GEI-1234"
+            onChange={(event) => {
+              setCode(event.target.value)
+              setError("")
             }}
-            className="space-y-4"
-          >
-            {[
-              ["username", "Usuario"],
-              ["code", "Código de activación"],
-              ["password", "Nueva contraseña"],
-              ["confirm", "Confirmar contraseña"],
-            ].map(([key, label]) => (
-              <TextField
-                key={key}
-                label={label}
-                required
-                type={
-                  ["password", "confirm"].includes(key) ? "password" : "text"
-                }
-                value={form[(key as keyof typeof form)]}
-                onChange={(event) =>
-                  setForm((previous) => ({
-                    ...previous,
-                    [key]: event.target.value,
-                  }))
-                }
-              />
-            ))}
-            {error && <Alert tone="error">{error}</Alert>}
-            <Button type="submit" className="w-full" disabled={pending}>
-              {pending ? "Activando…" : "Activar cuenta"}
-            </Button>
-          </form>
-          <Link
-            to="/login"
-            className="mt-5 block text-center text-xs text-primary"
-          >
-            Volver a Ingresar
-          </Link>
-        </>
-      )}
-    </PublicFrame>
-  )
-}
-export function NoAccessPage() {
-  const { authenticated, hasAccess } = useProduct()
-  if (!authenticated) return <Navigate to="/login" replace />
-  if (hasAccess) return <Navigate to="/home" replace />
-  return (
-    <PublicFrame>
-      <h1 className="text-xl font-semibold">Tu cuenta está activa</h1>
-      <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-        Tu cuenta está activa, pero actualmente no tiene acceso asignado a GEI
-        Hockey.
-      </p>
-      <p className="mt-3 text-xs text-muted-foreground">
-        Consultá con administración para revisar tu acceso.
-      </p>
-      <div className="mt-6 flex flex-col gap-3">
-        <Link to="/more/profile">
-          <Button className="w-full">Mi perfil</Button>
-        </Link>
-        <Link to="/login">
-          <Button variant="secondary" className="w-full">
-            Cerrar sesión
+          />
+          <Button type="submit" variant="primary">
+            Activar cuenta
           </Button>
-        </Link>
-      </div>
-    </PublicFrame>
+        </form>
+      )}
+      {ok && (
+        <Button variant="secondary" onClick={() => navigate("/home")}>
+          Ir al inicio
+        </Button>
+      )}
+      <p className="gei-meta">
+        Cuentas pendientes:{" "}
+        {state.people.filter((person) => person.account === "PENDING").length}.
+      </p>
+    </main>
   )
 }
+
+export function NoAccessPage() {
+  const { actor, logout } = useProduct()
+  return (
+    <main className="mx-auto grid min-h-dvh max-w-md content-center gap-5 px-4">
+      <PageContextHeader
+        context="Sin acceso"
+        title="Todavía no tenés acceso al sistema"
+        lead="Tu cuenta está activa pero el club todavía no te asignó un rol ni una relación de representación."
+      />
+      <KeyValue
+        items={[
+          { label: "Cuenta", value: actor.name },
+          {
+            label: "Estado",
+            value: <StateBadge value={actor.account} emphasis />,
+          },
+        ]}
+      />
+      <Banner tone="neutral" title="Qué sigue">
+        <span className="text-ink-strong">
+          Hablá con la administración del club. En cuanto te asignen, vas a ver
+          los destinos que te corresponden.
+        </span>
+      </Banner>
+      <Button variant="secondary" onClick={logout}>
+        Cerrar sesión
+      </Button>
+    </main>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INFORMES — filtros en URL, cero ≠ sin dato, links al origen
+   ═══════════════════════════════════════════════════════════════ */
+
+function periodStart(period: string): string {
+  const today = todayIso()
+  if (period === "month") return `${today.slice(0, 7)}-01`
+  if (period === "quarter") {
+    const date = new Date(`${today}T12:00:00`)
+    date.setMonth(date.getMonth() - 3)
+    return date.toISOString().slice(0, 10)
+  }
+  if (period === "year") return `${today.slice(0, 4)}-01-01`
+  return ""
+}
+
+function useFilteredEvents() {
+  const { state, actor, childId } = useProduct()
+  const query = useQueryState()
+  const team = query.get("team")
+  const period = query.get("period")
+  const scoped = visibleEvents(state, actor.id, childId)
+  const from = periodStart(period)
+  const events = scoped.filter((event) => {
+    if (team && !event.targetTeams.includes(team)) return false
+    if (from && event.date < from) return false
+    return true
+  })
+  return { events, team, period, query }
+}
+
 export function ReportsPage() {
-  const { capabilities } = useProduct()
-  if (!capabilities.report) return <Restricted />
-  return (
-    <>
-      <Header
-        title="Reportes"
-        description="Proyecciones de registros reales. Información de sólo lectura."
-      />
-      <Surface className="max-w-3xl">
-        <RowLink
-          to="/reports/attendance"
-          title="Asistencia"
-          detail="Presente, ausente, justificada y sin registrar"
-          icon={<Users size={20} className="text-primary" />}
+  const { state, authority } = useProduct()
+  const { events, team, period, query } = useFilteredEvents()
+  const canSee = authority.canOpen("reports")
+
+if (!canSee)
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty
+          title="No tenés informes disponibles"
+          detail="Los informes muestran asistencia y rendimiento según tu alcance."
         />
-        <RowLink
-          to="/reports/performance"
-          title="Rendimiento"
-          detail="Partidos jugados, goles y asistencias"
-          icon={<Trophy size={20} className="text-primary" />}
-        />
-      </Surface>
-    </>
-  )
-}
-export function ReportDetail({
-  performance = false,
-}: {
-  performance?: boolean
-}) {
-  const { state, actor, capabilities } = useProduct()
-  const [team, setTeam] = useState(actor.team || "sexta")
-  const [person, setPerson] = useState("all")
-  const [period, setPeriod] = useState("all")
-  if (!capabilities.report) return <Restricted />
-  const people = state.people.filter(
-    (item) =>
-      item.team === team &&
-      ["PLAYER", "CAPTAIN"].includes(item.role) &&
-      (person === "all" || item.id === person) &&
-      (actor.role !== "PLAYER" || item.id === actor.id),
-  )
-  const events = state.events.filter(
-    (event) =>
-      event.team === team &&
-      (period === "all" || event.date.startsWith(period)) &&
-      (performance ? event.record.state === "FINAL" : event.attendanceOpened),
-  )
+      </div>
+    )
+
   return (
-    <>
-      <Header
-        back="/reports"
-        eyebrow="Sólo lectura"
-        title={performance ? "Rendimiento" : "Asistencia"}
-        description={
-          performance
-            ? "La participación real se obtiene del registro del partido, no de la asistencia."
-            : "Sin registrar se mantiene separado de Ausente."
-        }
+    <div className="gei-stack-page mx-auto max-w-4xl">
+      <PageContextHeader
+        context="Informes"
+        title="Informes"
+        lead="Filtros guardados en la dirección: el botón atrás vuelve al mismo lugar."
       />
-      <div className="mb-6 grid gap-4 sm:grid-cols-3">
+      <div className="flex flex-wrap items-end gap-2">
         <Select
           label="Equipo"
           value={team}
-          onChange={(event) => setTeam(event.target.value)}
+          onChange={(event) => query.set({ team: event.target.value })}
+          className="min-w-48"
         >
-          {state.teams
-            .filter((item) => capabilities.official || item.id === actor.team)
-            .map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name} 2026
-              </option>
-            ))}
+          <option value="">Todos los equipos</option>
+          {state.teams.map((item) => (
+            <option key={item.id} value={item.id}>
+              {teamName(state, item.id)}
+            </option>
+          ))}
         </Select>
         <Select
           label="Período"
           value={period}
-          onChange={(event) => setPeriod(event.target.value)}
+          onChange={(event) => query.set({ period: event.target.value })}
+          className="min-w-44"
         >
-          <option value="all">Toda la temporada</option>
-          <option value="2026-09">Septiembre 2026</option>
-          <option value="2026-10">Octubre 2026</option>
+          <option value="">Todo el histórico</option>
+          <option value="year">Esta temporada</option>
+          <option value="quarter">Últimos 3 meses</option>
+          <option value="month">Este mes</option>
         </Select>
-        <Select
-          label="Jugadora"
-          value={person}
-          onChange={(event) => setPerson(event.target.value)}
-        >
-          <option value="all">
-            {actor.role === "PLAYER" ? "Mis registros" : "Todas las jugadoras"}
-          </option>
-          {state.people
-            .filter(
-              (item) =>
-                item.team === team &&
-                ["PLAYER", "CAPTAIN"].includes(item.role) &&
-                (actor.role !== "PLAYER" || item.id === actor.id),
-            )
-            .map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-        </Select>
+        {(team || period) && (
+          <Button variant="quiet" onClick={() => query.reset(["team", "period"])}>
+            Quitar filtros
+          </Button>
+        )}
       </div>
-      <Surface>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[560px] text-left text-xs">
-            <thead className="bg-muted/40 text-[10px] text-muted-foreground">
-              <tr>
-                <th className="p-4 font-medium">JUGADORA</th>
-                {(performance
-                  ? ["PARTIDOS", "GOLES", "ASISTENCIAS"]
-                  : [
-                      "PRESENTE",
-                      "AUSENTE",
-                      "JUSTIFICADA",
-                      "SIN REGISTRAR",
-                      "% PRESENCIA",
-                    ]
-                ).map((label) => (
-                  <th key={label} className="p-4 font-medium">
-                    {label}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {people.map((player) => {
-                const values = performance
-                  ? [
-                      events.filter(
-                        (event) =>
-                          event.record.status === "PLAYED" &&
-                          event.record.stats[player.id]?.played,
-                      ).length,
-                      events.reduce(
-                        (sum, event) =>
-                          sum + (event.record.stats[player.id]?.goals || 0),
-                        0,
-                      ),
-                      events.reduce(
-                        (sum, event) =>
-                          sum + (event.record.stats[player.id]?.assists || 0),
-                        0,
-                      ),
-                    ]
-                  : [
-                      events.filter(
-                        (event) => event.attendance[player.id] === "PRESENT",
-                      ).length,
-                      events.filter(
-                        (event) => event.attendance[player.id] === "ABSENT",
-                      ).length,
-                      events.filter(
-                        (event) => event.attendance[player.id] === "JUSTIFIED",
-                      ).length,
-                      events.filter((event) => !event.attendance[player.id])
-                        .length,
-                      events.length
-                        ? `${Math.round((events.filter((event) => event.attendance[player.id] === "PRESENT").length / events.length) * 100)}%`
-                        : "—",
-                    ]
-                return (
-                  <tr key={player.id} className="border-t border-border">
-                    <td className="p-4 font-medium">{player.name}</td>
-                    {values.map((value, index) => (
-                      <td
-                        key={index}
-                        className="p-4 tabular-nums text-muted-foreground"
-                      >
-                        {value}
-                      </td>
-                    ))}
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-        <p className="border-t border-border p-4 text-[10px] text-muted-foreground">
-          {events.length}{" "}
-          {performance
-            ? "partidos con resultado final"
-            : "planillas abiertas o cerradas"}{" "}
-          en el período. Sin registros no se interpreta como cero actividad
-          histórica.
-        </p>
-      </Surface>
-    </>
-  )
-}
-export function AuditPage() {
-  const { state, capabilities } = useProduct()
-  const [actor, setActor] = useState("")
-  const [resource, setResource] = useState("")
-  const [action, setAction] = useState("")
-  const [date, setDate] = useState("")
-  if (!capabilities.management) return <Restricted />
-  const entries = state.audit.filter(
-    (entry) =>
-      entry.actor.toLowerCase().includes(actor.toLowerCase()) &&
-      entry.resource.toLowerCase().includes(resource.toLowerCase()) &&
-      entry.action.toLowerCase().includes(action.toLowerCase()) &&
-      (!date ||
-        (date === "2026-10-02"
-          ? entry.date.startsWith("02 oct")
-          : date === "2026-10-01"
-            ? entry.date.startsWith("01 oct")
-            : date === "2026-09-28"
-              ? entry.date.startsWith("28 sep")
-              : false)),
-  )
-  return (
-    <>
-      <Header
-        back="/management"
-        title="Auditoría"
-        description="Registro inmutable de acciones. No se puede editar ni eliminar."
-      />
-      <div className="mb-6 grid gap-4 sm:grid-cols-4">
-        <TextField
-          label="Actor"
-          value={actor}
-          onChange={(event) => setActor(event.target.value)}
+
+      <div className="grid gap-3">
+        <RowLink
+          to={`/reports/attendance${team ? `?team=${team}` : ""}${period ? `&period=${period}` : ""}`}
+          title="Asistencia"
+          detail="Presentes, ausentes y justificadas por evento"
         />
-        <TextField
-          label="Recurso"
-          value={resource}
-          onChange={(event) => setResource(event.target.value)}
-        />
-        <TextField
-          label="Acción"
-          value={action}
-          onChange={(event) => setAction(event.target.value)}
-        />
-        <TextField
-          label="Fecha"
-          type="date"
-          value={date}
-          onChange={(event) => setDate(event.target.value)}
+        <RowLink
+          to={`/reports/performance${team ? `?team=${team}` : ""}${period ? `&period=${period}` : ""}`}
+          title="Rendimiento"
+          detail="Resultados y datos por persona"
         />
       </div>
-      {entries.length ? (
-        <Surface>
-          {entries.map((entry) => (
-            <div
-              key={entry.id}
-              className="border-b border-border p-5 last:border-0"
-            >
-              <div className="flex flex-wrap justify-between gap-2">
-                <p className="text-xs font-semibold">{entry.action}</p>
-                <span className="text-[10px] text-muted-foreground">
-                  {entry.date}
-                </span>
-              </div>
-              <p className="mt-2 text-xs text-muted-foreground">
-                {entry.actor} · {entry.resource}
-              </p>
-              {entry.reason && (
-                <p className="mt-2 text-[11px]">Motivo: {entry.reason}</p>
-              )}
-            </div>
-          ))}
-        </Surface>
-      ) : (
+
+      {events.length === 0 && (
         <Empty
-          title="Sin acciones para estos filtros"
-          detail="Probá con otro actor, recurso o período."
+          title="Sin eventos en este período"
+          detail="No es un error: simplemente no hay eventos que coincidan con el filtro."
+          action={
+            (team || period) && (
+              <Button variant="secondary" onClick={() => query.reset(["team", "period"])}>
+                Quitar filtros
+              </Button>
+            )
+          }
         />
       )}
-    </>
+    </div>
+  )
+}
+
+export function ReportDetail({ performance = false }: { performance?: boolean }) {
+  const { state, authority } = useProduct()
+  const { events, team, period, query } = useFilteredEvents()
+  if (!authority.canOpen("reports"))
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty title="No tenés acceso a los informes" detail="Pedilo a la administración." />
+      </div>
+    )
+
+  const played = events.filter((event) => event.record.state === "FINAL")
+  const withAttendance = events.filter((event) => event.attendanceOpened)
+
+  const people = useMemo(() => {
+    const ids = new Set<string>()
+    events.forEach((event) => Object.keys(event.attendance).forEach((id) => ids.add(id)))
+    return Array.from(ids)
+      .map((id) => state.people.find((person) => person.id === id))
+      .filter((person): person is NonNullable<typeof person> => !!person)
+      .sort((a, b) => a.lastName.localeCompare(b.lastName))
+  }, [events, state])
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-4xl">
+      <PageContextHeader
+        context={performance ? "Rendimiento" : "Asistencia"}
+        title={performance ? "Informe de rendimiento" : "Informe de asistencia"}
+        back="/reports"
+        lead={
+          events.length === 0
+            ? "No hay eventos con estos filtros."
+            : `${events.length} ${events.length === 1 ? "evento" : "eventos"} en el período.`
+        }
+        below={
+          <div className="flex flex-wrap items-end gap-2">
+            <Select
+              label="Equipo"
+              value={team}
+              onChange={(event) => query.set({ team: event.target.value })}
+              className="min-w-48"
+            >
+              <option value="">Todos los equipos</option>
+              {state.teams.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {teamName(state, item.id)}
+                </option>
+              ))}
+            </Select>
+            <Select
+              label="Período"
+              value={period}
+              onChange={(event) => query.set({ period: event.target.value })}
+              className="min-w-44"
+            >
+              <option value="">Todo el histórico</option>
+              <option value="year">Esta temporada</option>
+              <option value="quarter">Últimos 3 meses</option>
+              <option value="month">Este mes</option>
+            </Select>
+            {(team || period) && (
+              <Button variant="quiet" onClick={() => query.reset(["team", "period"])}>
+                Quitar filtros
+              </Button>
+            )}
+          </div>
+        }
+      />
+
+      {events.length === 0 ? (
+        <Empty
+          title="Nada para mostrar"
+          detail="No hay eventos que coincidan con estos filtros. No es que falten datos."
+          icon={<FileText size={22} />}
+        />
+      ) : performance ? (
+        <DetailSection title="Resultados" meta={`${played.length} finalizados`}>
+          {played.length === 0 ? (
+            <p className="gei-meta">
+              Ningún evento del período tiene resultado finalizado.
+            </p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-left">
+                <thead>
+                  <tr className="border-b border-line-strong">
+                    <th scope="col" className="gei-meta px-3 py-2">
+                      Evento
+                    </th>
+                    <th scope="col" className="gei-meta px-3 py-2">
+                      Fecha
+                    </th>
+                    <th scope="col" className="gei-meta px-3 py-2">
+                      Resultado
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {played.map((event: Event) => (
+                    <tr key={event.id} className="border-b border-line last:border-b-0">
+                      <td className="px-3 py-2.5">
+                        <Link
+                          to={`/events/${event.id}/match-record`}
+                          className="text-body font-semibold text-interactive hover:underline"
+                        >
+                          {eventName(event)}
+                        </Link>
+                      </td>
+                      <td className="px-3 py-2.5 text-meta tabular-nums">
+                        {dateLabel(event.date)}
+                      </td>
+                      <td className="px-3 py-2.5 text-body font-semibold tabular-nums">
+                        {event.record.gei}–{event.record.opponent}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          <div className="mt-4">
+            <p className="gei-body-strong mb-2">Datos por persona</p>
+            <ul className="grid gap-1">
+              {people.map((person) => {
+                const stats = played
+                  .flatMap((event) => [event.record.stats[person.id]])
+                  .filter(Boolean)
+                const goals = stats.reduce((sum, stat) => sum + (stat?.goals ?? 0), 0)
+                const assists = stats.reduce((sum, stat) => sum + (stat?.assists ?? 0), 0)
+                const appearances = stats.filter((stat) => stat?.played).length
+                return (
+                  <li key={person.id}>
+                    <RowStatic
+                      title={person.name}
+                      meta={
+                        <span className="text-meta tabular-nums text-ink-muted">
+                          {appearances} {appearances === 1 ? "presencia" : "presencias"} ·{" "}
+                          {goals} {goals === 1 ? "gol" : "goles"} · {assists}{" "}
+                          {assists === 1 ? "asistencia" : "asistencias"}
+                        </span>
+                      }
+                    />
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        </DetailSection>
+      ) : (
+        <DetailSection title="Asistencia por evento" meta={`${withAttendance.length} con planilla`}>
+          {withAttendance.length === 0 ? (
+            <p className="gei-meta">
+              No hay planillas de asistencia abiertas en este período.
+            </p>
+          ) : (
+            <ul className="grid gap-1">
+              {withAttendance.map((event) => {
+                const values = Object.values(event.attendance)
+                const present = values.filter((value) => value === "PRESENT").length
+                const absent = values.filter((value) => value === "ABSENT").length
+                const justified = values.filter((value) => value === "JUSTIFIED").length
+                const recorded = values.length
+                const percent = recorded === 0 ? null : Math.round((present / recorded) * 100)
+                return (
+                  <li key={event.id}>
+                    <RowStatic
+                      title={eventName(event)}
+                      detail={`${dateLabel(event.date)} · ${recorded} ${
+                        recorded === 1 ? "registro" : "registros"
+                      }`}
+                      meta={
+                        <span className="text-meta tabular-nums text-ink-muted">
+                          {present} presentes · {absent} ausentes · {justified}{" "}
+                          justificadas · {percent === null ? "—" : `${percent}%`} presencia
+                        </span>
+                      }
+                      trailing={
+                        <Link
+                          to={`/events/${event.id}/attendance`}
+                          className="gei-target-sm inline-flex items-center gap-1 rounded-control px-2 text-meta font-semibold text-interactive hover:bg-selected-soft"
+                        >
+                          Ver planilla
+                          <ArrowRight size={13} aria-hidden />
+                        </Link>
+                      }
+                    />
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </DetailSection>
+      )}
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HISTORIAL DE CAMBIOS — before/after real, filtro por rango
+   ═══════════════════════════════════════════════════════════════ */
+
+export function AuditPage() {
+  const { state, authority } = useProduct()
+  const query = useQueryState()
+  const from = query.get("from")
+  const to = query.get("to")
+  const actorFilter = query.get("actor")
+
+  if (!authority.canViewAudit)
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty
+          title="El historial es de administración"
+          detail="Sólo la administración del club puede ver quién hizo qué."
+        />
+      </div>
+    )
+
+  const entries = state.audit.filter((entry) => {
+    const day = entry.at.slice(0, 10)
+    if (from && day < from) return false
+    if (to && day > to) return false
+    if (actorFilter && entry.actor !== actorFilter) return false
+    return true
+  })
+  const actors = Array.from(new Set(state.audit.map((entry) => entry.actor)))
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-4xl">
+      <PageContextHeader
+        context="Historial"
+        title="Historial de cambios"
+        lead="Cada cambio queda con autor, fecha, motivo y valor anterior."
+        below={
+          <div className="flex flex-wrap items-end gap-2">
+            <TextField
+              label="Desde"
+              type="date"
+              value={from}
+              onChange={(event) => query.set({ from: event.target.value })}
+              className="min-w-40"
+            />
+            <TextField
+              label="Hasta"
+              type="date"
+              value={to}
+              onChange={(event) => query.set({ to: event.target.value })}
+              className="min-w-40"
+            />
+            <Select
+              label="Persona"
+              value={actorFilter}
+              onChange={(event) => query.set({ actor: event.target.value })}
+              className="min-w-48"
+            >
+              <option value="">Todas</option>
+              {actors.map((name) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))}
+            </Select>
+            {(from || to || actorFilter) && (
+              <Button
+                variant="quiet"
+                onClick={() => query.reset(["from", "to", "actor"])}
+              >
+                Quitar filtros
+              </Button>
+            )}
+          </div>
+        }
+      />
+
+      {entries.length === 0 ? (
+        <Empty
+          title="No hay cambios en ese rango"
+          detail={`El historial tiene ${state.audit.length} movimientos en total. Ajustá las fechas para verlos.`}
+          icon={<ShieldCheck size={22} />}
+        />
+      ) : (
+        <Surface flush>
+          <HistoryList
+            entries={entries.map((entry) => ({
+              action: entry.action,
+              actor: entry.actor,
+              at: dateTimeLabel(entry.at),
+              before: entry.before,
+              after: entry.after,
+              reason: entry.source,
+              to: entry.route,
+            }))}
+          />
+        </Surface>
+      )}
+    </div>
   )
 }

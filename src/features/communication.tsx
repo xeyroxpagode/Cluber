@@ -1,966 +1,1070 @@
-import { useEffect, useRef, useState } from "react"
-import { Link, useNavigate, useParams } from "react-router"
+import { useEffect, useMemo, useRef, useState } from "react"
+import { useNavigate, useParams, useSearchParams } from "react-router"
+import { Megaphone, MessagesSquare, Send, Users } from "lucide-react"
+import { useProduct } from "../mock/store"
 import {
-  Megaphone,
-  MessageSquare,
-  Plus,
-  Send,
-  CheckCheck,
-  MoreHorizontal,
-  Users,
-  Bell,
-  Check,
-  Edit3,
-  Trash2,
-} from "lucide-react"
-import { useProduct, wait } from "../mock/store"
-import { canReadNotice, noticeRead } from "../mock/permissions"
-import { labels, dateLabel } from "../mock/model"
-import { todayIso } from "../mock/clock"
+  dateLabel,
+  dateTimeLabel,
+  eventName,
+  relativeLabel,
+  teamName,
+  type Conversation,
+  type State,
+} from "../mock/model"
 import {
-  Header,
-  Surface,
-  Section,
-  Button,
   Avatar,
-  Badge,
-  RowLink,
-  TextField,
-  TextArea,
-  Select,
-  Alert,
+  Banner,
+  Button,
+  ConfirmDialog,
   Empty,
-  Modal,
-  TextLink,
+  Menu,
+  RowLink,
+  RowStatic,
+  SegmentedControl,
+  Select,
+  Sheet,
+  StateBadge,
+  Surface,
+  TabBar,
+  Tag,
+  TextArea,
+  TextField,
+  cx,
 } from "../shared/ui"
+import { canReadAnnouncement } from "../mock/derive"
+import {
+  DetailSection,
+  HistoryList,
+  PageContextHeader,
+  SectionHeader,
+} from "../shared/patterns"
+import { useQueryState } from "../shared/use-query-state"
+
+let nav: ((to: string) => void) | null = null
+/** Navegación SPA para helpers fuera del árbol de componentes. */
+function useRouter() {
+  nav = useNavigate()
+}
+function go(path: string) {
+  if (nav) nav(path)
+  else window.location.assign(path)
+}
+
+function conversationTitle(
+  state: State,
+  conversation: Conversation,
+  actorId: string,
+) {
+  if (conversation.kind === "TEAM")
+    return `Equipo · ${teamName(state, conversation.teamId)}`
+  if (conversation.kind === "EVENT") {
+    const event = state.events.find((item) => item.id === conversation.eventId)
+    return `Evento · ${event ? eventName(event) : "partido"}`
+  }
+  if (conversation.kind === "GROUP") return "Grupo"
+  return (
+    conversation.participants
+      .filter((id) => id !== actorId)
+      .map((id) => state.people.find((person) => person.id === id)?.name)
+      .filter(Boolean)
+      .join(", ") || "Conversación"
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMUNICACIÓN HOME — dos canales perceptualmente distintos
+   ═══════════════════════════════════════════════════════════════ */
 
 export function CommunicationHome() {
-  const { state, actor, capabilities } = useProduct()
-  const [tab, setTab] = useState("all")
-  const announcements = state.announcements.filter(
-    (item) => item.state === "PUBLISHED" || capabilities.official,
-  )
-  const conversations = state.conversations.filter((item) =>
-    item.participants.includes(actor.id),
-  )
+  const { state, authority, actor, childId } = useProduct()
+  const query = useQueryState()
+  const tab = query.get("tab", "conversaciones")
+  void childId
+  useRouter()
+
+  if (!authority.canOpen("communication"))
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty
+          title="No tenés conversaciones habilitadas"
+          detail="La comunicación con el club se habilita por rol."
+        />
+      </div>
+    )
+
+  const conversations = state.conversations
+    .filter(
+      (conversation) =>
+        conversation.state === "ACTIVE" &&
+        conversation.participants.includes(actor.id),
+    )
+    .map((conversation) => ({
+      conversation,
+      unread: conversation.unread[actor.id] ?? 0,
+    }))
+    .sort((a, b) => b.unread - a.unread)
+
+  const unreadTotal = conversations.reduce((sum, item) => sum + item.unread, 0)
+  const visibleAnnouncements = state.announcements.filter((announcement) => {
+    if (announcement.state === "ARCHIVED") return false
+    if (authority.canPublishAnnouncement) return true
+    return canReadAnnouncement(state, announcement, {
+      clubWide: authority.isClubWide,
+      teamIds: authority.teamIds,
+      coachTeamIds: authority.coachTeamIds,
+    })
+  })
+
   return (
-    <>
-      <Header
+    <div className="gei-stack-page mx-auto max-w-4xl">
+      <PageContextHeader
+        context="Comunicación"
         title="Comunicación"
-        description="Comunicados oficiales y conversaciones de tu equipo."
+        lead="Dos cosas distintas: lo que se conversa y lo que el club comunica."
         action={
-          <div className="flex gap-2">
-            {capabilities.official && (
-              <Link to="/communication/announcements/new">
-                <Button>
-                  <Plus size={15} />
-                  Nuevo comunicado
-                </Button>
-              </Link>
+          <div className="flex flex-wrap gap-2">
+            {authority.canChat && (
+              <Button
+                variant="secondary"
+                onClick={() => go("/communication/conversations/new")}
+              >
+                Nuevo mensaje
+              </Button>
             )}
-            {capabilities.chat && (
-              <Link to="/communication/conversations/new">
-                <Button variant="secondary">
-                  <Plus size={15} />
-                  Nueva conversación
-                </Button>
-              </Link>
+            {authority.canPublishAnnouncement && (
+              <Button variant="primary" onClick={() => go("/communication/announcements/new")}>
+                <Megaphone size={16} aria-hidden />
+                Publicar comunicado
+              </Button>
             )}
           </div>
         }
+        below={
+          <div className="border-b border-line">
+            <TabBar
+              ariaLabel="Canal de comunicación"
+              active={tab}
+              onChange={(value) => query.set({ tab: value })}
+              tabs={[
+                {
+                  id: "conversaciones",
+                  label: "Conversaciones",
+                  count: conversations.filter((item) => item.unread > 0).length,
+                },
+                {
+                  id: "comunicados",
+                  label: "Comunicados",
+                  count: visibleAnnouncements.filter((item) => item.state === "PUBLISHED")
+                    .length,
+                },
+              ]}
+            />
+          </div>
+        }
       />
-      <div className="mb-7 flex gap-6 border-b border-border">
-        {[
-          ["all", "Todo"],
-          ["announcements", "Comunicados"],
-          ...(capabilities.chat ? [["conversations", "Conversaciones"]] : []),
-        ].map(([value, label]) => (
-          <button
-            key={value}
-            onClick={() => setTab(value)}
-            className={`border-b-2 pb-3 text-xs font-medium ${
-              tab === value
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground"
-            }`}
-          >
-            {label}
-          </button>
-        ))}
+
+      <div className="grid gap-3">
+        <SectionHeader
+          title={tab === "conversaciones" ? "Conversaciones" : "Comunicados"}
+          meta={
+            tab === "conversaciones"
+              ? conversations.length === 0
+                ? undefined
+                : `${conversations.length} ${
+                    conversations.length === 1 ? "conversación" : "conversaciones"
+                  } · las no leídas primero`
+              : `${visibleAnnouncements.length} ${
+                  visibleAnnouncements.length === 1
+                    ? "comunicado vigente"
+                    : "comunicados vigentes"
+                }`
+          }
+          aside={
+            tab === "conversaciones" && unreadTotal > 0 ? (
+              <span className="inline-flex items-center gap-1.5">
+                <span aria-hidden className="size-2 rounded-pill bg-unread" />
+                <span className="text-meta font-semibold text-selected">
+                  {unreadTotal} sin leer
+                </span>
+              </span>
+            ) : undefined
+          }
+        />
       </div>
-      <div
-        className={`grid items-start gap-8 ${
-          tab === "all" && capabilities.chat ? "xl:grid-cols-[1fr_1fr]" : ""
-        }`}
-      >
-        {tab !== "conversations" && (
-          <Section
-            title="Comunicados oficiales"
-            aside={<Megaphone size={17} className="text-muted-foreground" />}
-          >
-            <Surface>
-              {announcements.map((item) => (
+
+      {tab === "conversaciones" ? (
+        conversations.length === 0 ? (
+          <Empty
+            title="Todavía no hay conversaciones"
+            detail="Cuando tu equipo o un evento tenga conversación, aparece acá."
+            icon={<MessagesSquare size={22} />}
+          />
+        ) : (
+          <ul className="grid gap-1">
+            {conversations.map(({ conversation, unread }) => {
+              const last = conversation.messages.at(-1)
+              return (
+                <li key={conversation.id}>
+                  <RowLink
+                    to={`/conversations/${conversation.id}`}
+                    title={conversationTitle(state, conversation, actor.id)}
+                    detail={last?.deletedAt ? "Mensaje eliminado" : last?.body}
+                    leading={
+                      conversation.kind === "EVENT" ? (
+                        <Megaphone size={18} aria-hidden className="text-ink-faint" />
+                      ) : conversation.kind === "TEAM" ? (
+                        <Users size={18} aria-hidden className="text-ink-faint" />
+                      ) : (
+                        <Avatar
+                          name={conversationTitle(state, conversation, actor.id)}
+                          size="sm"
+                          selected={unread > 0}
+                        />
+                      )
+                    }
+                    meta={
+                      <span className="grid gap-1">
+                        {unread > 0 ? (
+                          <span className="inline-flex items-center gap-1.5">
+                            <span aria-hidden className="size-2 rounded-pill bg-unread" />
+                            <span className="text-meta font-semibold text-selected">
+                              {unread} sin leer
+                            </span>
+                          </span>
+                        ) : (
+                          <span className="gei-meta tabular-nums">
+                            {last ? relativeLabel(last.at, new Date()) : ""}
+                          </span>
+                        )}
+                      </span>
+                    }
+                  />
+                </li>
+              )
+            })}
+          </ul>
+        )
+      ) : visibleAnnouncements.length === 0 ? (
+        <Empty
+          title="No hay comunicados para vos"
+          detail="Los comunicados aparecen según los equipos a los que pertenecés."
+          icon={<Megaphone size={22} />}
+        />
+      ) : (
+        <Surface flush>
+          <ul className="grid px-1 py-1">
+            {visibleAnnouncements.map((announcement) => (
+              <li key={announcement.id}>
                 <RowLink
-                  key={item.id}
-                  to={`/announcements/${item.id}`}
-                  title={item.title}
-                  detail={`${item.audience} · ${dateLabel(item.date)} · ${item.publisher}`}
-                  icon={
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary-soft text-primary">
-                      <Megaphone size={17} />
+                  to={`/announcements/${announcement.id}`}
+                  title={announcement.title}
+                  detail={
+                    <span className="flex flex-wrap items-center gap-2">
+                      <Tag tone="selected">
+                        Para {announcement.audienceSnapshot?.label ?? "todo el hockey"}
+                      </Tag>
+                      <span>{dateLabel(announcement.at.slice(0, 10))}</span>
                     </span>
                   }
-                  aside={
-                    item.state === "DRAFT" ? <Badge value="DRAFT" /> : undefined
-                  }
+                  leading={<Megaphone size={18} aria-hidden className="text-ink-faint" />}
+                  meta={<StateBadge value={announcement.state} />}
                 />
-              ))}
-            </Surface>
-          </Section>
-        )}
-        {tab !== "announcements" && capabilities.chat && (
-          <Section
-            title="Conversaciones"
-            aside={
-              <span className="text-[10px] text-muted-foreground">
-                Sólo tus conversaciones
-              </span>
-            }
-          >
-            {conversations.length ? (
-              <Surface>
-                {conversations.map((conversation) => {
-                  const last = conversation.messages.at(-1)
-                  return (
-                    <RowLink
-                      key={conversation.id}
-                      to={`/conversations/${conversation.id}`}
-                      title={conversation.title}
-                      detail={`${
-                        last?.deleted
-                          ? "Mensaje eliminado"
-                          : last?.body || "Todavía no hay mensajes"
-                      }`}
-                      icon={
-                        <Avatar
-                          name={conversation.title}
-                          blue={conversation.kind === "TEAM"}
-                        />
-                      }
-                      aside={
-                        <div className="text-right">
-                          <p className="text-[9px] text-muted-foreground">
-                            {last?.time}
-                          </p>
-                          {conversation.unread > 0 && (
-                            <span className="mt-2 inline-flex size-4 items-center justify-center rounded-full bg-primary text-[8px] text-white">
-                              {conversation.unread}
-                            </span>
-                          )}
-                        </div>
-                      }
-                    />
-                  )
-                })}
-              </Surface>
-            ) : (
-              <Empty
-                title="Todavía no tenés conversaciones"
-                detail="Iniciá una conversación directa o creá un grupo para coordinar."
-              />
-            )}
-          </Section>
-        )}
-      </div>
-    </>
+              </li>
+            ))}
+          </ul>
+        </Surface>
+      )}
+    </div>
   )
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   NUEVO MENSAJE DIRECTO — reutiliza la conversación existente
+   ═══════════════════════════════════════════════════════════════ */
+
 export function NewConversation() {
-  const { state, actor, capabilities, update, toast } = useProduct()
-  const navigate = useNavigate()
-  const [type, setType] = useState("DIRECT")
-  const [title, setTitle] = useState("")
-  const [selected, setSelected] = useState<string[]>([])
-  const [query, setQuery] = useState("")
-  const [pending, setPending] = useState(false)
-  const [duplicateId, setDuplicateId] = useState("")
-  if (!capabilities.chat)
+  const { state, authority, actor, childId } = useProduct()
+  const [params] = useSearchParams()
+  const query = useQueryState()
+  const [term, setTerm] = useState("")
+  void params
+  void childId
+
+  if (!authority.canChat)
     return (
-      <Empty
-        title="Conversación no disponible"
-        detail="Tu acceso actual no incluye mensajería privada."
-      />
+      <div className="mx-auto max-w-3xl">
+        <Empty
+          title="No podés iniciar conversaciones"
+          detail="La comunicación se habilita por rol."
+        />
+      </div>
     )
+
   const people = state.people.filter(
     (person) =>
       person.id !== actor.id &&
-      person.team === actor.team &&
-      ["PLAYER", "CAPTAIN", "COACH"].includes(person.role),
+      person.name.toLowerCase().includes(term.trim().toLowerCase()),
   )
-  const valid =
-    type === "DIRECT"
-      ? selected.length === 1
-      : selected.length >= 2 && !!title.trim()
-  async function create() {
-    setPending(true)
-    await wait()
-    const existing =
-      type === "DIRECT" &&
-      state.conversations.find(
-        (item) =>
-          item.kind === "DIRECT" &&
-          item.participants.length === 2 &&
-          item.participants.includes(actor.id) &&
-          item.participants.includes(selected[0]),
-      )
-    if (existing) {
-      const other = state.people.find((p) => p.id === selected[0])
-      setDuplicateId(existing.id)
-      toast(`Ya tenés una conversación con ${other?.name ?? "esa persona"}.`)
-      setPending(false)
-      return
-    }
-    const id = crypto.randomUUID()
-    update((draft) =>
-      draft.conversations.push({
-        id,
-        title:
-          type === "DIRECT"
-            ? state.people.find((person) => person.id === selected[0])!.name
-            : title,
-        kind: type as "DIRECT" | "GROUP",
-        participants: [actor.id, ...selected],
-        messages: [],
-        unread: 0,
-      }),
-    )
-    toast("Conversación creada")
-    navigate(`/conversations/${id}`)
-  }
+
   return (
-    <>
-      <Header
+    <div className="gei-stack-page mx-auto max-w-2xl">
+      <PageContextHeader
+        context="Nuevo mensaje"
+        title="Nuevo mensaje"
         back="/communication"
-        title="Nueva conversación"
-        description="Un espacio simple para coordinar con otras personas."
+        lead="Elegí con quién querés hablar. Si ya existe una conversación, se abre esa."
       />
-      <Surface className="max-w-2xl space-y-5 p-6">
-        <div className="flex gap-2">
-          <Button
-            variant={type === "DIRECT" ? "primary" : "secondary"}
-            onClick={() => {
-              setType("DIRECT")
-              setSelected([])
-            }}
-          >
-            Conversación directa
-          </Button>
-          <Button
-            variant={type === "GROUP" ? "primary" : "secondary"}
-            onClick={() => {
-              setType("GROUP")
-              setSelected([])
-            }}
-          >
-            Grupo
-          </Button>
-        </div>
-        {type === "GROUP" && (
-          <TextField
-            label="Nombre del grupo"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-          />
+      <TextField
+        label="Buscar persona"
+        value={term}
+        placeholder="Nombre"
+        onChange={(event) => setTerm(event.target.value)}
+      />
+      <ul className="grid gap-1">
+        {people.slice(0, 12).map((person) => {
+          const key = [actor.id, person.id].sort().join("__")
+          const existing = state.conversations.find(
+            (conversation) =>
+              conversation.kind === "DIRECT" &&
+              conversation.participants.length === 2 &&
+              conversation.participants.slice().sort().join("__") === key,
+          )
+          return (
+            <li key={person.id}>
+              <RowLink
+                to={existing ? `/conversations/${existing.id}` : `/conversations/new?to=${person.id}`}
+                title={person.name}
+                detail={
+                  existing
+                    ? "Ya tienen una conversación: se abre esa."
+                    : "Todavía no hablaron."
+                }
+                leading={<Avatar name={person.name} size="sm" />}
+                meta={existing ? <Tag>Conversación existente</Tag> : undefined}
+              />
+            </li>
+          )
+        })}
+        {people.length === 0 && (
+          <li>
+            <p className="gei-meta">Sin resultados para “{term}”.</p>
+          </li>
         )}
-        <TextField
-          label={
-            type === "DIRECT"
-              ? "Elegí una persona"
-              : "Participantes (al menos 2 personas más)"
-          }
-          placeholder="Buscar por nombre…"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-        />
-        <div className="max-h-80 overflow-y-auto">
-          {people
-            .filter((person) =>
-              person.name.toLowerCase().includes(query.toLowerCase()),
-            )
-            .map((person) => (
-              <label
-                key={person.id}
-                className="flex items-center gap-3 border-b border-border py-3 last:border-0"
-              >
-                <Avatar name={person.name} size="sm" />
-                <span className="flex-1 text-xs">{person.name}</span>
-                <input
-                  type={type === "DIRECT" ? "radio" : "checkbox"}
-                  name="participant"
-                  checked={selected.includes(person.id)}
-                  onChange={() =>
-                    setSelected((previous) =>
-                      type === "DIRECT"
-                        ? [person.id]
-                        : previous.includes(person.id)
-                          ? previous.filter((id) => id !== person.id)
-                          : [...previous, person.id],
-                    )
-                  }
-                  className="size-4 accent-primary"
-                />
-              </label>
-            ))}
-        </div>
-        <p className="text-xs text-muted-foreground">
-          {selected.length}{" "}
-          {selected.length === 1
-            ? "persona seleccionada"
-            : "personas seleccionadas"}
-        </p>
-        {duplicateId && type === "DIRECT" && selected.length === 1 && (
-          <div role="status" className="rounded-xl border border-primary/15 bg-primary-soft p-4">
-            <p className="text-[13px] font-semibold text-primary">
-              Ya tenés una conversación con {state.people.find((p) => p.id === selected[0])?.name}.
-            </p>
-            <button
-              onClick={() => navigate(`/conversations/${duplicateId}`)}
-              className="mt-2 text-[13px] font-semibold text-primary underline"
-            >
-              Abrir conversación
-            </button>
-          </div>
-        )}
-        <Button disabled={!valid || pending} onClick={create}>
-          {pending ? "Creando…" : "Crear conversación"}
-        </Button>
-      </Surface>
-    </>
+      </ul>
+      <Button variant="quiet" onClick={() => query.set({ tab: "conversaciones" })}>
+        Volver a comunicación
+      </Button>
+    </div>
   )
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   CONVERSACIÓN — composer siempre visible, menú accesible
+   ═══════════════════════════════════════════════════════════════ */
+
 export function ConversationPage() {
-  const { id } = useParams()
-  const { state, actor, update, toast } = useProduct()
+  const { conversationId } = useParams()
+  const [params] = useSearchParams()
+  const { state, authority, actor, sendMessage, deleteMessage, markConversationRead } =
+    useProduct()
   const [body, setBody] = useState("")
-  const [pending, setPending] = useState(false)
-  const [menu, setMenu] = useState("")
-  const [edit, setEdit] = useState("")
-  const [editBody, setEditBody] = useState("")
-  const [previous, setPrevious] = useState(false)
-  const bottom = useRef<HTMLDivElement>(null)
-  const conversation = state.conversations.find((item) => item.id === id)
+  const [sending, setSending] = useState(false)
+  const [deleting, setDeleting] = useState<string | null>(null)
+  const endRef = useRef<HTMLDivElement>(null)
+  useRouter()
+
+  const conversation = state.conversations.find(
+    (item) => item.id === conversationId,
+  )
+
   useEffect(() => {
-    if (conversation?.participants.includes(actor.id) && conversation.unread)
-      update((draft) => {
-        const item = draft.conversations.find((item) => item.id === id)
-        if (item) item.unread = 0
-      })
-  }, [id])
-  useEffect(() => {
-    bottom.current?.scrollIntoView({ behavior: "smooth", block: "nearest" })
-  }, [conversation?.messages.length])
-  if (!conversation || !conversation.participants.includes(actor.id))
+    if (conversation && (conversation.unread[actor.id] ?? 0) > 0)
+      markConversationRead(conversation.id)
+  }, [conversation, actor.id, markConversationRead])
+
+  if (!conversation)
     return (
-      <Empty
-        title="Conversación no disponible"
-        detail="Sólo las personas participantes tienen acceso a esta conversación."
-      />
+      <div className="mx-auto max-w-3xl">
+        <Empty
+          title="Esa conversación ya no existe"
+          detail="Puede que se haya archivado."
+        />
+      </div>
     )
+
+  const canPost =
+    authority.canChat && conversation.participants.includes(actor.id)
+  const target = params.get("to")
+  const targetPerson = state.people.find((person) => person.id === target)
+  const messages =
+    targetPerson && conversation.messages.length === 0
+      ? []
+      : conversation.messages
+
+  const conversationId_ = conversation.id
   async function send() {
-    if (!body.trim() || !conversation) return
-    setPending(true)
-    await wait(200)
-    update((draft) =>
-      draft.conversations
-        .find((item) => item.id === id)!
-        .messages.push({
-          id: crypto.randomUUID(),
-          author: actor.id,
-          body: body.trim(),
-          time: new Date().toLocaleTimeString("es-AR", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        }),
-    )
+    const text = body.trim()
+    if (!text || sending) return
+    setSending(true)
+    await sendMessage(conversationId_, text)
     setBody("")
-    setPending(false)
+    setSending(false)
+    endRef.current?.scrollIntoView({ block: "nearest" })
   }
+
   return (
-    <>
-      <Header
-        back="/communication"
-        title={conversation.title}
-        description={`${
-          conversation.kind === "TEAM"
-            ? "Conversación del equipo"
-            : conversation.kind === "EVENT"
-              ? "Conversación del evento"
-              : conversation.kind === "DIRECT"
-                ? "Conversación directa"
-                : "Grupo"
-        } · ${conversation.participants.length} participantes`}
-      />
-      <Surface className="flex min-h-[60dvh] max-w-4xl flex-col lg:h-[calc(100dvh-280px)] lg:min-h-[420px]">
-        <div className="flex-1 overflow-y-auto px-4 py-5 sm:px-7">
-          <div className="mb-6 text-center">
-            <Button
-              variant="ghost"
-              onClick={() => setPrevious(true)}
-              disabled={previous}
-            >
-              {previous
-                ? "Llegaste al inicio de la conversación"
-                : "Cargar mensajes anteriores"}
-            </Button>
-            <span className="mt-3 block text-[10px] text-muted-foreground">
-              Hoy · 2 de octubre
-            </span>
-          </div>
-          {previous && (
-            <p className="mb-5 text-center text-[10px] text-muted-foreground">
-              Esta conversación se creó el 1 de octubre. No hay mensajes
-              anteriores.
-            </p>
-          )}
-          {conversation.messages.length ? (
-            conversation.messages.map((message) => {
-              const own = message.author === actor.id
-              const author = state.people.find(
-                (person) => person.id === message.author,
-              )
-              return (
-                <div
-                  key={message.id}
-                  className={`mb-5 flex items-start gap-2.5 ${
-                    own ? "justify-end" : ""
-                  }`}
-                >
-                  {!own && (
-                    <Avatar name={author?.name || "Persona"} size="sm" />
-                  )}
-                  <div
-                    className={`relative max-w-[85%] rounded-xl px-4 py-3 sm:max-w-[70%] ${
-                      own
-                        ? "rounded-tr-sm bg-primary-soft"
-                        : "rounded-tl-sm border border-border bg-card"
-                    }`}
-                  >
-                    {!own && (
-                      <p className="mb-1.5 text-[10px] font-semibold text-primary">
-                        {author?.name}
-                      </p>
-                    )}
-                    <p
-                      className={`whitespace-pre-wrap text-xs leading-relaxed ${
-                        message.deleted ? "italic text-muted-foreground" : ""
-                      }`}
-                    >
-                      {message.deleted
-                        ? "Este mensaje fue eliminado."
-                        : message.body}
-                    </p>
-                    <div className="mt-2 flex items-center justify-end gap-1.5 text-[9px] text-muted-foreground">
-                      {message.edited && !message.deleted && (
-                        <span>Editado ·</span>
-                      )}
-                      {message.time}
-                      {own && !message.deleted && (
-                        <>
-                          <CheckCheck size={12} />
-                          <button
-                            aria-label="Acciones del mensaje"
-                            onClick={() =>
-                              setMenu(menu === message.id ? "" : message.id)
-                            }
-                          >
-                            <MoreHorizontal size={14} />
-                          </button>
-                        </>
-                      )}
-                    </div>
-                    {menu === message.id && (
-                      <div className="absolute right-0 top-full z-10 w-32 rounded-lg border border-border bg-card p-1 shadow-lg">
-                        <button
-                          className="block w-full p-2 text-left text-xs hover:bg-muted"
-                          onClick={() => {
-                            setEdit(message.id)
-                            setEditBody(message.body)
-                            setMenu("")
-                          }}
-                        >
-                          Editar
-                        </button>
-                        <button
-                          className="block w-full p-2 text-left text-xs text-danger hover:bg-danger-soft"
-                          onClick={async () => {
-                            await wait()
-                            update((draft) => {
-                              const item = draft.conversations
-                                .find((item) => item.id === id)!
-                                .messages.find(
-                                  (item) => item.id === message.id,
-                                )!
-                              item.deleted = true
-                              item.body = ""
-                            })
-                            setMenu("")
-                            toast("Mensaje eliminado")
-                          }}
-                        >
-                          Eliminar
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )
-            })
-          ) : (
-            <div className="py-20 text-center">
-              <MessageSquare
-                className="mx-auto mb-3 text-muted-foreground"
-                size={24}
-              />
-              <p className="text-xs text-muted-foreground">
-                La conversación está lista. Enviá el primer mensaje.
-              </p>
-            </div>
-          )}
-          <div ref={bottom} />
+    <div className="mx-auto grid h-[calc(100dvh-4rem)] max-w-3xl grid-rows-[auto_minmax(0,1fr)_auto] gap-3 py-4">
+      <header className="flex flex-wrap items-center gap-3 border-b border-line pb-3">
+        <div className="min-w-0 flex-1">
+          <p className="gei-page-context">Conversación</p>
+          <h1 className="gei-section-title">
+            {conversationTitle(state, conversation, actor.id)}
+          </h1>
         </div>
-        <form
-          onSubmit={(event) => {
-            event.preventDefault()
-            send()
-          }}
-          className="sticky bottom-0 flex items-center gap-3 border-t border-border bg-card p-4"
-        >
-          <input
-            aria-label="Mensaje"
-            placeholder="Escribí un mensaje…"
-            value={body}
-            onChange={(event) => setBody(event.target.value)}
-            className="min-w-0 flex-1 rounded-lg border border-border bg-background px-4 py-3 text-xs"
-          />
-          <Button
-            type="submit"
-            disabled={!body.trim() || pending}
-            aria-label="Enviar mensaje"
-          >
-            <Send size={17} />
+        {conversation.kind === "EVENT" && conversation.eventId && (
+          <Button variant="secondary" size="sm" onClick={() => go(`/events/${conversation.eventId}`)}>
+            Ver el evento
           </Button>
-        </form>
-      </Surface>
-      {edit && (
-        <Modal
-          title="Editar mensaje"
-          onClose={() => setEdit("")}
-          footer={
-            <>
-              <Button variant="secondary" onClick={() => setEdit("")}>
-                Volver
-              </Button>
-              <Button
-                disabled={!editBody.trim() || pending}
-                onClick={async () => {
-                  setPending(true)
-                  await wait()
-                  update((draft) => {
-                    const item = draft.conversations
-                      .find((item) => item.id === id)!
-                      .messages.find((item) => item.id === edit)!
-                    item.body = editBody
-                    item.edited = true
-                  })
-                  setPending(false)
-                  setEdit("")
-                  toast("Mensaje editado")
-                }}
+        )}
+        {conversation.kind === "TEAM" && conversation.teamId && (
+          <Button variant="secondary" size="sm" onClick={() => go(`/teams/${conversation.teamId}`)}>
+            Ver el equipo
+          </Button>
+        )}
+      </header>
+
+      <div className="min-h-0 space-y-3 overflow-y-auto pr-1">
+        {messages.length === 0 ? (
+          <Empty
+            title={targetPerson ? `Escribile a ${targetPerson.firstName}` : "Todavía no hay mensajes"}
+            detail={
+              targetPerson
+                ? "Este mensaje abre la conversación entre ustedes dos."
+                : "Cuando empiece la conversación, los mensajes aparecen acá."
+            }
+            icon={<MessagesSquare size={22} />}
+          />
+        ) : (
+          messages.map((message) => {
+            const author = state.people.find((person) => person.id === message.author)
+            const mine = message.author === actor.id
+            return (
+              <article
+                key={message.id}
+                className={cx(
+                  "grid gap-1",
+                  mine ? "justify-items-end" : "justify-items-start",
+                )}
               >
-                Guardar cambio
+                <div
+                  className={cx(
+                    "max-w-[85%] rounded-control px-3 py-2",
+                    mine ? "bg-selected-soft" : "bg-surface border border-line",
+                  )}
+                >
+                  {!mine && (
+                    <p className="text-meta font-semibold text-ink">
+                      {author?.name ?? ""}
+                    </p>
+                  )}
+                  <p className="gei-body text-ink-strong">
+                    {message.deletedAt ? (
+                      <span className="text-ink-muted italic">
+                        Mensaje eliminado
+                      </span>
+                    ) : (
+                      message.body
+                    )}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="gei-meta tabular-nums">
+                    {relativeLabel(message.at, new Date())}
+                    {message.edited && !message.deletedAt && " · editado"}
+                  </span>
+                  {mine && !message.deletedAt && (
+                    <Menu
+                      label="Acciones"
+                      items={[
+                        {
+                          label: "Eliminar mensaje",
+                          danger: true,
+                          onSelect: () => setDeleting(message.id),
+                        },
+                      ]}
+                    />
+                  )}
+                </div>
+              </article>
+            )
+          })
+        )}
+        <div ref={endRef} />
+      </div>
+
+      <form
+        onSubmit={(event) => {
+          event.preventDefault()
+          void send()
+        }}
+        className="sticky bottom-14 grid gap-2 border-t border-line bg-surface pt-3 lg:bottom-0"
+      >
+        {canPost ? (
+          <>
+            <label htmlFor="composer" className="sr-only">
+              Escribí un mensaje
+            </label>
+            <TextArea
+              id="composer"
+              label="Mensaje"
+              rows={2}
+              value={body}
+              onChange={(event) => setBody(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey) {
+                  event.preventDefault()
+                  void send()
+                }
+              }}
+              placeholder="Escribí el mensaje…"
+            />
+            <div className="flex justify-end">
+              <Button type="submit" variant="primary" busy={sending} disabled={!body.trim()}>
+                <Send size={16} aria-hidden />
+                Enviar
               </Button>
-            </>
-          }
-        >
-          <TextArea label="Mensaje" value={editBody} onChange={setEditBody} />
-        </Modal>
+            </div>
+          </>
+        ) : (
+          <p className="gei-meta">
+            No podés escribir en esta conversación.
+          </p>
+        )}
+      </form>
+
+      {deleting && (
+        <ConfirmDialog
+          title="Eliminar mensaje"
+          consequence="El mensaje desaparece de la conversación para todos. No se puede deshacer."
+          confirmLabel="Eliminar"
+          onClose={() => setDeleting(null)}
+          onConfirm={() => {
+            deleteMessage(conversation.id, deleting)
+            setDeleting(null)
+          }}
+        />
       )}
-    </>
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMUNICADOS — audiencia real, snapshot inmutable
+   ═══════════════════════════════════════════════════════════════ */
+
+export function AnnouncementForm() {
+  const { id } = useParams()
+  const { state, authority, saveAnnouncement } = useProduct()
+  const existing = state.announcements.find((item) => item.id === id)
+  const [title, setTitle] = useState(existing?.title ?? "")
+  const [body, setBody] = useState(existing?.body ?? "")
+  const [clubWide, setClubWide] = useState(
+    existing ? existing.audience.kind === "CLUB" : true,
+  )
+  const [teamIds, setTeamIds] = useState<string[]>(
+    existing?.audience.kind === "TEAMS" ? existing.audience.teamIds : [],
+  )
+  const [reason, setReason] = useState("")
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [pending, setPending] = useState(false)
+  const [done, setDone] = useState<"draft" | "published" | null>(null)
+  useRouter()
+
+  if (!authority.canPublishAnnouncement)
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty
+          title="Los comunicados los publica la Subcomisión"
+          detail="Es la comunicación oficial del club."
+        />
+      </div>
+    )
+
+  const published = existing?.state === "PUBLISHED"
+
+  function submit(publish: boolean) {
+    const found: Record<string, string> = {}
+    if (!title.trim()) found.title = "Poné un título."
+    if (!body.trim()) found.body = "Escribí el comunicado."
+    if (!clubWide && teamIds.length === 0)
+      found.audience = "Elegí al menos un equipo, o elegí todo el hockey."
+    if (published && !reason.trim())
+      found.reason = "Explicá por qué corregís un comunicado ya publicado."
+    setErrors(found)
+    if (Object.keys(found).length > 0) {
+      window.setTimeout(() => {
+        const first = document.getElementById(`af-${Object.keys(found)[0]}`)
+        first?.focus()
+      }, 0)
+      return
+    }
+    setPending(true)
+    const result = saveAnnouncement({
+      id: existing?.id,
+      title,
+      body,
+      audience: clubWide ? { kind: "CLUB" } : { kind: "TEAMS", teamIds },
+      publish,
+      reason,
+    })
+    setPending(false)
+    if (result.ok) setDone(publish ? "published" : "draft")
+    else setErrors({ form: result.error ?? "No pudimos guardar." })
+  }
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-2xl">
+      <PageContextHeader
+        context={published ? "Corregir comunicado" : "Nuevo comunicado"}
+        title={published ? `Corregir: ${existing?.title}` : "Nuevo comunicado"}
+        back={existing ? `/announcements/${existing.id}` : "/communication"}
+        lead={
+          published
+            ? "La audiencia de un comunicado publicado no se cambia: corregirla requiere publicar uno nuevo."
+            : "Elegí a quién le llega antes de publicar."
+        }
+      />
+
+      {done && (
+        <Banner
+          tone="success"
+          title={done === "published" ? "Comunicado publicado" : "Borrador guardado"}
+        >
+          <span className="text-ink-strong">
+            {done === "published"
+              ? "Las personas alcanzadas ya lo ven en su comunicación."
+              : "Todavía nadie lo ve. Lo podés publicar cuando esté listo."}
+          </span>
+        </Banner>
+      )}
+      {errors.form && (
+        <Banner tone="danger" title="No pudimos guardar el comunicado">
+          <span className="text-ink-strong">{errors.form}</span>
+        </Banner>
+      )}
+
+      <form
+        onSubmit={(event) => {
+          event.preventDefault()
+          submit(!published)
+        }}
+        noValidate
+        className="grid gap-5"
+      >
+        <Surface className="grid gap-4">
+          <TextField
+            id="af-title"
+            label="Título"
+            required
+            value={title}
+            error={errors.title}
+            onChange={(event) => setTitle(event.target.value)}
+          />
+          <TextArea
+            id="af-body"
+            label="Cuerpo"
+            required
+            rows={8}
+            value={body}
+            error={errors.body}
+            onChange={(event) => setBody(event.target.value)}
+            hint="Texto plano. Los saltos de línea se respetan."
+          />
+        </Surface>
+
+        <Surface className="grid gap-4">
+          <SectionHeader
+            title="Audiencia"
+            meta={published ? "Inmutable desde la publicación" : undefined}
+          />
+          {published ? (
+            <Banner tone="neutral" title="La audiencia no se puede cambiar">
+              <span className="text-ink-strong">
+                Este comunicado se publicó para{" "}
+                {existing?.audienceSnapshot?.label}. Si te equivocaste, publicá uno
+                nuevo con la audiencia correcta.
+              </span>
+            </Banner>
+          ) : (
+            <>
+              <SegmentedControl
+                ariaLabel="Audiencia del comunicado"
+                value={clubWide ? "CLUB" : "TEAMS"}
+                onChange={(value) => setClubWide(value === "CLUB")}
+                options={[
+                  { value: "CLUB", label: "Todo el hockey" },
+                  { value: "TEAMS", label: "Equipos concretos" },
+                ]}
+              />
+              {!clubWide && (
+                <fieldset className="grid gap-2" id="af-audience">
+                  <legend className="text-body font-semibold">Equipos destinatarios</legend>
+                  {errors.audience && (
+                    <p className="text-meta font-medium text-danger">
+                      {errors.audience}
+                    </p>
+                  )}
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {state.teams
+                      .filter((team) => team.state === "ACTIVE")
+                      .map((team) => {
+                        const checked = teamIds.includes(team.id)
+                        return (
+                          <label
+                            key={team.id}
+                            className={cx(
+                              "gei-target flex cursor-pointer items-center gap-2.5 rounded-control border px-3 text-body font-medium transition-colors",
+                              checked
+                                ? "border-selected-line bg-selected-soft text-selected"
+                                : "border-line-strong bg-surface hover:border-ink-faint",
+                            )}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={(next) =>
+                                setTeamIds((current) =>
+                                  next.target.checked
+                                    ? [...current, team.id]
+                                    : current.filter((id) => id !== team.id),
+                                )
+                              }
+                              className="size-5 accent-interactive"
+                            />
+                            {teamName(state, team.id)}
+                          </label>
+                        )
+                      })}
+                  </div>
+                </fieldset>
+              )}
+              <p className="gei-meta">
+                Cuando publiques queda registrada una copia exacta de quién lo va a
+                ver. Después no se recalcula.
+              </p>
+            </>
+          )}
+        </Surface>
+
+        {published && (
+          <Surface className="grid gap-4">
+            <TextArea
+              id="af-reason"
+              label="Por qué lo corregís"
+              required
+              rows={3}
+              value={reason}
+              error={errors.reason}
+              onChange={(event) => setReason(event.target.value)}
+              hint="Queda en el historial junto con la versión anterior."
+            />
+          </Surface>
+        )}
+
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <Button
+            type="button"
+            variant="quiet"
+            onClick={() => go(existing ? `/announcements/${existing.id}` : "/communication")}
+          >
+            Cancelar
+          </Button>
+          {!published && (
+            <Button
+              type="button"
+              variant="secondary"
+              busy={pending}
+              onClick={() => submit(false)}
+            >
+              Guardar borrador
+            </Button>
+          )}
+          <Button type="submit" variant="primary" busy={pending}>
+            {published ? "Guardar corrección" : "Publicar comunicado"}
+          </Button>
+        </div>
+      </form>
+    </div>
   )
 }
 
 export function AnnouncementDetail() {
   const { id } = useParams()
-  const { state, capabilities, update, toast } = useProduct()
+  const { state, authority, actor, archiveAnnouncement } = useProduct()
+  const [archiving, setArchiving] = useState(false)
+  const [sheet, setSheet] = useState(false)
+  useRouter()
   const announcement = state.announcements.find((item) => item.id === id)
-  const [archive, setArchive] = useState(false)
-  const [pending, setPending] = useState(false)
-  if (
-    !announcement ||
-    (announcement.state === "DRAFT" && !capabilities.official)
-  )
+
+  if (!announcement)
     return (
-      <Empty
-        title="Comunicado no disponible"
-        detail="No encontramos un comunicado publicado en tu alcance."
-      />
+      <div className="mx-auto max-w-3xl">
+        <Empty
+          title="Ese comunicado no existe"
+          detail="Puede que el enlace esté incompleto."
+        />
+      </div>
     )
+
+  const snapshot = announcement.audienceSnapshot
+  const reached = canReadAnnouncement(state, announcement, {
+    clubWide: authority.isClubWide,
+    teamIds: authority.teamIds,
+    coachTeamIds: authority.coachTeamIds,
+  })
+
+  if (!reached && !authority.canPublishAnnouncement)
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty
+          title="No te corresponde este comunicado"
+          detail="Se publicó para otros equipos."
+        />
+      </div>
+    )
+
   return (
-    <>
-      <Header
-        back="/communication"
-        eyebrow="Comunicado oficial"
+    <div className="gei-stack-page mx-auto max-w-2xl">
+      <PageContextHeader
+        context="Comunicado"
         title={announcement.title}
+        back="/communication"
+        lead={`Publicado el ${dateLabel(announcement.at.slice(0, 10), true)} por ${announcement.publisher}`}
         action={
-          capabilities.official && (
-            <Link to={`/announcements/${id}/edit`}>
-              <Button variant="secondary">
-                <Edit3 size={14} />
-                {announcement.state === "PUBLISHED"
-                  ? "Corregir"
-                  : "Editar borrador"}
-              </Button>
-            </Link>
+          <div className="flex items-center gap-2">
+            <StateBadge value={announcement.state} emphasis />
+            {authority.canCorrectAnnouncement() && (
+              <Menu
+                label="Acciones"
+                items={[
+                  {
+                    label: "Corregir título o cuerpo",
+                    onSelect: () => go(`/announcements/${announcement.id}/edit`),
+                  },
+                  {
+                    label: "Archivar",
+                    danger: true,
+                    onSelect: () => setArchiving(true),
+                  },
+                ]}
+              />
+            )}
+          </div>
+        }
+        below={
+          snapshot ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <Tag tone="selected">{snapshot.label}</Tag>
+              <span className="gei-meta">
+                Audiencia registrada al publicar el {dateLabel(snapshot.at.slice(0, 10))}
+              </span>
+              <button
+                type="button"
+                onClick={() => setSheet(true)}
+                className="gei-target-sm rounded-control px-2 text-meta font-semibold text-interactive hover:bg-selected-soft"
+              >
+                Quién lo ve
+              </button>
+            </div>
+          ) : undefined
+        }
+      />
+
+      <article className="grid gap-4">
+        {announcement.body.split("\n\n").map((paragraph, index) => (
+          <p key={index} className="gei-body text-ink">
+            {paragraph}
+          </p>
+        ))}
+      </article>
+
+      {announcement.corrections.length > 0 && (
+        <Surface className="grid gap-3">
+          <SectionHeader title="Correcciones" />
+          <HistoryList
+            entries={announcement.corrections.map((correction) => ({
+              action: "Corrección de comunicado",
+              actor: correction.actor,
+              at: dateTimeLabel(correction.at),
+              before: correction.before,
+              after: correction.after,
+              reason: correction.reason,
+            }))}
+          />
+        </Surface>
+      )}
+
+      {sheet && snapshot && (
+        <Sheet
+          title="Quién ve este comunicado"
+          description="La audiencia quedó registrada al publicarlo."
+          onClose={() => setSheet(false)}
+          footer={
+            <Button variant="primary" onClick={() => setSheet(false)}>
+              Entendido
+            </Button>
+          }
+        >
+          <div className="grid gap-2">
+            <RowStatic
+              title={snapshot.clubWide ? "Todo el hockey" : "Equipos concretos"}
+              detail={
+                snapshot.clubWide
+                  ? "Todas las personas del club con cuenta activa."
+                  : snapshot.teamIds
+                      .map((teamId) => teamName(state, teamId))
+                      .join(", ")
+              }
+            />
+          </div>
+        </Sheet>
+      )}
+
+      {archiving && (
+        <ConfirmDialog
+          title="Archivar el comunicado"
+          consequence="Deja de aparecer en el canal de todos. Queda guardado como histórico y no se borra."
+          confirmLabel="Archivar"
+          requireReason
+          onClose={() => setArchiving(false)}
+          onConfirm={(reason) => {
+            archiveAnnouncement(announcement.id, reason)
+            setArchiving(false)
+            go("/communication")
+          }}
+        />
+      )}
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   AVISOS — no leídos primero, tipo en lenguaje usuario
+   ═══════════════════════════════════════════════════════════════ */
+
+const NOTICE_TYPE_TEXT: Record<string, string> = {
+  EVENT_CHANGED: "Cambio en un evento",
+  EVENT_POSTPONED: "Un evento se postergó",
+  EVENT_RESCHEDULED: "Un evento se reprogramó",
+  EVENT_CANCELLED: "Un evento se canceló",
+  EVENT_RESTORED: "Un evento volvió a estar activo",
+  SELECTION_PUBLISHED: "Convocatoria publicada",
+  ANNOUNCEMENT_PUBLISHED: "Comunicado del club",
+}
+
+export function Notifications() {
+  const { state, actor, markNoticeRead, markAllNoticesRead } = useProduct()
+  useRouter()
+  const mine = useMemo(
+    () =>
+      state.notifications
+        .filter((notice) => notice.recipients.includes(actor.id))
+        .sort((a, b) => {
+          const aRead = a.readBy.includes(actor.id)
+          const bRead = b.readBy.includes(actor.id)
+          if (aRead !== bRead) return aRead ? 1 : -1
+          return b.at.localeCompare(a.at)
+        }),
+    [state.notifications, actor.id],
+  )
+  const unread = mine.filter((notice) => !notice.readBy.includes(actor.id))
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-3xl">
+      <PageContextHeader
+        context="Avisos"
+        title="Avisos"
+        lead="Lo que cambió y te afecta."
+        action={
+          unread.length > 0 && (
+            <Button variant="secondary" onClick={markAllNoticesRead}>
+              Marcar todo como leído
+            </Button>
           )
         }
       />
-      <Surface className="max-w-3xl p-6 sm:p-8">
-        <div className="mb-6 flex items-center gap-3">
-          <Avatar name={announcement.publisher} blue />
-          <div>
-            <p className="text-xs font-semibold">{announcement.publisher}</p>
-            <p className="mt-1 text-[10px] text-muted-foreground">
-              {dateLabel(announcement.date)} · {announcement.audience}
-            </p>
-          </div>
-          <span className="ml-auto">
-            <Badge value={announcement.state} />
-          </span>
-        </div>
-        <p className="whitespace-pre-wrap text-[14px] leading-[1.9]">
-          {announcement.body}
-        </p>
-        <div className="mt-8 flex items-center gap-2 border-t border-border pt-5 text-xs text-muted-foreground">
-          <Megaphone size={16} />
-          Comunicación oficial · GEI Hockey
-        </div>
-      </Surface>
-      {capabilities.official && announcement.state === "PUBLISHED" && (
-        <Button
-          variant="ghost"
-          className="mt-5"
-          onClick={() => setArchive(true)}
-        >
-          Archivar comunicado
-        </Button>
-      )}
-      {archive && (
-        <Modal
-          title="Archivar comunicado"
-          onClose={() => setArchive(false)}
-          footer={
-            <>
-              <Button variant="secondary" onClick={() => setArchive(false)}>
-                Volver
-              </Button>
-              <Button
-                disabled={pending}
-                onClick={async () => {
-                  setPending(true)
-                  await wait()
-                  update(
-                    (draft) =>
-                      (draft.announcements.find(
-                        (item) => item.id === id,
-                      )!.state = "ARCHIVED"),
-                    "Archivar comunicado",
-                    announcement.title,
-                  )
-                  setArchive(false)
-                  setPending(false)
-                  toast("Comunicado archivado. Su historia se conserva.")
-                }}
-              >
-                Archivar
-              </Button>
-            </>
-          }
-        >
-          <p className="text-sm">
-            El comunicado dejará de aparecer entre los comunicados vigentes. Su
-            publicación e historial se conservarán.
-          </p>
-        </Modal>
-      )}
-    </>
-  )
-}
-export function AnnouncementForm() {
-  const { id } = useParams()
-  const { state, actor, capabilities, update, notify, toast } = useProduct()
-  const navigate = useNavigate()
-  const original = state.announcements.find((item) => item.id === id)
-  const [title, setTitle] = useState(original?.title || "")
-  const [body, setBody] = useState(original?.body || "")
-  const [audience, setAudience] = useState(original?.audience || "Todo hockey")
-  const [reason, setReason] = useState("")
-  const [confirm, setConfirm] = useState(false)
-  const [pending, setPending] = useState(false)
-  const correction = original?.state === "PUBLISHED"
-  if (
-    !capabilities.official ||
-    (id && (!original || original.state === "ARCHIVED"))
-  )
-    return (
-      <Empty
-        title="Publicación no disponible"
-        detail="Los comunicados oficiales corresponden a la Subcomisión. Los comunicados archivados no se editan."
-      />
-    )
-  async function save(publish: boolean) {
-    setPending(true)
-    await wait()
-    const resourceId = id || crypto.randomUUID()
-    update(
-      (draft) => {
-        const current = draft.announcements.find((item) => item.id === id)
-        if (current) {
-          current.title = title
-          current.body = body
-          if (!correction) {
-            current.audience = audience
-            current.state = publish ? "PUBLISHED" : "DRAFT"
-          }
-          } else
-          draft.announcements.push({
-            id: resourceId,
-            title,
-            body,
-            audience,
-            state: publish ? "PUBLISHED" : "DRAFT",
-            publisher: `${actor.name} · Subcomisión`,
-            date: todayIso(),
-          })
-      },
-      correction
-        ? "Corregir comunicado"
-        : publish
-          ? "Publicar comunicado"
-          : "Guardar comunicado borrador",
-      title,
-      reason,
-    )
-    if (publish && !correction)
-      notify("Comunicado publicado", title, `/announcements/${resourceId}`)
-    toast(
-      correction
-        ? "Corrección guardada"
-        : publish
-          ? "Comunicado publicado"
-          : "Borrador guardado",
-    )
-    navigate(`/announcements/${resourceId}`)
-  }
-  return (
-    <>
-      <Header
-        back={id ? `/announcements/${id}` : "/communication"}
-        title={
-          correction
-            ? "Corregir comunicado"
-            : original
-              ? "Editar borrador"
-              : "Nuevo comunicado"
-        }
-        description="Una comunicación oficial, clara y dirigida a las personas correctas."
-      />
-      <Surface className="max-w-3xl space-y-6 p-6">
-        <TextField
-          label="Título"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-        />
-        <TextArea label="Contenido" value={body} onChange={setBody} />
-        <Select
-          label="Audiencia"
-          value={audience}
-          disabled={correction}
-          onChange={(event) => setAudience(event.target.value)}
-        >
-          <option>Todo hockey</option>
-          <option>Sexta A</option>
-          <option>Quinta A + Sexta A</option>
-        </Select>
-        {correction && (
-          <>
-            <Alert tone="info">
-              La audiencia publicada no puede modificarse. Si fue incorrecta,
-              corresponde crear un comunicado nuevo.
-            </Alert>
-            <TextArea
-              label="Motivo de corrección"
-              value={reason}
-              onChange={setReason}
-            />
-          </>
-        )}
-        <div className="flex flex-wrap justify-end gap-2">
-          {!correction && (
-            <Button
-              variant="secondary"
-              disabled={!title.trim() || pending}
-              onClick={() => save(false)}
-            >
-              Guardar borrador
-            </Button>
-          )}
-          <Button
-            disabled={
-              !title.trim() ||
-              !body.trim() ||
-              pending ||
-              (correction && !reason.trim())
-            }
-            onClick={() => (correction ? save(false) : setConfirm(true))}
-          >
-            {pending
-              ? "Guardando…"
-              : correction
-                ? "Guardar corrección"
-                : "Publicar"}
-          </Button>
-        </div>
-      </Surface>
-      {confirm && (
-        <Modal
-          title="Publicar comunicado"
-          onClose={() => !pending && setConfirm(false)}
-          footer={
-            <>
-              <Button variant="secondary" onClick={() => setConfirm(false)}>
-                Volver
-              </Button>
-              <Button disabled={pending} onClick={() => save(true)}>
-                {pending ? "Publicando…" : "Confirmar publicación"}
-              </Button>
-            </>
-          }
-        >
-          <p className="text-sm font-semibold">{title}</p>
-          <p className="mt-3 text-xs text-muted-foreground">
-            Audiencia: {audience}. Se enviará una notificación a las personas
-            destinatarias. La audiencia quedará fija en esta publicación.
-          </p>
-        </Modal>
-      )}
-    </>
-  )
-}
-export function Notifications() {
-  const { state, actor, update } = useProduct()
-  const navigate = useNavigate()
-  const [filter, setFilter] = useState("all")
-  const notices = state.notifications.filter(
-    (item) =>
-      canReadNotice(actor, item) &&
-      (filter === "all" || !noticeRead(actor, item)),
-  )
-  return (
-    <>
-      <Header
-        title="Avisos"
-        description="Qué cambió que te afecta. Sin lista de registros: sólo lo que requiere mirar."
-        action={
-          <Button
-            variant="secondary"
-            disabled={
-              !state.notifications.some(
-                (item) =>
-                  canReadNotice(actor, item) && !noticeRead(actor, item),
-              )
-            }
-            onClick={() =>
-              update((draft) =>
-                draft.notifications
-                  .filter((item) => canReadNotice(actor, item))
-                  .forEach((item) => {
-                    item.readBy = [
-                      ...new Set([...(item.readBy || []), actor.id]),
-                    ]
-                  }),
-              )
-            }
-          >
-            <Check size={14} />
-            Marcar todas como leídas
-          </Button>
-        }
-      />
-      <div className="mb-5 flex gap-3">
-        {[
-          ["all", "Todas"],
-          ["unread", "Sin leer"],
-        ].map(([value, label]) => (
-          <Button
-            key={value}
-            variant={filter === value ? "primary" : "secondary"}
-            onClick={() => setFilter(value)}
-          >
-            {label}
-          </Button>
-        ))}
-      </div>
-      {notices.length ? (
-        <Surface>
-          {notices.map((notice) => (
-            <button
-              key={notice.id}
-              onClick={() => {
-                update((draft) => {
-                  const item = draft.notifications.find(
-                    (item) => item.id === notice.id,
-                  )!
-                  item.readBy = [...new Set([...(item.readBy || []), actor.id])]
-                })
-                navigate(notice.route)
-              }}
-              className={`flex w-full items-start gap-4 border-b border-border p-5 text-left last:border-0 hover:bg-muted ${
-                !noticeRead(actor, notice)
-                  ? "bg-primary-soft/30 font-semibold"
-                  : "text-muted-foreground"
-              }`}
-            >
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary-soft text-primary">
-                <Bell size={17} />
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-xs font-semibold text-foreground">
-                  {notice.title}
-                </span>
-                <span className="mt-1.5 block text-xs leading-relaxed text-muted-foreground">
-                  {notice.body}
-                </span>
-                <span className="mt-2 block text-[10px] text-muted-foreground">
-                  {notice.date}
-                </span>
-              </span>
-              {!noticeRead(actor, notice) && (
-                <span className="mt-1 size-2 shrink-0 rounded-full bg-primary" />
-              )}
-            </button>
-          ))}
-        </Surface>
-      ) : (
+
+      {mine.length === 0 ? (
         <Empty
-          title="Estás al día"
-          detail={
-            filter === "unread"
-              ? "No tenés avisos sin leer."
-              : "Los cambios importantes aparecerán acá."
-          }
+          title="No tenés avisos"
+          detail="Cuando cambie algo que te afecta, aparece acá."
         />
+      ) : (
+        <Surface flush>
+          <ul className="grid px-1 py-1">
+            {mine.map((notice) => {
+              const isUnread = !notice.readBy.includes(actor.id)
+              return (
+                <li key={notice.id}>
+                  <RowStatic
+                    title={notice.title}
+                    detail={
+                      <span className="grid gap-1">
+                        <span className="text-meta font-semibold uppercase tracking-wide text-ink-faint">
+                          {NOTICE_TYPE_TEXT[notice.type] ?? "Aviso del club"}
+                        </span>
+                        <span>{notice.body}</span>
+                      </span>
+                    }
+                    meta={
+                      <span className="grid gap-1 text-right">
+                        {isUnread && (
+                          <span className="inline-flex items-center gap-1.5">
+                            <span
+                              aria-hidden
+                              className="size-2 rounded-pill bg-unread"
+                            />
+                            <span className="text-meta font-semibold text-selected">
+                              Sin leer
+                            </span>
+                          </span>
+                        )}
+                        <span className="gei-meta tabular-nums">
+                          {relativeLabel(notice.at, new Date())}
+                        </span>
+                      </span>
+                    }
+                    trailing={
+                      <span className="flex gap-1">
+                        {isUnread && (
+                          <Button
+                            variant="quiet"
+                            size="sm"
+                            onClick={() => markNoticeRead(notice.id)}
+                          >
+                            Marcar leído
+                          </Button>
+                        )}
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => {
+                            markNoticeRead(notice.id)
+                            go(notice.route)
+                          }}
+                        >
+                          Abrir
+                        </Button>
+                      </span>
+                    }
+                    className={cx(isUnread && "bg-selected-soft/40")}
+                  />
+                </li>
+              )
+            })}
+          </ul>
+        </Surface>
       )}
-    </>
+    </div>
   )
 }

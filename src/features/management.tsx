@@ -1,1425 +1,2072 @@
-import { useState } from "react"
-import { Link, useNavigate, useParams } from "react-router"
-import {
-  Users,
-  Layers3,
-  Trophy,
-  ShieldCheck,
-  Plus,
-  Search,
-  Pencil,
-  Archive,
-  UserRound,
-  KeyRound,
-  ArrowRight,
-  ChevronRight,
-} from "lucide-react"
-import { useProduct, wait } from "../mock/store"
-import { roleAssignments, currentRoles, hasRole } from "../mock/permissions"
-import { labels, type Person } from "../mock/model"
+import { useMemo, useState } from "react"
+import { useNavigate, useParams } from "react-router"
+import { Lock, Unlock } from "lucide-react"
+import { useProduct } from "../mock/store"
 import { todayIso } from "../mock/clock"
-import { deriveEligibility } from "../mock/eligibility"
 import {
-  Header,
-  Surface,
-  Section,
-  Button,
+  dateLabel,
+  dateTimeLabel,
+  entryLabel,
+  periodLabel,
+  teamName,
+  type CompetitionEntry,
+  type StructureType,
+} from "../mock/model"
+import {
+  activeMemberships,
+  activeRoleAssignments,
+  activeTeamAssignments,
+  guardiansOf,
+  membershipOf,
+  profileCompleteness,
+  roleScopeLabel,
+} from "../mock/derive"
+import {
+  deriveEligibility,
+  CONSTRAINT_REASON_LABEL,
+  CONSTRAINT_SCOPE_LABEL,
+  CONSTRAINT_SOURCE_LABEL,
+} from "../mock/eligibility"
+import {
   Avatar,
-  Badge,
-  RowLink,
-  TextField,
-  TextArea,
-  Select,
-  Alert,
+  Banner,
+  Button,
+  ConfirmDialog,
   Empty,
+  Expander,
+  FilterChip,
   Modal,
+  RowLink,
+  RowStatic,
+  Select,
+  Sheet,
+  StateBadge,
+  Surface,
+  TabBar,
+  Tag,
+  TextArea,
+  TextField,
+  cx,
 } from "../shared/ui"
+import {
+  DetailSection,
+  HistoryList,
+  PageContextHeader,
+  SectionHeader,
+} from "../shared/patterns"
+import { useQueryState } from "../shared/use-query-state"
 
-export function Restricted() {
-  return (
-    <Empty
-      title="Sección no disponible"
-      detail="Tu acceso actual no incluye esta operación. La administración no otorga autoridad deportiva ni acceso a conversaciones privadas."
-    />
-  )
+const ROLE_LABEL: Record<string, string> = {
+  PLAYER: "Jugadora",
+  CAPTAIN: "Capitana",
+  COACH: "Entrenador",
+  ADMIN: "Administración",
+  SUBCOMMITTEE: "Subcomisión",
 }
+
+const STRUCTURE_LABEL: Record<StructureType, string> = {
+  SEASON: "Temporadas",
+  DIVISION: "Divisiones",
+  LINE: "Líneas",
+  VENUE: "Sedes",
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HUB DE ADMINISTRACIÓN
+   ═══════════════════════════════════════════════════════════════ */
+
 export function ManagementHome() {
-  const { capabilities } = useProduct()
-  if (!capabilities.management) return <Restricted />
-  return (
-    <>
-      <Header
-        eyebrow="Administración"
-        title="Gestión de GEI Hockey"
-        description="Identidad, accesos y estructura. La operación deportiva tiene su propio alcance."
-      />
-      <div className="grid max-w-4xl gap-7 md:grid-cols-2">
-        <Section title="Organización">
-          <Surface>
-            <RowLink
-              to="/management/structure"
-              title="Estructura del club"
-              detail="Temporadas, divisiones, líneas y sedes"
-              icon={<Layers3 size={20} className="text-primary" />}
-            />
-            <RowLink
-              to="/management/people"
-              title="Personas y accesos"
-              detail="Pertenencias, asignaciones y cuentas"
-              icon={<Users size={20} className="text-primary" />}
-            />
-            <RowLink
-              to="/teams"
-              title="Equipos"
-              detail="Identidad, roster y asignación de responsables"
-              icon={<UserRound size={20} className="text-primary" />}
-            />
-          </Surface>
-        </Section>
-        <Section title="Competencia e integridad">
-          <Surface>
-            <RowLink
-              to="/management/competitions"
-              title="Competiciones"
-              detail="Inscripciones y referencias oficiales manuales"
-              icon={<Trophy size={20} className="text-primary" />}
-            />
-            <RowLink
-              to="/audit"
-              title="Auditoría"
-              detail="Registro inmutable de acciones"
-              icon={<ShieldCheck size={20} className="text-primary" />}
-            />
-          </Surface>
-        </Section>
-      </div>
-    </>
-  )
-}
-export function StructurePage() {
-  const { state, capabilities, update, renameVenueMetadata, toast } = useProduct()
-  const [tab, setTab] = useState("Temporada")
-  const [edit, setEdit] = useState("")
-  const [name, setName] = useState("")
-  const [pending, setPending] = useState(false)
-  const [error, setError] = useState("")
-  if (!capabilities.management) return <Restricted />
-  function dependency(id: string) {
-    const item = state.structure.find((item) => item.id === id)!
+  const { state, authority } = useProduct()
+  if (!authority.canOpen("management"))
     return (
-      item.type === "Temporada" ||
-      (item.type === "División" &&
-        state.teams.some(
-          (team) => team.division === item.name && team.state === "ACTIVE",
-        )) ||
-      (item.type === "Línea" &&
-        state.teams.some(
-          (team) => team.line === item.name && team.state === "ACTIVE",
-        )) ||
-      (item.type === "Sede" &&
-        state.events.some(
-          (event) =>
-            event.venue === item.name &&
-            ["SCHEDULED", "IN_PROGRESS"].includes(event.state),
-        ))
-    )
-  }
-  async function save() {
-    if (!name.trim()) return
-    if (
-      state.structure.some(
-        (item) => item.type === tab && item.name === name && item.id !== edit,
-      )
-    ) {
-      setError("Ya existe un elemento con ese nombre.")
-      return
-    }
-    setPending(true)
-    await wait()
-    if (edit !== "new" && (tab === "División" || tab === "Línea")) {
-      const item = state.structure.find((s) => s.id === edit)
-      if (item && item.name !== name) {
-        const inUse =
-          tab === "División"
-            ? state.teams.some((t) => t.division === item.name && t.state === "ACTIVE")
-            : state.teams.some((t) => t.line === item.name && t.state === "ACTIVE")
-        if (inUse) {
-          setPending(false)
-          setError(
-            "La identidad del equipo no cambia por renombrar División/Línea. Para una nueva identidad, creá un nuevo equipo. El nombre histórico se conserva.",
-          )
-          return
-        }
-      }
-    }
-    if (edit !== "new" && tab === "Sede") {
-      const venue = state.venues.find((v) => v.id === edit || v.name === state.structure.find((s) => s.id === edit)?.name)
-      if (venue) {
-        renameVenueMetadata(venue.id, name)
-        setPending(false)
-        setEdit("")
-        toast("Nombre de sede corregido. Los eventos conservan su sede asignada.")
-        return
-      }
-    }
-    update(
-      (draft) => {
-        if (edit === "new")
-          draft.structure.push({
-            id: crypto.randomUUID(),
-            name,
-            type: tab,
-            archived: false,
-          })
-        else {
-          const item = draft.structure.find((item) => item.id === edit)!
-          item.name = name
-        }
-      },
-      "Actualizar estructura",
-      name,
-    )
-    setPending(false)
-    setEdit("")
-    toast("Estructura guardada")
-  }
-  return (
-    <>
-      <Header
-        back="/management"
-        title="Estructura del club"
-        description="Los elementos históricos se conservan. No se eliminan."
-        action={
-          <Button
-            onClick={() => {
-              setEdit("new")
-              setName("")
-              setError("")
-            }}
-          >
-            <Plus size={15} />
-            Crear {tab.toLowerCase()}
-          </Button>
-        }
-      />
-      <div className="mb-6 flex gap-5 overflow-x-auto border-b border-border">
-        {["Temporada", "División", "Línea", "Sede"].map((item) => (
-          <button
-            key={item}
-            onClick={() => setTab(item)}
-            className={`shrink-0 border-b-2 pb-3 text-xs font-medium ${
-              tab === item
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground"
-            }`}
-          >
-            {item === "División"
-              ? "Divisiones"
-              : item === "Temporada"
-                ? "Temporadas"
-                : item === "Línea"
-                  ? "Líneas"
-                  : "Sedes"}
-          </button>
-        ))}
-      </div>
-      <Surface>
-        {state.structure
-          .filter((item) => item.type === tab)
-          .map((item) => (
-            <div
-              key={item.id}
-              className="flex flex-wrap items-center gap-3 border-b border-border p-5 last:border-0"
-            >
-              <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold">{item.name}</h3>
-                {dependency(item.id) && (
-                  <p className="mt-1 text-[10px] text-muted-foreground">
-                    {item.type === "Temporada"
-                      ? "Registro histórico · no se archiva"
-                      : "Tiene dependencias activas. No se puede archivar."}
-                  </p>
-                )}
-              </div>
-              <Badge value={item.archived ? "ARCHIVED" : "ACTIVE"} />
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  setEdit(item.id)
-                  setName(item.name)
-                  setError("")
-                }}
-              >
-                <Pencil size={14} />
-                Editar
-              </Button>
-              {item.type !== "Temporada" && (
-                <Button
-                  variant="ghost"
-                  disabled={item.archived || dependency(item.id)}
-                  onClick={async () => {
-                    await wait()
-                    update(
-                      (draft) =>
-                        (draft.structure.find(
-                          (element) => element.id === item.id,
-                        )!.archived = true),
-                      "Archivar estructura",
-                      item.name,
-                    )
-                    toast("Elemento archivado")
-                  }}
-                >
-                  <Archive size={14} />
-                  Archivar
-                </Button>
-              )}
-            </div>
-          ))}
-      </Surface>
-      {edit && (
-        <Modal
-          title={`${edit === "new" ? "Crear" : "Editar"} ${tab.toLowerCase()}`}
-          onClose={() => setEdit("")}
-          footer={
-            <>
-              <Button variant="secondary" onClick={() => setEdit("")}>
-                Volver
-              </Button>
-              <Button disabled={!name.trim() || pending} onClick={save}>
-                {pending ? "Guardando…" : "Guardar"}
-              </Button>
-            </>
-          }
-        >
-          <TextField
-            label="Nombre"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
-          {error && (
-            <div className="mt-3">
-              <Alert tone="error">{error}</Alert>
-            </div>
-          )}
-        </Modal>
-      )}
-    </>
-  )
-}
-export function PeopleManagement() {
-  const { state, capabilities } = useProduct()
-  const [query, setQuery] = useState("")
-  const [team, setTeam] = useState("all")
-  const [role, setRole] = useState("all")
-  const [status, setStatus] = useState("all")
-  if (!capabilities.management) return <Restricted />
-  const people = state.people.filter(
-    (person) =>
-      person.name.toLowerCase().includes(query.toLowerCase()) &&
-      (team === "all" || person.team === team) &&
-      (role === "all" || person.role === role) &&
-      (status === "all" || person.account === status),
-  )
-  return (
-    <>
-      <Header
-        back="/management"
-        title="Personas y accesos"
-        description="Datos de identidad, cuentas y relaciones vigentes."
-        action={
-          <Link to="/management/people/new">
-            <Button>
-              <Plus size={15} />
-              Crear persona
-            </Button>
-          </Link>
-        }
-      />
-      <div className="mb-6 grid gap-4 sm:grid-cols-4">
-        <TextField
-          label="Buscar persona"
-          placeholder="Nombre o apellido"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-        />
-        <Select
-          label="Equipo"
-          value={team}
-          onChange={(event) => setTeam(event.target.value)}
-        >
-          <option value="all">Todos los equipos</option>
-          {state.teams.map((team) => (
-            <option key={team.id} value={team.id}>
-              {team.name}
-            </option>
-          ))}
-        </Select>
-        <Select
-          label="Rol"
-          value={role}
-          onChange={(event) => setRole(event.target.value)}
-        >
-          <option value="all">Todos los roles</option>
-          {["PLAYER", "CAPTAIN", "COACH", "SUBCOMMITTEE", "ADMIN"].map(
-            (item) => (
-              <option key={item} value={item}>
-                {labels[item]}
-              </option>
-            ),
-          )}
-        </Select>
-        <Select
-          label="Estado"
-          value={status}
-          onChange={(event) => setStatus(event.target.value)}
-        >
-          <option value="all">Todas las cuentas</option>
-          {["ACTIVE", "PENDING", "DISABLED"].map((item) => (
-            <option key={item} value={item}>
-              {labels[item]}
-            </option>
-          ))}
-        </Select>
-      </div>
-      {people.length ? (
-        <Surface>
-          <div className="hidden grid-cols-[1.5fr_1fr_1fr_100px] bg-muted/40 p-4 text-[10px] font-semibold text-muted-foreground md:grid">
-            <span>PERSONA</span>
-            <span>EQUIPO</span>
-            <span>ROL</span>
-            <span>CUENTA</span>
-          </div>
-          {people.map((person) => (
-            <Link
-              key={person.id}
-              to={`/management/people/${person.id}`}
-              className="flex items-center gap-3 border-t border-border p-4 hover:bg-primary-soft/40 md:grid md:grid-cols-[1.5fr_1fr_1fr_100px]"
-            >
-              <span className="flex flex-1 items-center gap-3">
-                <Avatar name={person.name} size="sm" />
-                <span className="text-xs font-semibold">{person.name}</span>
-              </span>
-              <span className="hidden text-xs text-muted-foreground md:block">
-                {state.teams.find((team) => team.id === person.team)?.name ||
-                  "Club"}
-              </span>
-              <span className="hidden text-xs text-muted-foreground md:block">
-                {labels[person.role]}
-              </span>
-              <Badge value={person.account} />
-            </Link>
-          ))}
-        </Surface>
-      ) : (
+      <div className="mx-auto max-w-3xl">
         <Empty
-          title="No encontramos personas"
-          detail="Probá con otro nombre o ajustá los filtros."
+          title="La administración es de administración"
+          detail="No tenés acceso a estas superficies."
         />
+      </div>
+    )
+
+  const incomplete = state.people.filter((person) => !profileCompleteness(person).complete)
+  const pending = state.people.filter((person) => person.account === "PENDING")
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-4xl">
+      <PageContextHeader
+        context="Administración"
+        title="Administración del club"
+        lead="Altas de personas, estructura y competencias. Sin operaciones deportivas."
+      />
+      {(incomplete.length > 0 || pending.length > 0) && (
+        <Banner tone="attention" title="Hay pendientes de alta">
+          <span className="text-ink-strong">
+            {incomplete.length > 0 &&
+              `${incomplete.length} ${incomplete.length === 1 ? "persona tiene" : "personas tienen"} el perfil incompleto. `}
+            {pending.length > 0 &&
+              `${pending.length} ${pending.length === 1 ? "cuenta espera" : "cuentas esperan"} activación.`}
+          </span>
+        </Banner>
       )}
-    </>
+      <div className="grid gap-1">
+        <RowLink
+          to="/management/people"
+          title="Personas"
+          detail={`${state.people.length} personas · altas, cuentas, roles y habilitación`}
+        />
+        {authority.canOpen("structure") && (
+          <RowLink
+            to="/management/structure"
+            title="Estructura del club"
+            detail="Temporadas, divisiones, líneas y sedes"
+          />
+        )}
+        {authority.canOpen("competitions") && (
+          <RowLink
+            to="/management/competitions"
+            title="Competencias"
+            detail={`${state.competitions.length} competencias con inscripciones por equipo y por línea`}
+          />
+        )}
+      </div>
+    </div>
   )
 }
-export function CreatePerson() {
-  const { capabilities, state, update, toast } = useProduct()
-  const navigate = useNavigate()
-  const [form, setForm] = useState({
-    first: "",
-    last: "",
-    dni: "",
-    birth: "",
-    phone: "",
-    email: "",
-  })
-  const [pending, setPending] = useState(false)
-  const [error, setError] = useState("")
-  if (!capabilities.management) return <Restricted />
-  async function create() {
-    setError("")
-    if (form.dni && state.people.some((person) => person.dni === form.dni)) {
-      setError("Ya existe una persona con ese DNI.")
-      return
-    }
-    setPending(true)
-    await wait()
-    const id = crypto.randomUUID()
-    update(
-      (draft) =>
-        draft.people.push({
-          id,
-          name: `${form.first} ${form.last}`,
-          dni: form.dni,
-          birth: form.birth,
-          phone: form.phone,
-          email: form.email,
-          team: "",
-          role: "PLAYER",
-          eligibility: "ELIGIBLE",
-          account: "PENDING",
-          username: "",
-        }),
-      "Crear persona",
-      `${form.first} ${form.last}`,
-    )
-    toast("Persona creada. Todavía no tiene equipo ni acceso activo.")
-    navigate(`/management/people/${id}`)
-  }
-  return (
-    <>
-      <Header
-        back="/management/people"
-        title="Crear persona"
-        description="La identidad existe independientemente del equipo o de la cuenta."
-      />
-      <form
-        onSubmit={(event) => {
-          event.preventDefault()
-          create()
-        }}
-      >
-        <Surface className="max-w-3xl space-y-5 p-6">
-          <div className="grid gap-4 sm:grid-cols-2">
-            {Object.entries({
-              first: "Nombre",
-              last: "Apellido",
-              dni: "DNI",
-              birth: "Fecha de nacimiento",
-              phone: "Teléfono",
-              email: "Email",
-            }).map(([key, label]) => (
-              <TextField
-                key={key}
-                label={`${label}${["first", "last"].includes(key) ? " *" : ""}`}
-                required={["first", "last"].includes(key)}
-                type={
-                  key === "birth" ? "date" : key === "email" ? "email" : "text"
-                }
-                value={form[(key as keyof typeof form)]}
-                onChange={(event) =>
-                  setForm((previous) => ({
-                    ...previous,
-                    [key]: event.target.value,
-                  }))
-                }
-              />
-            ))}
-          </div>
-          <Alert tone="info">
-            Para ingresar al roster como jugadora se requieren todos estos
-            campos completos. Crear una persona no asigna automáticamente una
-            cuenta, un equipo ni permisos.
-          </Alert>
-          {error && <Alert tone="error">{error}</Alert>}
-          <Button type="submit" disabled={pending}>
-            {pending ? "Creando…" : "Crear persona"}
-          </Button>
-        </Surface>
-      </form>
-    </>
-  )
-}
-export function PersonAdminDetail() {
-  const { id } = useParams()
-  const { state, capabilities, update, toast } = useProduct()
-  const person = state.people.find((item) => item.id === id)
-  const [target, setTarget] = useState(person?.team || "sexta")
-  const [operation, setOperation] = useState("")
-  const [reason, setReason] = useState("")
-  const [username, setUsername] = useState(person?.username || "")
-  const [code, setCode] = useState("")
-  const [pending, setPending] = useState(false)
-  const [error, setError] = useState("")
-  const [eligibility, setEligibility] = useState(
-    person?.eligibility || "ELIGIBLE",
-  )
-  const [role, setRole] = useState<Person["role"]>("COACH")
-  if (!capabilities.management) return <Restricted />
-  if (!person)
+
+/* ═══════════════════════════════════════════════════════════════
+   PERSONAS — búsqueda y filtros preservados en la URL
+   ═══════════════════════════════════════════════════════════════ */
+
+export function PeopleManagement() {
+  const { state, authority } = useProduct()
+  const query = useQueryState()
+  const q = query.get("q")
+  const team = query.get("team")
+  const role = query.get("role")
+  const account = query.get("account")
+  const profileStatus = query.get("profileStatus")
+  useRouter()
+
+  if (!authority.canOpen("people"))
     return (
-      <Empty
-        title="Persona no encontrada"
-        detail="Revisá el listado de personas."
-      />
+      <div className="mx-auto max-w-3xl">
+        <Empty
+          title="Las personas las administra el club"
+          detail="Pedile a administración si necesitás corregir un dato."
+        />
+      </div>
     )
-  const lastAdmin =
-    hasRole(person, "ADMIN") &&
-    person.account === "ACTIVE" &&
-    state.people.filter(
-      (item) => hasRole(item, "ADMIN") && item.account === "ACTIVE",
-    ).length === 1
-  async function execute() {
-    if (!person) return
-    setError("")
-    if (
-      (operation === "Deshabilitar cuenta" ||
-        (operation === "Finalizar rol" && role === "ADMIN")) &&
-      lastAdmin
-    ) {
-      setError("Debe permanecer al menos un administrador con cuenta activa.")
-      return
-    }
-    if (
-      operation === "Asignar rol" &&
-      role === "CAPTAIN" &&
-      target !== person.team
-    ) {
-      setError(
-        "La capitana debe pertenecer al equipo en el que se asigna el rol.",
-      )
-      return
-    }
-    if (
-      operation === "Asignar equipo" &&
-      (!person.dni || !person.birth || !person.phone || !person.email)
-    ) {
-      setError(
-        "Perfil de jugadora incompleto. Completá DNI, fecha de nacimiento, teléfono y email antes de asignar equipo.",
-      )
-      return
-    }
-    if (
-      operation === "Crear acceso" &&
-      (!username.trim() ||
-        state.people.some(
-          (item) =>
-            item.username.toLowerCase() === username.toLowerCase() &&
-            item.id !== person.id,
-        ))
-    ) {
-      setError("Elegí un usuario único. El usuario no depende del equipo.")
-      return
-    }
-    setPending(true)
-    await wait()
-    update(
-      (draft) => {
-        const item = draft.people.find((item) => item.id === id)!
-        const today = todayIso()
-        if (operation === "Asignar equipo") {
-          item.roleAssignments = roleAssignments(item).map((assignment) =>
-            ["PLAYER", "CAPTAIN"].includes(assignment.role) &&
-            !assignment.validUntil
-              ? { ...assignment, validUntil: today }
-              : assignment,
-          )
-          item.roleAssignments.push({
-            id: crypto.randomUUID(),
-            role: "PLAYER",
-            scope: "TEAM",
-            target,
-            validFrom: today,
-            validUntil: null,
-          })
-          item.team = target
-          item.role = "PLAYER"
-          const ta = draft.teamAssignments.find((t) => t.personId === item.id && !t.validUntil)
-          if (ta) ta.validUntil = today
-          draft.teamAssignments.push({ id: crypto.randomUUID(), personId: item.id, teamId: target, validFrom: today, validUntil: null })
-        }
-        if (operation === "Finalizar pertenencia al equipo") {
-          item.roleAssignments = roleAssignments(item).map((assignment) =>
-            ["PLAYER", "CAPTAIN"].includes(assignment.role) &&
-            !assignment.validUntil
-              ? { ...assignment, validUntil: today }
-              : assignment,
-          )
-          item.team = ""
-          if (item.role === "CAPTAIN") item.role = "PLAYER"
-          const ta = draft.teamAssignments.find((t) => t.personId === item.id && !t.validUntil)
-          if (ta) ta.validUntil = today
-        }
-        if (operation === "Deshabilitar cuenta") item.account = "DISABLED"
-        if (operation === "Reactivar cuenta") item.account = "ACTIVE"
-        if (
-          operation === "Crear acceso" ||
-          operation === "Restablecer acceso"
-        ) {
-          item.username = username || item.username
-          item.account = "PENDING"
-        }
-        if (operation === "Actualizar elegibilidad") {
-          const today = todayIso()
-          draft.eligibilityConstraints.forEach((c) => {
-            if (c.personId === item.id && !c.validUntil) c.validUntil = today
-          })
-          if (eligibility !== "ELIGIBLE") {
-            draft.eligibilityConstraints.push({
-              id: crypto.randomUUID(),
-              personId: item.id,
-              state: eligibility,
-              scope: "CLUB",
-              scopeRefId: null,
-              source: "INTERNAL",
-              reason: "ADMIN",
-              note: reason || "Actualización administrativa.",
-              validFrom: today,
-              validUntil: null,
-            })
-          }
-          item.eligibility = eligibility
-        }
-        if (operation === "Asignar rol") {
-          item.roleAssignments = roleAssignments(item)
-          item.roleAssignments.push({
-            id: crypto.randomUUID(),
-            role,
-            scope: ["ADMIN", "SUBCOMMITTEE"].includes(role) ? "CLUB" : "TEAM",
-            target: ["ADMIN", "SUBCOMMITTEE"].includes(role) ? "club" : target,
-            validFrom: todayIso(),
-            validUntil: null,
-          })
-          if (!item.team && role === "COACH") item.team = target
-        }
-        if (operation === "Finalizar rol")
-          item.roleAssignments = roleAssignments(item).map((assignment) =>
-            assignment.role === role && !assignment.validUntil
-              ? { ...assignment, validUntil: todayIso() }
-              : assignment,
-          )
-      },
-      operation,
-      person.name,
-      reason,
-    )
-    if (
-      [
-        "Crear acceso",
-        "Restablecer acceso",
-        "Generar código de activación",
-      ].includes(operation)
-    )
-      setCode("GEI-2026-4812")
-    else setOperation("")
-    setPending(false)
-    toast("Cambio guardado en el historial")
-  }
+
+  const rows = state.people
+    .map((person) => {
+      const assignments = activeTeamAssignments(state, person.id)
+      const roles = activeRoleAssignments(state, person.id)
+      const completeness = profileCompleteness(person)
+      return { person, assignments, roles, completeness }
+    })
+    .filter((row) => {
+      if (q && !row.person.name.toLowerCase().includes(q.toLowerCase()))
+        return false
+      if (team && !row.assignments.some((a) => a.teamId === team)) return false
+      if (role && !row.roles.some((r) => r.role === role)) return false
+      if (account && row.person.account !== account) return false
+      if (profileStatus === "incomplete" && row.completeness.complete) return false
+      return true
+    })
+    .sort((a, b) => a.person.lastName.localeCompare(b.person.lastName))
+
+  const filtersOn = Boolean(q || team || role || account || profileStatus)
+
   return (
-    <>
-      <Header
-        back="/management/people"
-        eyebrow="Administración de persona"
-        title={person.name}
-        description="Identidad, acceso y relaciones. Los cambios conservan la historia."
-      />
-      <div className="grid items-start gap-7 xl:grid-cols-[1fr_320px]">
-        <div className="space-y-6">
-          <Section title="Identidad y contacto">
-            <Surface className="grid gap-5 p-6 sm:grid-cols-2">
-              {[
-                ["DNI", person.dni],
-                ["Fecha de nacimiento", person.birth],
-                ["Teléfono", person.phone],
-                ["Email", person.email],
-              ].map(([label, value]) => (
-                <div key={label}>
-                  <p className="text-[10px] text-muted-foreground">{label}</p>
-                  <p className="mt-1.5 break-words text-xs font-medium">
-                    {value || "Sin completar"}
-                  </p>
-                </div>
-              ))}
-            </Surface>
-          </Section>
-          <Section title="Pertenencia y equipo">
-            <Surface className="space-y-5 p-6">
-              <p className="text-xs">
-                {person.team
-                  ? `${state.teams.find((team) => team.id === person.team)?.name} 2026 · Pertenencia vigente`
-                  : "Sin asignación deportiva vigente"}
-              </p>
+    <div className="gei-stack-page mx-auto max-w-5xl">
+      <PageContextHeader
+        context="Personas"
+        title="Personas"
+        lead={`${rows.length} ${
+          rows.length === 1 ? "persona" : "personas"
+        } ${filtersOn ? "con estos filtros" : "en el club"}`}
+        action={
+          <Button variant="primary" onClick={() => go("/management/people/new")}>
+            Crear persona
+          </Button>
+        }
+        below={
+          <div className="grid gap-3">
+            <TextField
+              label="Buscar"
+              value={q}
+              placeholder="Nombre"
+              onChange={(event) => query.set({ q: event.target.value })}
+            />
+            <div className="flex flex-wrap items-end gap-2">
               <Select
-                label="Equipo de destino"
-                value={target}
-                onChange={(event) => setTarget(event.target.value)}
+                label="Equipo"
+                value={team}
+                onChange={(event) => query.set({ team: event.target.value })}
+                className="min-w-44"
               >
-                {state.teams
-                  .filter((team) => team.state === "ACTIVE")
-                  .map((team) => (
-                    <option key={team.id} value={team.id}>
-                      {team.name} 2026
-                    </option>
-                  ))}
-              </Select>
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    setOperation("Asignar equipo")
-                    setError("")
-                    setCode("")
-                  }}
-                >
-                  {" "}
-                  {person.team ? "Mover de equipo" : "Asignar equipo"}
-                </Button>
-                {person.team && (
-                  <Button
-                    variant="ghost"
-                    onClick={() => {
-                      setOperation("Finalizar pertenencia al equipo")
-                      setCode("")
-                    }}
-                  >
-                    Finalizar pertenencia
-                  </Button>
-                )}
-              </div>
-              <p className="text-[10px] leading-relaxed text-muted-foreground">
-                Mover termina la asignación y el rol PLAYER anteriores. Si era
-                capitana, ese rol finaliza y no se transfiere automáticamente.
-              </p>
-            </Surface>
-          </Section>
-          <Section title="Roles y alcance">
-            <Surface className="p-6">
-              <div className="mb-5 space-y-3">
-                {currentRoles(person).map((assignment) => (
-                  <div
-                    key={assignment.id}
-                    className="flex items-center justify-between gap-2"
-                  >
-                    <span className="flex items-center gap-2">
-                      <Badge value={assignment.role} />
-                      <span className="text-[10px] text-muted-foreground">
-                        {assignment.scope === "CLUB"
-                          ? "Club"
-                          : assignment.scope === "TEAM"
-                            ? state.teams.find(
-                                (team) => team.id === assignment.target,
-                              )?.name
-                            : "Evento"}
-                      </span>
-                    </span>
-                    {assignment.role !== "PLAYER" && (
-                      <Button
-                        variant="ghost"
-                        disabled={assignment.role === "ADMIN" && lastAdmin}
-                        onClick={() => {
-                          setRole(assignment.role)
-                          setOperation("Finalizar rol")
-                          setCode("")
-                        }}
-                      >
-                        Finalizar
-                      </Button>
-                    )}
-                  </div>
-                ))}
-              </div>
-              <Select
-                label="Rol a asignar"
-                value={role}
-                onChange={(event) =>
-                  setRole(event.target.value as Person["role"])
-                }
-              >
-                {["CAPTAIN", "COACH", "SUBCOMMITTEE", "ADMIN"].map((value) => (
-                  <option key={value} value={value}>
-                    {labels[value]}
+                <option value="">Todos</option>
+                {state.teams.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {teamName(state, item.id)}
                   </option>
                 ))}
               </Select>
-              <Button
-                className="mt-3"
-                variant="secondary"
-                disabled={
-                  hasRole(person, role) || (role === "CAPTAIN" && !person.team)
-                }
-                onClick={() => {
-                  setOperation("Asignar rol")
-                  setCode("")
-                  setError("")
-                }}
-              >
-                Asignar rol
-              </Button>
-              <p className="mt-3 text-xs text-muted-foreground">
-                Los roles vigentes se combinan. Administración no incluye
-                autoridad deportiva. Para entrenadores y capitanas se usa el
-                equipo de destino; administración y subcomisión tienen alcance
-                de club.
-              </p>
-            </Surface>
-          </Section>
-          <Section title="Elegibilidad">
-            <Surface className="space-y-4 p-6">
               <Select
-                label="Estado operacional"
-                value={eligibility}
-                onChange={(event) =>
-                  setEligibility(event.target.value as Person["eligibility"])
+                label="Rol"
+                value={role}
+                onChange={(event) => query.set({ role: event.target.value })}
+                className="min-w-44"
+              >
+                <option value="">Todos</option>
+                {Object.entries(ROLE_LABEL).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </Select>
+              <Select
+                label="Cuenta"
+                value={account}
+                onChange={(event) => query.set({ account: event.target.value })}
+                className="min-w-40"
+              >
+                <option value="">Todas</option>
+                <option value="ACTIVE">Activa</option>
+                <option value="PENDING">Pendiente</option>
+                <option value="DISABLED">Deshabilitada</option>
+              </Select>
+              <FilterChip
+                active={profileStatus === "incomplete"}
+                onClick={() =>
+                  query.set({
+                    profileStatus: profileStatus === "incomplete" ? "" : "incomplete",
+                  })
                 }
               >
-                <option value="ELIGIBLE">
-                  Elegible · sin restricciones activas
-                </option>
-                <option value="PENDING">Pendiente</option>
-                <option value="BLOCKED">Bloqueada</option>
-              </Select>
+                Perfil incompleto
+              </FilterChip>
+              {filtersOn && (
+                <Button
+                  variant="quiet"
+                  onClick={() => query.reset(["q", "team", "role", "account", "profileStatus"])}
+                >
+                  Quitar filtros
+                </Button>
+              )}
+            </div>
+          </div>
+        }
+      />
+
+      {rows.length === 0 ? (
+        <Empty
+          title="Sin resultados"
+          detail={
+            filtersOn
+              ? "Ninguna persona coincide con estos filtros."
+              : "Todavía no hay personas cargadas."
+          }
+          action={
+            filtersOn && (
               <Button
                 variant="secondary"
-                onClick={() => {
-                  setOperation("Actualizar elegibilidad")
-                  setCode("")
-                }}
+                onClick={() =>
+                  query.reset(["q", "team", "role", "account", "profileStatus"])
+                }
               >
-                Actualizar estado
+                Quitar filtros
               </Button>
-              <p className="text-[10px] text-muted-foreground">
-                Fuente manual · Sin datos clínicos. El entrenador sólo ve el
-                estado operativo.
-              </p>
-            </Surface>
-          </Section>
+            )
+          }
+        />
+      ) : (
+        <Surface flush>
+          <ul className="grid px-1 py-1">
+            {rows.map(({ person, assignments, roles, completeness }) => (
+              <li key={person.id}>
+                <RowLink
+                  to={`/management/people/${person.id}`}
+                  title={person.name}
+                  leading={<Avatar name={person.name} size="sm" />}
+                  detail={
+                    <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                      <span>
+                        {roles.length === 0
+                          ? "Sin rol deportivo"
+                          : roles
+                              .map(
+                                (assignment) =>
+                                  `${ROLE_LABEL[assignment.role]} · ${roleScopeLabel(state, assignment)}`,
+                              )
+                              .join("  ·  ")}
+                      </span>
+                    </span>
+                  }
+                  meta={
+                    <span className="grid justify-items-end gap-1">
+                      <StateBadge value={person.account} />
+                      {!completeness.complete && (
+                        <Tag tone="attention">Perfil incompleto</Tag>
+                      )}
+                    </span>
+                  }
+                />
+              </li>
+            ))}
+          </ul>
+        </Surface>
+      )}
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ALTA DE PERSONA — identidad administrada por el club
+   ═══════════════════════════════════════════════════════════════ */
+
+export function CreatePerson() {
+  const { state, authority, createPerson } = useProduct()
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    dni: "",
+    birth: "",
+    teamId: "",
+    membership: false,
+  })
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [pending, setPending] = useState(false)
+  const [created, setCreated] = useState<{ id: string; code: string } | null>(null)
+  useRouter()
+
+  if (!authority.canManagePeople)
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty title="No podés crear personas" detail="Reservado a administración." />
+      </div>
+    )
+
+  function submit() {
+    const found: Record<string, string> = {}
+    if (!form.name.trim()) found.name = "Escribí el nombre completo."
+    if (!form.dni.trim()) found.dni = "El documento lo administra el club y es obligatorio."
+    if (!form.birth) found.birth = "La fecha de nacimiento es obligatoria."
+    if (!form.email.includes("@")) found.email = "Revisá el correo."
+    setErrors(found)
+    if (Object.keys(found).length > 0) {
+      window.setTimeout(() => {
+        document.getElementById(`cp-${Object.keys(found)[0]}`)?.focus()
+      }, 0)
+      return
+    }
+    setPending(true)
+    const id = createPerson({
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      dni: form.dni,
+      birth: form.birth,
+      teamId: form.teamId || null,
+      role: "PLAYER",
+    })
+    if (form.membership) {
+      // La Membership se inicia desde el detalle administrativo.
+      go(`/management/people/${id}`)
+    }
+    setPending(false)
+    setCreated({ id, code: "" })
+    go(`/management/people/${id}`)
+  }
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-2xl">
+      <PageContextHeader
+        context="Nueva persona"
+        title="Crear persona"
+        back="/management/people"
+        lead="Documento y fecha de nacimiento los administra el club: no se los pide a la familia."
+      />
+      {created && (
+        <Banner tone="success" title="Persona creada">
+          <span className="text-ink-strong">
+            Quedó con cuenta pendiente. Emitile el código de activación desde su
+            ficha.
+          </span>
+        </Banner>
+      )}
+      <form
+        onSubmit={(event) => {
+          event.preventDefault()
+          submit()
+        }}
+        noValidate
+        className="grid gap-5"
+      >
+        <Surface className="grid gap-4">
+          <SectionHeader title="Identidad" />
+          <TextField
+            id="cp-name"
+            label="Nombre y apellido"
+            required
+            value={form.name}
+            error={errors.name}
+            onChange={(event) =>
+              setForm((current) => ({ ...current, name: event.target.value }))
+            }
+          />
+          <TextField
+            id="cp-dni"
+            label="Documento de identidad"
+            required
+            value={form.dni}
+            error={errors.dni}
+            hint="Dato del club. La persona no puede editarlo desde su perfil."
+            onChange={(event) =>
+              setForm((current) => ({ ...current, dni: event.target.value }))
+            }
+          />
+          <TextField
+            id="cp-birth"
+            label="Fecha de nacimiento"
+            type="date"
+            required
+            value={form.birth}
+            error={errors.birth}
+            onChange={(event) =>
+              setForm((current) => ({ ...current, birth: event.target.value }))
+            }
+          />
+        </Surface>
+        <Surface className="grid gap-4">
+          <SectionHeader title="Contacto" />
+          <TextField
+            id="cp-email"
+            label="Correo"
+            type="email"
+            required
+            value={form.email}
+            error={errors.email}
+            onChange={(event) =>
+              setForm((current) => ({ ...current, email: event.target.value }))
+            }
+          />
+          <TextField
+            id="cp-phone"
+            label="Teléfono"
+            value={form.phone}
+            onChange={(event) =>
+              setForm((current) => ({ ...current, phone: event.target.value }))
+            }
+          />
+        </Surface>
+        <Surface className="grid gap-4">
+          <SectionHeader title="Alta deportiva" hint="Opcional: se puede completar después." />
+          <Select
+            label="Equipo"
+            value={form.teamId}
+            onChange={(event) =>
+              setForm((current) => ({ ...current, teamId: event.target.value }))
+            }
+          >
+            <option value="">Sin equipo por ahora</option>
+            {state.teams
+              .filter((team) => team.state === "ACTIVE")
+              .map((team) => (
+                <option key={team.id} value={team.id}>
+                  {teamName(state, team.id)}
+                </option>
+              ))}
+          </Select>
+        </Surface>
+        <div className="flex flex-wrap justify-end gap-2">
+          <Button variant="quiet" onClick={() => go("/management/people")}>
+            Cancelar
+          </Button>
+          <Button type="submit" variant="primary" busy={pending}>
+            Crear persona
+          </Button>
         </div>
-        <Section title="Cuenta y acceso">
-          <Surface className="space-y-5 p-6">
-            <Badge value={person.account} />
-            <div>
-              <p className="text-[10px] text-muted-foreground">Usuario</p>
-              <p className="mt-1 text-xs font-semibold">
-                {person.username || "Sin acceso creado"}
-              </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              {!person.username ? (
+      </form>
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FICHA ADMINISTRATIVA — una sola acción primaria contextual
+   ═══════════════════════════════════════════════════════════════ */
+
+export function PersonAdminDetail() {
+  const { id = "" } = useParams()
+  const {
+    state,
+    authority,
+    updateIdentity,
+    startMembership,
+    endMembership,
+    setAccountState,
+    issueSetupToken,
+    createGuardianRelationship,
+    endGuardianRelationship,
+    createConstraint,
+    endConstraint,
+  } = useProduct()
+  const query = useQueryState()
+  const section = query.get("section", "identidad")
+  useRouter()
+  const [dialog, setDialog] = useState<
+    | null
+    | "identidad"
+    | "membership-start"
+    | "membership-end"
+    | "account-disable"
+    | "account-enable"
+    | "code"
+    | "guardian"
+    | "constraint"
+  >(null)
+  const [code, setCode] = useState("")
+  const [guardError, setGuardError] = useState("")
+  const [guard, setGuard] = useState({
+    guardianId: "",
+    relation: "Madre",
+    canViewChildInfo: true,
+    canRespondAvailability: true,
+  })
+  const [constraint, setConstraint] = useState({
+    state: "PENDING" as "PENDING" | "BLOCKED",
+    scope: "CLUB",
+    source: "INTERNAL",
+    reason: "MEDICAL_CLEARANCE",
+    note: "",
+  })
+  const [identity, setIdentity] = useState({ dni: "", birth: "", phone: "", email: "" })
+  const [identityErrors, setIdentityErrors] = useState<Record<string, string>>({})
+  const [closeReason, setCloseReason] = useState("")
+
+  const person = state.people.find((item) => item.id === id)
+
+  if (!authority.canOpen("people"))
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty title="No tenés acceso a las fichas de personas" detail="Reservado a administración." />
+      </div>
+    )
+  if (!person)
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty title="No encontramos a esa persona" detail="Revisá el enlace." />
+      </div>
+    )
+
+  const membership = membershipOf(state, person.id)
+  const memberships = activeMemberships(state, person.id)
+  const teams = activeTeamAssignments(state, person.id)
+  const roles = activeRoleAssignments(state, person.id)
+  const completeness = profileCompleteness(person)
+  const eligibility = deriveEligibility(state.eligibilityConstraints, person.id)
+  const constraints = state.eligibilityConstraints.filter(
+    (constraint) => constraint.personId === person.id,
+  )
+  const relations = guardiansOf(state, person.id)
+  const history = state.audit.filter((entry) => entry.route.includes(person.id))
+  const guardiansAvailable = state.people.filter((item) => item.id !== person.id)
+
+  /* Una sola acción primaria contextual según el estado real. */
+  const primary = !membership
+    ? { label: "Iniciar pertenencia", run: () => setDialog("membership-start") }
+    : person.account === "PENDING"
+      ? { label: "Emitir código de activación", run: () => setDialog("code") }
+      : person.account === "DISABLED"
+        ? { label: "Habilitar cuenta", run: () => setDialog("account-enable") }
+        : null
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-4xl">
+      <PageContextHeader
+        context="Personas"
+        title={person.name}
+        back="/management/people"
+        lead={
+          completeness.complete
+            ? "Ficha administrativa: identidad, pertenencia, roles, habilitación y cuenta."
+            : `Faltan datos para poder asignarla: ${completeness.missing
+                .map((item) => item.label)
+                .join(", ")}.`
+        }
+        action={
+          <div className="flex flex-wrap items-center gap-2">
+            <StateBadge value={person.account} emphasis />
+            {primary && (
+              <Button variant="primary" onClick={primary.run}>
+                {primary.label}
+              </Button>
+            )}
+          </div>
+        }
+        below={
+          <div className="border-b border-line">
+            <TabBar
+              ariaLabel="Secciones de la ficha"
+              active={section}
+              onChange={(value) => query.set({ section: value })}
+              tabs={[
+                { id: "identidad", label: "Identidad" },
+                { id: "pertenencia", label: "Pertenencia" },
+                { id: "equipos", label: "Equipos", count: teams.length },
+                { id: "roles", label: "Roles", count: roles.length },
+                { id: "habilitacion", label: "Habilitación" },
+                { id: "cuenta", label: "Cuenta" },
+                { id: "representacion", label: "Representación", count: relations.length },
+              ]}
+            />
+          </div>
+        }
+      />
+
+      {section === "identidad" && (
+        <div className="grid gap-4">
+          {!completeness.complete && (
+            <Banner tone="attention" title="Perfil incompleto">
+              <span className="text-ink-strong">
+                Mientras falten{" "}
+                {completeness.missing.map((item) => item.label).join(", ")} no se
+                puede asignar a un equipo: el club no tiene los datos para hacerlo.
+              </span>
+            </Banner>
+          )}
+          <Surface className="grid gap-4">
+            <SectionHeader
+              title="Datos que administra el club"
+              action={
                 <Button
                   variant="secondary"
+                  size="sm"
                   onClick={() => {
-                    setOperation("Crear acceso")
-                    setCode("")
+                    setIdentity({
+                      dni: person.dni,
+                      birth: person.birth,
+                      phone: person.phone,
+                      email: person.email,
+                    })
+                    setDialog("identidad")
                   }}
                 >
-                  Crear acceso
+                  Corregir identidad
                 </Button>
-              ) : (
-                <>
+              }
+            />
+            <RowStatic title="Nombre" detail={person.name} />
+            <RowStatic title="Documento" detail={person.dni || "Sin cargar"} />
+            <RowStatic
+              title="Fecha de nacimiento"
+              detail={person.birth ? dateLabel(person.birth, true) : "Sin cargar"}
+            />
+            <RowStatic title="Correo" detail={person.email || "Sin correo"} />
+            <RowStatic title="Teléfono" detail={person.phone || "Sin teléfono"} />
+          </Surface>
+        </div>
+      )}
+
+      {section === "pertenencia" && (
+        <div className="grid gap-4">
+          {memberships.length === 0 ? (
+            <Empty
+              title="Sin pertenencia vigente"
+              detail="La pertenencia es el vínculo con el club. Sin ella no hay temporada."
+              action={
+                <Button variant="primary" onClick={() => setDialog("membership-start")}>
+                  Iniciar pertenencia
+                </Button>
+              }
+            />
+          ) : (
+            memberships.map((item) => (
+              <Surface key={item.id} className="grid gap-3">
+                <SectionHeader
+                  title="Pertenencia vigente"
+                  meta={periodLabel(item.validFrom, item.validUntil)}
+                  action={
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={() => setDialog("membership-end")}
+                    >
+                      Finalizar
+                    </Button>
+                  }
+                />
+                <p className="gei-meta">
+                  Finalizar la pertenencia no borra la historia: el período queda
+                  cerrado y los equipos y roles se conservan con su vigencia.
+                </p>
+              </Surface>
+            ))
+          )}
+        </div>
+      )}
+
+      {section === "equipos" && (
+        <DetailSection title="Equipos" meta={`${teams.length} vigentes`}>
+          {teams.length === 0 ? (
+            <p className="gei-meta">
+              No tiene equipos vigentes. La asignación deportiva la hace el club.
+            </p>
+          ) : (
+            <ul className="grid">
+              {teams.map((assignment) => (
+                <li key={assignment.id}>
+                  <RowStatic
+                    title={teamName(state, assignment.teamId)}
+                    detail={periodLabel(assignment.validFrom, assignment.validUntil)}
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
+        </DetailSection>
+      )}
+
+      {section === "roles" && (
+        <DetailSection title="Roles y alcance" meta={`${roles.length} vigentes`}>
+          {roles.length === 0 ? (
+            <p className="gei-meta">No tiene roles vigentes.</p>
+          ) : (
+            <ul className="grid">
+              {roles.map((role) => (
+                <li key={role.id}>
+                  <RowStatic
+                    title={ROLE_LABEL[role.role] ?? role.role}
+                    detail={`${roleScopeLabel(state, role)} · ${periodLabel(
+                      role.validFrom,
+                      role.validUntil,
+                    )}`}
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
+        </DetailSection>
+      )}
+
+      {section === "habilitacion" && (
+        <div className="grid gap-4">
+          <Surface className="grid gap-3">
+            <SectionHeader
+              title="Estado para jugar"
+              action={
+                authority.canManageEligibility && (
                   <Button
                     variant="secondary"
-                    onClick={() => {
-                      setOperation("Restablecer acceso")
-                      setCode("")
-                    }}
+                    size="sm"
+                    onClick={() => setDialog("constraint")}
                   >
-                    Restablecer acceso
+                    Registrar una restricción
                   </Button>
-                  {person.account === "PENDING" && (
-                    <Button
-                      variant="secondary"
-                      onClick={() => {
-                        setOperation("Generar código de activación")
-                        setCode("")
-                      }}
-                    >
-                      Generar código de activación
-                    </Button>
-                  )}
-                  <Button
-                    variant="ghost"
-                    disabled={lastAdmin}
-                    onClick={() => {
-                      setOperation(
-                        person.account === "DISABLED"
-                          ? "Reactivar cuenta"
-                          : "Deshabilitar cuenta",
-                      )
-                      setCode("")
-                    }}
-                  >
-                    {person.account === "DISABLED"
-                      ? "Reactivar cuenta"
-                      : "Deshabilitar cuenta"}
-                  </Button>
-                </>
-              )}
-              {lastAdmin && (
-                <p className="text-[10px] text-warning">
-                  No se puede deshabilitar al último ADMIN activo.
-                </p>
-              )}
+                )
+              }
+            />
+            <div className="flex items-center gap-2">
+              <StateBadge
+                value={eligibility === "ELIGIBLE" ? "ELIGIBLE" : eligibility}
+                emphasis
+              />
+              <span className="gei-body text-ink-strong">
+                {eligibility === "ELIGIBLE"
+                  ? "Puede jugar sin restricciones."
+                  : eligibility === "PENDING"
+                    ? "Tiene un trámite pendiente antes de jugar."
+                    : "No puede jugar hasta que se levante el bloqueo."}
+              </span>
             </div>
           </Surface>
-        </Section>
-      </div>
-      {operation && (
+
+          <Surface className="grid gap-2">
+            <SectionHeader
+              title="Restricciones registradas"
+              meta={`${constraints.length}`}
+            />
+            {constraints.length === 0 ? (
+              <p className="gei-meta">Sin restricciones registradas.</p>
+            ) : (
+              <ul className="grid">
+                {constraints.map((item) => (
+                  <li key={item.id}>
+                    <div className="flex flex-wrap items-center gap-3 border-b border-line py-3 last:border-b-0">
+                      <div className="min-w-0 flex-1">
+                        <p className="gei-item-title">
+                          {item.state === "BLOCKED"
+                            ? "No habilitada para jugar"
+                            : "Trámite pendiente"}
+                        </p>
+                        <p className="gei-meta">
+                          {CONSTRAINT_SCOPE_LABEL[item.scope]} ·{" "}
+                          {CONSTRAINT_SOURCE_LABEL[item.source]} ·{" "}
+                          {CONSTRAINT_REASON_LABEL[item.reason]}
+                        </p>
+                        {item.note && (
+                          <p className="gei-body text-ink-strong">{item.note}</p>
+                        )}
+                        <p className="gei-meta tabular-nums">
+                          {periodLabel(item.validFrom, item.validUntil)} · cargada por{" "}
+                          {item.createdBy}
+                        </p>
+                      </div>
+                      <StateBadge
+                        value={item.state === "BLOCKED" ? "BLOCKED" : "PENDING"}
+                      />
+                      {authority.canManageEligibility && !item.validUntil && (
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() =>
+                            endConstraint(item.id, "Levantada desde la ficha")
+                          }
+                        >
+                          Levantar
+                        </Button>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Surface>
+        </div>
+      )}
+
+      {section === "cuenta" && (
+        <div className="grid gap-4">
+          <Surface className="grid gap-3">
+            <SectionHeader title="Estado de la cuenta" />
+            <RowStatic
+              title="Estado"
+              detail={
+                <StateBadge value={person.account} emphasis />
+              }
+            />
+            <RowStatic
+              title="Credencial"
+              detail={person.passwordSet ? "Configurada" : "Sin configurar"}
+            />
+            <RowStatic
+              title="Última actividad"
+              detail={dateLabel(person.lastActivityAt.slice(0, 10), true)}
+            />
+            {person.setupToken && (
+              <RowStatic
+                title="Código vigente"
+                detail={`${person.setupToken.code}${
+                  person.setupToken.used ? " (usado)" : ""
+                }`}
+              />
+            )}
+          </Surface>
+          <div className="flex flex-wrap gap-2">
+            {person.account === "PENDING" && (
+              <Button variant="primary" onClick={() => setDialog("code")}>
+                Emitir código de activación
+              </Button>
+            )}
+            {person.account === "ACTIVE" && (
+              <Button variant="danger" onClick={() => setDialog("account-disable")}>
+                <Lock size={16} aria-hidden />
+                Deshabilitar cuenta
+              </Button>
+            )}
+            {person.account === "DISABLED" && (
+              <Button variant="primary" onClick={() => setDialog("account-enable")}>
+                <Unlock size={16} aria-hidden />
+                Habilitar cuenta
+              </Button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {section === "representacion" && (
+        <div className="grid gap-4">
+          <Surface className="grid gap-3">
+            <SectionHeader
+              title="Personas que pueden actuar por esta persona"
+              meta={`${relations.length} vigentes`}
+              action={
+                authority.canManageGuardianRelations && (
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setDialog("guardian")}
+                  >
+                    Crear relación
+                  </Button>
+                )
+              }
+            />
+            {relations.length === 0 ? (
+              <p className="gei-meta">
+                No hay relaciones vigentes. Si es menor, se puede delegar la
+                consulta y la respuesta de disponibilidad sin darle un rol.
+              </p>
+            ) : (
+              <ul className="grid">
+                {relations.map((relation) => {
+                  const guardian = state.people.find(
+                    (item) => item.id === relation.guardianId,
+                  )
+                  return (
+                    <li key={relation.id}>
+                      <div className="flex flex-wrap items-center gap-3 border-b border-line py-3 last:border-b-0">
+                        <div className="min-w-0 flex-1">
+                          <p className="gei-item-title">{guardian?.name ?? "—"}</p>
+                          <p className="gei-meta">
+                            {relation.relation} · ve información:{" "}
+                            {relation.canViewChildInfo ? "sí" : "no"} · responde
+                            ¿Vas?: {relation.canRespondAvailability ? "sí" : "no"}
+                          </p>
+                          <p className="gei-meta tabular-nums">
+                            {periodLabel(relation.validFrom, relation.validUntil)}
+                          </p>
+                        </div>
+                        {authority.canManageGuardianRelations && (
+                          <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={() =>
+                              endGuardianRelationship(relation.id, "Finalizada desde la ficha")
+                            }
+                          >
+                            Finalizar
+                          </Button>
+                        )}
+                      </div>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </Surface>
+        </div>
+      )}
+
+      <Surface className="grid gap-3">
+        <SectionHeader title="Cambios de esta ficha" />
+        {history.length === 0 ? (
+          <p className="gei-meta">Todavía no hay cambios registrados.</p>
+        ) : (
+          <HistoryList
+            entries={history.map((entry) => ({
+              action: entry.action,
+              actor: entry.actor,
+              at: dateTimeLabel(entry.at),
+              before: entry.before,
+              after: entry.after,
+              reason: entry.source,
+            }))}
+          />
+        )}
+      </Surface>
+
+      {/* Diálogos de acción */}
+      {dialog === "identidad" && (
         <Modal
-          title={operation}
-          onClose={() => !pending && setOperation("")}
+          title="Corregir identidad"
+          description="Datos que el club administra. Queda registrado quién los cambió."
+          onClose={() => setDialog(null)}
           footer={
             <>
-              <Button
-                variant="secondary"
-                disabled={pending}
-                onClick={() => setOperation("")}
-              >
-                {code ? "Cerrar" : "Volver"}
+              <Button variant="quiet" onClick={() => setDialog(null)}>
+                Cancelar
               </Button>
-              {!code && (
-                <Button
-                  disabled={
-                    pending || (!reason.trim() && operation !== "Crear acceso")
-                  }
-                  onClick={execute}
-                >
-                  {pending ? "Guardando…" : "Confirmar cambio"}
-                </Button>
-              )}
+              <Button
+                variant="primary"
+                onClick={() => {
+                  const found: Record<string, string> = {}
+                  if (!identity.dni.trim()) found.dni = "El documento no puede quedar vacío."
+                  if (!identity.birth) found.birth = "La fecha no puede quedar vacía."
+                  setIdentityErrors(found)
+                  if (Object.keys(found).length > 0) return
+                  updateIdentity(person.id, identity)
+                  setDialog(null)
+                }}
+              >
+                Guardar identidad
+              </Button>
             </>
           }
         >
-          {code ? (
-            <>
-              <Alert tone="success">
-                Código de activación generado. La cuenta no inicia sesión
-                automáticamente.
-              </Alert>
-              <p className="my-5 rounded-lg bg-muted p-4 text-center font-mono text-lg">
-                {code}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Simulación local · Uso único · Vigencia de 24 horas. Entregalo
-                sólo a la persona correspondiente.
-              </p>
-            </>
-          ) : (
-            <>
-              <p className="mb-4 text-xs">
-                Persona: <strong>{person.name}</strong>
-                {operation === "Asignar equipo" &&
-                  ` → ${state.teams.find((team) => team.id === target)?.name}`}
-              </p>
-              {operation === "Crear acceso" && (
-                <div className="mb-4">
-                  <TextField
-                    label="Usuario único"
-                    value={username}
-                    onChange={(event) => setUsername(event.target.value)}
-                  />
-                </div>
-              )}
-              <TextArea
-                label="Motivo del cambio"
-                value={reason}
-                onChange={setReason}
-              />
-              {error && (
-                <div className="mt-4">
-                  <Alert tone="error">{error}</Alert>
-                </div>
-              )}
-            </>
-          )}
+          <div className="grid gap-4">
+            <TextField
+              label="Documento de identidad"
+              required
+              value={identity.dni}
+              error={identityErrors.dni}
+              onChange={(event) =>
+                setIdentity((current) => ({ ...current, dni: event.target.value }))
+              }
+            />
+            <TextField
+              label="Fecha de nacimiento"
+              type="date"
+              required
+              value={identity.birth}
+              error={identityErrors.birth}
+              onChange={(event) =>
+                setIdentity((current) => ({ ...current, birth: event.target.value }))
+              }
+            />
+            <TextField
+              label="Teléfono"
+              value={identity.phone}
+              onChange={(event) =>
+                setIdentity((current) => ({ ...current, phone: event.target.value }))
+              }
+            />
+            <TextField
+              label="Correo"
+              type="email"
+              value={identity.email}
+              onChange={(event) =>
+                setIdentity((current) => ({ ...current, email: event.target.value }))
+              }
+            />
+          </div>
         </Modal>
       )}
-    </>
-  )
-}
-export function TeamAdmin() {
-  const { id } = useParams()
-  const { state, capabilities, update, toast } = useProduct()
-  const team = state.teams.find((item) => item.id === id)
-  if (!capabilities.management) return <Restricted />
-  if (!team)
-    return (
-      <Empty
-        title="Equipo no encontrado"
-        detail="Revisá la estructura deportiva."
-      />
-    )
-  const dependencies =
-    state.people.some((person) => person.team === id) ||
-    state.events.some(
-      (event) =>
-        event.team === id && ["SCHEDULED", "IN_PROGRESS"].includes(event.state),
-    )
-  return (
-    <>
-      <Header
-        back="/teams"
-        eyebrow="Administración de equipo"
-        title={`${team.name} ${team.season}`}
-        description={`${team.division} · Línea ${team.line} · Identidad de temporada inmutable`}
-        action={<Badge value={team.state} />}
-      />
-      <div className="max-w-3xl space-y-6">
-        <Surface className="space-y-4 p-6">
-          <Button
-            variant="secondary"
-            disabled={team.state === "ARCHIVED" || dependencies}
-            onClick={async () => {
-              await wait()
-              update(
-                (draft) =>
-                  (draft.teams.find((item) => item.id === id)!.state =
-                    team.state === "DRAFT" ? "ACTIVE" : "ARCHIVED"),
-                "Cambiar estado equipo",
-                team.name,
-              )
-              toast("Estado del equipo actualizado")
-            }}
-          >
-            {team.state === "DRAFT" ? "Activar equipo" : "Archivar equipo"}
-          </Button>
-          {dependencies && (
-            <Alert>
-              No se puede archivar: hay asignaciones o eventos activos. Finalizá
-              las dependencias antes de archivar.
-            </Alert>
-          )}
-        </Surface>
-        <Section title="Asignaciones vigentes">
-          <Surface>
-            {state.people
-              .filter((person) => person.team === id)
-              .map((person) => (
-                <RowLink
-                  key={person.id}
-                  to={`/management/people/${person.id}`}
-                  title={person.name}
-                  detail={labels[person.role]}
-                  icon={<Avatar name={person.name} />}
-                />
+
+      {dialog === "membership-start" && (
+        <ConfirmDialog
+          title="Iniciar pertenencia"
+          consequence={`${person.firstName} queda dentro del club desde hoy. A partir de acá se le pueden asignar equipos y roles.`}
+          confirmLabel="Iniciar pertenencia"
+          tone="attention"
+          onClose={() => setDialog(null)}
+          onConfirm={() => {
+            startMembership(person.id)
+            setDialog(null)
+          }}
+        />
+      )}
+
+      {dialog === "membership-end" && (
+        <ConfirmDialog
+          title="Finalizar pertenencia"
+          consequence="Deja de estar dentro del club. No se borra nada: el período queda cerrado y la historia se conserva. Su cuenta queda activa pero sin acceso a la temporada."
+          confirmLabel="Finalizar pertenencia"
+          requireReason
+          onClose={() => setDialog(null)}
+          onConfirm={(reason) => {
+            endMembership(person.id, reason)
+            setDialog(null)
+          }}
+        />
+      )}
+
+      {dialog === "account-disable" && (
+        <ConfirmDialog
+          title="Deshabilitar cuenta"
+          consequence={`${person.firstName} no va a poder entrar más. Se cierran todas sus sesiones abiertas. La información del club se conserva.`}
+          confirmLabel="Deshabilitar cuenta"
+          requireReason
+          onClose={() => setDialog(null)}
+          onConfirm={(reason) => {
+            const result = setAccountState(person.id, "DISABLED", reason)
+            if (!result.ok) setGuardError(result.error ?? "")
+            setDialog(null)
+          }}
+          extra={
+            guardError && (
+              <Banner tone="danger" title="No se puede deshabilitar">
+                <span className="text-ink-strong">{guardError}</span>
+              </Banner>
+            )
+          }
+        />
+      )}
+
+      {dialog === "account-enable" && (
+        <ConfirmDialog
+          title="Habilitar cuenta"
+          consequence={`${person.firstName} vuelve a poder entrar al sistema con su nombre de usuario.`}
+          confirmLabel="Habilitar cuenta"
+          tone="attention"
+          onClose={() => setDialog(null)}
+          onConfirm={() => {
+            setAccountState(person.id, "ACTIVE", "Habilitada desde la ficha")
+            setDialog(null)
+          }}
+        />
+      )}
+
+      {dialog === "code" && (
+        <Modal
+          title="Código de activación"
+          description="Vigente por 24 horas y de un solo uso."
+          onClose={() => setDialog(null)}
+          footer={
+            <>
+              <Button variant="quiet" onClick={() => setDialog(null)}>
+                Cerrar
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  const issued = issueSetupToken(person.id)
+                  setCode(issued)
+                }}
+              >
+                Emitir código
+              </Button>
+            </>
+          }
+        >
+          <div className="grid gap-4">
+            {code ? (
+              <Banner tone="success" title="Código emitido">
+                <span className="gei-body-strong tabular-nums text-ink">{code}</span>
+                <span className="mt-1 block text-ink-strong">
+                  Pasáselo a {person.firstName}. Sirve en la pantalla “Activar
+                  cuenta”.
+                </span>
+              </Banner>
+            ) : (
+              <p className="gei-meta">
+                Todavía no emitiste un código para esta persona.
+              </p>
+            )}
+          </div>
+        </Modal>
+      )}
+
+      {dialog === "guardian" && (
+        <Modal
+          title="Crear relación de representación"
+          description="Una relación de representación no es un rol: define qué puede ver y qué puede responder."
+          onClose={() => setDialog(null)}
+          footer={
+            <>
+              <Button variant="quiet" onClick={() => setDialog(null)}>
+                Cancelar
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  if (!guard.guardianId) {
+                    setGuardError("Elegí quién representa.")
+                    return
+                  }
+                  createGuardianRelationship({
+                    guardianId: guard.guardianId,
+                    childId: person.id,
+                    relation: guard.relation,
+                    canViewChildInfo: guard.canViewChildInfo,
+                    canRespondAvailability: guard.canRespondAvailability,
+                  })
+                  setDialog(null)
+                }}
+              >
+                Crear relación
+              </Button>
+            </>
+          }
+        >
+          <div className="grid gap-4">
+            <Select
+              label="Quién representa"
+              value={guard.guardianId}
+              onChange={(event) => {
+                setGuard((current) => ({ ...current, guardianId: event.target.value }))
+                setGuardError("")
+              }}
+            >
+              <option value="">Elegí una persona</option>
+              {guardiansAvailable.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
               ))}
-          </Surface>
-        </Section>
-        <Link to="/management/people">
-          <Button variant="secondary">Gestionar asignaciones</Button>
-        </Link>
+            </Select>
+            {guardError && (
+              <p className="text-meta font-medium text-danger">{guardError}</p>
+            )}
+            <TextField
+              label="Relación"
+              value={guard.relation}
+              onChange={(event) =>
+                setGuard((current) => ({ ...current, relation: event.target.value }))
+              }
+            />
+            <fieldset className="grid gap-2">
+              <legend className="text-body font-semibold">Qué puede hacer</legend>
+              {[
+                { key: "canViewChildInfo", label: "Ver la información del menor" },
+                { key: "canRespondAvailability", label: "Responder el “¿Vas?” del menor" },
+              ].map((item) => (
+                <label
+                  key={item.key}
+                  className="flex min-h-11 cursor-pointer items-center gap-2.5 rounded-control border border-line-strong px-3"
+                >
+                  <input
+                    type="checkbox"
+                    checked={guard[item.key as "canViewChildInfo" | "canRespondAvailability"]}
+                    onChange={(event) =>
+                      setGuard((current) => ({
+                        ...current,
+                        [item.key]: event.target.checked,
+                      }))
+                    }
+                    className="size-5 accent-interactive"
+                  />
+                  <span className="text-body font-medium">{item.label}</span>
+                </label>
+              ))}
+            </fieldset>
+            <Banner tone="neutral" title="Lo que no se puede delegar">
+              <span className="text-ink-strong">
+                Ni documento, ni fecha de nacimiento, ni motivos de habilitación,
+                ni conversaciones privadas.
+              </span>
+            </Banner>
+          </div>
+        </Modal>
+      )}
+
+      {dialog === "constraint" && (
+        <Modal
+          title="Registrar una restricción de habilitación"
+          description="Queda con origen, motivo y vigencia."
+          onClose={() => setDialog(null)}
+          footer={
+            <>
+              <Button variant="quiet" onClick={() => setDialog(null)}>
+                Cancelar
+              </Button>
+              <Button
+                variant="danger"
+                onClick={() => {
+                  createConstraint({
+                    personId: person.id,
+                    state: constraint.state,
+                    scope: constraint.scope as never,
+                    scopeRefId: null,
+                    source: constraint.source as never,
+                    reason: constraint.reason as never,
+                    note: constraint.note || undefined,
+                    validFrom: todayIso(),
+                    validUntil: null,
+                  })
+                  setDialog(null)
+                }}
+              >
+                Registrar
+              </Button>
+            </>
+          }
+        >
+          <div className="grid gap-4">
+            <Select
+              label="Estado"
+              value={constraint.state}
+              onChange={(event) =>
+                setConstraint((current) => ({
+                  ...current,
+                  state: event.target.value as "PENDING" | "BLOCKED",
+                }))
+              }
+            >
+              <option value="PENDING">Trámite pendiente</option>
+              <option value="BLOCKED">No habilitada para jugar</option>
+            </Select>
+            <Select
+              label="Alcance"
+              value={constraint.scope}
+              onChange={(event) =>
+                setConstraint((current) => ({ ...current, scope: event.target.value }))
+              }
+            >
+              {Object.entries(CONSTRAINT_SCOPE_LABEL).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </Select>
+            <Select
+              label="Origen"
+              value={constraint.source}
+              onChange={(event) =>
+                setConstraint((current) => ({ ...current, source: event.target.value }))
+              }
+            >
+              {Object.entries(CONSTRAINT_SOURCE_LABEL).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </Select>
+            <Select
+              label="Motivo"
+              value={constraint.reason}
+              onChange={(event) =>
+                setConstraint((current) => ({ ...current, reason: event.target.value }))
+              }
+            >
+              {Object.entries(CONSTRAINT_REASON_LABEL).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </Select>
+            <TextArea
+              label="Nota"
+              rows={3}
+              value={constraint.note}
+              onChange={(event) =>
+                setConstraint((current) => ({ ...current, note: event.target.value }))
+              }
+              hint="Visible para Subcomisión y administración."
+            />
+          </div>
+        </Modal>
+      )}
+
+      <div className="sr-only" aria-live="polite">
+        {closeReason}
       </div>
-    </>
+    </div>
   )
 }
-export function CompetitionsPage() {
-  const { id } = useParams()
-  const { state, capabilities, update, toast } = useProduct()
-  const [create, setCreate] = useState(false)
-  const [name, setName] = useState("")
-  const [organizer, setOrganizer] = useState("")
-  const [pending, setPending] = useState(false)
-  const [newEntry, setNewEntry] = useState(false)
-  const [team, setTeam] = useState("sexta")
-  const [reference, setReference] = useState("")
-  const [scope, setScope] = useState("TEAM")
-  const [ending, setEnding] = useState("")
-  const competition = state.competitions.find((item) => item.id === id)
-  const mutate = capabilities.management || capabilities.official
-  if (!mutate && !capabilities.sport) return <Restricted />
-  async function createCompetition() {
-    setPending(true)
-    await wait()
-    update(
-      (draft) =>
-        draft.competitions.push({
-          id: crypto.randomUUID(),
-          name,
-          organizer,
-          state: "DRAFT",
-          entries: [],
-        }),
-      "Crear competencia",
-      name,
+
+/* ═══════════════════════════════════════════════════════════════
+   ESTRUCTURA — tabs, restore, dependency fences, dirección de sede
+   ═══════════════════════════════════════════════════════════════ */
+
+export function StructurePage() {
+  const { state, authority, setStructureArchived, renameVenueMetadata } =
+    useProduct()
+  const query = useQueryState()
+  const tab = query.get("tab", "VENUE")
+  useRouter()
+  const [archiveTarget, setArchiveTarget] = useState<string | null>(null)
+  const [error, setError] = useState("")
+  const [venueEdit, setVenueEdit] = useState<{
+    id: string
+    name: string
+    address: string
+    fieldLabel: string
+  } | null>(null)
+
+  if (!authority.canOpen("structure"))
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty
+          title="La estructura la administra el club"
+          detail="Temporadas, divisiones, líneas y sedes."
+        />
+      </div>
     )
-    setPending(false)
-    setCreate(false)
-    toast("Competencia creada como borrador")
-  }
+
+  const items = state.structure.filter((item) => item.type === tab)
+  const archived = items.filter((item) => item.archived)
+  const active = items.filter((item) => !item.archived)
+
   return (
-    <>
-      <Header
-        back={
-          id
-            ? "/management/competitions"
-            : capabilities.management
-              ? "/management"
-              : "/more"
-        }
-        title={competition?.name || "Competiciones"}
-        description={
-          competition?.organizer ||
-          "Inscripciones y contexto de competencia. Referencias federativas manuales."
-        }
-        action={
-          !id &&
-          mutate && (
-            <Button onClick={() => setCreate(true)}>
-              <Plus size={15} />
-              Crear competencia
-            </Button>
-          )
+    <div className="gei-stack-page mx-auto max-w-4xl">
+      <PageContextHeader
+        context="Estructura"
+        title="Estructura del club"
+        lead="Lo que sostiene todo lo demás. Archivar no borra: se puede restaurar."
+        below={
+          <div className="border-b border-line">
+            <TabBar
+              ariaLabel="Tipo de estructura"
+              active={tab}
+              onChange={(value) => query.set({ tab: value })}
+              tabs={(["SEASON", "DIVISION", "LINE", "VENUE"] as const).map(
+                (type) => ({
+                  id: type,
+                  label: STRUCTURE_LABEL[type],
+                  count: state.structure.filter(
+                    (item) => item.type === type && !item.archived,
+                  ).length,
+                }),
+              )}
+            />
+          </div>
         }
       />
-      {!id ? (
-        <Surface>
+
+      {error && (
+        <Banner tone="danger" title="No se puede archivar">
+          <span className="text-ink-strong">{error}</span>
+        </Banner>
+      )}
+
+      {active.length === 0 ? (
+        <Empty title="Nada activo en esta sección" detail="Podés restaurar algo archivado." />
+      ) : (
+        <Surface flush>
+          <ul className="grid px-1 py-1">
+            {active.map((item) => {
+              const teams = state.teams.filter(
+                (team) =>
+                  (item.type === "DIVISION" && team.divisionId === item.id) ||
+                  (item.type === "LINE" && team.lineId === item.id) ||
+                  (item.type === "SEASON" && team.seasonId === item.id),
+              )
+              return (
+                <li key={item.id}>
+                  <RowStatic
+                    title={item.name}
+                    detail={
+                      item.type === "DIVISION"
+                        ? `Temporada ${state.structure.find((s) => s.id === item.parentId)?.name ?? "—"}`
+                        : item.type === "VENUE"
+                          ? state.venues.find((venue) => venue.id === item.id)?.address
+                          : teams.length > 0
+                            ? `${teams.length} ${teams.length === 1 ? "equipo lo usa" : "equipos lo usan"}`
+                            : undefined
+                    }
+                    trailing={
+                      <span className="flex flex-wrap justify-end gap-1">
+                        {item.type === "VENUE" && (
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={() => {
+                              const venue = state.venues.find((v) => v.id === item.id)
+                              setVenueEdit({
+                                id: item.id,
+                                name: venue?.name ?? "",
+                                address: venue?.address ?? "",
+                                fieldLabel: venue?.fieldLabel ?? "",
+                              })
+                            }}
+                          >
+                            Editar
+                          </Button>
+                        )}
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => setArchiveTarget(item.id)}
+                        >
+                          Archivar
+                        </Button>
+                      </span>
+                    }
+                  />
+                </li>
+              )
+            })}
+          </ul>
+        </Surface>
+      )}
+
+      {archived.length > 0 && (
+        <DetailSection title="Archivados" meta={`${archived.length}`}>
+          <ul className="grid">
+            {archived.map((item) => (
+              <li key={item.id}>
+                <RowStatic
+                  title={item.name}
+                  detail="Archivado. Sigue existiendo y se puede volver a usar."
+                  trailing={
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => {
+                        const result = setStructureArchived(item.id, false)
+                        if (!result.ok) setError(result.error ?? "")
+                      }}
+                    >
+                      Restaurar
+                    </Button>
+                  }
+                />
+              </li>
+            ))}
+          </ul>
+        </DetailSection>
+      )}
+
+      {archiveTarget && (
+        <ConfirmDialog
+          title="Archivar"
+          consequence="Deja de estar disponible para elegir. No se borra: los eventos que ya lo usan siguen con su dato y podés restaurarlo."
+          confirmLabel="Archivar"
+          requireReason
+          reasonLabel="Por qué se archiva"
+          onClose={() => setArchiveTarget(null)}
+          onConfirm={(reason) => {
+            const result = setStructureArchived(archiveTarget, true)
+            if (!result.ok) setError(result.error ?? "")
+            setArchiveTarget(null)
+            void reason
+          }}
+        />
+      )}
+
+      {venueEdit && (
+        <Modal
+          title="Editar datos de la sede"
+          description="Corrección administrativa: no cambia los eventos que ya usan esta sede."
+          onClose={() => setVenueEdit(null)}
+          footer={
+            <>
+              <Button variant="quiet" onClick={() => setVenueEdit(null)}>
+                Cancelar
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  renameVenueMetadata(venueEdit.id, {
+                    name: venueEdit.name,
+                    address: venueEdit.address,
+                    fieldLabel: venueEdit.fieldLabel,
+                  })
+                  setVenueEdit(null)
+                }}
+              >
+                Guardar sede
+              </Button>
+            </>
+          }
+        >
+          <div className="grid gap-4">
+            <TextField
+              label="Nombre"
+              required
+              value={venueEdit.name}
+              onChange={(event) =>
+                setVenueEdit((current) =>
+                  current ? { ...current, name: event.target.value } : current,
+                )
+              }
+            />
+            <TextField
+              label="Dirección"
+              required
+              value={venueEdit.address}
+              onChange={(event) =>
+                setVenueEdit((current) =>
+                  current ? { ...current, address: event.target.value } : current,
+                )
+              }
+            />
+            <TextField
+              label="Cancha"
+              value={venueEdit.fieldLabel}
+              onChange={(event) =>
+                setVenueEdit((current) =>
+                  current ? { ...current, fieldLabel: event.target.value } : current,
+                )
+              }
+            />
+          </div>
+        </Modal>
+      )}
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPETENCIAS — TEAM y LINE separados, mismatch visible
+   ═══════════════════════════════════════════════════════════════ */
+
+export function CompetitionsPage() {
+  const { competitionId } = useParams()
+  const {
+    state,
+    authority,
+    createCompetition,
+    addCompetitionEntry,
+    setCompetitionState,
+    setEntryState,
+  } = useProduct()
+  const query = useQueryState()
+  const [newOpen, setNewOpen] = useState(false)
+  const [entryOpen, setEntryOpen] = useState(false)
+  const [error, setError] = useState("")
+  const [form, setForm] = useState({ name: "", organizer: "" })
+  const [entry, setEntry] = useState<{
+    scope: "TEAM" | "LINE"
+    teamId: string
+    divisionId: string
+    lineId: string
+    seasonId: string
+    reference: string
+  }>({
+    scope: "TEAM",
+    teamId: "",
+    divisionId: "",
+    lineId: "",
+    seasonId: "",
+    reference: "",
+  })
+
+  useRouter()
+
+  if (!authority.canViewCompetitions)
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty
+          title="Las competencias no están en tu alcance"
+          detail="Las ven la Subcomisión y la administración."
+        />
+      </div>
+    )
+
+  const competition = state.competitions.find((item) => item.id === competitionId)
+  const canMutate = authority.canManageCompetitions
+
+  if (!competition)
+    return (
+      <div className="gei-stack-page mx-auto max-w-4xl">
+        <PageContextHeader
+          context="Competencias"
+          title="Competencias"
+          lead="Inscripciones por equipo y por línea, con su vigencia."
+          action={
+            canMutate && (
+              <Button variant="primary" onClick={() => setNewOpen(true)}>
+                Crear competencia
+              </Button>
+            )
+          }
+        />
+        <div className="grid gap-1">
           {state.competitions.map((item) => (
             <RowLink
               key={item.id}
               to={`/management/competitions/${item.id}`}
               title={item.name}
-              detail={item.organizer}
-              icon={<Trophy size={20} className="text-primary" />}
-              aside={<Badge value={item.state} />}
+              detail={`${item.entries.length} ${
+                item.entries.length === 1 ? "inscripción" : "inscripciones"
+              } · ${item.organizer}`}
+              meta={<StateBadge value={item.state} />}
             />
           ))}
-        </Surface>
-      ) : competition ? (
-        <div className="max-w-4xl space-y-6">
-          <div className="flex flex-wrap items-center gap-4">
-            <Badge value={competition.state} />
-            {mutate && competition.state === "DRAFT" && (
-              <Button
-                onClick={async () => {
-                  await wait()
-                  update(
-                    (draft) =>
-                      (draft.competitions.find(
-                        (item) => item.id === id,
-                      )!.state = "ACTIVE"),
-                    "Activar competencia",
-                    competition.name,
-                  )
-                }}
-              >
-                Activar competencia
-              </Button>
-            )}
-            {mutate && competition.state === "ACTIVE" && (
-              <Button
-                variant="secondary"
-                disabled={competition.entries.some(
-                  (entry) => entry.state === "ACTIVE",
-                )}
-                onClick={async () => {
-                  await wait()
-                  update(
-                    (draft) =>
-                      (draft.competitions.find(
-                        (item) => item.id === id,
-                      )!.state = "CLOSED"),
-                    "Cerrar competencia",
-                    competition.name,
-                  )
-                  toast("Competencia cerrada")
-                }}
-              >
-                Cerrar competencia
-              </Button>
-            )}
-          </div>
-          {competition.entries.some((entry) => entry.state === "ACTIVE") &&
-            mutate && (
-              <Alert tone="info">
-                Para cerrar la competencia deben finalizar todas sus
-                inscripciones activas.
-              </Alert>
-            )}
-          <Section
-            title="Inscripciones"
-            aside={
-              mutate &&
-              competition.state !== "CLOSED" && (
-                <Button variant="secondary" onClick={() => setNewEntry(true)}>
-                  <Plus size={14} />
-                  Crear inscripción
+        </div>
+        {newOpen && (
+          <Modal
+            title="Crear competencia"
+            onClose={() => setNewOpen(false)}
+            footer={
+              <>
+                <Button variant="quiet" onClick={() => setNewOpen(false)}>
+                  Cancelar
                 </Button>
-              )
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    if (!form.name.trim()) {
+                      setError("Poné un nombre.")
+                      return
+                    }
+                    const id = createCompetition(form)
+                    setNewOpen(false)
+                    go(`/management/competitions/${id}`)
+                  }}
+                >
+                  Crear
+                </Button>
+              </>
             }
           >
-            <Surface>
-              {competition.entries.map((entry) => (
-                <div
-                  key={entry.id}
-                  className="flex flex-wrap items-center gap-3 border-b border-border p-5 last:border-0"
-                >
-                  <div className="flex-1">
-                    <p className="text-xs font-semibold">
-                      {entry.scope === "LINE"
-                        ? `Línea ${entry.team}`
-                        : state.teams.find((team) => team.id === entry.team)
-                            ?.name}{" "}
-                      · 2026
-                    </p>
-                    <p className="mt-1 text-[10px] text-muted-foreground">
-                      {entry.reference || "Sin referencia externa"}
-                    </p>
-                  </div>
-                  <Badge value={entry.state} />
-                  {mutate && entry.state === "PENDING" && (
-                    <Button
-                      variant="secondary"
-                      onClick={async () => {
-                        await wait()
-                        update(
-                          (draft) =>
-                            (draft.competitions
-                              .find((item) => item.id === id)!
-                              .entries.find(
-                                (item) => item.id === entry.id,
-                              )!.state = "ACTIVE"),
-                          "Activar inscripción",
-                          competition.name,
-                        )
-                      }}
-                    >
-                      Activar
-                    </Button>
-                  )}
-                  {mutate && entry.state === "ACTIVE" && (
-                    <Button variant="ghost" onClick={() => setEnding(entry.id)}>
-                      Finalizar inscripción
-                    </Button>
-                  )}
-                </div>
-              ))}
-              {!competition.entries.length && (
-                <p className="p-6 text-xs text-muted-foreground">
-                  Esta competencia todavía no tiene inscripciones.
-                </p>
+            <div className="grid gap-4">
+              <TextField
+                label="Nombre"
+                required
+                value={form.name}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, name: event.target.value }))
+                }
+              />
+              <TextField
+                label="Organizador"
+                required
+                value={form.organizer}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, organizer: event.target.value }))
+                }
+              />
+              {error && (
+                <p className="text-meta font-medium text-danger">{error}</p>
               )}
-            </Surface>
-          </Section>
-        </div>
-      ) : (
-        <Empty
-          title="Competencia no encontrada"
-          detail="Revisá el listado de competiciones."
-        />
-      )}
-      {create && (
-        <Modal
-          title="Crear competencia"
-          onClose={() => setCreate(false)}
-          footer={
-            <Button
-              disabled={!name || !organizer || pending}
-              onClick={createCompetition}
-            >
-              {pending ? "Creando…" : "Crear borrador"}
-            </Button>
-          }
-        >
-          <div className="space-y-4">
-            <TextField
-              label="Nombre"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-            />
-            <TextField
-              label="Organizador"
-              value={organizer}
-              onChange={(event) => setOrganizer(event.target.value)}
-            />
+            </div>
+          </Modal>
+        )}
+      </div>
+    )
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-4xl">
+      <PageContextHeader
+        context="Competencias"
+        title={competition.name}
+        back="/management/competitions"
+        lead={competition.organizer}
+        action={
+          <div className="flex flex-wrap items-center gap-2">
+            <StateBadge value={competition.state} emphasis />
+            {canMutate && (
+              <Button variant="secondary" onClick={() => setEntryOpen(true)}>
+                Añadir inscripción
+              </Button>
+            )}
           </div>
-        </Modal>
+        }
+      />
+
+      {error && (
+        <Banner tone="danger" title="No se pudo aplicar el cambio">
+          <span className="text-ink-strong">{error}</span>
+        </Banner>
       )}
-      {newEntry && competition && (
-        <Modal
-          title="Crear inscripción"
-          onClose={() => setNewEntry(false)}
-          footer={
-            <Button
-              disabled={pending}
-              onClick={async () => {
-                setPending(true)
-                await wait()
-                update(
-                  (draft) =>
-                    draft.competitions
-                      .find((item) => item.id === id)!
-                      .entries.push({
-                        id: crypto.randomUUID(),
-                        scope: scope as "TEAM" | "LINE",
-                        team: scope === "LINE" ? team : team,
-                        state: "PENDING",
-                        reference,
-                      }),
-                  "Crear inscripción",
-                  competition.name,
-                )
-                setPending(false)
-                setNewEntry(false)
-                toast("Inscripción creada como Pendiente")
-              }}
-            >
-              Crear inscripción
-            </Button>
-          }
-        >
-          <div className="space-y-4">
-            <Select
-              label="Alcance"
-              value={scope}
-              onChange={(event) => {
-                setScope(event.target.value)
-                setTeam(event.target.value === "LINE" ? "A" : "sexta")
-              }}
-            >
-              <option value="TEAM">Equipo</option>
-              <option value="LINE">Línea</option>
-            </Select>
-            <Select
-              label={scope === "TEAM" ? "Equipo" : "Línea"}
-              value={team}
-              onChange={(event) => setTeam(event.target.value)}
-            >
-              {scope === "TEAM"
-                ? state.teams.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name} 2026
-                    </option>
-                  ))
-                : state.structure
-                    .filter((item) => item.type === "Línea")
-                    .map((item) => <option key={item.id}>{item.name}</option>)}
-            </Select>
-            <TextField
-              label="Referencia externa manual"
-              value={reference}
-              onChange={(event) => setReference(event.target.value)}
-            />
+
+      <Surface className="grid gap-3">
+        <SectionHeader title="Inscripciones" meta={`${competition.entries.length}`} />
+        {competition.entries.length === 0 ? (
+          <Empty
+            title="Sin inscripciones"
+            detail="Esta competencia todavía no tiene equipos ni líneas inscritas."
+          />
+        ) : (
+          <ul className="grid">
+            {competition.entries.map((item) => (
+              <EntryRow
+                key={item.id}
+                state={state}
+                entry={item}
+                canMutate={canMutate}
+                onChangeState={(next) => {
+                  const result = setEntryState(competition.id, item.id, next)
+                  if (!result.ok) setError(result.error ?? "")
+                }}
+              />
+            ))}
+          </ul>
+        )}
+      </Surface>
+
+      {canMutate && (
+        <Surface className="grid gap-3">
+          <SectionHeader title="Estado de la competencia" />
+          <p className="gei-meta">
+            Para cerrar una competencia tiene que quedar sin inscripciones activas.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {(["DRAFT", "ACTIVE", "CLOSED"] as const)
+              .filter((next) => next !== competition.state)
+              .map((next) => (
+                <Button
+                  key={next}
+                  variant={next === "CLOSED" ? "danger" : "secondary"}
+                  onClick={() => {
+                    const result = setCompetitionState(competition.id, next)
+                    if (!result.ok) setError(result.error ?? "")
+                  }}
+                >
+                  {next === "DRAFT"
+                    ? "Volver a borrador"
+                    : next === "ACTIVE"
+                      ? "Activar competencia"
+                      : "Cerrar competencia"}
+                </Button>
+              ))}
           </div>
-        </Modal>
+        </Surface>
       )}
-      {ending && competition && (
+
+      {entryOpen && (
         <Modal
-          title="Finalizar inscripción"
-          onClose={() => setEnding("")}
+          title="Añadir inscripción"
+          description="Cada inscripción es de un equipo o de una línea concreta."
+          onClose={() => setEntryOpen(false)}
           footer={
             <>
-              <Button variant="secondary" onClick={() => setEnding("")}>
-                Volver
+              <Button variant="quiet" onClick={() => setEntryOpen(false)}>
+                Cancelar
               </Button>
               <Button
-                disabled={pending}
-                onClick={async () => {
-                  setPending(true)
-                  await wait()
-                  update(
-                    (draft) =>
-                      (draft.competitions
-                        .find((item) => item.id === id)!
-                        .entries.find((item) => item.id === ending)!.state =
-                        "ENDED"),
-                    "Finalizar inscripción",
-                    competition.name,
-                  )
-                  setPending(false)
-                  setEnding("")
-                  toast(
-                    "Inscripción finalizada. El contexto histórico se conserva.",
-                  )
+                variant="primary"
+                onClick={() => {
+                  const payload =
+                    entry.scope === "TEAM"
+                      ? ({
+                          scope: "TEAM",
+                          teamId: entry.teamId,
+                          state: "PENDING",
+                          reference: entry.reference,
+                        } as const)
+                      : ({
+                          scope: "LINE",
+                          divisionId: entry.divisionId,
+                          lineId: entry.lineId,
+                          seasonId: entry.seasonId,
+                          state: "PENDING",
+                          reference: entry.reference,
+                        } as const)
+                  const result = addCompetitionEntry(competition.id, payload)
+                  if (result.ok) setEntryOpen(false)
+                  else setError(result.error ?? "")
                 }}
               >
-                Confirmar finalización
+                Añadir inscripción
               </Button>
             </>
           }
         >
-          <p className="text-xs leading-relaxed">
-            La inscripción no podrá usarse en nuevos partidos. Los partidos que
-            ya la referencian conservan su contexto histórico.
-          </p>
+          <div className="grid gap-4">
+            <div className="grid grid-cols-2 gap-2">
+              {(["TEAM", "LINE"] as const).map((scope) => (
+                <button
+                  key={scope}
+                  type="button"
+                  aria-pressed={entry.scope === scope}
+                  onClick={() =>
+                    setEntry((current) => ({ ...current, scope }))
+                  }
+                  className={cx(
+                    "gei-target rounded-control border px-3 text-body font-semibold transition-colors",
+                    entry.scope === scope
+                      ? "border-interactive bg-selected-soft text-selected"
+                      : "border-line-strong bg-surface text-ink-muted",
+                  )}
+                >
+                  {scope === "TEAM" ? "Equipo" : "Línea"}
+                </button>
+              ))}
+            </div>
+            {entry.scope === "TEAM" ? (
+              <Select
+                label="Equipo"
+                required
+                value={entry.teamId}
+                onChange={(event) =>
+                  setEntry((current) => ({ ...current, teamId: event.target.value }))
+                }
+              >
+                <option value="">Elegí un equipo</option>
+                {state.teams.map((team) => (
+                  <option key={team.id} value={team.id}>
+                    {teamName(state, team.id)}
+                  </option>
+                ))}
+              </Select>
+            ) : (
+              <div className="grid gap-3">
+                <Select
+                  label="División"
+                  required
+                  value={entry.divisionId}
+                  onChange={(event) =>
+                    setEntry((current) => ({
+                      ...current,
+                      divisionId: event.target.value,
+                    }))
+                  }
+                >
+                  <option value="">Elegí una división</option>
+                  {state.structure
+                    .filter((item) => item.type === "DIVISION")
+                    .map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                </Select>
+                <Select
+                  label="Línea"
+                  required
+                  value={entry.lineId}
+                  onChange={(event) =>
+                    setEntry((current) => ({ ...current, lineId: event.target.value }))
+                  }
+                >
+                  <option value="">Elegí una línea</option>
+                  {state.structure
+                    .filter((item) => item.type === "LINE")
+                    .map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                </Select>
+                <Select
+                  label="Temporada"
+                  required
+                  value={entry.seasonId}
+                  onChange={(event) =>
+                    setEntry((current) => ({ ...current, seasonId: event.target.value }))
+                  }
+                >
+                  <option value="">Elegí una temporada</option>
+                  {state.structure
+                    .filter((item) => item.type === "SEASON")
+                    .map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                </Select>
+              </div>
+            )}
+            <TextField
+              label="Referencia externa"
+              value={entry.reference}
+              hint="Código de la asociación, si existe."
+              onChange={(event) =>
+                setEntry((current) => ({ ...current, reference: event.target.value }))
+              }
+            />
+          </div>
         </Modal>
       )}
-    </>
+    </div>
   )
+}
+
+function EntryRow({
+  state,
+  entry,
+  canMutate,
+  onChangeState,
+}: {
+  state: ReturnType<typeof useProduct>["state"]
+  entry: CompetitionEntry
+  canMutate: boolean
+  onChangeState: (next: CompetitionEntry["state"]) => void
+}) {
+  const label = entryLabel(state, entry)
+  return (
+    <li className="flex flex-wrap items-center gap-3 border-b border-line py-3 last:border-b-0">
+      <div className="min-w-0 flex-1">
+        <p className="gei-item-title">{label}</p>
+        <p className="gei-meta">
+          {entry.scope === "TEAM"
+            ? "Inscripción de equipo: exige que el partido juegue con ese equipo."
+            : "Inscripción de línea: exige la misma división, línea y temporada."}
+          {entry.reference && ` · referencia ${entry.reference}`}
+        </p>
+      </div>
+      <StateBadge value={entry.state === "ACTIVE" ? "ACTIVE" : entry.state === "ENDED" ? "ENDED" : "PENDING"} />
+      {canMutate && (
+        <div className="flex flex-wrap gap-1">
+          {entry.state !== "ACTIVE" && (
+            <Button variant="secondary" size="sm" onClick={() => onChangeState("ACTIVE")}>
+              Activar
+            </Button>
+          )}
+          {entry.state !== "ENDED" && (
+            <Button variant="danger" size="sm" onClick={() => onChangeState("ENDED")}>
+              Finalizar
+            </Button>
+          )}
+        </div>
+      )}
+    </li>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EQUIPO (administración)
+   ═══════════════════════════════════════════════════════════════ */
+
+export function TeamAdmin() {
+  const { id = "" } = useParams()
+  const { state, authority } = useProduct()
+  const team = state.teams.find((item) => item.id === id)
+
+  if (!authority.canOpen("structure"))
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty title="No tenés acceso a los equipos" detail="Reservado a administración." />
+      </div>
+    )
+  if (!team)
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty title="No encontramos ese equipo" detail="Revisá el enlace." />
+      </div>
+    )
+
+  const members = state.people.filter((person) =>
+    activeTeamAssignments(state, person.id).some((a) => a.teamId === id),
+  )
+  const entries = state.competitions.flatMap((competition) =>
+    competition.entries
+      .filter((entry) =>
+        entry.scope === "TEAM"
+          ? entry.teamId === id
+          : state.teams.find(
+              (item) =>
+                item.divisionId === entry.divisionId &&
+                item.lineId === entry.lineId &&
+                item.seasonId === entry.seasonId,
+            )?.id === id,
+      )
+      .map((entry) => ({ competition, entry })),
+  )
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-4xl">
+      <PageContextHeader
+        context="Equipos"
+        title={teamName(state, id)}
+        back="/management/people"
+        lead="Identidad del equipo e inscripciones en competencias."
+      />
+      <DetailSection title="Identidad">
+        <RowStatic title="Nombre" detail={teamName(state, id)} />
+        <RowStatic
+          title="Composición"
+          detail="División · Línea · Temporada"
+        />
+        <RowStatic title="Estado" detail={team.state === "ACTIVE" ? "Activo" : "Archivado"} />
+      </DetailSection>
+      <DetailSection title="Personas" meta={`${members.length}`}>
+        <div className="grid gap-1">
+          {members.map((person) => (
+            <RowLink
+              key={person.id}
+              to={`/management/people/${person.id}`}
+              title={person.name}
+              leading={<Avatar name={person.name} size="sm" />}
+            />
+          ))}
+        </div>
+      </DetailSection>
+      <DetailSection title="Inscripciones en competencias" meta={`${entries.length}`}>
+        {entries.length === 0 ? (
+          <p className="gei-meta">Este equipo no está inscrito en ninguna competencia.</p>
+        ) : (
+          <ul className="grid">
+            {entries.map(({ competition, entry }) => (
+              <li key={entry.id}>
+                <RowStatic
+                  title={competition.name}
+                  detail={entryLabel(state, entry)}
+                  meta={<StateBadge value={entry.state === "ACTIVE" ? "ACTIVE" : entry.state === "ENDED" ? "ENDED" : "PENDING"} />}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+      </DetailSection>
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════════════════════════ */
+
+let nav: ((to: string) => void) | null = null
+/** Navegación SPA para helpers fuera del árbol de componentes. */
+function useRouter() {
+  nav = useNavigate()
+}
+function go(path: string) {
+  if (nav) nav(path)
+  else window.location.assign(path)
 }
