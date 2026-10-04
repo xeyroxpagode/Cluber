@@ -199,6 +199,12 @@ interface ProductApi {
     patch: Partial<State["jornadas"][number]>,
     reason: string,
   ) => void
+  createJornada: (data: {
+    name: string
+    seasonId: string
+    competitionId: string
+    eventIds: string[]
+  }) => { ok: boolean; id?: string; error?: string }
   /* Comunicación */
   sendMessage: (conversationId: string, body: string) => Promise<void>
   deleteMessage: (conversationId: string, messageId: string) => void
@@ -1349,6 +1355,65 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
     )
   }
 
+  const createJornada: ProductApi["createJornada"] = (data) => {
+    const season = state.structure.find((item) => item.id === data.seasonId)
+    const competition = state.competitions.find(
+      (item) => item.id === data.competitionId,
+    )
+    if (!season) return { ok: false, error: "Elegí una temporada." }
+    if (!competition) return { ok: false, error: "Elegí una competencia." }
+    if (data.eventIds.length === 0)
+      return { ok: false, error: "Elegí al menos un partido para la jornada." }
+    if (data.eventIds.length > 100)
+      return {
+        ok: false,
+        error: "Una jornada admite hasta 100 partidos. Dividila en dos jornadas.",
+      }
+    const events = state.events.filter((item) => data.eventIds.includes(item.id))
+    const wrongType = events.filter((item) => item.type !== "MATCH")
+    if (wrongType.length > 0)
+      return {
+        ok: false,
+        error: "Una jornada sólo agrupa partidos, no entrenamientos ni eventos del club.",
+      }
+    const mismatchedSeason = events.filter((event) => {
+      const team = state.teams.find((item) => item.id === event.targetTeams[0])
+      return !team || team.seasonId !== data.seasonId
+    })
+    if (mismatchedSeason.length > 0)
+      return {
+        ok: false,
+        error:
+          "Algún partido pertenece a otra temporada, así que no puede ir en esta jornada.",
+      }
+    const id = `jornada-${uid().slice(0, 6)}`
+    update(
+      (draft) => {
+        draft.jornadas.unshift({
+          id,
+          name: data.name.trim() || `Fecha de ${season.name}`,
+          seasonId: data.seasonId,
+          competitionId: data.competitionId,
+          events: [...data.eventIds],
+          at: todayIso(),
+          venueId: null,
+          meeting: "",
+          departure: "",
+          point: "",
+        })
+      },
+      {
+        action: "Crear jornada",
+        resource: data.name.trim() || `Fecha de ${season.name}`,
+        before: null,
+        after: `${data.eventIds.length} partidos`,
+        source: competition.name,
+        route: `/jornadas/${id}`,
+      },
+    )
+    return { ok: true, id }
+  }
+
   const sendMessage: ProductApi["sendMessage"] = async (conversationId, body) => {
     const text = body.trim()
     if (!text) return
@@ -1709,6 +1774,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
     setEntryState,
     setStructureArchived,
     updateJornada,
+    createJornada,
     sendMessage,
     deleteMessage,
     markConversationRead,

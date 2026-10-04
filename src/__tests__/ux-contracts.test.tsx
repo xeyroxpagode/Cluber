@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { renderScreen } from "./harness"
-import { Home } from "../features/overview"
+import { Home, Calendar } from "../features/overview"
 import { EventDetail } from "../features/events"
 import { AvailabilityPage } from "../features/participation"
 import { ProfilePage } from "../features/account-insight"
@@ -188,6 +188,39 @@ describe("§37 — copy con concordancia y sin jerga", () => {
     expect(stateText("NEEDS_RECONFIRMATION")).toBe("Hay que volver a confirmar")
     expect(stateText("ELIGIBLE")).toBe("Habilitada")
     expect(stateText("DESCONOCIDO")).toBe("Estado a revisar")
+  })
+})
+
+describe("§20 — calendario usable", () => {
+  it("el título del mes es una fecha real, no una fecha inválida", () => {
+    renderScreen("/calendar", "/calendar", <Calendar />)
+    const title = screen.getByRole("heading", { level: 1 })
+    expect(title.textContent).not.toContain("Invalid")
+    expect(title.textContent).toMatch(/[a-záéíóú]+ de \d{4}/i)
+  })
+
+  it("el control de vista muestra el estado seleccionado sin contradecir la grilla", () => {
+    renderScreen("/calendar", "/calendar", <Calendar />)
+    const control = screen.getByRole("group", { name: "Vista del calendario" })
+    const agenda = within(control).getByRole("button", { name: "Agenda" })
+    const mes = within(control).getByRole("button", { name: "Mes" })
+    const mesSelected = mes.getAttribute("aria-pressed") === "true"
+    const agendaSelected = agenda.getAttribute("aria-pressed") === "true"
+    expect(mesSelected).not.toBe(agendaSelected)
+    if (mesSelected) expect(screen.getByText("Dom")).toBeTruthy()
+  })
+
+  it("la agenda explica cómo se leen los estados sin mentir sobre el color", () => {
+    renderScreen("/calendar", "/calendar", <Calendar />)
+    expect(screen.getByText("Cómo se leen los estados")).toBeTruthy()
+    expect(screen.getByText(/Postergado: no hay horario vigente/)).toBeTruthy()
+  })
+
+  it("los filtros viven en la URL", async () => {
+    renderScreen("/calendar", "/calendar", <Calendar />)
+    const select = screen.getByLabelText("Filtrar por tipo de evento")
+    await userEvent.selectOptions(select, "MATCH")
+    expect(screen.getByRole("button", { name: "Quitar filtros" })).toBeTruthy()
   })
 })
 

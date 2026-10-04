@@ -247,7 +247,8 @@ export function getAuthority(
         case "structure":
           return admin
         case "people":
-          return admin
+          // La Subcomisión entra a la ficha para la habilitación, no para cuentas.
+          return admin || official
         case "competitions":
           return admin || official
         case "announcements":

@@ -77,7 +77,7 @@ export function Button({
       className={cx(
         buttonBase,
         buttonVariants[variant],
-        size === "sm" && "min-h-9 px-3 py-1.5 text-meta",
+        size === "sm" && "min-h-11 px-3 py-2 text-meta",
         className,
       )}
     >
@@ -339,7 +339,7 @@ export function SegmentedControl({
             onClick={() => onChange(option.value)}
             className={cx(
               "rounded-[0.4rem] px-3 font-semibold transition-colors duration-micro motion-reduce:transition-none",
-              size === "md" ? "min-h-9 text-meta" : "min-h-8 text-meta",
+              size === "md" ? "min-h-11 text-meta" : "min-h-10 text-meta",
               active
                 ? "bg-surface text-ink shadow-raised"
                 : "text-ink-muted hover:text-ink",

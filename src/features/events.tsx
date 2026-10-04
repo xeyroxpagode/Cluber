@@ -1669,24 +1669,24 @@ export function EventForm() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   JORNADA
+   JORNADA — detalle y alta
+   Una jornada agrupa partidos de una fecha operativa. No reemplaza el ciclo
+   de vida de cada partido.
    ═══════════════════════════════════════════════════════════════ */
 
 export function JornadaPage() {
   const { jornadaId } = useParams()
+  const jornada = useProduct().state.jornadas.find(
+    (item) => item.id === jornadaId,
+  )
+  if (!jornada) return <JornadaCreate />
+  return <JornadaDetail jornadaId={jornada.id} />
+}
+
+function JornadaDetail({ jornadaId }: { jornadaId: string }) {
   const navigate = useNavigate()
   const { state, authority, updateJornada } = useProduct()
-  const jornada = state.jornadas.find((item) => item.id === jornadaId)
-
-  if (!jornada)
-    return (
-      <div className="mx-auto max-w-3xl">
-        <Empty
-          title="No encontramos esa jornada"
-          detail="Puede que el enlace esté incompleto."
-        />
-      </div>
-    )
+  const jornada = state.jornadas.find((item) => item.id === jornadaId)!
 
   const events = jornada.events
     .map((id) => state.events.find((event) => event.id === id))
@@ -1702,6 +1702,7 @@ export function JornadaPage() {
   })
   const [pending, setPending] = useState(false)
   const [impactVisible, setImpactVisible] = useState(false)
+  const [error, setError] = useState("")
 
   const bulkChanged =
     (jornada.venueId ?? "v1") !== form.venueId ||
@@ -1720,7 +1721,16 @@ export function JornadaPage() {
         }
       />
 
-      <DetailSection title="Partidos de la jornada" meta={`${events.length}`}>
+      {error && (
+        <Banner tone="danger" title="No pudimos guardar">
+          <span className="text-ink-strong">{error}</span>
+        </Banner>
+      )}
+
+      <DetailSection
+        title="Partidos de la jornada"
+        meta={`${events.length} ${events.length === 1 ? "partido" : "partidos"}`}
+      >
         <ul className="grid gap-1">
           {events.map((event) => (
             <li key={event.id}>
@@ -1736,7 +1746,7 @@ export function JornadaPage() {
         </ul>
       </DetailSection>
 
-      {canManage && (
+      {canManage ? (
         <Surface className="grid gap-4">
           <SectionHeader
             title="Organización de toda la jornada"
@@ -1804,7 +1814,7 @@ export function JornadaPage() {
               variant="primary"
               busy={pending}
               disabled={!bulkChanged}
-              onClick={async () => {
+              onClick={() => {
                 if (!bulkChanged) return
                 setPending(true)
                 updateJornada(
@@ -1823,13 +1833,15 @@ export function JornadaPage() {
             >
               Guardar jornada
             </Button>
-            {bulkChanged && (
-              <Button variant="quiet" onClick={() => setImpactVisible(true)}>
-                Ver impacto
-              </Button>
-            )}
           </div>
         </Surface>
+      ) : (
+        <Banner tone="neutral" title="Sólo lectura">
+          <span className="text-ink-strong">
+            La organización de la jornada la edita el entrenador del equipo o la
+            Subcomisión.
+          </span>
+        </Banner>
       )}
 
       {impactVisible && (
@@ -1849,10 +1861,188 @@ export function JornadaPage() {
           </ul>
         </Modal>
       )}
+    </div>
+  )
+}
 
-      <Button variant="quiet" onClick={() => navigate("/calendar")}>
-        Volver al calendario
-      </Button>
+function JornadaCreate() {
+  const navigate = useNavigate()
+  const { state, authority, createJornada } = useProduct()
+  const seasons = state.structure.filter((item) => item.type === "SEASON")
+  const [name, setName] = useState("")
+  const [seasonId, setSeasonId] = useState(seasons[0]?.id ?? "")
+  const [competitionId, setCompetitionId] = useState(
+    state.competitions[0]?.id ?? "",
+  )
+  const [selected, setSelected] = useState<string[]>([])
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [pending, setPending] = useState(false)
+
+  if (!authority.canCreateEvent)
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty
+          title="No podés crear jornadas"
+          detail="Las jornadas las organiza la Subcomisión o el entrenador del equipo."
+        />
+      </div>
+    )
+
+  const candidates = state.events.filter((event) => {
+    if (event.type !== "MATCH") return false
+    const team = state.teams.find((item) => item.id === event.targetTeams[0])
+    if (!team) return false
+    if (seasonId && team.seasonId !== seasonId) return false
+    return !state.jornadas.some((item) => item.events.includes(event.id))
+  })
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-3xl">
+      <PageContextHeader
+        context="Jornadas"
+        title="Nueva jornada"
+        back="/calendar"
+        lead="Agrupá los partidos de una fecha operativa. Cada partido conserva su propio ciclo de vida."
+      />
+      <form
+        noValidate
+        className="grid gap-5"
+        onSubmit={(event_) => {
+          event_.preventDefault()
+          const found: Record<string, string> = {}
+          if (!seasonId) found.seasonId = "Elegí la temporada."
+          if (!competitionId) found.competitionId = "Elegí la competencia."
+          if (selected.length === 0) found.events = "Elegí al menos un partido."
+          setErrors(found)
+          if (Object.keys(found).length > 0) {
+            window.setTimeout(
+              () =>
+                document
+                  .getElementById(`jn-${Object.keys(found)[0]}`)
+                  ?.focus(),
+              0,
+            )
+            return
+          }
+          setPending(true)
+          const result = createJornada({
+            name,
+            seasonId,
+            competitionId,
+            eventIds: selected,
+          })
+          setPending(false)
+          if (result.ok && result.id) navigate(`/jornadas/${result.id}`)
+          else
+            setErrors({ form: result.error ?? "No pudimos crear la jornada." })
+        }}
+      >
+        {errors.form && (
+          <Banner tone="danger" title="No pudimos crear la jornada">
+            <span className="text-ink-strong">{errors.form}</span>
+          </Banner>
+        )}
+
+        <Surface className="grid gap-4">
+          <TextField
+            id="jn-name"
+            label="Nombre de la jornada"
+            value={name}
+            hint="Si lo dejás vacío, usamos la temporada."
+            onChange={(event_) => setName(event_.target.value)}
+          />
+          <Select
+            id="jn-seasonId"
+            label="Temporada"
+            required
+            value={seasonId}
+            error={errors.seasonId}
+            onChange={(event_) => {
+              setSeasonId(event_.target.value)
+              setSelected([])
+            }}
+          >
+            {seasons.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.name}
+              </option>
+            ))}
+          </Select>
+          <Select
+            id="jn-competitionId"
+            label="Competencia"
+            required
+            value={competitionId}
+            error={errors.competitionId}
+            onChange={(event_) => setCompetitionId(event_.target.value)}
+          >
+            {state.competitions.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.name}
+              </option>
+            ))}
+          </Select>
+        </Surface>
+
+        <Surface className="grid gap-3">
+          <SectionHeader
+            title="Partidos de la jornada"
+            meta={`${selected.length} de ${candidates.length} disponibles`}
+          />
+          {errors.events && (
+            <p className="text-meta font-medium text-danger">{errors.events}</p>
+          )}
+          {candidates.length === 0 ? (
+            <p className="gei-meta">
+              No hay partidos de esa temporada fuera de una jornada.
+            </p>
+          ) : (
+            <ul className="grid">
+              {candidates.map((event) => {
+                const checked = selected.includes(event.id)
+                return (
+                  <li
+                    key={event.id}
+                    className="border-b border-line last:border-b-0"
+                  >
+                    <label className="flex min-h-14 cursor-pointer items-center gap-3 py-2">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={(next) =>
+                          setSelected((current) =>
+                            next.target.checked
+                              ? [...current, event.id]
+                              : current.filter((id) => id !== event.id),
+                          )
+                        }
+                        className="size-5 shrink-0 accent-interactive"
+                      />
+                      <span className="min-w-0 flex-1">
+                        <span className="gei-item-title block truncate">
+                          {eventName(event)}
+                        </span>
+                        <span className="gei-meta block">
+                          {dateLabel(event.date, true)} · {event.time}
+                        </span>
+                      </span>
+                    </label>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </Surface>
+
+        <div className="flex flex-wrap justify-end gap-2">
+          <Button variant="quiet" onClick={() => navigate("/calendar")}>
+            Cancelar
+          </Button>
+          <Button type="submit" variant="primary" busy={pending}>
+            Crear jornada
+          </Button>
+        </div>
+      </form>
     </div>
   )
 }

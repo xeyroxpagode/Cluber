@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react"
-import { Link, useParams } from "react-router"
+import { Link, useNavigate, useParams } from "react-router"
 import {
   ArrowRight,
   CalendarDays,
@@ -333,6 +333,15 @@ function venueName(state: ReturnType<typeof useProduct>["state"], event: Event) 
   return state.venues.find((venue) => venue.id === event.venueId)?.name ?? "Sin sede"
 }
 
+let nav: ((to: string) => void) | null = null
+function useRouter() {
+  nav = useNavigate()
+}
+function go(path: string) {
+  if (nav) nav(path)
+  else window.location.assign(path)
+}
+
 export function Home() {
   const { state, authority, actor, childId } = useProduct()
   const today = todayIso()
@@ -511,8 +520,8 @@ export function Home() {
    Estado en URL: mes, equipo, tipo, vista.
    ═══════════════════════════════════════════════════════════════ */
 
-const monthName = (iso: string) =>
-  new Date(`${iso}-01T12:00:00`).toLocaleDateString("es-AR", {
+const monthName = (anchor: string) =>
+  new Date(`${anchor}-01T12:00:00`).toLocaleDateString("es-AR", {
     month: "long",
     year: "numeric",
   })
@@ -539,6 +548,7 @@ function monthMatrix(anchor: string) {
 export function Calendar() {
   const { state, authority, actor, childId } = useProduct()
   const query = useQueryState()
+  useRouter()
   const today = todayIso()
   const anchor = query.get("m", today.slice(0, 7)) || today.slice(0, 7)
   const teamFilter = query.get("team")
@@ -656,18 +666,25 @@ export function Calendar() {
     <div className="gei-stack-page mx-auto max-w-6xl">
       <PageContextHeader
         context="Calendario"
-        title={monthName(`${anchor}-01`)}
+        title={monthName(anchor)}
         lead="Filtros, mes y vista quedan guardados: el botón atrás del navegador vuelve a este mismo lugar."
         action={
-          <SegmentedControl
-            ariaLabel="Vista del calendario"
-            value={view}
-            onChange={(value) => query.set({ view: value })}
-            options={[
-              { value: "agenda", label: "Agenda" },
-              { value: "month", label: "Mes" },
-            ]}
-          />
+          <div className="flex flex-wrap items-center gap-2">
+            {authority.canCreateEvent && (
+              <Button variant="secondary" onClick={() => go("/jornadas/new")}>
+                Nueva jornada
+              </Button>
+            )}
+            <SegmentedControl
+              ariaLabel="Vista del calendario"
+              value={view}
+              onChange={(value) => query.set({ view: value })}
+              options={[
+                { value: "agenda", label: "Agenda" },
+                { value: "month", label: "Mes" },
+              ]}
+            />
+          </div>
         }
         below={
           <div className="flex flex-wrap items-end gap-2">
@@ -865,6 +882,7 @@ export function TeamDetail() {
   const { state, authority, actor, childId } = useProduct()
   const query = useQueryState()
   const tab = query.get("tab", "eventos")
+  useRouter()
   const today = todayIso()
   const subject = childId ?? actor.id
 

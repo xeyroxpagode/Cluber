@@ -77,7 +77,7 @@ const STRUCTURE_LABEL: Record<StructureType, string> = {
 
 export function ManagementHome() {
   const { state, authority } = useProduct()
-  if (!authority.canOpen("management"))
+  if (!authority.canOpen("management") && !authority.canOpen("competitions"))
     return (
       <div className="mx-auto max-w-3xl">
         <Empty
@@ -94,10 +94,18 @@ export function ManagementHome() {
     <div className="gei-stack-page mx-auto max-w-4xl">
       <PageContextHeader
         context="Administración"
-        title="Administración del club"
-        lead="Altas de personas, estructura y competencias. Sin operaciones deportivas."
+        title={
+          authority.canManagePeople
+            ? "Administración del club"
+            : "Coordinación oficial"
+        }
+        lead={
+          authority.canManagePeople
+            ? "Altas de personas, estructura y competencias. Sin operaciones deportivas."
+            : "Desde acá gestionás la habilitación para jugar y las competencias. Las cuentas y la estructura las maneja administración."
+        }
       />
-      {(incomplete.length > 0 || pending.length > 0) && (
+      {authority.canManagePeople && (incomplete.length > 0 || pending.length > 0) && (
         <Banner tone="attention" title="Hay pendientes de alta">
           <span className="text-ink-strong">
             {incomplete.length > 0 &&
@@ -111,7 +119,11 @@ export function ManagementHome() {
         <RowLink
           to="/management/people"
           title="Personas"
-          detail={`${state.people.length} personas · altas, cuentas, roles y habilitación`}
+          detail={
+            authority.canManagePeople
+              ? `${state.people.length} personas · altas, cuentas, roles y habilitación`
+              : `${state.people.length} personas · habilitación para jugar`
+          }
         />
         {authority.canOpen("structure") && (
           <RowLink
@@ -185,9 +197,11 @@ export function PeopleManagement() {
           rows.length === 1 ? "persona" : "personas"
         } ${filtersOn ? "con estos filtros" : "en el club"}`}
         action={
-          <Button variant="primary" onClick={() => go("/management/people/new")}>
-            Crear persona
-          </Button>
+          authority.canManagePeople && (
+            <Button variant="primary" onClick={() => go("/management/people/new")}>
+              Crear persona
+            </Button>
+          )
         }
         below={
           <div className="grid gap-3">
@@ -512,7 +526,7 @@ export function PersonAdminDetail() {
     endConstraint,
   } = useProduct()
   const query = useQueryState()
-  const section = query.get("section", "identidad")
+  const section = query.get("section", authority.canManagePeople ? "identidad" : "habilitacion")
   useRouter()
   const [dialog, setDialog] = useState<
     | null
@@ -571,15 +585,33 @@ export function PersonAdminDetail() {
   const relations = guardiansOf(state, person.id)
   const history = state.audit.filter((entry) => entry.route.includes(person.id))
   const guardiansAvailable = state.people.filter((item) => item.id !== person.id)
+  const admin = authority.canManagePeople
 
   /* Una sola acción primaria contextual según el estado real. */
-  const primary = !membership
-    ? { label: "Iniciar pertenencia", run: () => setDialog("membership-start") }
-    : person.account === "PENDING"
-      ? { label: "Emitir código de activación", run: () => setDialog("code") }
-      : person.account === "DISABLED"
-        ? { label: "Habilitar cuenta", run: () => setDialog("account-enable") }
-        : null
+  const primary = !admin
+    ? null
+    : !membership
+      ? { label: "Iniciar pertenencia", run: () => setDialog("membership-start") }
+      : person.account === "PENDING"
+        ? { label: "Emitir código de activación", run: () => setDialog("code") }
+        : person.account === "DISABLED"
+          ? { label: "Habilitar cuenta", run: () => setDialog("account-enable") }
+          : null
+
+  const tabs = [
+    { id: "identidad", label: "Identidad", show: admin },
+    { id: "pertenencia", label: "Pertenencia", show: admin },
+    { id: "equipos", label: "Equipos", show: admin, count: teams.length },
+    { id: "roles", label: "Roles", show: admin, count: roles.length },
+    { id: "habilitacion", label: "Habilitación", show: true },
+    { id: "cuenta", label: "Cuenta", show: admin },
+    {
+      id: "representacion",
+      label: "Representación",
+      show: admin,
+      count: relations.length,
+    },
+  ].filter((tab) => tab.show)
 
   return (
     <div className="gei-stack-page mx-auto max-w-4xl">
@@ -588,11 +620,15 @@ export function PersonAdminDetail() {
         title={person.name}
         back="/management/people"
         lead={
-          completeness.complete
-            ? "Ficha administrativa: identidad, pertenencia, roles, habilitación y cuenta."
-            : `Faltan datos para poder asignarla: ${completeness.missing
-                .map((item) => item.label)
-                .join(", ")}.`
+          authority.canManagePeople
+            ? completeness.complete
+              ? "Ficha administrativa: identidad, pertenencia, roles, habilitación y cuenta."
+              : `Faltan datos para poder asignarla: ${completeness.missing
+                  .map((item) => item.label)
+                  .join(", ")}.`
+            : `Vista de coordinación: gestionás la habilitación para jugar${
+                completeness.complete ? "" : " y le faltan datos de identidad"
+              }.`
         }
         action={
           <div className="flex flex-wrap items-center gap-2">
@@ -610,15 +646,11 @@ export function PersonAdminDetail() {
               ariaLabel="Secciones de la ficha"
               active={section}
               onChange={(value) => query.set({ section: value })}
-              tabs={[
-                { id: "identidad", label: "Identidad" },
-                { id: "pertenencia", label: "Pertenencia" },
-                { id: "equipos", label: "Equipos", count: teams.length },
-                { id: "roles", label: "Roles", count: roles.length },
-                { id: "habilitacion", label: "Habilitación" },
-                { id: "cuenta", label: "Cuenta" },
-                { id: "representacion", label: "Representación", count: relations.length },
-              ]}
+              tabs={tabs.map(({ id, label, count }) => ({
+                id,
+                label,
+                count,
+              }))}
             />
           </div>
         }

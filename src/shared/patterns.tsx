@@ -52,11 +52,15 @@ export function PageContextHeader({
         <p className="gei-page-context">{context}</p>
       </div>
       <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 basis-64">
           <h1 className="gei-page-title">{title}</h1>
           {lead && <p className="gei-page-lead mt-2 max-w-2xl">{lead}</p>}
         </div>
-        {action && <div className="flex shrink-0 flex-wrap gap-2">{action}</div>}
+        {action && (
+          <div className="flex w-full shrink-0 flex-wrap items-center gap-2 sm:w-auto">
+            {action}
+          </div>
+        )}
       </div>
       {below}
     </header>
