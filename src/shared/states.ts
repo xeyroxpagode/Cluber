@@ -1,13 +1,21 @@
+import type {
+  ReactNode,
+  ButtonHTMLAttributes,
+  InputHTMLAttributes,
+  SelectHTMLAttributes,
+  TextareaHTMLAttributes,
+} from "react"
+
 /**
- * Domain → presentation mapping explícito (Stage 4 §17).
- * Prohibido: labels[value] || value como fallback silencioso.
- * Estado desconocido: warning en dev + etiqueta visualmente segura.
+ * Presentación explícita de estado de dominio (Stage 6 §37).
+ * Prohibido `labels[value] || value`. Un estado desconocido se reporta
+ * en desarrollo y nunca se muestra crudo.
  */
 
-export type Tone = "neutral" | "info" | "success" | "warning" | "danger"
+export type Tone = "neutral" | "attention" | "success" | "warning" | "danger" | "selected"
 
-const STATE_TEXT: Record<string, string> = {
-  // Event lifecycle
+export const STATE_TEXT: Record<string, string> = {
+  /* Ciclo de vida del evento */
   DRAFT: "Borrador",
   SCHEDULED: "Programado",
   POSTPONED: "Postergado",
@@ -15,7 +23,7 @@ const STATE_TEXT: Record<string, string> = {
   IN_PROGRESS: "En curso",
   COMPLETED: "Finalizado",
   ABANDONED: "Suspendido",
-  // Publication / sheets / records
+  /* Publicación y registros */
   PUBLISHED: "Publicado",
   ARCHIVED: "Archivado",
   ACTIVE: "Activo",
@@ -25,41 +33,41 @@ const STATE_TEXT: Record<string, string> = {
   CLOSED: "Cerrada",
   ENDED: "Finalizada",
   FINAL: "Final",
-  // Eligibility (derivado)
+  /* Elegibilidad */
   ELIGIBLE: "Habilitada",
   BLOCKED: "No habilitada",
-  // Availability (vocabulario usuario)
+  /* Disponibilidad */
   YES: "Voy",
-  MAYBE: "Quizás",
+  MAYBE: "Tal vez",
   NO: "No voy",
   NO_RESPONSE: "Sin respuesta",
-  NEEDS_RECONFIRMATION: "Necesita confirmación",
-  // Attendance
+  NEEDS_RECONFIRMATION: "Hay que volver a confirmar",
+  /* Asistencia */
   PRESENT: "Presente",
   ABSENT: "Ausente",
   JUSTIFIED: "Justificada",
   UNRECORDED: "Sin registrar",
-  // Match
+  /* Partido */
   PLAYED: "Jugado",
   FORFEIT: "No presentación",
-  // Roles (solo para contexto, no como decisión de autoridad)
+  /* Roles (contexto, nunca autoridad) */
   PLAYER: "Jugadora",
   CAPTAIN: "Capitana",
-  COACH: "Entrenador o entrenadora",
+  COACH: "Entrenador",
   ADMIN: "Administración",
   SUBCOMMITTEE: "Subcomisión",
-  // Event types
+  /* Tipos de evento */
   MATCH: "Partido",
   TRAINING: "Entrenamiento",
   CLUB_EVENT: "Evento del club",
 }
 
-const STATE_TONE: Record<string, Tone> = {
+const stateToneMap: Record<string, Tone> = {
   DRAFT: "neutral",
-  SCHEDULED: "info",
+  SCHEDULED: "selected",
   POSTPONED: "warning",
   CANCELLED: "danger",
-  IN_PROGRESS: "info",
+  IN_PROGRESS: "attention",
   COMPLETED: "success",
   ABANDONED: "warning",
   PUBLISHED: "success",
@@ -77,7 +85,7 @@ const STATE_TONE: Record<string, Tone> = {
   MAYBE: "warning",
   NO: "danger",
   NO_RESPONSE: "neutral",
-  NEEDS_RECONFIRMATION: "warning",
+  NEEDS_RECONFIRMATION: "attention",
   PRESENT: "success",
   ABSENT: "danger",
   JUSTIFIED: "warning",
@@ -89,12 +97,55 @@ const STATE_TONE: Record<string, Tone> = {
 export function stateText(value: string): string {
   const known = STATE_TEXT[value]
   if (known) return known
-  if (import.meta.env.DEV) {
+  if (import.meta.env.DEV)
     console.warn(`[GEI] estado de dominio desconocido en UI: ${value}`)
-  }
   return "Estado a revisar"
 }
 
 export function stateTone(value: string): Tone {
-  return STATE_TONE[value] ?? "neutral"
+  return stateToneMap[value] ?? "neutral"
 }
+
+/** Clases de badge por tono. Quiet por defecto; `emphasis` para atención real. */
+export const toneBadge: Record<Tone, string> = {
+  neutral: "bg-neutral-soft text-ink-muted ring-1 ring-inset ring-neutral-line",
+  selected: "bg-selected-soft text-selected ring-1 ring-inset ring-selected-line",
+  attention: "bg-attention-soft text-attention ring-1 ring-inset ring-attention-line",
+  success: "bg-success-soft text-success ring-1 ring-inset ring-success-line",
+  warning: "bg-warning-soft text-warning ring-1 ring-inset ring-warning-line",
+  danger: "bg-danger-soft text-danger ring-1 ring-inset ring-danger-line",
+}
+
+export const toneSurface: Record<Tone, string> = {
+  neutral: "bg-neutral-soft",
+  selected: "bg-selected-soft",
+  attention: "bg-attention-soft",
+  success: "bg-success-soft",
+  warning: "bg-warning-soft",
+  danger: "bg-danger-soft",
+}
+
+/** Copy de pluralización: nunca "1 pendientes". */
+export function pluralize(
+  count: number,
+  one: string,
+  many: string,
+  opts?: { includeCount?: boolean },
+): string {
+  const text = `${count === 1 ? one : many}`
+  return opts?.includeCount === false ? text : `${count} ${text}`
+}
+
+export function cx(
+  ...values: Array<string | false | null | undefined | boolean>
+) {
+  return values.filter(Boolean).join(" ")
+}
+
+export function childrenText(children: ReactNode): string {
+  return typeof children === "string" ? children : ""
+}
+
+export type InputFieldProps = InputHTMLAttributes<HTMLInputElement>
+export type SelectFieldProps = SelectHTMLAttributes<HTMLSelectElement>
+export type TextareaFieldProps = TextareaHTMLAttributes<HTMLTextAreaElement>

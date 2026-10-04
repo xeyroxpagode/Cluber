@@ -1,72 +1,127 @@
-import type { Event } from "../mock/model"
+import type { Event, Response } from "../mock/model"
+import { eventAvailabilityView } from "../mock/model"
 import { useProduct } from "../mock/store"
-import { stateText } from "./states"
+import { RadioGroup } from "./ui"
+import { cx } from "./states"
 
-/**
- * Gramática única ¿Vas? (Stage 4 §16).
- * Vocabulario: Voy / Quizás / No voy. Mismo orden, estado y micro-feedback en
- * Home, Calendario contextual, Detalle de equipo, Detalle de evento y Availability.
- */
-export type VasValue = "YES" | "MAYBE" | "NO"
+export type VasValue = Response
 
-const OPTIONS: Array<{ value: VasValue; label: string }> = [
-  { value: "YES", label: "Voy" },
-  { value: "MAYBE", label: "Quizás" },
-  { value: "NO", label: "No voy" },
+const OPTIONS: Array<{ value: VasValue; label: string; tone: "success" | "warning" | "danger" }> = [
+  { value: "YES", label: "Voy", tone: "success" },
+  { value: "MAYBE", label: "Tal vez", tone: "warning" },
+  { value: "NO", label: "No voy", tone: "danger" },
 ]
 
-export function VasInline({ event }: { event: Event }) {
-  const { actor, updateEvent, toast } = useProduct()
-  const current = event.availability[actor.id]
-  const stale = !!current && current.revision !== event.revision
+export const VAS_LABELS: Record<string, string> = {
+  YES: "Voy",
+  MAYBE: "Tal vez",
+  NO: "No voy",
+  NO_RESPONSE: "Sin respuesta",
+  NEEDS_RECONFIRMATION: "Hay que volver a confirmar",
+}
 
-  function answer(value: VasValue) {
-    updateEvent(
-      event.id,
-      (item) => {
-        item.availability[actor.id] = { value, revision: item.revision }
-      },
-      `Responder disponibilidad: ${stateText(value)}`,
+/**
+ * Única gramática de ¿Vas? (Stage 6 §11 / Freeze §12).
+ * Mismo orden, mismo vocabulario y mismo feedback en Inicio, Calendario,
+ * Equipo, Evento y Availability. Sólo accesible si la autoridad lo permite.
+ */
+export function VasControl({
+  event,
+  personId,
+  readOnlyReason,
+}: {
+  event: Event
+  personId: string
+  readOnlyReason?: string
+}) {
+  const { respondAvailability, toast, authority } = useProduct()
+  const view = eventAvailabilityView(event, personId)
+  const canRespond =
+    personId === authority.person.id
+      ? authority.canRespondOwn
+      : authority.canRespondForChild(personId)
+
+  if (event.state !== "SCHEDULED")
+    return (
+      <p className="gei-meta">
+        {event.state === "POSTPONED"
+          ? "Este evento está postergado: no hay horario vigente para confirmar."
+          : "Este evento ya no admite cambios de disponibilidad."}
+      </p>
     )
-    toast(stale ? "Respuesta actualizada. Gracias por confirmar." : "Respuesta guardada.")
+
+  if (readOnlyReason || !canRespond)
+    return (
+      <p className="gei-meta">
+        {readOnlyReason ??
+          (personId === authority.person.id
+            ? "Vos no jugás este evento, así que no respondés disponibilidad. La lista de responses es la que podés ver."
+            : "La delegación de este menor no incluye responder disponibilidad.")}
+      </p>
+    )
+
+  async function answer(value: VasValue) {
+    await respondAvailability(event.id, personId, value)
+    toast("Respuesta guardada.")
   }
 
   return (
-    <div className="rounded-xl border border-border bg-card p-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-[13px] font-semibold">¿Vas?</p>
-        <p role="status" className="gei-meta">
-          {current
-            ? stale
-              ? `Respuesta anterior: ${stateText(current.value)} · El horario cambió desde tu última respuesta.`
-              : `Tu respuesta: ${stateText(current.value)}`
-            : "Todavía no respondiste."}
+    <div className="grid gap-2.5">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <p className="gei-body-strong">¿Vas?</p>
+        <p className="gei-meta" role="status" aria-live="polite">
+          Tu respuesta:{" "}
+          <span
+            className={cx(
+              "font-semibold",
+              view === "NEEDS_RECONFIRMATION" && "text-attention",
+              view === "NO_RESPONSE" && "text-ink-muted",
+            )}
+          >
+            {VAS_LABELS[view]}
+          </span>
         </p>
       </div>
-      {stale && (
-        <p className="mt-2 rounded-lg bg-warning-soft px-3 py-2 text-[12px] font-medium text-warning">
-          El horario cambió desde tu última respuesta. Confirmá nuevamente.
+      {view === "NEEDS_RECONFIRMATION" && (
+        <p className="rounded-control border border-attention-line bg-attention-soft px-3 py-2 text-meta font-medium text-attention">
+          El horario cambió desde tu última respuesta. Confirmá de nuevo.
         </p>
       )}
-      <div className="mt-3 grid grid-cols-3 gap-2" role="group" aria-label="¿Vas?">
-        {OPTIONS.map((opt) => {
-          const active = current?.value === opt.value && !stale
-          return (
-            <button
-              key={opt.value}
-              onClick={() => answer(opt.value)}
-              aria-pressed={active}
-              className={`min-h-11 rounded-lg border px-2 py-2.5 text-[13px] font-semibold transition-colors duration-150 motion-reduce:transition-none ${
-                active
-                  ? "border-primary bg-primary text-white"
-                  : "border-border bg-card hover:border-primary/40 hover:bg-primary-soft/40"
-              }`}
-            >
-              {opt.label}
-            </button>
-          )
-        })}
-      </div>
+      <RadioGroup
+        legend="¿Vas?"
+        name={`vas-${event.id}-${personId}`}
+        columns={3}
+        value={(view === "NEEDS_RECONFIRMATION" || view === "NO_RESPONSE"
+          ? null
+          : view) as VasValue | null}
+        options={OPTIONS}
+        onChange={answer}
+      />
+    </div>
+  )
+}
+
+export function VasCompact({ event }: { event: Event }) {
+  const { childId, authority } = useProduct()
+  const personId = childId ?? authority.person.id
+  const view = eventAvailabilityView(event, personId)
+  const canRespond =
+    authority.person.id === personId
+      ? authority.canRespondOwn
+      : authority.canRespondForChild(personId)
+
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <span className="gei-meta font-semibold">¿Vas?</span>
+      <span
+        className="text-meta font-semibold text-ink-strong"
+        aria-live="polite"
+      >
+        {VAS_LABELS[view]}
+      </span>
+      {!canRespond && (
+        <span className="gei-meta">sólo consulta</span>
+      )}
     </div>
   )
 }
