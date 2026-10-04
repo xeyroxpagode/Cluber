@@ -1,1158 +1,1111 @@
-import { useEffect, useRef, useState } from "react"
+import { useMemo, useState } from "react"
+import { useParams } from "react-router"
 import {
-  Check,
-  X,
-  HelpCircle,
-  Users,
-  Send,
+  AlertCircle,
   CheckCircle2,
-  Search,
-  ShieldAlert,
+  Lock,
+  Unlock,
 } from "lucide-react"
-import { useProduct, canOperateEvent, wait } from "../mock/store"
-import { useEvent } from "./events"
-import { scenario } from "../mock/scenarios"
-import { getAllowedActions } from "../mock/authority"
-import { deriveEligibility, activeConstraintsFor, constraintUserText } from "../mock/eligibility"
 import {
-  availabilityLabel,
+  StaleVersionError,
+  useProduct,
+} from "../mock/store"
+import {
+  eventAvailabilityView,
   eventName,
   dateLabel,
-  labels,
-  type Response,
+  teamName,
   type AttendanceValue,
-  type PlayerStat,
 } from "../mock/model"
-import { stateText } from "../shared/states"
 import {
-  Header,
-  Surface,
-  Badge,
+  activeTeamAssignments,
+  CONFLICT_TEXT,
+  conflictCodesFor,
+  selectionConflicts,
+} from "../mock/derive"
+import {
+  Banner,
   Button,
-  Alert,
-  Avatar,
-  Modal,
+  ConfirmDialog,
   Empty,
-  Saved,
-  TextField,
+  Expander,
+  RadioGroup,
+  RowLink,
+  RowStatic,
+  Sheet,
+  StateBadge,
+  Surface,
+  Tag,
   TextArea,
-  Select,
+  cx,
 } from "../shared/ui"
+import {
+  DetailSection,
+  HistoryList,
+  PageContextHeader,
+  SectionHeader,
+} from "../shared/patterns"
+import { VasControl } from "../shared/vas"
+
+function useEvent(eventId: string | undefined) {
+  const { state } = useProduct()
+  const event = state.events.find((item) => item.id === eventId)
+  return { event, state }
+}
+
+function Missing({ title, detail }: { title: string; detail: string }) {
+  return (
+    <div className="mx-auto max-w-3xl">
+      <Empty title={title} detail={detail} />
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DISPONIBILIDAD
+   Una sola gramática de ¿Vas? · estado derivado en texto
+   ═══════════════════════════════════════════════════════════════ */
 
 export function AvailabilityPage() {
-  const { event, state, actor, capabilities, updateEvent, toast } = useEvent()
-  const [pending, setPending] = useState(false)
-  const [query, setQuery] = useState("")
-  if (
-    !event ||
-    (event.team !== actor.team && !event.clubWide && !capabilities.official)
-  )
-    return (
-      <Empty
-        title="Disponibilidad no disponible"
-        detail="No tenés acceso a este evento."
-      />
-    )
-  const previous = event.availability[actor.id]
-  const stale = previous && previous.revision !== event.revision
-  const people = state.people.filter(
-    (person) =>
-      person.team === event.team && ["PLAYER", "CAPTAIN"].includes(person.role),
-  )
-  async function respond(value: Response) {
-    if (!event) return
-    setPending(true)
-    await wait()
-    updateEvent(
-      event.id,
-      (item) =>
-        (item.availability[actor.id] = { value, revision: item.revision }),
-      "Responder disponibilidad",
-    )
-    setPending(false)
-    toast("Tu disponibilidad quedó confirmada")
-  }
-  return (
-    <>
-      <Header
-        back={`/events/${event.id}`}
-        eyebrow={`${eventName(event)} · ${dateLabel(event.date)} · ${event.time}`}
-        title="Disponibilidad"
-        description="Las respuestas previas no determinan la convocatoria ni la asistencia."
-      />
-      <div className="max-w-3xl space-y-6">
-        {capabilities.availability && (
-          <Surface className="space-y-5 p-6">
-            <h2 className="text-base font-semibold">¿Podés participar?</h2>
-            {stale && (
-              <Alert>
-                <strong>El horario cambió desde tu última respuesta.</strong>
-                <p className="mt-1">
-                  Respuesta anterior: {stateText(previous.value)}. Confirmá nuevamente
-                  para este horario.
-                </p>
-              </Alert>
-            )}
-            {previous && !stale && (
-              <p className="text-xs text-muted-foreground">
-                Tu última respuesta confirmada:{" "}
-                <strong>{stateText(previous.value)}</strong>
-              </p>
-            )}
-            <div className="grid grid-cols-3 gap-3">
-              {(["YES", "MAYBE", "NO"] as const).map((value) => (
-                <button
-                  key={value}
-                  disabled={pending || event.state !== "SCHEDULED"}
-                  onClick={() => respond(value)}
-                  className={`flex min-h-20 flex-col items-center justify-center gap-2 rounded-xl border text-sm font-semibold transition-colors disabled:opacity-45 ${
-                    previous?.value === value && !stale
-                      ? "border-primary bg-primary-soft text-primary"
-                      : "border-border hover:border-primary/40 hover:bg-primary-soft/30"
-                  }`}
-                >
-                  {value === "YES" ? (
-                    <Check size={20} />
-                  ) : value === "NO" ? (
-                    <X size={20} />
-                  ) : (
-                    <HelpCircle size={20} />
-                  )}
-                  {stateText(value)}
-                </button>
-              ))}
-            </div>
-            {pending && <Saved saving />}
-            {event.state !== "SCHEDULED" && (
-              <Alert tone="info">
-                Este evento no está programado. Se conservan las respuestas
-                previas, pero no se pueden registrar nuevas confirmaciones.
-              </Alert>
-            )}
-          </Surface>
-        )}
-        {(capabilities.sport ||
-          capabilities.official ||
-          actor.role === "CAPTAIN") && (
-          <>
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <h2 className="text-sm font-semibold">
-                Respuestas del equipo · {people.length}
-              </h2>
-              <input
-                aria-label="Buscar jugadora"
-                placeholder="Buscar jugadora…"
-                className="rounded-lg border border-border bg-card px-3 py-2 text-xs"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-              />
-            </div>
-            <Surface>
-              {people
-                .filter((person) =>
-                  person.name.toLowerCase().includes(query.toLowerCase()),
-                )
-                .map((person) => (
-                  <div
-                    key={person.id}
-                    className="flex items-center gap-3 border-b border-border p-4 last:border-0"
-                  >
-                    <Avatar name={person.name} size="sm" />
-                    <span className="flex-1 text-xs font-medium">
-                      {person.name}
-                    </span>
-                    <Badge
-                      value={
-                        event.availability[person.id]?.revision !==
-                        event.revision
-                          ? "RECONFIRM"
-                          : event.availability[person.id]?.value
-                      }
-                    >
-                      {availabilityLabel(event, person.id)}
-                    </Badge>
-                  </div>
-                ))}
-            </Surface>
-          </>
-        )}
-      </div>
-    </>
-  )
-}
+  const { eventId } = useParams()
+  const { event, state } = useEvent(eventId)
+  const { actor, childId, authority } = useProduct()
 
-export function SelectionPage() {
-  const { event, state, actor, updateEvent, notify, toast } = useEvent()
-  const [selected, setSelected] = useState(event?.selection || [])
-  const [saveState, setSaveState] = useState("Guardado")
-  const [query, setQuery] = useState("")
-  const [filter, setFilter] = useState("all")
-  const [confirm, setConfirm] = useState(false)
-  const [publishing, setPublishing] = useState(false)
-  const [error, setError] = useState("")
-  const initialized = useRef(false)
-  const saving = useRef<Promise<void> | null>(null)
-  const generation = useRef(0)
-  const allowed =
-    event && canOperateEvent(actor, event) && event.type === "MATCH"
-  const mutable = event?.state === "SCHEDULED"
-  useEffect(() => {
-    if (!initialized.current) {
-      initialized.current = true
-      return
-    }
-    if (!event || !allowed || !mutable) return
-    setSaveState("Cambios pendientes")
-    const current = ++generation.current
-    const timer = setTimeout(() => {
-      setSaveState("Guardando…")
-      saving.current = wait().then(() => {
-        if (current !== generation.current) return
-        if (scenario === "save-error") {
-          setSaveState("Error al guardar")
-          setError(
-            "No pudimos guardar el borrador. Tu selección se conserva; podés publicar el estado deseado cuando estés lista.",
-          )
-        } else {
-          updateEvent(event.id, (item) => (item.selection = selected))
-          setSaveState("Guardado")
-        }
-        saving.current = null
-      })
-    }, 600)
-    return () => clearTimeout(timer)
-  }, [selected])
-  if (!event || event.type !== "MATCH" || event.team !== actor.team)
-    return (
-      <Empty
-        title="Convocatoria no disponible"
-        detail="La convocatoria corresponde a un partido dentro del alcance del equipo."
-      />
-    )
-  if (!allowed)
-    return (
-      <>
-        <Header
-          back={`/events/${event.id}`}
-          eyebrow={`${eventName(event)} · ${dateLabel(event.date)}`}
-          title="Convocatoria"
-          description="Versión publicada para este partido."
-        />
-        {event.published ? (
-          <Surface>
-            <div className="flex items-center justify-between border-b border-border p-5">
-              <span className="text-xs font-semibold">
-                {event.published.length} jugadoras convocadas
-              </span>
-              <Badge value="PUBLISHED" />
-            </div>
-            {event.published.map((id) => {
-              const person = state.people.find((item) => item.id === id)
-              return (
-                person && (
-                  <div
-                    key={id}
-                    className="flex items-center gap-3 border-b border-border p-4 last:border-0"
-                  >
-                    <Avatar name={person.name} size="sm" />
-                    <span className="text-xs font-medium">{person.name}</span>
-                  </div>
-                )
-              )
-            })}
-          </Surface>
-        ) : (
-          <Empty
-            title="Todavía no se publicó la convocatoria"
-            detail="El entrenador está preparando la selección para este partido."
-          />
-        )}
-      </>
-    )
-  const people = state.people.filter(
-    (person) =>
-      person.team === event.team && ["PLAYER", "CAPTAIN"].includes(person.role),
+  if (!event) return <Missing title="Ese evento ya no está" detail="Revisá el enlace." />
+
+  const subject = childId ?? actor.id
+  const roster = useMemo(() => {
+    const teams = event.targetTeams
+    const ids = new Set<string>()
+    state.teamAssignments
+      .filter((a) => teams.includes(a.teamId) && !a.validUntil)
+      .forEach((a) => ids.add(a.personId))
+    event.targetPersonIds.forEach((id) => ids.add(id))
+    return Array.from(ids)
+      .map((id) => state.people.find((person) => person.id === id))
+      .filter((person): person is NonNullable<typeof person> => !!person)
+      .sort((a, b) => a.lastName.localeCompare(b.lastName))
+  }, [event, state])
+
+  const buckets = roster.reduce(
+    (accumulator, person) => {
+      const view = eventAvailabilityView(event, person.id)
+      accumulator[view] = (accumulator[view] ?? 0) + 1
+      return accumulator
+    },
+    {} as Record<string, number>,
   )
-  const blocked = selected.filter((id) => {
-    return deriveEligibility(state.eligibilityConstraints, id) !== "ELIGIBLE"
-  })
-  const publishedConflicts = (event.published || []).filter((id) => {
-    const person = people.find((p) => p.id === id)
-    if (!person) return true
-    if (deriveEligibility(state.eligibilityConstraints, id) !== "ELIGIBLE") return true
-    return !people.some((p) => p.id === id)
-  })
-  const visible = people.filter(
-    (person) =>
-      person.name.toLowerCase().includes(query.toLowerCase()) &&
-      (filter === "all" || selected.includes(person.id)),
-  )
-  async function publish() {
-    if (!event) return
-    setPublishing(true)
-    if (saving.current) await saving.current
-    await wait()
-    generation.current++
-    const now = new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })
-    updateEvent(
-      event.id,
-      (item) => {
-        item.selection = selected
-        item.published = [...selected]
-        item.selectionRevisions.push({
-          id: crypto.randomUUID(),
-          players: [...selected],
-          author: actor.name,
-          date: `${now} · Hoy`,
-        })
-      },
-      blocked.length
-        ? `Publicar convocatoria con ${blocked.length} situación actual`
-        : "Publicar convocatoria",
-    )
-    notify(
-      "Convocatoria publicada",
-      `${eventName(event)} · ${selected.length} jugadoras convocadas${blocked.length ? ` · ${blocked.length} con situación actual` : ""}`,
-      `/events/${event.id}`,
-      "SELECTION_PUBLISHED",
-    )
-    setPublishing(false)
-    setConfirm(false)
-    setSaveState(`Guardado ${now}`)
-    toast(blocked.length ? "Convocatoria publicada con situaciones para revisar" : "Convocatoria publicada")
-  }
+
   return (
-    <>
-      <Header
+    <div className="gei-stack-page mx-auto max-w-4xl">
+      <PageContextHeader
+        context="Disponibilidad"
+        title={eventName(event)}
         back={`/events/${event.id}`}
-        eyebrow={`${eventName(event)} · ${dateLabel(event.date)} · ${event.time}`}
-        title="Convocatoria"
-        description="Disponibilidad y elegibilidad son información independiente."
-        action={<Badge value={event.published ? "PUBLISHED" : "DRAFT"} />}
+        lead={`${roster.length} ${roster.length === 1 ? "persona" : "personas"} del ${
+          event.clubWide
+            ? "todo el hockey"
+            : event.targetTeams.map((id) => teamName(state, id)).join(" + ")
+        }`}
       />
-      <div className="max-w-4xl space-y-5">
-        {publishedConflicts.length > 0 && (
-          <Alert tone="error">
-            Esta convocatoria tiene {publishedConflicts.length} situación para
-            revisar. La publicación anterior se conserva.
-            <span className="mt-2 block text-[12px] font-normal">
-              {publishedConflicts.slice(0, 3).map((id) => {
-                const p = state.people.find((x) => x.id === id)
-                const cs = activeConstraintsFor(state.eligibilityConstraints, id)
-                return (
-                  <span key={id} className="mt-1 block">
-                    · {p?.name ?? id}
-                    {cs.length ? ` — ${constraintUserText(cs[0])}` : " — ya no pertenece al destino actual."}
-                  </span>
-                )
-              })}
-              {publishedConflicts.length > 3 && (
-                <span className="mt-1 block">· y {publishedConflicts.length - 3} más en la tabla.</span>
-              )}
-            </span>
-          </Alert>
-        )}
-        {!mutable && (
-          <Alert tone="info">
-            Sólo se puede publicar una convocatoria cuando el partido está
-            programado. La versión publicada se conserva.
-          </Alert>
-        )}
-        {event.published && (
-          <Alert tone="success">
-            Publicada · {event.published.length} jugadoras. Los cambios actuales
-            se guardan como borrador hasta una nueva publicación.
-          </Alert>
-        )}
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="w-full sm:w-64">
-            <TextField
-              label="Buscar jugadora"
-              placeholder="Nombre o apellido…"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-            />
-          </div>
-          <div className="flex items-center gap-4">
-            <select
-              aria-label="Filtrar convocatoria"
-              className="rounded-lg border border-border bg-card p-2 text-xs"
-              value={filter}
-              onChange={(event) => setFilter(event.target.value)}
-            >
-              <option value="all">Todo el equipo</option>
-              <option value="selected">Seleccionadas</option>
-            </select>
-            <span role="status" className="text-[11px] text-muted-foreground">
-              {saveState === "Guardado" && (
-                <Check className="mr-1 inline text-success" size={13} />
-              )}
-              {saveState}
-            </span>
-          </div>
-        </div>
-        <Surface>
-          <div className="hidden grid-cols-[1fr_180px_100px_80px] border-b border-border bg-muted/40 px-5 py-3 text-[10px] font-medium text-muted-foreground sm:grid">
-            <span>JUGADORA</span>
-            <span>DISPONIBILIDAD</span>
-            <span>ELEGIBILIDAD</span>
-            <span className="text-right">SELECCIÓN</span>
-          </div>
-          {visible.map((person) => {
-            const checked = selected.includes(person.id)
-            const eligibility = deriveEligibility(state.eligibilityConstraints, person.id)
-            const ineligible = eligibility !== "ELIGIBLE"
-            const constraints = activeConstraintsFor(state.eligibilityConstraints, person.id)
-            return (
-              <label
-                key={person.id}
-                className={`flex cursor-pointer flex-wrap items-center gap-3 border-b border-border p-4 last:border-0 sm:grid sm:grid-cols-[1fr_180px_100px_80px] sm:px-5 ${
-                  checked ? "bg-primary-soft/40" : "hover:bg-muted/30"
-                }`}
-              >
-                <span className="flex min-w-0 flex-1 items-center gap-3">
-                  <Avatar name={person.name} size="sm" />
-                  <span>
-                    <span className="block text-xs font-semibold">
-                      {person.name}
-                    </span>
-                    {person.role === "CAPTAIN" && (
-                      <span className="mt-1 block text-[10px] text-muted-foreground">
-                        Capitana
-                      </span>
-                    )}
-                    {ineligible && (
-                      <span className="mt-1 block text-[10px] font-medium text-warning">
-                        {constraints.length
-                          ? constraintUserText(constraints[0])
-                          : "Tiene una situación para revisar."}
-                      </span>
-                    )}
-                  </span>
-                </span>
-                <span className="text-[10px] text-muted-foreground">
-                  {availabilityLabel(event, person.id)}
-                </span>
-                <Badge value={eligibility} />
-                <input
-                  type="checkbox"
-                  aria-label={`Seleccionar a ${person.name}`}
-                  checked={checked}
-                  disabled={!allowed || !mutable}
-                  onChange={() => {
-                    setError("")
-                    setSelected((previous) =>
-                      previous.includes(person.id)
-                        ? previous.filter((id) => id !== person.id)
-                        : [...previous, person.id],
-                    )
-                  }}
-                  className="ml-auto size-4 accent-primary sm:justify-self-end"
+
+      {event.state === "POSTPONED" && (
+        <Banner tone="warning" title="Este evento está postergado">
+          <span className="text-ink-strong">
+            No hay horario vigente, así que no se pueden cargar respuestas nuevas.
+            Las respuestas anteriores quedan guardadas como referencia.
+          </span>
+        </Banner>
+      )}
+
+      <Surface>
+        <VasControl event={event} personId={subject} />
+      </Surface>
+
+      <Surface className="grid gap-3">
+        <SectionHeader title="Resumen" />
+        <ul className="grid gap-1">
+          {[
+            { key: "YES", label: "Voy" },
+            { key: "MAYBE", label: "Tal vez" },
+            { key: "NO", label: "No voy" },
+            { key: "NEEDS_RECONFIRMATION", label: "Hay que volver a confirmar" },
+            { key: "NO_RESPONSE", label: "Sin responder" },
+          ].map((bucket) => (
+            <RowStatic
+              key={bucket.key}
+              title={bucket.label}
+              leading={
+                <StateBadge
+                  value={bucket.key}
+                  tone={
+                    bucket.key === "NEEDS_RECONFIRMATION" ? "attention" : undefined
+                  }
                 />
-              </label>
+              }
+              trailing={
+                <span className="gei-body-strong tabular-nums">
+                  {buckets[bucket.key] ?? 0}
+                </span>
+              }
+            />
+          ))}
+        </ul>
+      </Surface>
+
+      <DetailSection title="Respuestas">
+        <ul className="grid">
+          {roster.map((person) => {
+            const view = eventAvailabilityView(event, person.id)
+            const mine = person.id === subject
+            return (
+              <li
+                key={person.id}
+                className="flex min-h-11 flex-wrap items-center gap-3 border-b border-line py-2.5 last:border-b-0"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="gei-item-title truncate">
+                    {person.name}
+                    {mine && (
+                      <span className="ml-2 text-meta font-normal text-ink-muted">
+                        (vos)
+                      </span>
+                    )}
+                  </p>
+                </div>
+                <StateBadge
+                  value={view}
+                  tone={view === "NEEDS_RECONFIRMATION" ? "attention" : undefined}
+                />
+                {authority.canRespondForChild(person.id) &&
+                  person.id !== subject &&
+                  view !== "NO_RESPONSE" && (
+                    <span className="gei-meta">respondible por vos</span>
+                  )}
+              </li>
             )
           })}
-        </Surface>
-        {error && <Alert tone="error">{error}</Alert>}
-        {allowed && (
-          <div className="sticky bottom-20 flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-4 shadow-sm lg:bottom-4">
-            <span className="text-xs">
-              <strong className="text-base text-primary">
-                {selected.length}
-              </strong>{" "}
-              jugadoras seleccionadas
-            </span>
-            <Button
-              disabled={!mutable || !selected.length || publishing}
-              onClick={() => setConfirm(true)}
-            >
-              <Send size={14} />
-              {event.published
-                ? "Publicar actualización"
-                : "Publicar convocatoria"}
-            </Button>
-          </div>
-        )}
-      </div>
-      {confirm && (
-        <Modal
-          title="Publicar convocatoria"
-          onClose={() => !publishing && setConfirm(false)}
-          footer={
-            <>
-              <Button
-                variant="secondary"
-                onClick={() => setConfirm(false)}
-                disabled={publishing}
-              >
-                Volver
-              </Button>
-              <Button onClick={publish} disabled={publishing}>
-                {publishing ? "Publicando…" : "Confirmar publicación"}
-              </Button>
-            </>
-          }
-        >
-          <p className="text-sm">
-            Se publicará la convocatoria de{" "}
-            <strong>{selected.length} jugadoras</strong> para {eventName(event)}
-            .
-          </p>
-          {blocked.length > 0 && (
-            <div className="mt-3 rounded-lg border border-warning/20 bg-warning-soft p-3">
-              <p className="text-[12px] font-semibold text-warning">
-                {blocked.length} {blocked.length === 1 ? "jugadora tiene" : "jugadoras tienen"} una situación actual.
-              </p>
-              <p className="mt-1 text-[12px] leading-relaxed text-warning">
-                Se publica igual y queda marcada para revisar. La publicación histórica se conserva; los conflictos se muestran como actuales.
-              </p>
-            </div>
-          )}
-          <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-            La publicación queda registrada y las personas correspondientes
-            recibirán una notificación. La disponibilidad no cambia.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {people
-              .filter((person) => selected.includes(person.id))
-              .map((person) => (
-                <span
-                  key={person.id}
-                  className="rounded-md bg-muted px-2 py-1 text-[10px]"
-                >
-                  {person.name}
-                </span>
-              ))}
-          </div>
-        </Modal>
-      )}
-    </>
+        </ul>
+      </DetailSection>
+    </div>
   )
 }
 
-export function AttendancePage() {
-  const { event, state, actor, updateEvent, markAttendance, toast } = useEvent()
+/* ═══════════════════════════════════════════════════════════════
+   CONVOCATORIA — escaneable, una sola CTA fuerte, revisiones aparte
+   ═══════════════════════════════════════════════════════════════ */
+
+export function SelectionPage() {
+  const { eventId } = useParams()
+  const { event, state } = useEvent(eventId)
+  const { authority, publishSelection, toast } = useProduct()
+  const [draft, setDraft] = useState<string[] | null>(null)
+  const [dirty, setDirty] = useState(false)
+  const [publishing, setPublishing] = useState(false)
   const [confirm, setConfirm] = useState(false)
-  const [correction, setCorrection] = useState(false)
-  const [reason, setReason] = useState("")
-  const [pending, setPending] = useState(false)
-  const [entries, setEntries] = useState(event?.attendance || {})
-  const [query, setQuery] = useState("")
-  if (!event || event.type === "CLUB_EVENT" || !canOperateEvent(actor, event))
+  const [conflictMessage, setConflictMessage] = useState("")
+  const [revisionsOpen, setRevisionsOpen] = useState(false)
+
+  if (!event) return <Missing title="Ese evento ya no está" detail="Revisá el enlace." />
+  if (!authority.canManageSelection(event))
     return (
-      <Empty
-        title="Asistencia no disponible"
-        detail="La asistencia requiere autoridad deportiva y corresponde a entrenamientos o partidos."
+      <Missing
+        title="No administrás la convocatoria de este evento"
+        detail="La convocatoria es del entrenador del equipo o de la Subcomisión."
       />
     )
-  const people = state.people.filter(
-    (person) =>
-      person.team === event.team && ["PLAYER", "CAPTAIN"].includes(person.role),
-  )
-  const unrecorded = people.filter(
-    (person) => !(correction ? entries : event.attendance)[person.id],
-  ).length
-  const canOpen = ["SCHEDULED", "IN_PROGRESS"].includes(event.state)
-  const canMark = event.attendanceOpened && !event.attendanceClosed
-  async function mark(id: string, value: AttendanceValue) {
-    if (!event) return
-    if (correction) {
-      setEntries((previous) => ({ ...previous, [id]: value }))
-      return
+
+  const published = event.published ?? null
+  const working = draft ?? published ?? []
+  const setWorking = (next: string[] | ((current: string[]) => string[])) =>
+    setDraft(
+      typeof next === "function"
+        ? (next as (current: string[]) => string[])(working)
+        : next,
+    )
+  const eventVersion = event.version
+  const eventKey = event.id
+  const conflicts = selectionConflicts(state, event)
+  const roster = useMemo(() => {
+    const ids = new Set<string>()
+    state.teamAssignments
+      .filter((a) => event.targetTeams.includes(a.teamId) && !a.validUntil)
+      .forEach((a) => ids.add(a.personId))
+    return Array.from(ids)
+      .map((id) => state.people.find((person) => person.id === id))
+      .filter((person): person is NonNullable<typeof person> => !!person)
+      .sort((a, b) => a.lastName.localeCompare(b.lastName))
+  }, [event, state])
+
+  const toggle = (personId: string) => {
+    setWorking(
+      working.includes(personId)
+        ? working.filter((id) => id !== personId)
+        : [...working, personId],
+    )
+    setDirty(true)
+  }
+
+  const added = working.filter((id) => !(published ?? []).includes(id))
+  const removed = (published ?? []).filter((id) => !working.includes(id))
+
+  async function publish() {
+    setPublishing(true)
+    setConflictMessage("")
+    try {
+      await publishSelection(eventKey, working, eventVersion)
+      setDraft(null)
+      setDirty(false)
+      setConfirm(false)
+      toast("Convocatoria publicada.")
+    } catch (error) {
+      if (error instanceof StaleVersionError)
+        setConflictMessage(
+          "Alguien tocó la convocatoria mientras la editabas. Tu borrador sigue acá: revisá y publicá de nuevo.",
+        )
+      else setConflictMessage("No pudimos publicar. Volvé a intentar.")
+    } finally {
+      setPublishing(false)
     }
-    setPending(true)
-    await wait(130)
-    markAttendance(event.id, id, value)
-    setPending(false)
   }
-  async function close() {
-    if (!event) return
-    setPending(true)
-    await wait()
-    updateEvent(
-      event.id,
-      (item) => (item.attendanceClosed = true),
-      "Cerrar asistencia",
-    )
-    setConfirm(false)
-    setPending(false)
-    toast(
-      "Asistencia cerrada. Los registros faltantes se conservan como Sin registrar.",
-    )
-  }
+
   return (
-    <>
-      <Header
+    <div className="gei-stack-page mx-auto max-w-4xl">
+      <PageContextHeader
+        context="Convocatoria"
+        title={eventName(event)}
         back={`/events/${event.id}`}
-        eyebrow={`${eventName(event)} · ${dateLabel(event.date)}`}
-        title="Asistencia"
-        description="Registrá la presencia real. Sin registrar no significa ausente."
+        lead={`${dateLabel(event.date, true)} · ${
+          working.length
+        } ${working.length === 1 ? "convocada" : "convocadas"}`}
         action={
-          <Badge value={event.attendanceClosed ? "CLOSED" : "DRAFT"}>
-            {correction
-              ? "Corrección de asistencia cerrada"
-              : event.attendanceClosed
-                ? "Cerrada"
-                : event.attendanceOpened
-                  ? "Abierta"
-                  : "Sin abrir"}
-          </Badge>
+          <StateBadge
+            value={published === null ? "DRAFT" : "PUBLISHED"}
+            emphasis
+          />
         }
       />
-      <div className="max-w-4xl space-y-5">
-        {!event.attendanceOpened ? (
-          <Empty
-            title="La asistencia todavía no se abrió"
-            detail={
-              canOpen
-                ? "Abrí la planilla para registrar la presencia de cada jugadora."
-                : "Sólo puede abrirse con el evento programado o en curso."
-            }
+
+      {conflictMessage && (
+        <Banner tone="attention" title="La convocatoria cambió mientras editabas">
+          <span className="text-ink-strong">{conflictMessage}</span>
+        </Banner>
+      )}
+
+      {conflicts.length > 0 && (
+        <Banner
+          tone="attention"
+          title={`${conflicts.length} ${
+            conflicts.length === 1 ? "convocada tiene" : "convocadas tienen"
+          } un problema a revisar`}
+        >
+          <span className="text-ink-strong">
+            Podés publicar igual: la convocatoria no se bloquea. Avisale a la
+            persona para que no venga en falso.
+          </span>
+        </Banner>
+      )}
+
+      <Surface className="grid gap-3">
+        <SectionHeader
+          title="Convocadas"
+          meta={`${working.length} de ${roster.length}`}
+          aside={
+            dirty ? (
+              <span className="text-meta font-medium text-attention">
+                Borrador sin publicar
+              </span>
+            ) : undefined
+          }
+        />
+        <ul className="grid pb-2">
+          {roster.map((person) => {
+            const selected = working.includes(person.id)
+            const codes = published ? conflictCodesFor(state, event, person.id) : []
+            const blocked = codes.includes("ELIGIBILITY_BLOCKED")
+            return (
+              <li
+                key={person.id}
+                className="border-b border-line last:border-b-0"
+              >
+                <div className="flex min-h-11 items-center gap-3 py-2.5">
+                  <input
+                    type="checkbox"
+                    id={`sel-${person.id}`}
+                    checked={selected}
+                    onChange={() => toggle(person.id)}
+                    className="size-5 shrink-0 accent-interactive"
+                  />
+                  <label
+                    htmlFor={`sel-${person.id}`}
+                    className="min-w-0 flex-1 cursor-pointer"
+                  >
+                    <span className="gei-item-title block truncate">{person.name}</span>
+                    <span className="gei-meta block">
+                      {eventAvailabilityView(event, person.id) === "YES"
+                        ? "Dijo que va"
+                        : eventAvailabilityView(event, person.id) === "NO"
+                          ? "Dijo que no va"
+                          : eventAvailabilityView(event, person.id) ===
+                              "NEEDS_RECONFIRMATION"
+                            ? "Confirmó con el horario anterior"
+                            : "Sin responder"}
+                    </span>
+                  </label>
+                  {selected && blocked && (
+                    <Tag tone="danger">No puede jugar</Tag>
+                  )}
+                </div>
+                {selected && codes.length > 0 && (
+                  <div className="pb-3 pl-8">
+                    <ul className="grid gap-1">
+                      {codes.map((code) => (
+                        <li
+                          key={code}
+                          className="flex items-start gap-1.5 text-meta text-attention"
+                        >
+                          <AlertCircle size={13} aria-hidden className="mt-0.5 shrink-0" />
+                          {CONFLICT_TEXT[code]}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </li>
+            )
+          })}
+        </ul>
+      </Surface>
+
+      <Surface className="grid gap-3">
+        <div className="flex items-baseline justify-between gap-3">
+          <h2 className="gei-section-title">Revisiones publicadas</h2>
+          <button
+            type="button"
+            onClick={() => setRevisionsOpen((value) => !value)}
+            aria-expanded={revisionsOpen}
+            className="gei-target-sm rounded-control px-2 text-meta font-semibold text-interactive hover:bg-selected-soft"
           >
+            {revisionsOpen ? "Ocultar" : `Ver ${event.selectionRevisions.length}`}
+          </button>
+        </div>
+        {revisionsOpen &&
+          (event.selectionRevisions.length === 0 ? (
+            <p className="gei-meta">Todavía no se publicó ninguna convocatoria.</p>
+          ) : (
+            <HistoryList
+              entries={event.selectionRevisions.map((revision) => ({
+                action: `Convocatoria de ${revision.players.length} personas`,
+                actor: revision.author,
+                at: new Date(revision.at).toLocaleString("es-AR"),
+                before:
+                  revision.removed.length > 0
+                    ? `${revision.removed.length} fuera`
+                    : null,
+                after:
+                  revision.added.length > 0 ? `${revision.added.length} adentro` : null,
+              }))}
+            />
+          ))}
+      </Surface>
+
+      <div className="sticky bottom-16 z-20 -mx-4 flex flex-wrap items-center justify-between gap-2 border-t border-line bg-surface/95 px-4 py-3 backdrop-blur-sm lg:bottom-0 lg:mx-0 lg:rounded-surface lg:border">
+        <p className="gei-meta">
+          {added.length > 0 && `${added.length} sumadas`}
+          {added.length > 0 && removed.length > 0 && " · "}
+          {removed.length > 0 && `${removed.length} fuera`}
+          {added.length === 0 && removed.length === 0 &&
+            (published === null ? "Sin publicar" : "Sin cambios")}
+        </p>
+        <div className="flex gap-2">
+          {dirty && (
             <Button
-              disabled={!canOpen || pending}
-              onClick={async () => {
-                setPending(true)
-                await wait()
-                updateEvent(
-                  event.id,
-                  (item) => (item.attendanceOpened = true),
-                  "Abrir asistencia",
-                )
-                setPending(false)
+              variant="quiet"
+              onClick={() => {
+                setDraft(null)
+                setDirty(false)
               }}
             >
-              Abrir asistencia
+              Descartar
             </Button>
-          </Empty>
-        ) : (
-          <>
-            {event.attendanceClosed && !correction && (
-              <Alert tone="success">
-                Asistencia cerrada. Para modificar un registro, iniciá una
-                corrección con motivo.
-              </Alert>
-            )}
-            {correction && (
-              <Alert tone="info">
-                Estás corrigiendo una asistencia cerrada. El cierre original se
-                conserva y el motivo queda en el historial.
-              </Alert>
-            )}
-            <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
-              <div className="flex flex-wrap gap-4">
-                <span>
-                  <strong className="text-success">
-                    {
-                      Object.values(
-                        correction ? entries : event.attendance,
-                      ).filter((value) => value === "PRESENT").length
-                    }
-                  </strong>{" "}
-                  presentes
-                </span>
-                <span>
-                  <strong>
-                    {
-                      Object.values(
-                        correction ? entries : event.attendance,
-                      ).filter((value) => value === "ABSENT").length
-                    }
-                  </strong>{" "}
-                  ausentes
-                </span>
-                <span>
-                  <strong>
-                    {
-                      Object.values(
-                        correction ? entries : event.attendance,
-                      ).filter((value) => value === "JUSTIFIED").length
-                    }
-                  </strong>{" "}
-                  justificadas
-                </span>
-                <span className="text-muted-foreground">
-                  {unrecorded} sin registrar
-                </span>
-              </div>
-              <input
-                aria-label="Buscar jugadora"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Buscar jugadora…"
-                className="rounded-lg border border-border bg-card p-2 text-xs"
-              />
-            </div>
-            <Surface>
-              {people
-                .filter((person) =>
-                  person.name.toLowerCase().includes(query.toLowerCase()),
-                )
-                .map((person) => {
-                  const value = (correction ? entries : event.attendance)[
-                    person.id
-                  ]
-                  return (
-                    <div
-                      key={person.id}
-                      className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-3.5 last:border-0"
-                    >
-                      <div className="flex items-center gap-3">
-                        <Avatar name={person.name} size="sm" />
-                        <span>
-                          <span className="block text-xs font-semibold">
-                            {person.name}
-                          </span>
-                          <span className="mt-1 block text-[10px] text-muted-foreground">
-                            {value ? labels[value] : "Sin registrar"}
-                          </span>
-                        </span>
-                      </div>
-                      <div className="flex gap-1.5">
-                        {(["PRESENT", "ABSENT", "JUSTIFIED"] as const).map(
-                          (option) => (
-                            <button
-                              key={option}
-                              disabled={pending || (!canMark && !correction)}
-                              onClick={() => mark(person.id, option)}
-                              className={`min-h-9 rounded-md border px-2.5 py-1 text-[10px] font-medium disabled:opacity-50 ${
-                                option === value
-                                  ? option === "PRESENT"
-                                    ? "border-success/20 bg-success-soft text-success"
-                                    : option === "ABSENT"
-                                      ? "border-danger/20 bg-danger-soft text-danger"
-                                      : "border-primary/20 bg-primary-soft text-primary"
-                                  : "border-border bg-card text-muted-foreground hover:bg-muted"
-                              }`}
-                            >
-                              {labels[option]}
-                            </button>
-                          ),
-                        )}
-                      </div>
-                    </div>
-                  )
-                })}
-            </Surface>
-            {correction && (
-              <TextArea
-                label="Motivo de la corrección (obligatorio)"
-                value={reason}
-                onChange={setReason}
-                required
-              />
-            )}
-            <div className="sticky bottom-20 flex justify-end gap-2 rounded-xl border border-border bg-card p-4 lg:bottom-4">
-              {event.attendanceClosed ? (
-                correction ? (
-                  <>
-                    <Button
-                      variant="secondary"
-                      onClick={() => setCorrection(false)}
-                      disabled={pending}
-                    >
-                      Volver
-                    </Button>
-                    <Button
-                      disabled={!reason.trim() || pending}
-                      onClick={async () => {
-                        setPending(true)
-                        await wait()
-                        Object.entries(entries).forEach(([pid, value]) => {
-                          if (event.attendance[pid] !== value) {
-                            markAttendance(event.id, pid, value, reason)
-                          }
-                        })
-                        updateEvent(
-                          event.id,
-                          () => {},
-                          "Corregir asistencia",
-                          reason,
-                        )
-                        setPending(false)
-                        setCorrection(false)
-                        toast("Corrección guardada con su motivo. El historial conserva antes y después.")
-                      }}
-                    >
-                      {pending ? "Guardando…" : "Guardar corrección"}
-                    </Button>
-                  </>
-                ) : (
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      setEntries(event.attendance)
-                      setCorrection(true)
-                    }}
-                  >
-                    Corregir asistencia
-                  </Button>
-                )
-              ) : (
-                <Button disabled={pending} onClick={() => setConfirm(true)}>
-                  Cerrar asistencia
-                </Button>
-              )}
-            </div>
-          </>
-        )}
+          )}
+          <Button
+            variant={dirty ? "primary" : "secondary"}
+            disabled={!dirty}
+            busy={publishing}
+            onClick={() => setConfirm(true)}
+          >
+            {published === null ? "Publicar convocatoria" : "Publicar cambios"}
+          </Button>
+        </div>
       </div>
+
       {confirm && (
-        <Modal
-          title="Cerrar asistencia"
-          onClose={() => !pending && setConfirm(false)}
-          footer={
+        <ConfirmDialog
+          title={published === null ? "Publicar convocatoria" : "Publicar cambios"}
+          consequence={
             <>
-              <Button
-                variant="secondary"
-                onClick={() => setConfirm(false)}
-                disabled={pending}
-              >
-                Volver
-              </Button>
-              <Button disabled={pending} onClick={close}>
-                {pending
-                  ? "Cerrando…"
-                  : unrecorded
-                    ? "Cerrar igualmente"
-                    : "Confirmar cierre"}
-              </Button>
+              Las {working.length} personas convocadas van a recibir un aviso. La
+              revisión anterior queda guardada y no se reescribe.
             </>
           }
-        >
-          <Alert tone={unrecorded ? "warning" : "info"}>
-            {unrecorded
-              ? `Quedan ${unrecorded} jugadoras sin registrar.`
-              : "Todas las jugadoras tienen un registro."}
-          </Alert>
-          <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
-            Si cerrás la asistencia, las jugadoras sin registro seguirán
-            figurando como Sin registrar. No se convertirán en ausentes.
-          </p>
-        </Modal>
+          confirmLabel="Publicar"
+          pending={publishing}
+          pendingLabel="Publicando"
+          onClose={() => setConfirm(false)}
+          onConfirm={() => void publish()}
+          tone="attention"
+          extra={
+            added.length > 0 || removed.length > 0 ? (
+              <div className="rounded-surface border border-line bg-control p-3">
+                <p className="text-meta font-semibold uppercase tracking-wide text-ink-muted">
+                  Cambios
+                </p>
+                <ul className="mt-1.5 grid gap-1">
+                  {added.map((id) => (
+                    <li key={id} className="gei-body text-ink-strong">
+                      Entra {state.people.find((person) => person.id === id)?.name}
+                    </li>
+                  ))}
+                  {removed.map((id) => (
+                    <li key={id} className="gei-body text-ink-strong">
+                      Sale {state.people.find((person) => person.id === id)?.name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : undefined
+          }
+        />
       )}
-    </>
+    </div>
   )
 }
 
-export function MatchRecordPage() {
-  const { event, state, actor, updateEvent, correctRecord, toast } = useEvent()
-  const [record, setRecord] = useState(event?.record)
-  const [correction, setCorrection] = useState(false)
-  const [reason, setReason] = useState("")
-  const [confirm, setConfirm] = useState(false)
-  const [pending, setPending] = useState(false)
-  const [error, setError] = useState("")
-  if (
-    !event ||
-    !record ||
-    event.type !== "MATCH" ||
-    !canOperateEvent(actor, event)
-  )
+/* ═══════════════════════════════════════════════════════════════
+   ASISTENCIA — uso repetitivo, filas de 44 px, un toque
+   ═══════════════════════════════════════════════════════════════ */
+
+const ATTENDANCE_OPTIONS: Array<{
+  value: AttendanceValue
+  label: string
+  tone: "success" | "danger" | "warning"
+}> = [
+  { value: "PRESENT", label: "Presente", tone: "success" },
+  { value: "ABSENT", label: "Ausente", tone: "danger" },
+  { value: "JUSTIFIED", label: "Justificada", tone: "warning" },
+]
+
+export function AttendancePage() {
+  const { eventId } = useParams()
+  const { event, state } = useEvent(eventId)
+  const {
+    authority,
+    markAttendance,
+    openAttendance,
+    closeAttendance,
+  } = useProduct()
+  const [correction, setCorrection] = useState<{
+    personId: string
+    value: AttendanceValue
+  } | null>(null)
+  const [closing, setClosing] = useState(false)
+  const [closeReason, setCloseReason] = useState("")
+  const [historyOpen, setHistoryOpen] = useState(false)
+
+  if (!event) return <Missing title="Ese evento ya no está" detail="Revisá el enlace." />
+  if (!authority.canManageAttendance(event))
     return (
-      <Empty
-        title="Resultado no disponible"
-        detail="El registro de partido requiere autoridad deportiva sobre este evento."
+      <Missing
+        title="No tomás la asistencia de este evento"
+        detail="La asistencia la toma el entrenador del equipo."
       />
     )
-  const people = state.people.filter(
-    (person) =>
-      person.team === event.team && ["PLAYER", "CAPTAIN"].includes(person.role),
-  )
-  const final = event.record.state === "FINAL"
-  const canEdit =
-    correction ||
-    (!final && ["IN_PROGRESS", "COMPLETED", "ABANDONED"].includes(event.state))
-  function stat(id: string, patch: Partial<PlayerStat>) {
-    setRecord((previous) =>
-      previous
-        ? {
-            ...previous,
-            stats: {
-              ...previous.stats,
-              [id]: {
-                ...(previous.stats[id] || {
-                  played: false,
-                  goals: 0,
-                  assists: 0,
-                }),
-                ...patch,
-              },
-            },
-          }
-        : previous,
-    )
+
+  const roster = useMemo(() => {
+    const ids = new Set<string>()
+    state.teamAssignments
+      .filter((a) => event.targetTeams.includes(a.teamId) && !a.validUntil)
+      .forEach((a) => ids.add(a.personId))
+    event.targetPersonIds.forEach((id) => ids.add(id))
+    return Array.from(ids)
+      .map((id) => state.people.find((person) => person.id === id))
+      .filter((person): person is NonNullable<typeof person> => !!person)
+      .sort((a, b) => a.lastName.localeCompare(b.lastName))
+  }, [event, state])
+
+  const closed = !!event.attendanceClosedAt
+  const unrecorded = roster.filter((person) => !event.attendance[person.id])
+  const counts = {
+    present: roster.filter((person) => event.attendance[person.id] === "PRESENT")
+      .length,
+    absent: roster.filter((person) => event.attendance[person.id] === "ABSENT")
+      .length,
+    justified: roster.filter(
+      (person) => event.attendance[person.id] === "JUSTIFIED",
+    ).length,
+    unrecorded: unrecorded.length,
   }
-  async function save(finalize: boolean) {
-    if (!event || !record) return
-    if (correction && !reason.trim()) {
-      setError("Indicá el motivo de la corrección.")
-      return
-    }
-    setPending(true)
-    await wait()
-    const afterLabel = `GEI ${record.gei}-${record.opponent} (${finalize || final ? "FINAL" : "Borrador"})`
-    if (correction) {
-      const snapshot = { ...record }
-      correctRecord(event.id, afterLabel, reason, (item) => {
-        item.record = {
-          ...snapshot,
-          state: "FINAL",
-          stats:
-            snapshot.status === "PLAYED"
-              ? Object.fromEntries(
-                  Object.entries(snapshot.stats).filter(([, value]) => value.played),
-                )
-              : {},
-        }
-      })
-    } else {
-      updateEvent(
-        event.id,
-        (item) => {
-          item.record = {
-            ...record,
-            state: finalize || final ? "FINAL" : "DRAFT",
-            stats:
-              record.status === "PLAYED"
-                ? Object.fromEntries(
-                    Object.entries(record.stats).filter(
-                      ([, value]) => value.played,
-                    ),
-                  )
-                : {},
-          }
-          if (finalize && !final)
-            item.state = record.status === "ABANDONED" ? "ABANDONED" : "COMPLETED"
-        },
-        finalize ? "Finalizar resultado" : "Guardar resultado borrador",
-        reason,
-      )
-    }
-    setConfirm(false)
-    setCorrection(false)
-    setPending(false)
-    toast(
-      correction
-        ? "Corrección guardada. El resultado sigue siendo Final."
-        : finalize
-          ? "Resultado final registrado"
-          : "Borrador del resultado guardado",
-    )
-  }
+
   return (
-    <>
-      <Header
+    <div className="gei-stack-page mx-auto max-w-4xl">
+      <PageContextHeader
+        context="Asistencia"
+        title={eventName(event)}
         back={`/events/${event.id}`}
-        eyebrow={`${eventName(event)} · ${dateLabel(event.date)}`}
-        title="Resultado y estadísticas"
-        description="Las jugadoras que participaron se registran explícitamente, no desde la asistencia."
+        lead={`${dateLabel(event.date, true)} · ${
+          closed ? "cerrada" : "abierta"
+        }`}
         action={
-          <Badge value={final ? "FINAL" : "DRAFT"}>
-            {final
-              ? correction
-                ? "Corrección · Final"
-                : "Resultado final"
-              : "Borrador"}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <StateBadge value={closed ? "CLOSED" : "OPEN"} emphasis />
+          </div>
         }
       />
-      <div className="max-w-4xl space-y-6">
-        {!canEdit && !final && (
-          <Alert tone="info">
-            El resultado puede registrarse cuando el partido esté en curso,
-            completado o abandonado. Iniciá el evento desde su detalle.
-          </Alert>
-        )}
-        {final && (
-          <Alert tone="success">
-            Resultado final: GEI {event.record.gei} – {event.record.opponent}{" "}
-            {event.opponent}. El partido no se reabre.
-          </Alert>
-        )}
-        <Surface className="space-y-6 p-6">
-          <div className="grid gap-5 sm:grid-cols-3">
-            <TextField
-              label="Goles GEI"
-              type="number"
-              min={0}
-              disabled={!canEdit}
-              value={record.gei}
-              onChange={(event) =>
-                setRecord({
-                  ...record,
-                  gei: Math.max(0, Number(event.target.value)),
-                })
-              }
-            />
-            <TextField
-              label={`Goles ${event.opponent}`}
-              type="number"
-              min={0}
-              disabled={!canEdit}
-              value={record.opponent}
-              onChange={(event) =>
-                setRecord({
-                  ...record,
-                  opponent: Math.max(0, Number(event.target.value)),
-                })
-              }
-            />
-            <Select
-              label="Estado del resultado"
-              value={record.status}
-              disabled={!canEdit || final}
-              onChange={(event) =>
-                setRecord({
-                  ...record,
-                  status: event.target.value as typeof record.status,
-                })
-              }
+
+      {closed && unrecorded.length > 0 && (
+        <Banner tone="attention" title={`${unrecorded.length} quedaron sin registrar`}>
+          <span className="text-ink-strong">
+            Cerrar la planilla no significa que estuvieran ausentes. Esas personas
+            siguen sin registro y podés anotarlas con un motivo.
+          </span>
+        </Banner>
+      )}
+
+      {!event.attendanceOpened && (
+        <Banner tone="attention" title="La planilla todavía no está abierta">
+          <span className="text-ink-strong">
+            Abrila recién cuando estés tomando la asistencia. Nadie ve datos antes
+            de eso.
+          </span>
+        </Banner>
+      )}
+
+      {/* Conteos arriba, fijos y con texto */}
+      <Surface className="grid gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {ATTENDANCE_OPTIONS.map((option) => (
+            <div
+              key={option.value}
+              className="rounded-control border border-line bg-control px-3 py-2.5"
             >
-              <option value="PLAYED">Jugado</option>
-              <option value="FORFEIT">No presentación</option>
-              <option value="ABANDONED">Abandonado</option>
-            </Select>
-          </div>
-          {canEdit ? (
-            <TextArea
-              label="Observaciones"
-              value={record.observations}
-              onChange={(value) =>
-                setRecord({ ...record, observations: value })
-              }
-            />
-          ) : (
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              {record.observations || "Sin observaciones registradas."}
+              <p className="text-meta uppercase tracking-wide text-ink-muted">
+                {option.label}
+              </p>
+              <p className="gei-l4 tabular-nums">
+                {option.value === "PRESENT"
+                  ? counts.present
+                  : option.value === "ABSENT"
+                    ? counts.absent
+                    : counts.justified}
+              </p>
+            </div>
+          ))}
+          <div className="rounded-control border border-line bg-surface px-3 py-2.5">
+            <p className="text-meta uppercase tracking-wide text-ink-muted">
+              Sin registrar
             </p>
-          )}
-        </Surface>
-        {record.status === "PLAYED" && (
-          <>
-            <h2 className="text-sm font-semibold">
-              Participación real · Goles y asistencias
-            </h2>
-            <Surface>
-              <div className="grid grid-cols-[1fr_50px_55px_55px] gap-2 border-b border-border bg-muted/40 p-4 text-[9px] font-semibold text-muted-foreground sm:grid-cols-[1fr_80px_80px_80px]">
-                <span>JUGADORA</span>
-                <span>JUGÓ</span>
-                <span>GOLES</span>
-                <span>ASIST.</span>
-              </div>
-              {people.map((person) => (
-                <div
-                  key={person.id}
-                  className="grid grid-cols-[1fr_50px_55px_55px] items-center gap-2 border-b border-border p-4 last:border-0 sm:grid-cols-[1fr_80px_80px_80px]"
-                >
-                  <span className="text-xs font-medium">{person.name}</span>
-                  <input
-                    aria-label={`${person.name} jugó`}
-                    type="checkbox"
-                    disabled={!canEdit}
-                    checked={record.stats[person.id]?.played || false}
-                    onChange={(event) =>
-                      stat(person.id, {
-                        played: event.target.checked,
-                        ...(!event.target.checked
-                          ? { goals: 0, assists: 0 }
-                          : {}),
-                      })
-                    }
-                    className="size-4 accent-primary"
-                  />
-                  {(["goals", "assists"] as const).map((field) => (
-                    <input
-                      key={field}
-                      aria-label={`${person.name} ${
-                        field === "goals" ? "goles" : "asistencias"
-                      }`}
-                      type="number"
-                      min={0}
-                      value={record.stats[person.id]?.[field] || 0}
-                      disabled={!canEdit || !record.stats[person.id]?.played}
-                      onChange={(event) =>
-                        stat(person.id, {
-                          [field]: Math.max(0, Number(event.target.value)),
-                        })
-                      }
-                      className="w-full rounded-md border border-border px-2 py-1.5 text-xs disabled:bg-muted disabled:text-muted-foreground"
-                    />
-                  ))}
+            <p className="gei-l4 tabular-nums">{counts.unrecorded}</p>
+          </div>
+        </div>
+      </Surface>
+
+      <Surface flush className="overflow-visible">
+        <ul className="grid">
+          {roster.map((person) => {
+            const value = event.attendance[person.id]
+            return (
+              <li
+                key={person.id}
+                className="border-b border-line last:border-b-0"
+              >
+                <div className="flex min-h-14 flex-wrap items-center gap-2 px-3 py-2">
+                  <div className="min-w-40 flex-1">
+                    <p className="gei-item-title truncate">{person.name}</p>
+                    <p className="gei-meta">
+                      {value
+                        ? value === "PRESENT"
+                          ? "Presente"
+                          : value === "ABSENT"
+                            ? "Ausente"
+                            : "Justificada"
+                        : "Sin registrar — no es lo mismo que ausente"}
+                    </p>
+                  </div>
+                  <div className="flex gap-1.5">
+                    {ATTENDANCE_OPTIONS.map((option) => {
+                      const active = value === option.value
+                      return (
+                        <button
+                          key={option.value}
+                          type="button"
+                          aria-pressed={active}
+                          onClick={() => {
+                            if (value) setCorrection({ personId: person.id, value: option.value })
+                            else markAttendance(event.id, person.id, option.value)
+                          }}
+                          className={cx(
+                            "min-h-11 rounded-control border px-3 text-meta font-semibold transition-colors duration-micro",
+                            active
+                              ? option.tone === "success"
+                                ? "border-success bg-success text-white"
+                                : option.tone === "danger"
+                                  ? "border-danger bg-danger text-white"
+                                  : "border-warning bg-warning text-white"
+                              : "border-line-strong bg-surface text-ink-muted hover:border-ink-faint hover:text-ink",
+                          )}
+                        >
+                          {option.label}
+                        </button>
+                      )
+                    })}
+                  </div>
                 </div>
-              ))}
-            </Surface>
-          </>
-        )}
-        {correction && (
-          <TextArea
-            label="Motivo de corrección (obligatorio)"
-            value={reason}
-            onChange={setReason}
-            required
+              </li>
+            )
+          })}
+        </ul>
+      </Surface>
+
+      <Surface className="grid gap-3">
+        <div className="flex items-baseline justify-between gap-3">
+          <h2 className="gei-section-title">Correcciones</h2>
+          <button
+            type="button"
+            onClick={() => setHistoryOpen((value) => !value)}
+            aria-expanded={historyOpen}
+            className="gei-target-sm rounded-control px-2 text-meta font-semibold text-interactive hover:bg-selected-soft"
+          >
+            {historyOpen ? "Ocultar" : `Ver ${event.attendanceHistory.length}`}
+          </button>
+        </div>
+        {historyOpen ? (
+          <HistoryList
+            entries={event.attendanceHistory.map((entry) => ({
+              action: `${state.people.find((person) => person.id === entry.personId)?.name ?? ""}: ${
+                entry.before ?? "sin registrar"
+              } → ${entry.after}`,
+              actor: entry.actor,
+              at: new Date(entry.at).toLocaleString("es-AR"),
+              reason: entry.reason ?? null,
+            }))}
+            emptyText="Todavía no hubo correcciones."
           />
+        ) : (
+          <p className="gei-meta">
+            Cada corrección pide un motivo y queda con nombre, fecha y valor
+            anterior.
+          </p>
         )}
-        {error && <Alert tone="error">{error}</Alert>}
-        <div className="sticky bottom-20 flex justify-end gap-3 rounded-xl border border-border bg-card p-4 lg:bottom-4">
-          {final && !correction ? (
-            <Button variant="secondary" onClick={() => setCorrection(true)}>
-              Corregir resultado
+      </Surface>
+
+      <div className="flex flex-wrap gap-2">
+        {!event.attendanceOpened ? (
+          <Button variant="primary" onClick={() => void openAttendance(event.id)}>
+            Abrir asistencia
+          </Button>
+        ) : !closed ? (
+          <Button variant="danger" onClick={() => setClosing(true)}>
+            <Lock size={16} aria-hidden />
+            Cerrar asistencia
+          </Button>
+        ) : (
+          <Banner tone="success" title="La planilla está cerrada">
+            <span className="text-ink-strong">
+              Podés seguir anotando correcciones con motivo. No se pierde nada.
+            </span>
+          </Banner>
+        )}
+      </div>
+
+      {closing && (
+        <ConfirmDialog
+          title="Cerrar la asistencia"
+          consequence={
+            unrecorded.length > 0 ? (
+              <>
+                Quedan {unrecorded.length} personas sin registrar. No se van a
+                marcar como ausentes: van a quedar explícitamente sin registro.
+              </>
+            ) : (
+              "Después de cerrar, cada cambio necesita un motivo y queda registrado."
+            )
+          }
+          confirmLabel="Cerrar asistencia"
+          requireReason
+          pendingLabel="Cerrando"
+          onClose={() => setClosing(false)}
+          onConfirm={(reason) => {
+            void closeAttendance(event.id, reason)
+            setClosing(false)
+          }}
+          extra={
+            <TextArea
+              label="Motivo del cierre"
+              rows={2}
+              value={closeReason}
+              onChange={(event) => setCloseReason(event.target.value)}
+              hint="Queda en el historial de la planilla."
+            />
+          }
+        />
+      )}
+
+      {correction && (
+        <CorrectionDialog
+          personName={
+            state.people.find((person) => person.id === correction.personId)?.name ??
+            ""
+          }
+          previous={
+            event.attendance[correction.personId as string] ?? null
+          }
+          next={correction.value}
+          onClose={() => setCorrection(null)}
+          onConfirm={(reason) => {
+            markAttendance(
+              event.id,
+              correction.personId,
+              correction.value,
+              reason,
+            )
+            setCorrection(null)
+          }}
+        />
+      )}
+    </div>
+  )
+}
+
+function CorrectionDialog({
+  personName,
+  previous,
+  next,
+  onClose,
+  onConfirm,
+}: {
+  personName: string
+  previous: AttendanceValue | null
+  next: AttendanceValue
+  onClose: () => void
+  onConfirm: (reason: string) => void
+}) {
+  const label = (value: AttendanceValue | null) =>
+    value === "PRESENT"
+      ? "Presente"
+      : value === "ABSENT"
+        ? "Ausente"
+        : value === "JUSTIFIED"
+          ? "Justificada"
+          : "Sin registrar"
+  return (
+    <ConfirmDialog
+      title={`Cambiar la asistencia de ${personName}`}
+      consequence={`${label(previous)} → ${label(next)}. Se guarda el valor anterior.`}
+      confirmLabel="Guardar corrección"
+      requireReason
+      reasonLabel="Por qué cambiás el valor"
+      onClose={onClose}
+      onConfirm={onConfirm}
+    />
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESULTADO — editable sólo cuando el lifecycle lo permite
+   ═══════════════════════════════════════════════════════════════ */
+
+export function MatchRecordPage() {
+  const { eventId } = useParams()
+  const { event, state } = useEvent(eventId)
+  const { authority, finalizeRecord, correctRecord, transitionEvent } =
+    useProduct()
+  const [form, setForm] = useState({
+    gei: event?.record.gei ?? 0,
+    opponent: event?.record.opponent ?? 0,
+    observations: event?.record.observations ?? "",
+    status: event?.record.status ?? "PLAYED",
+  })
+  const [editing, setEditing] = useState(false)
+  const [finalizing, setFinalizing] = useState(false)
+  const [correcting, setCorrecting] = useState(false)
+  const [error, setError] = useState("")
+  const [historyOpen, setHistoryOpen] = useState(false)
+
+  if (!event)
+    return <Missing title="Ese partido ya no está" detail="Revisá el enlace." />
+  if (event.type !== "MATCH")
+    return (
+      <Missing
+        title="Este evento no tiene resultado"
+        detail="Sólo los partidos tienen acta de resultado."
+      />
+    )
+  if (!authority.canManageRecord(event))
+    return (
+      <Missing
+        title="No cargás el resultado de este partido"
+        detail="El acta la completa el entrenador del equipo."
+      />
+    )
+
+  const canEdit = event.state === "IN_PROGRESS"
+  const isFinal = event.record.state === "FINAL"
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-3xl">
+      <PageContextHeader
+        context="Resultado"
+        title={eventName(event)}
+        back={`/events/${event.id}`}
+        lead={dateLabel(event.date, true)}
+        action={<StateBadge value={isFinal ? "FINAL" : "DRAFT"} emphasis />}
+      />
+
+      {!isFinal && (
+        <Banner tone="neutral" title="Esto es un borrador, no un resultado">
+          <span className="text-ink-strong">
+            Mientras no lo finalices no cuenta como resultado oficial ni aparece
+            en los informes.
+          </span>
+        </Banner>
+      )}
+
+      {isFinal && (
+        <Banner tone="success" title="Resultado oficial">
+          <span className="text-ink-strong">
+            {dateLabel(event.date, true)} · cargado por el club. Corregirlo pide
+            un motivo y queda registrado.
+          </span>
+        </Banner>
+      )}
+
+      {error && (
+        <Banner tone="danger" title="No pudimos guardar el acta">
+          <span className="text-ink-strong">{error}</span>
+        </Banner>
+      )}
+
+      <Surface className="grid gap-4">
+        <p className="gei-l5 tabular-nums">
+          {form.gei}–{form.opponent}
+        </p>
+        <RadioGroup
+          legend="Situación del partido"
+          name="record-status"
+          columns={3}
+          value={form.status}
+          onChange={(value) =>
+            setForm((current) => ({
+              ...current,
+              status: value,
+              opponent: value === "FORFEIT" ? 3 : current.opponent,
+            }))
+          }
+          options={[
+            { value: "PLAYED", label: "Jugado" },
+            { value: "FORFEIT", label: "No presentación" },
+            { value: "ABANDONED", label: "Suspendido" },
+          ]}
+        />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="grid gap-1.5">
+            <span className="text-body font-semibold">Goles GEI</span>
+            <input
+              type="number"
+              min={0}
+              max={99}
+              value={form.gei}
+              disabled={!editing}
+              onChange={(next) =>
+                setForm((current) => ({ ...current, gei: Number(next.target.value) }))
+              }
+              className="gei-target rounded-control border border-line-strong bg-surface px-3 text-body tabular-nums disabled:bg-control"
+            />
+          </label>
+          <label className="grid gap-1.5">
+            <span className="text-body font-semibold">Goles del rival</span>
+            <input
+              type="number"
+              min={0}
+              max={99}
+              value={form.opponent}
+              disabled={!editing}
+              onChange={(next) =>
+                setForm((current) => ({
+                  ...current,
+                  opponent: Number(next.target.value),
+                }))
+              }
+              className="gei-target rounded-control border border-line-strong bg-surface px-3 text-body tabular-nums disabled:bg-control"
+            />
+          </label>
+        </div>
+        <label className="grid gap-1.5">
+          <span className="text-body font-semibold">Cómo se vio</span>
+          <textarea
+            rows={3}
+            value={form.observations}
+            disabled={!editing}
+            onChange={(next) =>
+              setForm((current) => ({ ...current, observations: next.target.value }))
+            }
+            className="resize-y rounded-control border border-line-strong bg-surface px-3 py-2.5 text-body disabled:bg-control"
+          />
+        </label>
+
+        {!isFinal && !editing && (
+          <Banner tone="attention" title="El partido todavía no terminó">
+            <span className="text-ink-strong">
+              El acta se habilita cuando el partido pasa a “En curso”. Si el
+              partido ya se jugó, marcá el evento como terminado.
+            </span>
+          </Banner>
+        )}
+
+        <div className="flex flex-wrap gap-2">
+          {canEdit && !isFinal && !editing && (
+            <Button variant="secondary" onClick={() => setEditing(true)}>
+              Cargar el resultado
             </Button>
-          ) : (
+          )}
+          {canEdit && !isFinal && editing && (
             <>
               <Button
-                variant="secondary"
-                disabled={!canEdit || pending}
-                onClick={() =>
-                  correction ? setCorrection(false) : save(false)
-                }
+                variant="primary"
+                onClick={() => setFinalizing(true)}
+                disabled={form.gei === event.record.gei && form.opponent === event.record.opponent && !form.observations.trim()}
               >
-                {correction ? "Volver" : "Guardar borrador"}
+                Finalizar resultado
               </Button>
-              <Button
-                disabled={!canEdit || pending || (correction && !reason.trim())}
-                onClick={() => (correction ? save(true) : setConfirm(true))}
-              >
-                {pending
-                  ? "Guardando…"
-                  : correction
-                    ? "Guardar corrección"
-                    : "Finalizar resultado"}
+              <Button variant="quiet" onClick={() => setEditing(false)}>
+                Cancelar
               </Button>
             </>
+          )}
+          {isFinal && (
+            <Button variant="danger" onClick={() => setCorrecting(true)}>
+              Corregir el resultado
+            </Button>
           )}
         </div>
-      </div>
-      {confirm && (
-        <Modal
-          title="Finalizar resultado"
-          onClose={() => !pending && setConfirm(false)}
-          footer={
-            <>
-              <Button variant="secondary" onClick={() => setConfirm(false)}>
-                Volver
-              </Button>
-              <Button disabled={pending} onClick={() => save(true)}>
-                {pending ? "Finalizando…" : "Confirmar resultado final"}
-              </Button>
-            </>
-          }
-        >
-          <p className="text-center text-3xl font-bold">
-            GEI {record.gei} – {record.opponent} {event.opponent}
+      </Surface>
+
+      <Surface className="grid gap-3">
+        <div className="flex items-baseline justify-between gap-3">
+          <h2 className="gei-section-title">Historial del acta</h2>
+          <button
+            type="button"
+            onClick={() => setHistoryOpen((value) => !value)}
+            aria-expanded={historyOpen}
+            className="gei-target-sm rounded-control px-2 text-meta font-semibold text-interactive hover:bg-selected-soft"
+          >
+            {historyOpen ? "Ocultar" : `Ver ${event.recordHistory.length}`}
+          </button>
+        </div>
+        {historyOpen ? (
+          <HistoryList
+            entries={event.recordHistory.map((entry) => ({
+              action: "Resultado",
+              actor: entry.actor,
+              at: new Date(entry.at).toLocaleString("es-AR"),
+              before: entry.before,
+              after: entry.after,
+              reason: entry.reason,
+            }))}
+            emptyText="El acta nunca se corrigió."
+          />
+        ) : (
+          <p className="gei-meta">
+            Cada corrección guarda el marcador anterior, el motivo, quién lo hizo y
+            cuándo.
           </p>
-          <p className="mt-5 text-xs leading-relaxed text-muted-foreground">
-            El resultado quedará como Final y el evento pasará a{" "}
-            {record.status === "ABANDONED" ? "Abandonado" : "Finalizado"}. Sólo
-            podrán hacerse correcciones explícitas con un motivo.
-          </p>
-          {error && (
-            <div className="mt-4">
-              <Alert tone="error">{error}</Alert>
-            </div>
-          )}
-        </Modal>
+        )}
+      </Surface>
+
+      {finalizing && (
+        <ConfirmDialog
+          title="Finalizar el resultado"
+          consequence="Después de finalizar, el acta no se edita más: cualquier cambio pasa por una corrección con motivo."
+          confirmLabel="Finalizar resultado"
+          tone="attention"
+          pendingLabel="Finalizando"
+          onClose={() => setFinalizing(false)}
+          onConfirm={async () => {
+            try {
+              await finalizeRecord(event.id, { ...event.record, ...form }, "Cierre del acta")
+              setFinalizing(false)
+              setEditing(false)
+            } catch {
+              setError("No pudimos finalizar. Volvé a intentar.")
+              setFinalizing(false)
+            }
+          }}
+        />
       )}
-    </>
+
+      {correcting && (
+        <CorrectionRecordDialog
+          before={`${event.record.gei}-${event.record.opponent}`}
+          next={`${form.gei}-${form.opponent}`}
+          onClose={() => setCorrecting(false)}
+          onConfirm={(reason) => {
+            correctRecord(event.id, { ...event.record, ...form }, reason)
+            setCorrecting(false)
+          }}
+        />
+      )}
+
+      {event.state === "SCHEDULED" && authority.canEditEvent(event) && (
+        <Surface className="grid gap-2">
+          <p className="gei-body-strong">Este partido todavía no empezó</p>
+          <p className="gei-meta">
+            Pasalo a “En curso” cuando empiece para poder cargar el resultado.
+          </p>
+          <Button
+            variant="secondary"
+            onClick={() =>
+              void transitionEvent(event.id, "IN_PROGRESS", "Inicio del partido")
+            }
+          >
+            <Unlock size={16} aria-hidden />
+            Marcar como en curso
+          </Button>
+        </Surface>
+      )}
+
+      {event.state === "SCHEDULED" && (
+        <p className="gei-meta flex items-center gap-1.5">
+          <CheckCircle2 size={14} aria-hidden />
+          {event.record.state === "DRAFT"
+            ? "Todavía no hay resultado oficial."
+            : ""}
+        </p>
+      )}
+    </div>
+  )
+}
+
+function CorrectionRecordDialog({
+  before,
+  next,
+  onClose,
+  onConfirm,
+}: {
+  before: string
+  next: string
+  onClose: () => void
+  onConfirm: (reason: string) => void
+}) {
+  return (
+    <ConfirmDialog
+      title="Corregir el resultado"
+      consequence={`${before} → ${next}. El resultado anterior queda guardado con el motivo. Esta corrección queda a la vista.`}
+      confirmLabel="Guardar corrección"
+      requireReason
+      reasonLabel="Por qué corregís el resultado"
+      onClose={onClose}
+      onConfirm={onConfirm}
+    />
   )
 }

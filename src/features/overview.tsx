@@ -1,990 +1,1371 @@
-import { useState } from "react"
-import { Link, useNavigate, useParams } from "react-router"
+import { useMemo, useState } from "react"
+import { Link, useParams } from "react-router"
 import {
   ArrowRight,
-  Plus,
+  CalendarDays,
+  CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  CalendarDays,
-  Clock3,
-  AlertCircle,
-  ClipboardList,
-  CheckCircle2,
-  Megaphone,
-  Users,
+  Flag,
   MapPin,
-  List,
-  Grid3X3,
-  Search,
-  Phone,
-  Mail,
+  Search as SearchIcon,
+  Dumbbell,
 } from "lucide-react"
 import { useProduct } from "../mock/store"
 import {
-  dateLabel,
-  eventName,
-  labels,
-  availabilityLabel,
-  eventTargetsText,
-} from "../mock/model"
-import { currentRoles } from "../mock/permissions"
-import { todayIso, todayLabel } from "../mock/clock"
-import { deriveEligibility } from "../mock/eligibility"
-import { stateText } from "../shared/states"
-import { VasInline } from "../shared/vas"
+  addDays,
+  todayIso,
+} from "../mock/clock"
 import {
-  Header,
-  Section,
-  Surface,
-  EventRow,
-  TextLink,
-  Badge,
-  Button,
+  activeRoleAssignments,
+  activeTeamAssignments,
+  eventsInScopeOfPerson,
+  guardiansOf,
+  profileCompleteness,
+  roleScopeLabel,
+  selectionConflicts,
+  visibleEvents,
+  CONFLICT_TEXT,
+  conflictCodesFor,
+} from "../mock/derive"
+import {
+  dateLabel,
+  dateTimeLabel,
+  eventAvailabilityView,
+  eventName,
+  eventTargetsText,
+  teamName,
+  type Event,
+} from "../mock/model"
+import {
   Avatar,
-  RowLink,
-  Select,
+  Button,
   Empty,
-  IconButton,
-  TextField,
+  FilterChip,
+  RowLink,
+  RowStatic,
+  SegmentedControl,
+  Select,
+  StateBadge,
+  Surface,
+  Tag,
+  TextLink,
+  cx,
 } from "../shared/ui"
+import { PageContextHeader, DetailSection } from "../shared/patterns"
+import { VasControl, VasCompact } from "../shared/vas"
+import { useQueryState } from "../shared/use-query-state"
 
-export function Home() {
-  const { state, actor, capabilities, guardianChildren } = useProduct()
-  const myTeam = state.teams.find((team) => team.id === actor.team)
-  const teamRoster = state.people.filter(
-    (person) =>
-      person.team === actor.team && ["PLAYER", "CAPTAIN"].includes(person.role),
+/* ═══════════════════════════════════════════════════════════════
+   HOME
+   SITUACIÓN → ACCIÓN → INFORMACIÓN. Máximo 3 ítems de atención.
+   ═══════════════════════════════════════════════════════════════ */
+
+interface AttentionItem {
+  id: string
+  reason: string
+  consequence: string
+  action: { label: string; to: string }
+  urgency: "now" | "soon" | "later"
+}
+
+function buildAttention(): AttentionItem[] {
+  const { state, actor, authority, childId } = useProduct()
+  const today = todayIso()
+  const subject = childId ?? actor.id
+  const scoped = visibleEvents(state, actor.id, childId).filter(
+    (event) => event.state !== "CANCELLED" && event.state !== "COMPLETED",
   )
-  const captain = teamRoster.find((person) => person.role === "CAPTAIN")
-  const scope = state.events.filter(
-    (event) =>
-      event.team === actor.team || event.clubWide || capabilities.official,
-  )
-  const todayIsoValue = todayIso()
-  const today = scope.filter(
-    (event) => event.date === todayIsoValue && event.state === "SCHEDULED",
-  )
-  const upcoming = scope
-    .filter(
-      (event) =>
-        event.date > todayIsoValue &&
-        !["CANCELLED", "DRAFT"].includes(event.state),
+  const items: AttentionItem[] = []
+
+  if (authority.canManagePeople) {
+    const incomplete = state.people.filter(
+      (person) => !profileCompleteness(person).complete,
     )
-    .sort((first, second) => first.date.localeCompare(second.date))
-  const nextMatch = upcoming.find(
-    (event) => event.type === "MATCH" && event.state === "SCHEDULED",
-  )
-  const attention = scope.flatMap((event) => {
-    const rows: {
-      title: string
-      detail: string
-      route: string
-      kind: string
-      action: string
-    }[] = []
-    const needsReconfirmation = capabilities.availability ? !!event.availability[actor.id] && event.availability[actor.id].revision !== event.revision : Object.values(event.availability).some(response => response.revision !== event.revision)
-    if (event.state === "SCHEDULED" && needsReconfirmation)
-      rows.push({
-        title: "Nuevo horario, nuevas confirmaciones",
-        detail: `${eventName(event)} · ${dateLabel(event.date)} · ${event.time}`,
-        route: `/events/${event.id}${
-          capabilities.availability ? "/availability" : ""
-        }`,
-        kind: "time",
-        action: capabilities.availability ? "Reconfirmar" : "Ver partido",
+    if (incomplete.length > 0)
+      items.push({
+        id: "profile-incomplete",
+        reason: `${incomplete.length} ${
+          incomplete.length === 1 ? "persona tiene" : "personas tienen"
+        } el perfil incompleto.`,
+        consequence:
+          "No se pueden asignar a un equipo con la información incompleta.",
+        action: {
+          label: "Ver esas personas",
+          to: "/management/people?profileStatus=incomplete",
+        },
+        urgency: "now",
       })
-    const conflicts = (event.published || []).filter((id) => {
-      const person = state.people.find((p) => p.id === id)
-      if (!person) return true
-      if (deriveEligibility(state.eligibilityConstraints, id) !== "ELIGIBLE") return true
-      return person.team !== event.team
+    const noMembership = state.people.filter(
+      (person) =>
+        person.account === "ACTIVE" &&
+        !state.memberships.some(
+          (item) => item.personId === person.id && !item.validUntil,
+        ),
+    )
+    if (noMembership.length > 0)
+      items.push({
+        id: "no-membership",
+        reason: `${noMembership.length} ${
+          noMembership.length === 1 ? "cuenta activa sin" : "cuentas activas sin"
+        } pertenencia vigente.`,
+        consequence: "Sin pertenencia no pueden entrar a la temporada.",
+        action: { label: "Abrir personas", to: "/management/people" },
+        urgency: "now",
+      })
+    const pending = state.people.filter((person) => person.account === "PENDING")
+    if (pending.length > 0)
+      items.push({
+        id: "pending-accounts",
+        reason: `${pending.length} ${
+          pending.length === 1 ? "cuenta espera" : "cuentas esperan"
+        } activación.`,
+        consequence: "Hasta que activen la cuenta no pueden entrar al sistema.",
+        action: { label: "Emitir códigos", to: "/management/people?account=PENDING" },
+        urgency: "soon",
+      })
+  }
+
+  if (authority.canManageEligibility) {
+    const blocked = state.eligibilityConstraints.filter(
+      (constraint) => constraint.state === "BLOCKED" && !constraint.validUntil,
+    )
+    if (blocked.length > 0)
+      items.push({
+        id: "blocked",
+        reason: `${blocked.length} ${
+          blocked.length === 1 ? "restricción vigente" : "restricciones vigentes"
+        } sin resolver.`,
+        consequence:
+          "Las personas afectadas no pueden jugar hasta que se levante el bloqueo.",
+        action: { label: "Revisar elegibilidad", to: "/management/people" },
+        urgency: "now",
+      })
+  }
+
+  // Reconfirmación pendiente de quien mira (sólo si puede responder).
+  const canRespond =
+    authority.canRespondOwn ||
+    (childId !== null && authority.canRespondForChild(childId))
+  const subjectEvents = canRespond
+    ? scoped.filter((event) => event.state === "SCHEDULED")
+    : []
+  const stale = subjectEvents.filter(
+    (event) => eventAvailabilityView(event, subject) === "NEEDS_RECONFIRMATION",
+  )
+  if (stale.length > 0)
+    items.push({
+      id: "reconfirm",
+      reason:
+        stale.length === 1
+          ? "Cambió el horario de un evento al que respondiste."
+          : `Cambió el horario de ${stale.length} eventos a los que respondiste.`,
+      consequence: "Tu respuesta anterior ya no cuenta hasta que confirmes de nuevo.",
+      action: {
+        label: "Volver a confirmar",
+        to: `/events/${stale[0].id}`,
+      },
+      urgency: "now",
     })
-    if (conflicts.length && capabilities.sport)
-      rows.push({
-        title: "Convocatoria con situaciones para revisar",
-        detail: `${eventName(event)} · ${conflicts.length} jugadora con conflicto actual`,
-        route: `/events/${event.id}/selection`,
-        kind: "selection",
-        action: "Revisar",
+
+  const unanswered = subjectEvents.filter(
+    (event) => eventAvailabilityView(event, subject) === "NO_RESPONSE" && event.date >= today,
+  )
+  if (unanswered.length > 0)
+    items.push({
+      id: "unanswered",
+      reason:
+        unanswered.length === 1
+          ? "Hay un evento próximo sin tu respuesta."
+          : `Hay ${unanswered.length} eventos próximos sin tu respuesta.`,
+      consequence: "La entrenadora necesita saber quién viene.",
+      action: { label: "Responder", to: `/events/${unanswered[0].id}` },
+      urgency: "soon",
+    })
+
+  // Sólo para quien convoca: conflictos derivados en la convocatoria publicada.
+  if (authority.coachTeamIds.length > 0) {
+    const conflictEvents = scoped.filter((event) => {
+      if (event.type !== "MATCH" || !event.published) return false
+      if (!authority.isCoachOfTeam(event.targetTeams[0] ?? "")) return false
+      return selectionConflicts(state, event).length > 0
+    })
+    if (conflictEvents.length > 0) {
+      const event = conflictEvents[0]
+      items.push({
+        id: "selection-conflict",
+        reason:
+          conflictEvents.length === 1
+            ? "Hay 1 convocatoria con una persona que no puede jugar."
+            : `Hay ${conflictEvents.length} convocatorias con gente que no puede jugar.`,
+        consequence:
+          "La convocatoria publicada sigue en pie, pero conviene revisarla antes del partido.",
+        action: {
+          label: "Revisar convocatoria",
+          to: `/events/${event.id}/selection`,
+        },
+        urgency: "now",
       })
-    if (event.attendanceOpened && !event.attendanceClosed && capabilities.sport)
-      rows.push({
-        title: "La asistencia sigue abierta",
-        detail: `${event.title} · ${state.people.filter((person) => person.team === event.team && ["PLAYER", "CAPTAIN"].includes(person.role) && !event.attendance[person.id]).length} jugadoras sin registrar`,
-        route: `/events/${event.id}/attendance`,
-        kind: "attendance",
-        action: "Registrar",
-      })
-    if (
-      event.state === "IN_PROGRESS" &&
-      event.record.state !== "FINAL" &&
-      capabilities.sport
+    }
+  }
+
+  const order: Record<AttentionItem["urgency"], number> = {
+    now: 0,
+    soon: 1,
+    later: 2,
+  }
+  return items.sort((a, b) => order[a.urgency] - order[b.urgency]).slice(0, 3)
+}
+
+function AttentionSection() {
+  const items = buildAttention()
+  if (items.length === 0)
+    return (
+      <section className="grid gap-3">
+        <h2 className="gei-section-title">Necesita tu atención</h2>
+        <div className="flex flex-wrap items-center gap-3 rounded-surface border border-success-line bg-success-soft px-4 py-3.5">
+          <CheckCircle2 size={19} aria-hidden className="text-success" />
+          <div>
+            <p className="gei-body-strong text-success">No hay nada pendiente</p>
+            <p className="gei-meta text-ink-strong">
+              Todo lo que dependía de vos está resuelto.
+            </p>
+          </div>
+        </div>
+      </section>
     )
-      rows.push({
-        title: "Falta completar el resultado",
-        detail: `${eventName(event)} · ${dateLabel(event.date)}`,
-        route: `/events/${event.id}/match-record`,
-        kind: "record",
-        action: "Completar",
-      })
-    return rows
-  })
-  const visibleAttention = attention.slice(0, 3)
-  const pendingVas = [...today, ...upcoming].find(
-    (event) =>
-      event.state === "SCHEDULED" &&
-      capabilities.availability &&
-      (!event.availability[actor.id] ||
-        event.availability[actor.id].revision !== event.revision),
+
+  return (
+    <section className="grid gap-3">
+      <div className="flex items-baseline justify-between gap-3">
+        <h2 className="gei-section-title">Necesita tu atención</h2>
+        <p className="gei-meta">{items.length} {items.length === 1 ? "cosa" : "cosas"}</p>
+      </div>
+      <ul className="grid gap-3">
+        {items.map((item, index) => (
+          <li
+            key={item.id}
+            className={cx(
+              "grid gap-3 rounded-surface border p-4",
+              item.urgency === "now"
+                ? "border-attention-line bg-attention-soft"
+                : "border-line bg-surface",
+            )}
+          >
+            <div className="flex items-start gap-3">
+              <span
+                aria-hidden
+                className={cx(
+                  "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-pill text-micro font-bold",
+                  item.urgency === "now"
+                    ? "bg-attention text-white"
+                    : "bg-neutral-soft text-ink-muted",
+                )}
+              >
+                {index + 1}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="gei-body-strong text-ink">{item.reason}</p>
+                <p className="gei-body mt-0.5 text-ink-strong">{item.consequence}</p>
+              </div>
+            </div>
+            <div className="pl-8">
+              <Link
+                to={item.action.to}
+                className={cx(
+                  "gei-target inline-flex items-center gap-1.5 rounded-control px-3.5 py-2 text-meta font-semibold transition-colors",
+                  index === 0
+                    ? "bg-interactive text-white hover:bg-interactive-hover"
+                    : "border border-line-strong bg-surface text-ink hover:border-ink-faint",
+                )}
+              >
+                {item.action.label}
+                <ArrowRight size={14} aria-hidden />
+              </Link>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+function EventLine({ event, showDate = true }: { event: Event; showDate?: boolean }) {
+  const { state } = useProduct()
+  const terminal = ["CANCELLED", "COMPLETED", "ABANDONED", "POSTPONED"].includes(
+    event.state,
   )
   return (
-    <>
-      <Header
-        eyebrow={todayLabel()}
-        title={`Buen día, ${actor.name.split(" ")[0]}`}
-        description={
-          capabilities.sport
-            ? "Este es el día a día de tu equipo. Vamos a lo importante."
-            : "Todo lo que necesitás saber para tu día en GEI."
-        }
-        action={
-          (capabilities.sport || capabilities.official) && (
-            <Link to="/events/new">
-              <Button>
-                <Plus size={16} />
-                Crear evento
-              </Button>
-            </Link>
-          )
-        }
-      />
-      <div className="mb-7 flex items-center gap-2 text-[11px] text-muted-foreground">
-        <span className="rounded-md border border-border bg-card px-2.5 py-1.5 font-medium text-foreground">
-          {actor.team ? myTeam?.name : "GEI Hockey"}
+    <RowLink
+      to={`/events/${event.id}`}
+      title={eventName(event)}
+      detail={
+        <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+          <span>{eventTargetsText(state, event)}</span>
+          <span aria-hidden>·</span>
+          <span className="inline-flex items-center gap-1">
+            <MapPin size={11} aria-hidden />
+            {venueName(state, event)}
+          </span>
         </span>
-        <span>Temporada 2026</span>
-        <span className="mx-1 size-1 rounded-full bg-border" />
-        <span>{labels[actor.role]}</span>
-      </div>
-      {guardianChildren.length === 1 && (
-        <p role="status" className="gei-body mb-5 text-muted-foreground">
-          Viendo a {state.people.find((p) => p.id === guardianChildren[0])?.name}
-        </p>
-      )}
-      {guardianChildren.length > 1 && (
-        <label className="mb-5 block max-w-xs text-xs font-medium">
-          <span className="gei-meta">Viendo a</span>
-          <select
-            aria-label="Viendo a"
-            className="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2.5 text-[13px]"
-            defaultValue={guardianChildren[0]}
+      }
+      meta={
+        <span className="grid gap-1">
+          {terminal && <StateBadge value={event.state} />}
+          <span
+            className={cx(
+              "block text-body font-semibold tabular-nums",
+              event.state === "POSTPONED" && "text-ink-muted",
+            )}
           >
-            {guardianChildren.map((id) => (
-              <option key={id} value={id}>
-                {state.people.find((p) => p.id === id)?.name ?? id}
-              </option>
-            ))}
-          </select>
-        </label>
-      )}
-      <div
-        className={`grid items-start gap-8 ${
-          actor.team ? "xl:grid-cols-[minmax(0,1fr)_300px]" : ""
-        }`}
-      >
-        <div className="space-y-8">
-          <Section
-            title="Necesita tu atención"
-            aside={
-              <span className="rounded-md bg-warning-soft px-2 py-0.5 text-[10px] font-semibold text-warning">
-                {visibleAttention.length} pendientes
-              </span>
-            }
-          >
-            <Surface>
-              {visibleAttention.length ? (
-                visibleAttention.map((item, index) => (
-                  <Link
-                    key={index}
-                    to={item.route}
-                    className="group flex items-center gap-3.5 border-b border-border px-5 py-[18px] last:border-b-0 hover:bg-warning-soft/30"
-                  >
-                    <span
-                      className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${
-                        item.kind === "time"
-                          ? "bg-warning-soft text-warning"
-                          : "bg-primary-soft text-primary"
-                      }`}
-                    >
-                      {item.kind === "time" ? (
-                        <Clock3 size={17} />
-                      ) : item.kind === "attendance" ? (
-                        <ClipboardList size={17} />
-                      ) : (
-                        <AlertCircle size={17} />
-                      )}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[12px] font-semibold">{item.title}</p>
-                      <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground">
-                        {item.detail}
-                      </p>
-                    </div>
-                    <span className="hidden items-center gap-1 text-[11px] font-semibold text-primary sm:flex">
-                      {item.action}
-                      <ArrowRight size={13} />
-                    </span>
-                    <ChevronRight
-                      size={15}
-                      className="text-muted-foreground sm:hidden"
-                    />
-                  </Link>
-                ))
-              ) : (
-                <div className="flex items-center gap-3 p-5 text-sm">
-                  <CheckCircle2 size={18} className="text-success" />
-                  Nada pendiente.
-                </div>
-              )}
-            </Surface>
-          </Section>
-          {pendingVas && (
-            <section aria-label="Responder disponibilidad">
-              <VasInline event={pendingVas} />
-            </section>
+            {event.state === "POSTPONED" ? "A definir" : event.time}
+          </span>
+          {showDate && (
+            <span className="gei-meta tabular-nums">{dateLabel(event.date)}</span>
           )}
-          <Section
-            title="Hoy"
-            aside={
-              <span className="text-[11px] text-muted-foreground">
-                {dateLabel(todayIsoValue)}
-              </span>
-            }
-          >
-            {today.length ? (
-              <Surface>
-                {today.map((event) => (
-                  <EventRow key={event.id} event={event} showDate={false} />
-                ))}
-                <div className="flex items-center gap-2 border-t border-border bg-muted/30 px-5 py-3 text-[10px] text-muted-foreground">
-                  <Clock3 size={12} />
-                  Tu próxima actividad comienza a las {today[0].time}.
-                </div>
-              </Surface>
-            ) : (
-              <Empty
-                title="Hoy no hay actividades"
-                detail="Podés revisar los próximos eventos de tu equipo."
-              />
-            )}
-          </Section>
-          <Section
-            title="Próximamente"
-            aside={<TextLink to="/calendar">Ver calendario</TextLink>}
-          >
-            <Surface>
-              {upcoming.slice(0, 4).map((event) => (
-                <EventRow key={event.id} event={event} />
-              ))}
-            </Surface>
-          </Section>
-          <Section
-            title="Comunicaciones recientes"
-            aside={<TextLink to="/communication">Ver todas</TextLink>}
-          >
-            <Surface>
-              {state.announcements
-                .filter((item) => item.state === "PUBLISHED")
-                .slice(0, 2)
-                .map((item) => (
-                  <RowLink
-                    key={item.id}
-                    to={`/announcements/${item.id}`}
-                    title={item.title}
-                    detail={`${item.publisher} · ${dateLabel(item.date)}`}
-                    icon={
-                      <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-                        <Megaphone size={17} />
-                      </span>
-                    }
-                  />
-                ))}
-            </Surface>
-          </Section>
-        </div>
-        {actor.team && (
-          <aside className="space-y-6">
-            <Surface>
-              <div className="border-b border-border px-5 py-4">
-                <span className="text-[10px] font-semibold tracking-[1px] text-muted-foreground">
-                  TU EQUIPO
-                </span>
-              </div>
-              <div className="p-5">
-                <div className="flex items-center gap-3">
-                  <span className="flex size-12 items-center justify-center rounded-xl bg-primary text-lg font-bold text-white">
-                    6<span className="ml-0.5 text-xs">A</span>
-                  </span>
-                  <div>
-                    <h3 className="text-[16px] font-semibold">
-                      {myTeam?.name}
-                    </h3>
-                    <p className="mt-1 text-[11px] text-muted-foreground">
-                      Temporada 2026
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-5 flex items-center gap-2 text-[11px] text-muted-foreground">
-                  <Users size={14} />
-                  <span>{teamRoster.length} jugadoras en el equipo</span>
-                </div>
-                <div className="mt-4 flex -space-x-1.5">
-                  {teamRoster.slice(0, 5).map((person) => (
-                    <span
-                      key={person.id}
-                      className="rounded-full border-2 border-card"
-                    >
-                      <Avatar name={person.name} size="sm" blue />
-                    </span>
-                  ))}
-                  <span className="flex size-9 items-center justify-center rounded-full border-2 border-card bg-muted text-[9px] text-muted-foreground">
-                    +{Math.max(0, teamRoster.length - 5)}
-                  </span>
-                </div>
-                <Link
-                  to={`/teams/${actor.team}`}
-                  className="mt-5 flex items-center justify-between border-t border-border pt-4 text-[11px] font-semibold text-primary"
-                >
-                  Ver equipo
-                  <ArrowRight size={14} />
-                </Link>
-              </div>
-            </Surface>
-            {nextMatch && (
-              <div className="rounded-xl border border-primary/10 bg-primary-soft/60 p-5">
-                <span className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.8px] text-primary">
-                  <FlagIcon />
-                  Próximo partido
-                </span>
-                <h3 className="text-[16px] font-semibold">
-                  GEI{" "}
-                  <span className="mx-1 font-normal text-muted-foreground">
-                    vs.
-                  </span>{" "}
-                  {nextMatch.opponent}
-                </h3>
-                <p className="mt-2 text-[11px] text-muted-foreground">
-                  {nextMatch.competition}
-                </p>
-                <div className="mt-5 space-y-2.5 text-[11px]">
-                  <div className="flex gap-2">
-                    <CalendarDays size={14} className="text-primary" />
-                    {dateLabel(nextMatch.date)}
-                  </div>
-                  <div className="flex gap-2">
-                    <Clock3 size={14} className="text-primary" />
-                    {nextMatch.time} h
-                  </div>
-                  <div className="flex gap-2">
-                    <MapPin size={14} className="shrink-0 text-primary" />
-                    {nextMatch.venue}
-                  </div>
-                </div>
-                <div className="mt-5">
-                  <TextLink to={`/events/${nextMatch.id}`}>
-                    Abrir partido
-                  </TextLink>
-                </div>
-              </div>
-            )}
-            {captain && (
-              <div className="px-1">
-                <h3 className="mb-4 text-[12px] font-semibold">En el equipo</h3>
-                <div className="flex items-center gap-3">
-                  <Avatar name={captain.name} size="sm" />
-                  <div>
-                    <p className="text-[11px] font-medium">{captain.name}</p>
-                    <p className="mt-1 text-[10px] text-muted-foreground">
-                      Capitana · {myTeam?.name}
-                    </p>
-                  </div>
-                  <Link
-                    to="/conversations/c2"
-                    aria-label="Abrir conversación con Victoria"
-                    className="ml-auto text-muted-foreground"
-                  >
-                    <MessageIcon />
-                  </Link>
-                </div>
-              </div>
-            )}
-          </aside>
-        )}
-      </div>
-    </>
+        </span>
+      }
+    />
   )
-}
-function FlagIcon() {
-  return <CalendarDays size={14} />
-}
-function MessageIcon() {
-  return <Users size={16} />
 }
 
-export function Calendar() {
-  const { state, capabilities, actor } = useProduct()
-  const now = new Date(`${todayIso()}T12:00:00`)
-  const [month, setMonth] = useState(now.getMonth())
-  const [year, setYear] = useState(now.getFullYear())
-  const [team, setTeam] = useState(actor.team || "all")
-  const [type, setType] = useState("all")
-  const [view, setView] = useState("agenda")
-  const events = state.events.filter(
-    (event) =>
-      event.state !== "DRAFT" &&
-      (event.team === actor.team || event.clubWide || capabilities.official) &&
-      (team === "all" || event.team === team || event.clubWide) &&
-      (type === "all" || event.type === type) &&
-      event.date.startsWith(`${year}-${String(month + 1).padStart(2, "0")}`),
+function venueName(state: ReturnType<typeof useProduct>["state"], event: Event) {
+  return state.venues.find((venue) => venue.id === event.venueId)?.name ?? "Sin sede"
+}
+
+export function Home() {
+  const { state, authority, actor, childId } = useProduct()
+  const today = todayIso()
+  const scoped = visibleEvents(state, actor.id, childId)
+  const subject = childId ?? actor.id
+
+  const todayEvents = scoped
+    .filter((event) => event.date === today && event.state !== "CANCELLED")
+    .sort((a, b) => a.time.localeCompare(b.time))
+
+  const upcoming = scoped
+    .filter((event) => event.date > today && event.state !== "CANCELLED")
+    .sort((a, b) =>
+      a.date === b.date ? a.time.localeCompare(b.time) : a.date.localeCompare(b.date),
+    )
+    .slice(0, 4)
+
+  const unreadNotices = state.notifications.filter(
+    (notice) =>
+      notice.recipients.includes(actor.id) && !notice.readBy.includes(actor.id),
   )
-  const title = new Date(year, month, 1).toLocaleDateString("es-AR", {
+  const conversations = state.conversations
+    .filter(
+      (conversation) =>
+        conversation.state === "ACTIVE" &&
+        conversation.participants.includes(actor.id),
+    )
+    .sort(
+      (a, b) => (b.unread[actor.id] ?? 0) - (a.unread[actor.id] ?? 0),
+    )
+
+  const greeting = activeRoleAssignments(state, actor.id)
+  void greeting
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-5xl">
+      <PageContextHeader
+        context="Inicio"
+        title={authority.guardianChildren.length > 0 && childId
+          ? (state.people.find((p) => p.id === childId)?.name ?? actor.name)
+          : `Hola, ${actor.firstName}`}
+        lead={
+          authority.guardianChildren.length > 0 && childId
+            ? "Información y eventos del menor que estás mirando."
+            : "Lo que pasa hoy y lo que viene."
+        }
+      />
+
+      <AttentionSection />
+
+      <section className="grid gap-3">
+        <div className="flex items-baseline justify-between gap-3">
+          <h2 className="gei-section-title">Hoy</h2>
+          <TextLink to="/calendar">Ver calendario</TextLink>
+        </div>
+        {todayEvents.length === 0 ? (
+          <div className="flex flex-wrap items-center gap-3 rounded-surface border border-line bg-surface px-4 py-3.5">
+            <CalendarDays size={18} aria-hidden className="text-ink-faint" />
+            <div>
+              <p className="gei-body-strong">Hoy no hay eventos</p>
+              <p className="gei-meta">
+                {upcoming.length > 0
+                  ? `El próximo es ${dateLabel(upcoming[0].date)}.`
+                  : "No hay eventos programados por delante."}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <Surface flush>
+            <ul className="grid px-1 py-1">
+              {todayEvents.map((event) => (
+                <li key={event.id}>
+                  <EventLine event={event} />
+                </li>
+              ))}
+            </ul>
+          </Surface>
+        )}
+      </section>
+
+      <section className="grid gap-3">
+        <div className="flex items-baseline justify-between gap-3">
+          <h2 className="gei-section-title">Próximamente</h2>
+          <TextLink to="/calendar">Ver calendario</TextLink>
+        </div>
+        {upcoming.length === 0 ? (
+          <p className="gei-meta">
+            No hay eventos programados por delante. Cuando se carguen, aparecen acá.
+          </p>
+        ) : (
+          <Surface flush>
+            <ul className="grid px-1 py-1">
+              {upcoming.map((event) => (
+                <li key={event.id}>
+                  <EventLine event={event} />
+                </li>
+              ))}
+            </ul>
+          </Surface>
+        )}
+      </section>
+
+      <section className="grid gap-3">
+        <div className="flex items-baseline justify-between gap-3">
+          <h2 className="gei-section-title">Comunicaciones</h2>
+          <TextLink to="/communication">Ver todo</TextLink>
+        </div>
+        <div className="grid gap-2">
+          {conversations.slice(0, 2).map((conversation) => {
+            const last = conversation.messages.at(-1)
+            const other = conversation.participants
+              .filter((id) => id !== actor.id)
+              .map((id) => state.people.find((person) => person.id === id)?.name)
+              .filter(Boolean)
+            const title =
+              conversation.kind === "TEAM"
+                ? `Equipo · ${teamName(state, conversation.teamId)}`
+                : conversation.kind === "EVENT"
+                  ? `Evento · ${state.events.find((e) => e.id === conversation.eventId)?.opponent ?? ""}`
+                  : other[0]
+            return (
+              <RowLink
+                key={conversation.id}
+                to={`/conversations/${conversation.id}`}
+                title={title}
+                detail={last?.deletedAt ? "Mensaje eliminado" : last?.body}
+                meta={
+                  (conversation.unread[actor.id] ?? 0) > 0 ? (
+                    <span className="inline-flex items-center gap-1.5">
+                      <span aria-hidden className="size-2 rounded-pill bg-unread" />
+                      <span className="text-meta font-semibold text-selected">
+                        {conversation.unread[actor.id]} sin leer
+                      </span>
+                    </span>
+                  ) : (
+                    <span className="gei-meta tabular-nums">
+                      {last ? dateTimeLabel(last.at) : ""}
+                    </span>
+                  )
+                }
+              />
+            )
+          })}
+          {unreadNotices.length > 0 && (
+            <RowLink
+              to="/notifications"
+              title="Avisos"
+              detail={unreadNotices[0].title}
+              meta={
+                <span className="inline-flex items-center gap-1.5">
+                  <span aria-hidden className="size-2 rounded-pill bg-unread" />
+                  <span className="text-meta font-semibold text-selected">
+                    {unreadNotices.length} sin leer
+                  </span>
+                </span>
+              }
+            />
+          )}
+          {conversations.length === 0 && unreadNotices.length === 0 && (
+            <p className="gei-meta">Todavía no hay conversaciones ni avisos.</p>
+          )}
+        </div>
+      </section>
+
+      <p className="gei-meta sr-only" aria-live="polite">
+        Tu disponibilidad pendiente:{" "}
+        {subject ? String(scoped.filter((e) => eventAvailabilityView(e, subject) === "NO_RESPONSE").length) : "0"}
+      </p>
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CALENDARIO
+   Mes + panel contextual en desktop. Agenda primero en mobile.
+   Estado en URL: mes, equipo, tipo, vista.
+   ═══════════════════════════════════════════════════════════════ */
+
+const monthName = (iso: string) =>
+  new Date(`${iso}-01T12:00:00`).toLocaleDateString("es-AR", {
     month: "long",
     year: "numeric",
   })
-  const firstDay = (new Date(year, month, 1).getDay() + 6) % 7
-  const days = new Date(year, month + 1, 0).getDate()
-  function move(delta: number) {
-    const date = new Date(year, month + delta, 1)
-    setMonth(date.getMonth())
-    setYear(date.getFullYear())
+
+function monthMatrix(anchor: string) {
+  const [y, m] = anchor.split("-").map(Number)
+  const first = new Date(y, m - 1, 1)
+  const start = new Date(first)
+  start.setDate(first.getDate() - first.getDay())
+  return Array.from({ length: 42 }, (_, index) => {
+    const date = new Date(start)
+    date.setDate(start.getDate() + index)
+    return date.toISOString().slice(0, 10)
+  }).map((iso) => {
+    const local = new Date(`${iso}T12:00:00`)
+    return {
+      iso,
+      day: local.getDate(),
+      inMonth: local.getMonth() === m - 1,
+    }
+  })
+}
+
+export function Calendar() {
+  const { state, authority, actor, childId } = useProduct()
+  const query = useQueryState()
+  const today = todayIso()
+  const anchor = query.get("m", today.slice(0, 7)) || today.slice(0, 7)
+  const teamFilter = query.get("team")
+  const typeFilter = query.get("type")
+  const view = query.get("view", window.innerWidth >= 1024 ? "month" : "agenda")
+  const selected = query.get("event")
+
+  const scoped = useMemo(
+    () => visibleEvents(state, actor.id, childId),
+    [state, actor.id, childId],
+  )
+  const filtered = scoped.filter((event) => {
+    if (teamFilter && !event.targetTeams.includes(teamFilter)) return false
+    if (typeFilter && event.type !== typeFilter) return false
+    return true
+  })
+
+  const days = monthMatrix(anchor)
+  const selectedEvent = filtered.find((event) => event.id === selected)
+  const agenda = [...filtered].sort((a, b) =>
+    a.date === b.date ? a.time.localeCompare(b.time) : a.date.localeCompare(b.date),
+  )
+
+  const shiftMonth = (delta: number) => {
+    const [y, m] = anchor.split("-").map(Number)
+    const date = new Date(y, m - 1 + delta, 1)
+    query.set({
+      m: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`,
+    })
   }
-  return (
-    <>
-      <Header
-        eyebrow="Temporada 2026"
-        title="Calendario"
-        description="Entrenamientos, partidos y actividades del club."
-        action={
-          (capabilities.sport || capabilities.official) && (
-            <Link to="/events/new">
-              <Button>
-                <Plus size={15} />
-                Crear evento
-              </Button>
-            </Link>
-          )
-        }
-      />
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <IconButton label="Mes anterior" onClick={() => move(-1)}>
-            <ChevronLeft size={18} />
-          </IconButton>
-          <h2 className="min-w-36 text-sm font-semibold capitalize">{title}</h2>
-          <IconButton label="Mes siguiente" onClick={() => move(1)}>
-            <ChevronRight size={18} />
-          </IconButton>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setMonth(now.getMonth())
-              setYear(now.getFullYear())
-            }}
-          >
-            Hoy
-          </Button>
+
+  const eventToneChip = (event: Event) =>
+    event.state === "CANCELLED" || event.state === "ABANDONED"
+      ? "bg-danger-soft text-danger"
+      : event.state === "POSTPONED"
+        ? "bg-warning-soft text-warning"
+        : event.state === "COMPLETED"
+          ? "bg-neutral-soft text-ink-muted"
+          : event.type === "MATCH"
+            ? "bg-selected-soft text-selected"
+            : "bg-neutral-soft text-ink-strong"
+
+  const monthGrid = (
+    <div className="grid gap-px overflow-hidden rounded-surface border border-line bg-line">
+      <div className="grid grid-cols-7 bg-surface">
+        {["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"].map((day) => (
+          <div key={day} className="gei-micro px-2 py-2 text-center">
+            {day}
+          </div>
+        ))}
+      </div>
+      {Array.from({ length: 6 }, (_, week) => (
+        <div key={week} className="grid grid-cols-7 gap-px bg-line">
+          {days.slice(week * 7, week * 7 + 7).map((day) => {
+            const dayEvents = filtered.filter((event) => event.date === day.iso)
+            return (
+              <div
+                key={day.iso}
+                className={cx(
+                  "min-h-[5.5rem] bg-surface p-1.5",
+                  !day.inMonth && "bg-page",
+                  day.iso === today && "ring-1 ring-inset ring-interactive",
+                )}
+              >
+                <p
+                  className={cx(
+                    "gei-micro tabular-nums",
+                    day.iso === today ? "font-bold text-interactive" : "text-ink-faint",
+                  )}
+                >
+                  {day.day}
+                </p>
+                <ul className="mt-1 grid gap-0.5">
+                  {dayEvents.slice(0, 2).map((event) => (
+                    <li key={event.id}>
+                      <button
+                        type="button"
+                        onClick={() => query.set({ event: event.id })}
+                        className={cx(
+                          "block w-full truncate rounded-control px-1.5 py-1 text-left text-micro font-semibold transition-colors",
+                          eventToneChip(event),
+                          selected === event.id && "outline-2 outline-offset-1 outline-interactive",
+                        )}
+                      >
+                        <span className="tabular-nums">{event.time}</span>{" "}
+                        {event.state === "CANCELLED" ? "Cancelado" : event.type === "MATCH" ? "Partido" : "Entreno."}
+                      </button>
+                    </li>
+                  ))}
+                  {dayEvents.length > 2 && (
+                    <li className="gei-micro px-1.5">
+                      +{dayEvents.length - 2} más
+                    </li>
+                  )}
+                </ul>
+              </div>
+            )
+          })}
         </div>
-        <div className="flex gap-2">
-          <div className="w-32">
+      ))}
+    </div>
+  )
+
+  const agendaList = (
+    <ul className="grid gap-3">
+      {agenda.map((event) => (
+        <li key={event.id}>
+          <EventLine event={event} />
+        </li>
+      ))}
+    </ul>
+  )
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-6xl">
+      <PageContextHeader
+        context="Calendario"
+        title={monthName(`${anchor}-01`)}
+        lead="Filtros, mes y vista quedan guardados: el botón atrás del navegador vuelve a este mismo lugar."
+        action={
+          <SegmentedControl
+            ariaLabel="Vista del calendario"
+            value={view}
+            onChange={(value) => query.set({ view: value })}
+            options={[
+              { value: "agenda", label: "Agenda" },
+              { value: "month", label: "Mes" },
+            ]}
+          />
+        }
+        below={
+          <div className="flex flex-wrap items-end gap-2">
             <Select
               label="Equipo"
-              value={team}
-              onChange={(event) => setTeam(event.target.value)}
+              aria-label="Filtrar por equipo"
+              value={teamFilter}
+              onChange={(event) => query.set({ team: event.target.value })}
+              className="min-w-48"
             >
-              <option value="all">Todos</option>
+              <option value="">Todos los equipos</option>
               {state.teams
-                .filter(
-                  (item) => item.id === actor.team || capabilities.official,
-                )
-                .map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.name}
+                .filter((team) => team.state === "ACTIVE")
+                .map((team) => (
+                  <option key={team.id} value={team.id}>
+                    {teamName(state, team.id)}
                   </option>
                 ))}
             </Select>
-          </div>
-          <div className="w-36">
             <Select
               label="Tipo"
-              value={type}
-              onChange={(event) => setType(event.target.value)}
+              aria-label="Filtrar por tipo de evento"
+              value={typeFilter}
+              onChange={(event) => query.set({ type: event.target.value })}
+              className="min-w-44"
             >
-              <option value="all">Todos</option>
-              <option value="TRAINING">Entrenamientos</option>
-              <option value="MATCH">Partidos</option>
-              <option value="CLUB_EVENT">Club</option>
+              <option value="">Todos los tipos</option>
+              <option value="MATCH">Partido</option>
+              <option value="TRAINING">Entrenamiento</option>
+              <option value="CLUB_EVENT">Evento del club</option>
             </Select>
+            {(teamFilter || typeFilter) && (
+              <Button
+                variant="quiet"
+                onClick={() => query.reset(["team", "type"])}
+              >
+                Quitar filtros
+              </Button>
+            )}
           </div>
-        </div>
-      </div>
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex gap-4 text-[10px] text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <span className="size-2 rounded-full bg-primary" />
-            Partido
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="size-2 rounded-full bg-success" />
-            Entrenamiento
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="size-2 rounded-full bg-warning" />
-            Club
-          </span>
-        </div>
-        <div className="flex gap-1 rounded-lg border border-border bg-card p-1">
-          <IconButton label="Mes" onClick={() => setView("month")}>
-            <Grid3X3 size={16} />
-          </IconButton>
-          <IconButton label="Agenda" onClick={() => setView("agenda")}>
-            <List size={16} />
-          </IconButton>
-        </div>
-      </div>
-      <Surface className={`${view === "month" ? "hidden md:block" : "hidden"}`}>
-        <div className="grid grid-cols-7 border-b border-border bg-muted/40">
-          {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((day) => (
-            <div
-              key={day}
-              className="py-3 text-center text-xs text-muted-foreground"
-            >
-              {day}
-            </div>
-          ))}
-        </div>
-        <div className="grid grid-cols-7">
-          {Array.from(
-            { length: Math.ceil((firstDay + days) / 7) * 7 },
-            (_, index) => {
-              const day = index - firstDay + 1
-              const date = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
-              const valid = day > 0 && day <= days
-              return (
-                <div
-                  key={index}
-                  className={`min-h-28 border-b border-r border-border p-2 ${
-                    valid ? "bg-card" : "bg-muted/40"
-                  }`}
-                >
-                  <span
-                    className={`mb-2 flex size-6 items-center justify-center rounded-full text-[11px] ${
-                      date === todayIso()
-                        ? "bg-primary font-semibold text-white"
-                        : "text-muted-foreground"
-                    }`}
-                  >
-                    {valid ? day : ""}
-                  </span>
-                  {events
-                    .filter((event) => event.date === date)
-                    .map((event) => (
-                      <Link
-                        key={event.id}
-                        to={`/events/${event.id}`}
-                        className={`mb-1 block rounded-md border-l-2 p-1.5 text-[10px] ${
-                          event.state === "CANCELLED"
-                            ? "border-danger bg-danger-soft line-through"
-                            : event.type === "MATCH"
-                              ? "border-primary bg-primary-soft"
-                              : "border-success bg-success-soft"
-                        }`}
-                      >
-                        <span className="block font-semibold">
-                          {event.time} · {eventName(event)}
-                        </span>
-                        <span className="mt-0.5 block opacity-65">
-                          {event.state === "SCHEDULED"
-                            ? event.clubWide
-                              ? "Todo hockey"
-                              : eventTargetsText(
-                                  event,
-                                  (id) =>
-                                    state.teams.find((t) => t.id === id)?.name ?? "Equipo",
-                                )
-                            : stateText(event.state)}
-                        </span>
-                      </Link>
-                    ))}
-                </div>
-              )
-            },
+        }
+      />
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_22rem]">
+        <div className="grid gap-3">
+          {view === "month" ? (
+            <>
+              <div className="flex items-center justify-between gap-2">
+                <Button variant="secondary" size="sm" onClick={() => shiftMonth(-1)}>
+                  <ChevronLeft size={15} aria-hidden />
+                  Mes anterior
+                </Button>
+                <Button variant="secondary" size="sm" onClick={() => shiftMonth(1)}>
+                  Mes siguiente
+                  <ChevronRight size={15} aria-hidden />
+                </Button>
+              </div>
+              {monthGrid}
+              <p className="gei-meta">
+                En el mes, cada celda muestra hasta dos eventos con hora y tipo.
+                Tocá uno para ver el detalle acá al lado.
+              </p>
+            </>
+          ) : agenda.length === 0 ? (
+            <Empty
+              title="Sin eventos con estos filtros"
+              detail="No hay nada agendado que coincida con lo que elegiste."
+              action={
+                <Button variant="secondary" onClick={() => query.reset(["team", "type"])}>
+                  Quitar filtros
+                </Button>
+              }
+            />
+          ) : (
+            agendaList
           )}
         </div>
-      </Surface>
-      <div className={view === "month" ? "md:hidden" : ""}>
-        {events.length ? (
-          <Surface>
-            {[...events]
-              .sort((first, second) => first.date.localeCompare(second.date))
-              .map((event) => (
-                <EventRow key={event.id} event={event} />
-              ))}
+
+        <aside className="grid content-start gap-3">
+          {selectedEvent ? (
+            <Surface className="grid gap-4">
+              <div className="grid gap-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <StateBadge value={selectedEvent.state} />
+                  <span className="gei-meta">
+                    {dateLabel(selectedEvent.date)} ·{" "}
+                    {selectedEvent.state === "POSTPONED" ? "sin horario" : selectedEvent.time}
+                  </span>
+                </div>
+                <h3 className="gei-section-title">{eventName(selectedEvent)}</h3>
+                <p className="gei-meta">
+                  {eventTargetsText(state, selectedEvent)}
+                </p>
+              </div>
+              <p className="gei-meta flex items-center gap-1.5">
+                <MapPin size={13} aria-hidden />
+                {venueName(state, selectedEvent)}
+              </p>
+              {selectedEvent.state === "SCHEDULED" && (
+                <VasControl event={selectedEvent} personId={childId ?? actor.id} />
+              )}
+              <Button variant="secondary" onClick={() => query.set({ event: "" })}>
+                Dejar de ver este evento
+              </Button>
+            </Surface>
+          ) : (
+            <Surface className="grid gap-2">
+              <p className="gei-body-strong">Ningún evento seleccionado</p>
+              <p className="gei-meta">
+                Tocá un día del mes o una fila de la agenda para ver el detalle y
+                responder ¿Vas? sin salir del calendario.
+              </p>
+            </Surface>
+          )}
+          <Surface className="grid gap-2">
+            <p className="gei-body-strong">Cómo se leen los estados</p>
+            <ul className="grid gap-1.5">
+              <li className="flex items-center gap-2 text-meta">
+                <span aria-hidden className="size-3 rounded-control bg-selected-soft ring-1 ring-inset ring-selected-line" />
+                Con horario vigente: se puede confirmar disponibilidad.
+              </li>
+              <li className="flex items-center gap-2 text-meta">
+                <span aria-hidden className="size-3 rounded-control bg-warning-soft ring-1 ring-inset ring-warning-line" />
+                Postergado: no hay horario vigente.
+              </li>
+              <li className="flex items-center gap-2 text-meta">
+                <span aria-hidden className="size-3 rounded-control bg-danger-soft ring-1 ring-inset ring-danger-line" />
+                Cancelado o suspendido: ya no es un evento operativo.
+              </li>
+            </ul>
           </Surface>
-        ) : (
-          <Empty
-            title="No hay eventos en este período"
-            detail="Cambiá de mes o ajustá los filtros para ver otras actividades."
-          />
-        )}
+        </aside>
       </div>
-    </>
+      {authority.isClubWide && filtered.length === 0 && (
+        <p className="gei-meta">Sin resultados para estos filtros.</p>
+      )}
+    </div>
   )
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   EQUIPOS
+   ═══════════════════════════════════════════════════════════════ */
+
 export function Teams() {
-  const { state, actor, capabilities } = useProduct()
-  const visible = state.teams.filter(
-    (team) =>
-      team.id === actor.team ||
-      capabilities.management ||
-      capabilities.official,
-  )
+  const { state, authority, actor, childId } = useProduct()
+  const scoped = visibleEvents(state, actor.id, childId)
+  const teams = state.teams.filter((team) => team.state === "ACTIVE")
+
   return (
-    <>
-      <Header
-        eyebrow="Temporada 2026"
+    <div className="gei-stack-page mx-auto max-w-5xl">
+      <PageContextHeader
+        context="Equipos"
         title="Equipos"
-        description="La estructura deportiva de tu temporada."
+        lead="La lista depende de tu alcance: un entrenador ve sus equipos, una jugadora el suyo."
       />
-      <Surface>
-        {visible.map((team) => (
-          <RowLink
-            key={team.id}
-            to={`/teams/${team.id}`}
-            title={`${team.name} 2026`}
-            detail={`${team.division} · Línea ${team.line} · ${state.people.filter((person) => person.team === team.id && ["PLAYER", "CAPTAIN"].includes(person.role)).length} jugadoras`}
-            icon={
-              <span className="flex size-12 items-center justify-center rounded-lg bg-primary-soft text-base font-bold text-primary">
-                {team.line}
-              </span>
-            }
-            aside={<Badge value={team.state} />}
+      <div className="grid gap-2">
+        {teams.map((team) => {
+          const members = state.people.filter((person) =>
+            activeTeamAssignments(state, person.id).some(
+              (assignment) => assignment.teamId === team.id,
+            ),
+          )
+          const teamEvents = scoped.filter((event) =>
+            event.targetTeams.includes(team.id),
+          )
+          const isMine = authority.teamIds.includes(team.id)
+          return (
+            <RowLink
+              key={team.id}
+              to={`/teams/${team.id}`}
+              title={teamName(state, team.id)}
+              detail={`${members.length} ${
+                members.length === 1 ? "persona" : "personas"
+              } · ${teamEvents.length} ${
+                teamEvents.length === 1 ? "evento" : "eventos"
+              } a la vista`}
+              leading={isMine ? <Tag tone="selected">Tu alcance</Tag> : undefined}
+            />
+          )
+        })}
+        {teams.length === 0 && (
+          <Empty
+            title="No tenés equipos asignados"
+            detail="Cuando la administración te asigne a un equipo, aparece acá."
           />
-        ))}
-      </Surface>
-    </>
+        )}
+      </div>
+    </div>
   )
 }
+
 export function TeamDetail() {
-  const { teamId } = useParams()
-  const { state, actor, capabilities } = useProduct()
-  const [tab, setTab] = useState("Equipo")
+  const { teamId = "" } = useParams()
+  const { state, authority, actor, childId } = useProduct()
+  const query = useQueryState()
+  const tab = query.get("tab", "eventos")
+  const today = todayIso()
+  const subject = childId ?? actor.id
+
   const team = state.teams.find((item) => item.id === teamId)
-  if (!team)
+  if (!team || !authority.canOpen("teams"))
     return (
-      <Empty
-        title="Equipo no disponible"
-        detail="No encontramos este equipo."
-      />
+      <div className="gei-stack-page mx-auto max-w-3xl">
+        <PageContextHeader context="Equipos" title="No llegaste a ese equipo" />
+        <Empty
+          title="Ese equipo no está en tu alcance"
+          detail="Pedile a la administración que te lo asigne si lo necesitás."
+        />
+      </div>
     )
-  if (
-    actor.team !== team.id &&
-    !capabilities.management &&
-    !capabilities.official
+
+  const members = state.people.filter((person) =>
+    activeTeamAssignments(state, person.id).some(
+      (assignment) => assignment.teamId === teamId,
+    ),
   )
-    return (
-      <Empty
-        title="Equipo no disponible"
-        detail="No tenés acceso a este equipo."
-      />
+  const scoped = visibleEvents(state, actor.id, childId)
+  const events = scoped
+    .filter((event) => event.targetTeams.includes(teamId))
+    .sort((a, b) =>
+      a.date === b.date ? b.time.localeCompare(a.time) : b.date.localeCompare(a.date),
     )
-  const people = state.people.filter(
-    (person) =>
-      person.team === team.id && ["PLAYER", "CAPTAIN"].includes(person.role),
+  const upcoming = events.filter(
+    (event) => event.date >= today && event.state !== "CANCELLED",
   )
-  const events = state.events.filter((event) => event.team === team.id)
+  const finished = events.filter(
+    (event) => event.date < today || event.state === "COMPLETED",
+  )
+  const isMine = authority.teamIds.includes(teamId)
+
   return (
-    <>
-      <Header
+    <div className="gei-stack-page mx-auto max-w-5xl">
+      <PageContextHeader
+        context="Equipos"
+        title={teamName(state, teamId)}
         back="/teams"
-        eyebrow="Equipo · Temporada 2026"
-        title={team.name}
-        description={`${team.division} · Línea ${team.line}`}
+        lead={
+          isMine
+            ? "Es un equipo que vos ves: aquí abajo están tus eventos y tu disponibilidad."
+            : "Estás viendo un equipo que no gestionás."
+        }
         action={
-          capabilities.management && (
-            <Link to={`/management/teams/${team.id}`}>
-              <Button variant="secondary">Administrar equipo</Button>
-            </Link>
+          isMine ? (
+            <Tag tone="selected">En tu alcance</Tag>
+          ) : (
+            <Tag>Sólo consulta</Tag>
           )
         }
       />
-      <div className="mb-6 flex gap-6 border-b border-border">
-        {["Equipo", "Eventos", "Resultados"].map((item) => (
-          <button
-            key={item}
-            onClick={() => setTab(item)}
-            className={`border-b-2 px-1 pb-3 text-xs font-medium ${
-              tab === item
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground"
-            }`}
-          >
-            {item}
-          </button>
-        ))}
+
+      <div className="border-b border-line">
+        <div
+          role="tablist"
+          aria-label="Secciones del equipo"
+          className="flex gap-1 overflow-x-auto"
+        >
+          {[
+            { id: "personas", label: "Personas", count: members.length },
+            { id: "eventos", label: "Eventos", count: events.length },
+            { id: "resultados", label: "Resultados", count: finished.filter((e) => e.record.state === "FINAL").length },
+          ].map((item) => {
+            const selected = tab === item.id
+            return (
+              <button
+                key={item.id}
+                role="tab"
+                type="button"
+                aria-selected={selected}
+                onClick={() => query.set({ tab: item.id })}
+                className={cx(
+                  "gei-target-sm shrink-0 border-b-2 px-3 text-body font-semibold transition-colors",
+                  selected
+                    ? "border-interactive text-interactive"
+                    : "border-transparent text-ink-muted hover:text-ink",
+                )}
+              >
+                {item.label}
+                <span className="ml-1.5 text-meta text-ink-faint">{item.count}</span>
+              </button>
+            )
+          })}
+        </div>
       </div>
-      {tab === "Equipo" ? (
-        <div className="grid gap-7 xl:grid-cols-[1fr_300px]">
-          <Section title={`Jugadoras · ${people.length}`}>
-            <Surface>
-              {people.map((person) => (
+
+      {tab === "personas" && (
+        <DetailSection
+          title="Personas del equipo"
+          meta={`${members.length} ${members.length === 1 ? "persona" : "personas"}`}
+        >
+          <div className="grid gap-1">
+            {members.map((person) => {
+              const roles = activeRoleAssignments(state, person.id)
+              return (
                 <RowLink
                   key={person.id}
                   to={`/people/${person.id}`}
                   title={person.name}
-                  detail={person.role === "CAPTAIN" ? "Capitana" : "Jugadora"}
-                  icon={<Avatar name={person.name} />}
-                  aside={
-                    capabilities.sport ||
-                    capabilities.official ||
-                    capabilities.management ? (
-                      <Badge value={deriveEligibility(state.eligibilityConstraints, person.id)} />
-                    ) : undefined
-                  }
+                  detail={roles
+                    .map(
+                      (role) =>
+                        `${role.role === "COACH" ? "Entrenador" : role.role === "CAPTAIN" ? "Capitana" : "Jugadora"} · ${roleScopeLabel(state, role)}`,
+                    )
+                    .join("  ·  ")}
+                  leading={<Avatar name={person.name} size="sm" />}
                 />
-              ))}
-            </Surface>
-          </Section>
-          <div className="space-y-6">
-            <Section title="Cuerpo técnico">
-              <Surface>
-                {state.people
-                  .filter((person) =>
-                    currentRoles(person).some(
-                      (a) => a.role === "COACH" && a.scope === "TEAM" && a.target === team.id,
-                    ),
-                  )
-                  .map((coach) => (
-                    <RowLink
-                      key={coach.id}
-                      to={`/people/${coach.id}`}
-                      title={coach.name}
-                      detail="Entrenador o entrenadora"
-                      icon={<Avatar name={coach.name} blue />}
-                    />
-                  ))}
-                {!state.people.some((person) =>
-                  currentRoles(person).some(
-                    (a) => a.role === "COACH" && a.scope === "TEAM" && a.target === team.id,
-                  ),
-                ) && (
-                  <p className="p-5 text-xs text-muted-foreground">
-                    Sin cuerpo técnico asignado a este equipo.
-                  </p>
-                )}
-              </Surface>
-            </Section>
-            <Section title="Próximos eventos">
-              <Surface>
-                {events
-                  .filter(
-                    (event) =>
-                      event.date >= todayIso() && event.state === "SCHEDULED",
-                  )
-                  .slice(0, 3)
-                  .map((event) => (
-                    <EventRow key={event.id} event={event} />
-                  ))}
-              </Surface>
-            </Section>
+              )
+            })}
           </div>
-        </div>
-      ) : tab === "Eventos" ? (
-        <Surface>
-          {events.map((event) => (
-            <EventRow key={event.id} event={event} />
-          ))}
-        </Surface>
-      ) : (
-        <Surface>
-          {!events.some((event) => event.record.state === "FINAL") && (
-            <div className="p-8 text-center">
-              <h3 className="text-sm font-semibold">
-                Todavía no hay resultados finales
-              </h3>
-              <p className="mt-2 text-xs text-muted-foreground">
-                Los partidos aparecerán acá cuando se finalice su resultado.
-              </p>
-            </div>
-          )}
-          {events
-            .filter((event) => event.record.state === "FINAL")
-            .map((event) => (
-              <RowLink
-                key={event.id}
-                to={`/events/${event.id}`}
-                title={eventName(event)}
-                detail={`${dateLabel(event.date)} · ${labels[event.record.status]}`}
-                aside={
-                  <span className="text-xl font-bold tabular-nums">
-                    {event.record.gei} – {event.record.opponent}
-                  </span>
-                }
-              />
-            ))}
-        </Surface>
+        </DetailSection>
       )}
-    </>
-  )
-}
-export function PersonDetail() {
-  const { personId } = useParams()
-  const { state, actor, capabilities } = useProduct()
-  const person = state.people.find((item) => item.id === personId)
-  if (
-    !person ||
-    (person.team !== actor.team &&
-      !capabilities.official &&
-      person.id !== actor.id)
-  )
-    return (
-      <Empty
-        title="Persona no disponible"
-        detail="Esta información no está disponible en tu contexto."
-      />
-    )
-  return (
-    <>
-      <Header
-        back={`/teams/${person.team}`}
-        title={person.name}
-        description={`${labels[person.role]} · ${state.teams.find((team) => team.id === person.team)?.name || "Club"} 2026`}
-      />
-      <Surface className="max-w-2xl p-6">
-        <Avatar name={person.name} size="lg" />
-        <div className="mt-5 flex gap-2">
-          <Badge value={person.role} />
-          {capabilities.sport && <Badge value={deriveEligibility(state.eligibilityConstraints, person.id)} />}
+
+      {tab === "eventos" && (
+        <div className="grid gap-4">
+          {upcoming.length > 0 && (
+            <DetailSection
+              title="Próximos eventos"
+              meta={`${upcoming.length} ${upcoming.length === 1 ? "evento" : "eventos"}`}
+            >
+              <ul className="grid gap-2">
+                {upcoming.map((event) => (
+                  <li key={event.id}>
+                    <Surface className="grid gap-3">
+                      <EventLine event={event} />
+                      {event.state === "SCHEDULED" && (
+                        <VasControl event={event} personId={subject} />
+                      )}
+                    </Surface>
+                  </li>
+                ))}
+              </ul>
+            </DetailSection>
+          )}
+          <DetailSection
+            title="Eventos pasados"
+            meta={finished.length === 0 ? undefined : `${finished.length}`}
+          >
+            {finished.length === 0 ? (
+              <p className="gei-meta">Todavía no hay eventos pasados.</p>
+            ) : (
+              <ul className="grid gap-1">
+                {finished.map((event) => (
+                  <li key={event.id}>
+                    <EventLine event={event} />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </DetailSection>
         </div>
-        {(capabilities.sport ||
-          actor.role === "CAPTAIN" ||
-          actor.id === person.id) && (
-          <div className="mt-6 space-y-4 text-sm">
-            <p className="flex items-center gap-3">
-              <Phone size={16} className="text-muted-foreground" />
-              {person.phone}
-            </p>
-            <p className="flex items-center gap-3">
-              <Mail size={16} className="text-muted-foreground" />
-              {person.email}
-            </p>
-          </div>
-        )}
-        <p className="mt-6 text-xs text-muted-foreground">
-          Pertenencia vigente · Temporada 2026
-        </p>
-      </Surface>
-    </>
+      )}
+
+      {tab === "resultados" && (
+        <DetailSection title="Resultados" meta="De eventos finalizados">
+          {finished.filter((event) => event.record.state === "FINAL").length === 0 ? (
+            <p className="gei-meta">Todavía no hay resultados finalizados.</p>
+          ) : (
+            <ul className="grid gap-1">
+              {finished
+                .filter((event) => event.record.state === "FINAL")
+                .map((event) => (
+                  <li key={event.id}>
+                    <RowStatic
+                      title={eventName(event)}
+                      detail={dateLabel(event.date, true)}
+                      meta={
+                        <span className="gei-body-strong tabular-nums">
+                          {event.record.gei}–{event.record.opponent}
+                        </span>
+                      }
+                      trailing={
+                        <TextLink to={`/events/${event.id}/match-record`}>
+                          Ver acta
+                        </TextLink>
+                      }
+                    />
+                  </li>
+                ))}
+            </ul>
+          )}
+        </DetailSection>
+      )}
+    </div>
   )
 }
-export function SearchPage() {
-  const { state, actor, capabilities } = useProduct()
-  const [query, setQuery] = useState("")
-  const search = query.toLocaleLowerCase()
-  const people = state.people.filter(
-    (item) =>
-      (item.team === actor.team ||
-        capabilities.management ||
-        capabilities.official) &&
-      item.name.toLocaleLowerCase().includes(search),
-  )
-  const teams = state.teams.filter(
-    (item) =>
-      (item.id === actor.team ||
-        capabilities.management ||
-        capabilities.official) &&
-      item.name.toLocaleLowerCase().includes(search),
-  )
-  const events = state.events.filter(
-    (item) =>
-      (item.team === actor.team || item.clubWide || capabilities.official) &&
-      eventName(item).toLocaleLowerCase().includes(search),
-  )
-  return (
-    <>
-      <Header
-        title="Buscar"
-        description="Personas, equipos y eventos dentro de tu alcance."
-      />
-      <div className="mb-7 max-w-2xl">
-        <TextField
-          label="Buscar en GEI"
-          autoFocus
-          placeholder="Nombre, equipo o partido…"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
+
+/* ═══════════════════════════════════════════════════════════════
+   PERSONA — lectura, sin PII indebida
+   ═══════════════════════════════════════════════════════════════ */
+
+export function PersonDetail() {
+  const { personId = "" } = useParams()
+  const { state, authority } = useProduct()
+  const person = state.people.find((item) => item.id === personId)
+  if (!person)
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty
+          title="No encontramos a esa persona"
+          detail="Puede que el enlace esté incompleto o que ya no exista."
         />
       </div>
-      {query ? (
-        <div className="max-w-3xl space-y-6">
-          <Section title="Personas">
-            <Surface>
-              {people.map((person) => (
-                <RowLink
-                  key={person.id}
-                  to={
-                    capabilities.management
-                      ? `/management/people/${person.id}`
-                      : `/people/${person.id}`
+    )
+
+  const roles = activeRoleAssignments(state, person.id)
+  const teams = activeTeamAssignments(state, person.id)
+  const relations = guardiansOf(state, person.id)
+  const eligibility = state.eligibilityConstraints.filter(
+    (constraint) =>
+      constraint.personId === person.id &&
+      (!constraint.validUntil || constraint.validUntil > todayIso()),
+  )
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-3xl">
+      <PageContextHeader
+        context="Personas"
+        title={person.name}
+        back="/teams"
+        action={<StateBadge value={person.account} />}
+      />
+
+      <DetailSection title="Identidad">
+        <dl className="grid">
+          <RowStatic title="Nombre" detail={person.name} />
+          <RowStatic
+            title="Contacto"
+            detail={
+              authority.canViewContact(person)
+                ? `${person.phone || "Sin teléfono"} · ${person.email || "Sin correo"}`
+                : "No disponible para tu rol"
+            }
+          />
+          {authority.canViewDni && (
+            <RowStatic title="Documento" detail={person.dni || "Sin cargar"} />
+          )}
+          {authority.canViewBirth && (
+            <RowStatic title="Fecha de nacimiento" detail={person.birth || "Sin cargar"} />
+          )}
+        </dl>
+      </DetailSection>
+
+      <DetailSection title="Roles y alcance">
+        {roles.length === 0 ? (
+          <p className="gei-meta">No tiene roles deportivos vigentes.</p>
+        ) : (
+          <ul className="grid gap-1">
+            {roles.map((role) => (
+              <li key={role.id}>
+                <RowStatic
+                  title={
+                    role.role === "COACH"
+                      ? "Entrenador"
+                      : role.role === "CAPTAIN"
+                        ? "Capitana"
+                        : role.role === "ADMIN"
+                          ? "Administración"
+                          : role.role === "SUBCOMMITTEE"
+                            ? "Subcomisión"
+                            : "Jugadora"
                   }
-                  title={person.name}
-                  detail={`PERSONA · ${state.teams.find((team) => team.id === person.team)?.name || "Club"}`}
-                  icon={<Avatar name={person.name} />}
+                  detail={roleScopeLabel(state, role)}
                 />
-              ))}
-              {!people.length && (
-                <p className="p-5 text-xs text-muted-foreground">
-                  No encontramos personas con ese nombre.
-                </p>
-              )}
-            </Surface>
-          </Section>
-          <Section title="Equipos">
-            <Surface>
-              {teams.map((team) => (
-                <RowLink
-                  key={team.id}
-                  to={`/teams/${team.id}`}
-                  title={team.name}
-                  detail="EQUIPO · Temporada 2026"
+              </li>
+            ))}
+          </ul>
+        )}
+      </DetailSection>
+
+      {teams.length > 0 && (
+        <DetailSection title="Equipos">
+          <ul className="grid gap-1">
+            {teams.map((assignment) => (
+              <li key={assignment.id}>
+                <RowStatic
+                  title={teamName(state, assignment.teamId)}
+                  detail={`Desde ${dateLabel(assignment.validFrom)}`}
                 />
-              ))}
-              {!teams.length && (
-                <p className="p-5 text-xs text-muted-foreground">
-                  No hay equipos que coincidan.
-                </p>
-              )}
-            </Surface>
-          </Section>
-          <Section title="Eventos">
-            <Surface>
-              {events.map((event) => (
-                <EventRow key={event.id} event={event} />
-              ))}
-              {!events.length && (
-                <p className="p-5 text-xs text-muted-foreground">
-                  No hay eventos que coincidan.
-                </p>
-              )}
-            </Surface>
-          </Section>
-        </div>
-      ) : (
-        <Empty
-          title="¿Qué estás buscando?"
-          detail="Escribí un nombre, un equipo o un rival para encontrarlo rápidamente."
-        />
+              </li>
+            ))}
+          </ul>
+        </DetailSection>
       )}
-    </>
+
+      {relations.length > 0 && (
+        <DetailSection title="Personas que pueden actuar por esta persona">
+          <ul className="grid gap-1">
+            {relations.map((relation) => {
+              const guardian = state.people.find(
+                (item) => item.id === relation.guardianId,
+              )
+              return (
+                <li key={relation.id}>
+                  <RowStatic
+                    title={guardian?.name ?? "—"}
+                    detail={`${relation.relation} · puede ver información: ${
+                      relation.canViewChildInfo ? "sí" : "no"
+                    } · puede responder ¿Vas?: ${
+                      relation.canRespondAvailability ? "sí" : "no"
+                    }`}
+                  />
+                </li>
+              )
+            })}
+          </ul>
+        </DetailSection>
+      )}
+
+      {authority.canViewEligibilityStatus(person) && (
+        <DetailSection title="Habilitación para jugar">
+          {eligibility.length === 0 ? (
+            <p className="gei-meta">Sin restricciones vigentes: puede jugar.</p>
+          ) : (
+            <ul className="grid gap-1">
+              {eligibility.map((constraint) => (
+                <li key={constraint.id}>
+                  <RowStatic
+                    title={
+                      constraint.state === "BLOCKED"
+                        ? "No habilitada para jugar"
+                        : "Trámite pendiente"
+                    }
+                    detail={
+                      authority.canViewEligibilityReason
+                        ? constraint.note ?? "Sin detalle"
+                        : "Pedí el detalle a la Subcomisión."
+                    }
+                    trailing={
+                      <StateBadge
+                        value={constraint.state === "BLOCKED" ? "BLOCKED" : "PENDING"}
+                      />
+                    }
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
+        </DetailSection>
+      )}
+    </div>
   )
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   BUSCAR — query en la URL
+   ═══════════════════════════════════════════════════════════════ */
+
+export function SearchPage() {
+  const { state, authority, actor, childId } = useProduct()
+  const query = useQueryState()
+  const term = query.get("q")
+  const [draft, setDraft] = useState(term)
+  const needle = term.trim().toLowerCase()
+  const scoped = visibleEvents(state, actor.id, childId)
+
+  const people = needle
+    ? state.people.filter(
+        (person) =>
+          person.name.toLowerCase().includes(needle) ||
+          person.username.toLowerCase().includes(needle),
+      )
+    : []
+  const teams = needle
+    ? state.teams.filter((team) =>
+        teamName(state, team.id).toLowerCase().includes(needle),
+      )
+    : []
+  const events = needle
+    ? scoped.filter((event) =>
+        (eventName(event) + eventTargetsText(state, event))
+          .toLowerCase()
+          .includes(needle),
+      )
+    : []
+  const structure = needle
+    ? state.structure.filter(
+        (item) =>
+          item.type !== "VENUE" &&
+          item.name.toLowerCase().includes(needle),
+      )
+    : []
+  const total = people.length + teams.length + events.length + structure.length
+
+  return (
+    <div className="gei-stack-page mx-auto max-w-3xl">
+      <PageContextHeader
+        context="Buscar"
+        title="Buscar"
+        lead="Buscá personas, equipos, eventos y divisiones o líneas del club."
+      />
+      <form
+        onSubmit={(event) => {
+          event.preventDefault()
+          query.set({ q: draft })
+        }}
+        className="flex gap-2"
+      >
+        <div className="relative flex-1">
+          <SearchIcon
+            size={17}
+            aria-hidden
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint"
+          />
+          <input
+            value={draft}
+            onChange={(event) => setDraft(event.target.value)}
+            aria-label="Buscar en GEI Hockey"
+            placeholder="Nombre, equipo, evento…"
+            className="gei-target w-full rounded-control border border-line-strong bg-surface pl-9 pr-3 text-body text-ink placeholder:text-ink-faint"
+          />
+        </div>
+        <Button type="submit" variant="primary">
+          Buscar
+        </Button>
+      </form>
+
+      {!needle ? (
+        <Empty
+          title="Escribí algo para empezar"
+          detail="La búsqueda no devuelve datos personales como documento o fecha de nacimiento."
+          icon={<SearchIcon size={22} />}
+        />
+      ) : total === 0 ? (
+        <Empty
+          title={`Nada para "${term}"`}
+          detail="Probá con menos palabras o revisá cómo está escrito el nombre."
+          action={
+            <Button variant="secondary" onClick={() => query.reset(["q"])}>
+              Limpiar búsqueda
+            </Button>
+          }
+          icon={<SearchIcon size={22} />}
+        />
+      ) : (
+        <div className="grid gap-5">
+          {people.length > 0 && (
+            <DetailSection title="Personas" meta={`${people.length}`}>
+              <div className="grid gap-1">
+                {people.slice(0, 8).map((person) => (
+                  <RowLink
+                    key={person.id}
+                    to={`/people/${person.id}`}
+                    title={person.name}
+                    detail={
+                      authority.canViewEligibilityStatus(person)
+                        ? undefined
+                        : undefined
+                    }
+                    leading={<Avatar name={person.name} size="sm" />}
+                  />
+                ))}
+              </div>
+            </DetailSection>
+          )}
+          {teams.length > 0 && (
+            <DetailSection title="Equipos" meta={`${teams.length}`}>
+              <div className="grid gap-1">
+                {teams.map((team) => (
+                  <RowLink
+                    key={team.id}
+                    to={`/teams/${team.id}`}
+                    title={teamName(state, team.id)}
+                  />
+                ))}
+              </div>
+            </DetailSection>
+          )}
+          {events.length > 0 && (
+            <DetailSection title="Eventos" meta={`${events.length}`}>
+              <ul className="grid gap-1">
+                {events.map((event) => (
+                  <li key={event.id}>
+                    <EventLine event={event} />
+                  </li>
+                ))}
+              </ul>
+            </DetailSection>
+          )}
+          {structure.length > 0 && (
+            <DetailSection
+              title="Divisiones y líneas"
+              meta={`${structure.length}`}
+            >
+              <div className="grid gap-1">
+                {structure.map((item) => (
+                  <RowStatic
+                    key={item.id}
+                    title={item.name}
+                    detail={item.type === "DIVISION" ? "División" : "Línea"}
+                  />
+                ))}
+              </div>
+            </DetailSection>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export { VasCompact }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   Link,
   NavLink,
@@ -8,287 +8,337 @@ import {
   useNavigate,
 } from "react-router"
 import {
-  House,
-  CalendarDays,
-  Users,
-  MessageSquare,
-  Ellipsis,
-  Search,
   Bell,
+  CalendarDays,
   ChevronDown,
-  ArrowUpRight,
-  CheckCircle2,
-  ShieldCheck,
+  Ellipsis,
+  House,
+  MessageSquare,
+  Search,
+  Users,
 } from "lucide-react"
 import { useProduct } from "../mock/store"
-import { canReadNotice, noticeRead } from "../mock/permissions"
-import { scenario, scenarioLabels } from "../mock/scenarios"
-import { Avatar, Alert } from "../shared/ui"
-import { labels } from "../mock/model"
 import { routeContext } from "../shared/nav-context"
-const nav = [
-  { to: "/home", label: "Inicio", icon: House },
-  { to: "/calendar", label: "Calendario", icon: CalendarDays },
-  { to: "/teams", label: "Equipos", icon: Users },
-  { to: "/communication", label: "Comunicación", icon: MessageSquare },
-  { to: "/more", label: "Más", icon: Ellipsis },
+import { Avatar, Button, Toast, cx } from "../shared/ui"
+import { Sheet } from "../shared/ui"
+import { relativeLabel } from "../mock/model"
+import type { Page } from "../mock/authority"
+
+const NAV: Array<{ to: string; label: string; icon: typeof House; page: Page }> = [
+  { to: "/home", label: "Inicio", icon: House, page: "home" },
+  { to: "/calendar", label: "Calendario", icon: CalendarDays, page: "calendar" },
+  { to: "/teams", label: "Equipos", icon: Users, page: "teams" },
+  {
+    to: "/communication",
+    label: "Comunicación",
+    icon: MessageSquare,
+    page: "communication",
+  },
+  { to: "/more", label: "Más", icon: Ellipsis, page: "more" },
 ]
+
 function sectionActive(to: string, path: string) {
   const children: Record<string, string[]> = {
     "/calendar": ["/events", "/jornadas"],
     "/communication": ["/conversations", "/announcements"],
     "/more": ["/management", "/reports", "/audit"],
+    "/teams": ["/people"],
   }
   return (children[to] || []).some((prefix) => path.startsWith(prefix))
 }
+
 export function Shell() {
-  const { state, actor, toastMessage, capabilities, authenticated, hasAccess, guardianChildren } =
-    useProduct()
-  const visibleNav = nav.filter((item) => {
-    if (item.to === "/communication" && !capabilities.chat && guardianChildren.length === 0)
-      return true
-    if (item.to === "/communication" && !capabilities.chat) return false
-    return true
-  })
+  const {
+    state,
+    actor,
+    authority,
+    childId,
+    setChildId,
+    toastMessage,
+    authenticated,
+    hasAccess,
+    logout,
+  } = useProduct()
   const location = useLocation()
+  const navigate = useNavigate()
+  const [switcher, setSwitcher] = useState(false)
+
+  const visibleNav = NAV.filter((item) => authority.canOpen(item.page))
+  const activeChildId = childId ?? authority.guardianChildren[0]?.childId ?? null
+  const activeChild = authority.guardianChildren.find(
+    (child) => child.childId === activeChildId,
+  )
+
   const unread = state.notifications.filter(
-    (item) => !noticeRead(actor, item) && canReadNotice(actor, item),
+    (notice) =>
+      notice.recipients.includes(actor.id) && !notice.readBy.includes(actor.id),
   ).length
   const unreadMessages = state.conversations
-    .filter((item) => item.participants.includes(actor.id))
-    .reduce((sum, item) => sum + item.unread, 0)
-  const navigate = useNavigate()
-  const [loading, setLoading] = useState(scenario === "loading")
-  useEffect(() => {
-    if (!loading) return
-    const timer = setTimeout(() => setLoading(false), 900)
-    return () => clearTimeout(timer)
-  }, [loading])
+    .filter(
+      (conversation) =>
+        conversation.state === "ACTIVE" &&
+        conversation.participants.includes(actor.id),
+    )
+    .reduce((sum, conversation) => sum + (conversation.unread[actor.id] ?? 0), 0)
+
   useEffect(() => {
     window.scrollTo({ top: 0 })
   }, [location.pathname])
+
   useEffect(() => {
-    const shortcut = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
+    const onKey = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault()
         navigate("/search")
       }
     }
-    document.addEventListener("keydown", shortcut)
-    return () => document.removeEventListener("keydown", shortcut)
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
   }, [navigate])
+
   if (!authenticated) return <Navigate to="/login" replace />
   if (!hasAccess)
     return location.pathname === "/more/profile" ? (
-      <main className="mx-auto max-w-3xl p-6">
+      <main className="mx-auto max-w-2xl px-4 py-8">
         <Outlet />
       </main>
     ) : (
       <Navigate to="/no-access" replace />
     )
+
   return (
-    <div className="min-h-screen">
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[224px] flex-col border-r border-border bg-card lg:flex">
-        <Link to="/home" className="flex items-center gap-3 px-6 pb-8 pt-8">
-          <span className="flex size-10 items-center justify-center rounded-lg bg-primary text-[16px] font-extrabold tracking-[-1px] text-white">
-            GEI
-          </span>
-          <span>
-            <span className="block text-[15px] font-bold">GEI Hockey</span>
-            <span className="mt-0.5 block text-[9px] font-medium tracking-[1.5px] text-muted-foreground">
-              GESTIÓN DEPORTIVA
+    <div className="min-h-dvh overflow-x-clip">
+      <a
+        href="#contenido"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-control focus:bg-ink focus:px-4 focus:py-2 focus:text-body focus:text-white"
+      >
+        Ir al contenido
+      </a>
+
+      {/* Barra superior: contexto, búsqueda, avisos, cuenta */}
+      <header className="sticky top-0 z-30 border-b border-line bg-surface/95 backdrop-blur-sm">
+        <div className="flex h-16 items-center gap-3 px-4 sm:px-6">
+          <Link
+            to="/home"
+            className="flex items-center gap-2 lg:hidden"
+            aria-label="GEI Hockey · Inicio"
+          >
+            <span className="flex size-9 items-center justify-center rounded-control bg-brand text-body-strong text-brand-ink">
+              GEI
             </span>
-          </span>
-        </Link>
-        <div className="mx-4 mb-6 flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2.5">
-          <span className="size-1.5 rounded-full bg-success" />
-          <span className="flex-1 text-[11px] font-medium">Temporada 2026</span>
-          <CalendarDays size={13} className="text-muted-foreground" />
-        </div>
-        <nav className="space-y-1 px-3">
-          {visibleNav.map(({ to, label, icon: Icon }) => (
-            <NavLink
-              key={to}
-              to={to}
-              className={({ isActive }) =>
-                `flex items-center gap-3 rounded-lg px-4 py-3 text-[13px] font-medium ${
-                  isActive || sectionActive(to, location.pathname)
-                    ? "bg-primary-soft text-primary"
-                    : "text-muted-foreground hover:bg-muted"
-                }`
-              }
-            >
-              <Icon size={18} strokeWidth={1.7} />
-              {label}
-              {to === "/communication" &&
-                capabilities.chat &&
-                unreadMessages > 0 && (
-                  <span className="ml-auto flex size-5 items-center justify-center rounded-md bg-primary/10 text-[10px] text-primary">
-                    {unreadMessages}
-                  </span>
-                )}
-            </NavLink>
-          ))}
-        </nav>
-        <div className="mx-6 mt-8 border-t border-border pt-6">
-          <div className="mb-3 text-[9px] font-semibold tracking-[1.4px] text-muted-foreground">
-            MI EQUIPO
-          </div>
-          {actor.team && (
-            <Link
-              to={`/teams/${actor.team}`}
-              className="flex items-center gap-2 text-xs font-medium"
-            >
-              <span className="size-2 rounded-full bg-primary" />
-              {state.teams.find((team) => team.id === actor.team)?.name}
-              <ArrowUpRight
-                size={12}
-                className="ml-auto text-muted-foreground"
-              />
-            </Link>
-          )}
-          {capabilities.management && (
-            <Link to="/management" className="flex items-center gap-2 text-xs">
-              <ShieldCheck size={14} />
-              Administración
-            </Link>
-          )}
-        </div>
-        <div className="mt-auto">
-          <div className="mx-5 mb-5 rounded-lg bg-background p-3">
-            <span className="text-[10px] font-semibold text-foreground">
-              Un equipo, un mismo lugar.
-            </span>
-            <p className="mt-1.5 text-[10px] leading-relaxed text-muted-foreground">
-              Todo lo que necesitás para el día a día del hockey.
+          </Link>
+
+          <div className="hidden min-w-0 flex-1 lg:block">
+            <p className="gei-micro">Hockey</p>
+            <p className="truncate text-body font-semibold text-ink">
+              {routeContext(location.pathname)}
             </p>
           </div>
-          <Link
-            to="/more/profile"
-            className="flex items-center gap-3 border-t border-border p-5"
-          >
-            <Avatar name={actor.name} blue />
-            <span className="min-w-0 flex-1">
-              <span className="block text-[11px] font-semibold">
-                {actor.name}
-              </span>
-              <span className="mt-1 block text-[10px] text-muted-foreground">
-                {labels[actor.role]}
-                {actor.team
-                  ? ` · ${state.teams.find((team) => team.id === actor.team)?.name ?? ""}`
-                  : ""}
-              </span>
-            </span>
-            <ChevronDown size={13} className="text-muted-foreground" />
-          </Link>
-        </div>
-      </aside>
-      <div className="lg:pl-[224px]">
-        <header className="sticky top-0 z-20 flex h-[65px] items-center justify-between gap-4 border-b border-border bg-card/95 px-5 backdrop-blur-sm sm:px-8">
-          <div className="hidden text-xs text-muted-foreground sm:block">
-            Hockey <span className="mx-2 text-border">/</span>
-            <span className="font-medium text-foreground">
+          <div className="min-w-0 flex-1 lg:hidden">
+            <p className="truncate text-body font-semibold text-ink">
               {routeContext(location.pathname)}
-            </span>
+            </p>
           </div>
-          <Link to="/home" className="text-sm font-bold text-primary sm:hidden">
-            GEI Hockey
-          </Link>
-          <div className="flex items-center gap-2">
+
+          <div className="flex items-center gap-1">
+            <Link
+              to="/search"
+              className="gei-target-sm hidden items-center gap-2 rounded-control px-2.5 text-meta text-ink-muted transition-colors hover:bg-control hover:text-ink sm:inline-flex"
+            >
+              <Search size={16} aria-hidden />
+              Buscar
+              <kbd className="ml-3 rounded border border-line px-1.5 py-0.5 text-micro">
+                ⌘K
+              </kbd>
+            </Link>
             <Link
               to="/search"
               aria-label="Buscar"
-              className="flex items-center gap-2 rounded-md px-3 py-2 text-[11px] text-muted-foreground hover:bg-muted"
+              className="flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink sm:hidden"
             >
-              <Search size={16} />
-              <span className="hidden md:inline">Buscar en GEI</span>
-              <kbd className="ml-7 hidden rounded border border-border px-1.5 py-0.5 text-[9px] md:inline">
-                ⌘ K
-              </kbd>
+              <Search size={19} aria-hidden />
             </Link>
-            <span className="mx-2 hidden h-5 w-px bg-border sm:block" />
             <Link
               to="/notifications"
-              aria-label={`Avisos, ${unread} sin leer`}
-              className="relative rounded-lg p-2.5 text-muted-foreground hover:bg-muted"
+              aria-label={
+                unread > 0 ? `Avisos, ${unread} sin leer` : "Avisos, todo leído"
+              }
+              className="relative flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink"
             >
-              <Bell size={19} />
+              <Bell size={19} aria-hidden />
               {unread > 0 && (
-                <span className="absolute right-2 top-2 size-1.5 rounded-full bg-primary ring-2 ring-card" />
+                <>
+                  <span
+                    aria-hidden
+                    className="absolute right-2.5 top-2.5 size-2 rounded-pill bg-unread ring-2 ring-surface"
+                  />
+                </>
               )}
             </Link>
-            <Link to="/more/profile" className="ml-2">
-              <Avatar name={actor.name} size="sm" blue />
+            <Link
+              to="/more/profile"
+              className="ml-1 flex items-center rounded-control p-0.5 transition-colors hover:bg-control"
+              aria-label="Mi perfil"
+            >
+              <Avatar name={actor.name} size="sm" selected />
             </Link>
           </div>
-        </header>
-        <main className="mx-auto max-w-[1440px] px-5 pb-28 pt-7 sm:px-8 sm:pt-9 lg:px-10 lg:pb-12">
-          {scenario === "degraded" && (
-            <div className="mb-6">
-              <Alert tone="error">
-                {scenarioLabels.degraded}
-                <p className="mt-2 text-xs">
-                  La demostración mantiene los datos visibles. No se descarta
-                  ningún formulario.
-                </p>
-              </Alert>
-            </div>
-          )}
-          {loading ? (
-            <div
-              role="status"
-              aria-label="Cargando información"
-              className="space-y-7"
-            >
-              <div className="h-8 w-52 animate-pulse rounded bg-border motion-reduce:animate-none" />
-              <div className="h-4 w-72 max-w-full animate-pulse rounded bg-border motion-reduce:animate-none" />
-              {[0, 1, 2].map((item) => (
-                <div
-                  key={item}
-                  className="h-32 animate-pulse rounded-xl border border-border bg-card motion-reduce:animate-none"
-                />
-              ))}
-              <span className="sr-only">Cargando información…</span>
-            </div>
-          ) : (
-            <Outlet />
-          )}
-        </main>
-        <footer className="hidden items-center justify-between border-t border-border px-10 py-5 text-[10px] text-muted-foreground lg:flex">
-          <span>GEI Hockey · Gimnasia y Esgrima de Ituzaingó</span>
-          <span>Temporada 2026</span>
-        </footer>
-      </div>
-      <nav
-        aria-label="Navegación principal"
-        className="fixed inset-x-0 bottom-0 z-30 flex border-t border-border bg-card pb-[env(safe-area-inset-bottom)] lg:hidden"
-      >
-        {visibleNav.map(({ to, label, icon: Icon }) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) =>
-              `flex flex-1 flex-col items-center gap-1.5 py-3 text-[9px] font-medium ${
-                isActive || sectionActive(to, location.pathname)
-                  ? "text-primary"
-                  : "text-muted-foreground"
-              }`
-            }
-          >
-            <Icon size={20} />
-            {label}
-          </NavLink>
-        ))}
-      </nav>
-      {toastMessage && (
-        <div
-          role="status"
-          className="fixed bottom-24 left-1/2 z-[60] flex max-w-[90vw] -translate-x-1/2 items-center gap-3 rounded-xl bg-foreground px-5 py-3.5 text-xs text-white shadow-xl lg:bottom-6"
-        >
-          <CheckCircle2 size={17} className="shrink-0" />
-          {toastMessage}
         </div>
+
+        {/* Selector de menor (D3 / §28): sólo si hay más de uno */}
+        {authority.guardianChildren.length > 0 && (
+          <div className="border-t border-line bg-selected-soft px-4 py-2 sm:px-6">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-meta text-selected">
+                Viendo la información de{" "}
+                <span className="font-semibold">{activeChild?.name ?? "—"}</span>
+              </p>
+              {authority.guardianChildren.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => setSwitcher(true)}
+                  className="gei-target-sm inline-flex items-center gap-1 rounded-control px-2 text-meta font-semibold text-selected hover:bg-surface"
+                >
+                  Cambiar
+                  <ChevronDown size={14} aria-hidden />
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+      </header>
+
+      <div className="flex">
+        {/* Destinos en desktop: los mismos 5, sin drawer */}
+        <nav
+          aria-label="Destinos"
+          className="sticky top-16 hidden h-[calc(100dvh-4rem)] w-[224px] shrink-0 flex-col gap-1 overflow-y-auto border-r border-line bg-surface px-3 py-4 lg:flex"
+        >
+          {visibleNav.map(({ to, label, icon: Icon }) => {
+            const active =
+              location.pathname === to || sectionActive(to, location.pathname)
+            return (
+              <NavLink
+                key={to}
+                to={to}
+                className={cx(
+                  "gei-target flex items-center gap-3 rounded-control px-3 text-body font-semibold transition-colors duration-micro",
+                  active
+                    ? "bg-selected-soft text-selected"
+                    : "text-ink-muted hover:bg-control hover:text-ink",
+                )}
+                aria-current={active ? "page" : undefined}
+              >
+                <Icon size={19} aria-hidden strokeWidth={1.9} />
+                {label}
+                {to === "/communication" && unreadMessages > 0 && (
+                  <span className="ml-auto inline-flex items-center gap-1 text-meta font-semibold text-selected">
+                    <span aria-hidden className="size-2 rounded-pill bg-unread" />
+                    {unreadMessages}
+                  </span>
+                )}
+                {to === "/more" && unread > 0 && (
+                  <span className="ml-auto inline-flex items-center gap-1 text-meta font-semibold text-selected">
+                    <span aria-hidden className="size-2 rounded-pill bg-unread" />
+                    {unread}
+                  </span>
+                )}
+              </NavLink>
+            )
+          })}
+        </nav>
+
+        <main
+          id="contenido"
+          className="min-w-0 flex-1 px-4 pb-28 pt-6 sm:px-6 lg:px-8 lg:pb-16"
+        >
+          <Outlet />
+        </main>
+      </div>
+
+      {/* Destinos en mobile: los mismos 5 */}
+      <nav
+        aria-label="Destinos"
+        className="fixed inset-x-0 bottom-0 z-30 flex border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
+      >
+        {visibleNav.map(({ to, label, icon: Icon }) => {
+          const active =
+            location.pathname === to || sectionActive(to, location.pathname)
+          return (
+            <NavLink
+              key={to}
+              to={to}
+              aria-current={active ? "page" : undefined}
+              className={cx(
+                "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 px-0 py-2 text-micro font-semibold transition-colors",
+                active ? "text-selected" : "text-ink-muted",
+              )}
+            >
+              <Icon size={20} aria-hidden strokeWidth={1.9} />
+              <span className="max-w-full truncate">{label}</span>
+            </NavLink>
+          )
+        })}
+      </nav>
+
+      <Toast message={toastMessage} />
+
+      {switcher && (
+        <Sheet
+          title="¿A quién estás mirando?"
+          description="Cambia de menor en Inicio, Calendario, Equipos y disponibilidad."
+          onClose={() => setSwitcher(false)}
+          footer={
+            <Button variant="primary" onClick={() => setSwitcher(false)}>
+              Listo
+            </Button>
+          }
+        >
+          <ul className="grid gap-1">
+            {authority.guardianChildren.map((child) => (
+              <li key={child.childId}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setChildId(child.childId)
+                    setSwitcher(false)
+                  }}
+                  className={cx(
+                    "gei-target flex w-full items-center gap-3 rounded-control px-3 text-left transition-colors",
+                    child.childId === activeChildId
+                      ? "bg-selected-soft text-selected"
+                      : "hover:bg-control",
+                  )}
+                >
+                  <Avatar name={child.name} size="sm" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-body font-semibold text-ink">
+                      {child.name}
+                    </span>
+                    <span className="gei-meta block">
+                      {child.relation} · responde ¿Vas?:{" "}
+                      {child.canRespondAvailability ? "sí" : "no"}
+                    </span>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </Sheet>
       )}
     </div>
   )
+}
+
+export function useUnreadSummary() {
+  const { state, actor } = useProduct()
+  const notices = state.notifications.filter((notice) =>
+    notice.recipients.includes(actor.id),
+  )
+  return {
+    unread: notices.filter((notice) => !notice.readBy.includes(actor.id)).length,
+    newest: notices[0]
+      ? { at: relativeLabel(notices[0].at, new Date()), title: notices[0].title }
+      : null,
+  }
 }

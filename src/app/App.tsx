@@ -44,6 +44,8 @@ import {
   AuditPage,
 } from "../features/account-insight"
 import { Empty } from "../shared/ui"
+
+/** Rutas canónicas: 38 destinos. No se cambian. */
 const router = createBrowserRouter([
   { path: "/login", Component: LoginPage },
   { path: "/activate", Component: ActivatePage },
@@ -55,8 +57,8 @@ const router = createBrowserRouter([
       { path: "/home", Component: Home },
       { path: "/calendar", Component: Calendar },
       { path: "/teams", Component: Teams },
-      { path: "/teams/:teamId", Component: TeamDetail },
-      { path: "/people/:personId", Component: PersonDetail },
+      { path: "/teams/:teamId", element: <TeamDetail /> },
+      { path: "/people/:personId", element: <PersonDetail /> },
       { path: "/events/new", Component: EventForm },
       { path: "/events/:eventId", Component: EventDetail },
       { path: "/events/:eventId/edit", Component: EventForm },
@@ -72,6 +74,7 @@ const router = createBrowserRouter([
       { path: "/announcements/:id", Component: AnnouncementDetail },
       { path: "/announcements/:id/edit", Component: AnnouncementForm },
       { path: "/conversations/:id", Component: ConversationPage },
+      { path: "/conversations/new", Component: NewConversation },
       { path: "/notifications", Component: Notifications },
       { path: "/search", Component: SearchPage },
       { path: "/more", Component: MorePage },
@@ -100,6 +103,7 @@ const router = createBrowserRouter([
     ],
   },
 ])
+
 export default function App() {
   return (
     <MockAppProvider>
