@@ -17,6 +17,7 @@ import {
   eventName,
   periodLabel,
   relativeLabel,
+  roleTextOf,
   teamName,
   type Event,
 } from "../mock/model"
@@ -55,14 +56,6 @@ import {
   SectionHeader,
 } from "../shared/patterns"
 import { useQueryState } from "../shared/use-query-state"
-
-const ROLE_LABEL: Record<string, string> = {
-  PLAYER: "Jugadora",
-  CAPTAIN: "Capitana",
-  COACH: "Entrenador",
-  ADMIN: "Administración",
-  SUBCOMMITTEE: "Subcomisión",
-}
 
 /* ═══════════════════════════════════════════════════════════════
    MÁS
@@ -316,7 +309,7 @@ export function ProfilePage() {
             {roles.map((role) => (
               <li key={role.id}>
                 <RowStatic
-                  title={ROLE_LABEL[role.role] ?? role.role}
+                  title={roleTextOf(role.role)}
                   detail={`${roleScopeLabel(state, role)} · ${periodLabel(
                     role.validFrom,
                     role.validUntil,

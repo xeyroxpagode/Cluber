@@ -34,6 +34,7 @@ import {
   eventAvailabilityView,
   eventName,
   eventTargetsText,
+  roleTextOf,
   teamName,
   type Event,
 } from "../mock/model"
@@ -984,12 +985,12 @@ export function TeamDetail() {
                   key={person.id}
                   to={`/people/${person.id}`}
                   title={person.name}
-                  detail={roles
-                    .map(
-                      (role) =>
-                        `${role.role === "COACH" ? "Entrenador" : role.role === "CAPTAIN" ? "Capitana" : "Jugadora"} · ${roleScopeLabel(state, role)}`,
-                    )
-                    .join("  ·  ")}
+detail={roles
+                              .map(
+                                (role) =>
+                                  `${roleTextOf(role.role)} · ${roleScopeLabel(state, role)}`,
+                              )
+                              .join("  ·  ")}
                   leading={<Avatar name={person.name} size="sm" />}
                 />
               )
@@ -1136,17 +1137,7 @@ export function PersonDetail() {
             {roles.map((role) => (
               <li key={role.id}>
                 <RowStatic
-                  title={
-                    role.role === "COACH"
-                      ? "Entrenador"
-                      : role.role === "CAPTAIN"
-                        ? "Capitana"
-                        : role.role === "ADMIN"
-                          ? "Administración"
-                          : role.role === "SUBCOMMITTEE"
-                            ? "Subcomisión"
-                            : "Jugadora"
-                  }
+                  title={roleTextOf(role.role)}
                   detail={roleScopeLabel(state, role)}
                 />
               </li>

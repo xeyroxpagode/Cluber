@@ -238,8 +238,15 @@ export interface Event {
   attendanceHistory: HistoryEntry<AttendanceValue | null>[]
   record: MatchRecord
   recordHistory: MatchRecordHistoryEntry[]
-  history: string[]
+  history: HistoryLine[]
   divergedFromSeries: boolean
+}
+
+export interface HistoryLine {
+  id: string
+  at: string
+  actor: string
+  text: string
 }
 
 export interface SelectionRevision {
@@ -442,11 +449,10 @@ export const labels: Record<string, string> = {
   PUBLISHED: "Publicado",
   ARCHIVED: "Archivado",
   ACTIVE: "Activo",
-  ARCHIVED_TEAM: "Archivado",
   DISABLED: "Deshabilitada",
   PENDING: "Pendiente",
-  CLOSED: "Cerrada",
   OPEN: "Abierta",
+  CLOSED: "Cerrada",
   ENDED: "Finalizada",
   FINAL: "Final",
   ELIGIBLE: "Habilitada",
@@ -465,6 +471,18 @@ export const labels: Record<string, string> = {
   PLAYED: "Jugado",
   FORFEIT: "No presentación",
 }
+
+/** Vocabulario único de roles para toda la interfaz. */
+export const roleText: Record<Role, string> = {
+  PLAYER: "Jugadora",
+  CAPTAIN: "Capitana",
+  COACH: "Entrenador",
+  ADMIN: "Administración",
+  SUBCOMMITTEE: "Subcomisión",
+}
+
+export const roleTextOf = (role: string) =>
+  roleText[role as Role] ?? "Sin rol deportivo"
 
 /** Estado derivado de disponibilidad que la jugadora ve. */
 export type AvailabilityView = Response | "NO_RESPONSE" | "NEEDS_RECONFIRMATION"

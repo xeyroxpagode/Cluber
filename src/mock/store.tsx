@@ -268,7 +268,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
     toastTimer.current = window.setTimeout(() => setToast(""), 3800)
   }, [])
 
-  const audit = useCallback(
+  const record = useCallback(
     (
       draft: State,
       entry: {
@@ -295,16 +295,24 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
     [actor.name],
   )
 
+  /** Línea de historial con fecha y autor reales: nunca una etiqueta relativa. */
+  const pushHistory = useCallback(
+    (event: Event, text: string, by = actor.name) => {
+      event.history.unshift({ id: uid(), at: nowIso(), actor: by, text })
+    },
+    [actor.name],
+  )
+
   const update = useCallback<ProductApi["update"]>(
     (recipe, entry) => {
       setState((previous) => {
         const next = structuredClone(previous)
         recipe(next)
-        if (entry) audit(next, entry)
+        if (entry) record(next, entry)
         return next
       })
     },
-    [audit],
+    [record],
   )
 
   /** Destinatarios reales de un evento: club + equipos destino + personas destino. */
@@ -348,9 +356,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
         if (!event) return
         Object.assign(event, patch)
         event.version++
-        event.history.unshift(
-          `Corrección de redacción · ${actor.name} · ${reason}`,
-        )
+        pushHistory(event, `Corrección de redacción: ${reason}`)
       },
       {
         action: "Corregir redacción del evento",
@@ -387,8 +393,10 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
         event.time = event.time === "17:30" ? "18:00" : "17:30"
         event.coordinationRevision++
         event.version++
-        event.history.unshift(
-          `Cambio de horario desde otro dispositivo · Otra persona · hace 1 min`,
+        pushHistory(
+          event,
+          "Cambio de horario desde otro dispositivo",
+          "Otra persona",
         )
       })
       const latest = structuredClone(state).events.find((item) => item.id === originId)!
@@ -416,8 +424,9 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
               : scope === "THIS_AND_FOLLOWING"
                 ? "Este evento y los siguientes"
                 : "Toda la serie"
-          target.history.unshift(
-            `${operation} · ${actor.name} · ${label}${kind === "schedule" ? " · cambió el horario" : ""}`,
+          pushHistory(
+            target,
+            `${operation} · ${label}${kind === "schedule" ? " · cambió el horario" : ""}`,
           )
           if (scope === "ONLY_THIS" && occurrence.seriesId) {
             target.divergedFromSeries = true
@@ -444,7 +453,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
             })
           }
         })
-        audit(draft, {
+        record(draft, {
           action: operation,
           resource:
             occurrences.length > 1
@@ -498,7 +507,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
           target.record.state = to === "COMPLETED" ? "FINAL" : target.record.state
           if (to === "ABANDONED") target.record.status = "ABANDONED"
         }
-        target.history.unshift(`${verbs[to]} · ${actor.name} · ${reason}`)
+        pushHistory(target, `${verbs[to]}: ${reason}`)
         pushNotice(draft, {
           type: typeByState[to],
           title:
@@ -513,7 +522,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
           route: `/events/${id}`,
           recipients: recipientsOfEvent(draft, target),
         })
-        audit(draft, {
+        record(draft, {
           action: verbs[to],
           resource: event.opponent || event.title,
           before,
@@ -543,10 +552,11 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
           answeredAt: nowIso(),
         }
         event.version++
-        event.history.unshift(
-          `Disponibilidad ${value === "YES" ? "confirmada" : value === "MAYBE" ? "dudosa" : "negada"} · ${
-            draft.people.find((p) => p.id === personId)?.name
-          } · ahora`,
+        pushHistory(
+          event,
+          `Disponibilidad ${
+            value === "YES" ? "confirmada" : value === "MAYBE" ? "dudosa" : "negada"
+          } · ${draft.people.find((p) => p.id === personId)?.name ?? ""}`,
         )
       },
       {
@@ -597,8 +607,9 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
           at: nowIso(),
           conflicts: [],
         })
-        target.history.unshift(
-          `Convocatoria publicada · ${actor.name} · ${added.length}Sumaron, ${removed.length} salieron`,
+        pushHistory(
+          target,
+          `Convocatoria publicada · ${added.length} sumaron, ${removed.length} salieron`,
         )
         pushNotice(draft, {
           type: "SELECTION_PUBLISHED",
@@ -609,7 +620,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
             new Set([...selected, ...before]),
           ).filter((id) => id !== actor.id),
         })
-        audit(draft, {
+        record(draft, {
           action: "Publicar convocatoria",
           resource: target.opponent || target.title,
           before: before.length ? `${before.length} convocadas` : "Sin convocatoria",
@@ -628,8 +639,8 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
         const event = draft.events.find((item) => item.id === eventId)!
         event.attendanceOpened = true
         event.version++
-        event.history.unshift(`Asistencia abierta · ${actor.name} · ahora`)
-        audit(draft, {
+        pushHistory(event, "Asistencia abierta")
+        record(draft, {
           action: "Abrir asistencia",
           resource: event.opponent || event.title,
           before: "Cerrada",
@@ -651,8 +662,8 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
         const event = draft.events.find((item) => item.id === eventId)!
         event.attendanceClosedAt = nowIso()
         event.version++
-        event.history.unshift(`Asistencia cerrada · ${actor.name} · ${reason}`)
-        audit(draft, {
+        pushHistory(event, `Asistencia cerrada: ${reason}`)
+        record(draft, {
           action: "Cerrar asistencia",
           resource: event.opponent || event.title,
           before: "Abierta",
@@ -688,12 +699,11 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
           correction: before !== null,
         })
         const personName = draft.people.find((p) => p.id === personId)?.name
-        event.history.unshift(
-          `${personName}: ${before ?? "sin registrar"} → ${value} · ${actor.name}${
-            reason ? ` · ${reason}` : ""
-          }`,
+        pushHistory(
+          event,
+          `${personName}: ${before ?? "sin registrar"} → ${value}${reason ? ` · ${reason}` : ""}`,
         )
-        audit(draft, {
+        record(draft, {
           action: before ? "Corregir asistencia" : "Registrar asistencia",
           resource: `${personName} · ${event.opponent || event.title}`,
           before,
@@ -730,10 +740,8 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
           at: nowIso(),
           reason,
         })
-        target.history.unshift(
-          `Resultado finalizado ${afterLabel} · ${actor.name} · ${reason}`,
-        )
-        audit(draft, {
+        pushHistory(target, `Resultado finalizado ${afterLabel} · ${reason}`)
+        record(draft, {
           action: "Finalizar resultado",
           resource: event.opponent || event.title,
           before: beforeLabel,
@@ -766,10 +774,11 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
           at: nowIso(),
           reason,
         })
-        target.history.unshift(
-          `Resultado corregido ${beforeLabel} → ${afterLabel} · ${actor.name} · ${reason}`,
+        pushHistory(
+          target,
+          `Resultado corregido ${beforeLabel} → ${afterLabel} · ${reason}`,
         )
-        audit(draft, {
+        record(draft, {
           action: "Corregir resultado",
           resource: event.opponent || event.title,
           before: beforeLabel,
@@ -796,9 +805,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
         target.venueId = venue.id
         target.version++
         target.coordinationRevision++
-        target.history.unshift(
-          `Sede cambiada de ${before} a ${venue.name} · ${actor.name}`,
-        )
+        pushHistory(target, `Sede cambiada a ${venue.name}`)
         pushNotice(draft, {
           type: "EVENT_CHANGED",
           title: "Cambió la sede",
@@ -808,7 +815,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
             (id) => id !== actor.id,
           ),
         })
-        audit(draft, {
+        record(draft, {
           action: "Cambiar sede del evento",
           resource: target.opponent || target.title,
           before: before,
@@ -871,7 +878,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
           setupToken: null,
           roleAssignments: [],
         })
-        audit(draft, {
+        record(draft, {
           action: "Crear persona",
           resource: data.name,
           before: null,
@@ -1325,10 +1332,11 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
             .forEach((event) => {
               event.version++
               event.coordinationRevision++
-              event.history.unshift(
+              pushHistory(
+                event,
                 `Jornada actualizada (${Object.entries(patch)
                   .map(([key, value]) => `${key}: ${value}`)
-                  .join(" · ")}) · ${actor.name} · ${reason}`,
+                  .join(" · ")}) · ${reason}`,
               )
               pushNotice(draft, {
                 type: "EVENT_CHANGED",
@@ -1341,7 +1349,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
               })
             })
         }
-        audit(draft, {
+        record(draft, {
           action: "Actualizar jornada",
           resource: target.name,
           before: null,
@@ -1453,7 +1461,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
         const message = conversation?.messages.find((item) => item.id === messageId)
         if (!conversation || !message) return
         message.deletedAt = nowIso()
-        audit(draft, {
+        record(draft, {
           action: "Eliminar mensaje",
           resource: conversationId,
           before: message.body.slice(0, 60),
@@ -1553,7 +1561,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
                 : recipientsOfTeams(draft, target.audienceSnapshot.teamIds),
             })
           }
-          audit(draft, {
+          record(draft, {
             action: data.publish && existing.state !== "PUBLISHED" ? "Publicar comunicado" : "Corregir comunicado",
             resource: target.title,
             before: beforeTitle,
@@ -1594,7 +1602,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
           })
         }
         draft.announcements.unshift(created)
-        audit(draft, {
+        record(draft, {
           action: data.publish ? "Publicar comunicado" : "Crear comunicado",
           resource: created.title,
           before: null,
@@ -1625,7 +1633,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
       (draft) => {
         const target = draft.announcements.find((entry) => entry.id === id)!
         target.state = "ARCHIVED"
-        audit(draft, {
+        record(draft, {
           action: "Archivar comunicado",
           resource: target.title,
           before: "Publicado",

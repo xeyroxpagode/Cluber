@@ -413,9 +413,9 @@ export function EventDetail() {
           <Modal title="Historial del evento" onClose={() => setSheet(null)}>
             <HistoryList
               entries={event.history.map((line) => ({
-                action: line,
-                actor: "",
-                at: "",
+                action: line.text,
+                actor: line.actor,
+                at: dateTimeLabel(line.at),
               }))}
               emptyText="Sin movimientos registrados."
             />
@@ -730,7 +730,12 @@ export function EventDetail() {
                     key={index}
                     className="border-b border-line py-2.5 last:border-b-0"
                   >
-                    <p className="gei-body text-ink-strong">{line}</p>
+                    <div>
+                    <p className="gei-body text-ink-strong">{line.text}</p>
+                    <p className="gei-meta">
+                      {line.actor} · {dateTimeLabel(line.at)}
+                    </p>
+                  </div>
                   </li>
                 ))}
               </ul>
@@ -789,9 +794,9 @@ export function EventDetail() {
         <Modal title="Historial del evento" onClose={() => setSheet(null)}>
           <HistoryList
             entries={event.history.map((line) => ({
-              action: line,
-              actor: "",
-              at: "",
+              action: line.text,
+              actor: line.actor,
+              at: dateTimeLabel(line.at),
             }))}
             emptyText="Sin movimientos registrados."
           />
@@ -1243,7 +1248,14 @@ export function EventForm() {
               stats: {},
             },
             recordHistory: [],
-            history: [`Evento creado · ${authority.person.name} · ahora`],
+            history: [
+              {
+                id: `h-${crypto.randomUUID().slice(0, 8)}`,
+                at: new Date().toISOString(),
+                actor: authority.person.name,
+                text: "Evento creado",
+              },
+            ],
             divergedFromSeries: false,
           })
         },

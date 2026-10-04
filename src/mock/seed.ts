@@ -2,6 +2,7 @@ import type {
   AttendanceValue,
   Availability,
   Event,
+  HistoryLine,
   Person,
   Response,
   State,
@@ -81,7 +82,7 @@ interface EventOverrides {
   attendanceOpened?: boolean
   attendanceClosedAt?: string | null
   record?: Event["record"]
-  history?: string[]
+  history?: HistoryLine[]
 }
 
 function makeEvent(
@@ -154,6 +155,18 @@ function makeEvent(
   }
 }
 
+const peopleIds = playerIds
+
+/** Línea de historial del seed: fecha y autor reales, nunca una etiqueta relativa. */
+const line = (dayOffset: number, hour: number, actor: string, text: string) => ({
+  id: `h-${dayOffset}-${hour}-${actor.slice(0, 4)}-${text.slice(0, 6)}`,
+  at: at(dayOffset, hour),
+  actor,
+  text,
+})
+
+void peopleIds
+
 export function createSeed(): State {
   const matchCuba = makeEvent("match-cuba", "MATCH", 6, "18:00", {
     opponent: "CUBA",
@@ -182,9 +195,9 @@ export function createSeed(): State {
     },
   ]
   matchCuba.history = [
-    "Horario cambiado de 16:00 a 18:00 · Tomás Beltrán · hace 2 días",
-    "Convocatoria publicada · Tomás Beltrán · hace 2 días",
-    "Evento programado · Carolina Sánchez · hace 8 días",
+    line(-2, 18, "Tomás Beltrán", "Horario cambiado de 16:00 a 18:00"),
+    line(-2, 10, "Tomás Beltrán", "Convocatoria publicada"),
+    line(-8, 9, "Carolina Sánchez", "Evento programado"),
   ]
 
   const matchLomas = makeEvent("match-lomas", "MATCH", 0, "17:00", {
@@ -213,8 +226,8 @@ export function createSeed(): State {
     },
   })
   matchLomas.history = [
-    "Partido iniciado · Tomás Beltrán · hoy",
-    "Convocatoria publicada · Tomás Beltrán · hace 4 días",
+    line(0, 17, "Tomás Beltrán", "Partido iniciado"),
+    line(-4, 10, "Tomás Beltrán", "Convocatoria publicada"),
   ]
 
   const matchSic = makeEvent("match-sic", "MATCH", -6, "16:00", {
@@ -244,9 +257,9 @@ export function createSeed(): State {
       },
     },
     history: [
-      "Resultado corregido de 3-1 a 4-1 · Tomás Beltrán · hace 5 días",
-      "Resultado finalizado · Tomás Beltrán · hace 6 días",
-      "Asistencia cerrada · Tomás Beltrán · hace 6 días",
+      line(-5, 21, "Tomás Beltrán", "Resultado corregido de 3-1 a 4-1"),
+      line(-6, 20, "Tomás Beltrán", "Resultado finalizado"),
+      line(-6, 20, "Tomás Beltrán", "Asistencia cerrada"),
     ],
   })
   matchSic.recordHistory = [
@@ -275,7 +288,7 @@ export function createSeed(): State {
   const matchBanco = makeEvent("match-banco", "MATCH", 12, "16:00", {
     opponent: "Banco Nación",
     state: "POSTPONED",
-    history: ["Partido postergado · Carolina Sánchez · hace 1 día"],
+    history: [line(-1, 11, "Carolina Sánchez", "Partido postergado")],
   })
 
   // Serie de 4 ocurrencias: obliga a que "Toda la serie" mute 4.
@@ -288,7 +301,7 @@ export function createSeed(): State {
         { p4: "MAYBE", p6: "NO" },
         1,
       ),
-      history: index === 0 ? ["Entrenamiento registrado · Carolina Sánchez · hace 3 días"] : [],
+      history: index === 0 ? [line(-3, 9, "Carolina Sánchez", "Entrenamiento registrado")] : [],
     }),
   )
 
@@ -300,7 +313,7 @@ export function createSeed(): State {
     meeting: "10:15",
     departure: "10:00",
     point: "Estacionamiento interno",
-    history: ["Entrenamiento reprogramado · Carolina Sánchez · ayer"],
+    history: [line(-1, 17, "Carolina Sánchez", "Entrenamiento reprogramado")],
   })
 
   const clubEvent = makeEvent("club-familias", "CLUB_EVENT", 4, "10:00", {
@@ -313,7 +326,7 @@ export function createSeed(): State {
 
   const cancelled = makeEvent("training-cancelado", "TRAINING", -1, "19:00", {
     state: "CANCELLED",
-    history: ["Entrenamiento cancelado · Carolina Sánchez · ayer"],
+    history: [line(-1, 12, "Carolina Sánchez", "Entrenamiento cancelado")],
   })
 
   const people: Person[] = [

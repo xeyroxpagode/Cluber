@@ -14,54 +14,21 @@ import type {
 
 export type Tone = "neutral" | "attention" | "success" | "warning" | "danger" | "selected"
 
+/**
+ * Vocabulario único de estado. La fuente canónica vive en el modelo de
+ * dominio; acá se expone como presentación con los mismos textos.
+ */
+import { labels } from "../mock/model"
+
 export const STATE_TEXT: Record<string, string> = {
-  /* Ciclo de vida del evento */
-  DRAFT: "Borrador",
-  SCHEDULED: "Programado",
-  POSTPONED: "Postergado",
-  CANCELLED: "Cancelado",
-  IN_PROGRESS: "En curso",
-  COMPLETED: "Finalizado",
-  ABANDONED: "Suspendido",
-  /* Publicación y registros */
-  PUBLISHED: "Publicado",
-  ARCHIVED: "Archivado",
-  ACTIVE: "Activo",
-  DISABLED: "Deshabilitada",
-  PENDING: "Pendiente",
-  OPEN: "Abierta",
-  CLOSED: "Cerrada",
-  ENDED: "Finalizada",
-  FINAL: "Final",
-  /* Elegibilidad */
-  ELIGIBLE: "Habilitada",
+  ...labels,
   BLOCKED: "No habilitada",
-  /* Disponibilidad */
   YES: "Voy",
-  MAYBE: "Tal vez",
   NO: "No voy",
   NO_RESPONSE: "Sin respuesta",
   NEEDS_RECONFIRMATION: "Hay que volver a confirmar",
-  /* Asistencia */
-  PRESENT: "Presente",
-  ABSENT: "Ausente",
-  JUSTIFIED: "Justificada",
   UNRECORDED: "Sin registrar",
-  /* Partido */
-  PLAYED: "Jugado",
-  FORFEIT: "No presentación",
-  /* Roles (contexto, nunca autoridad) */
-  PLAYER: "Jugadora",
-  CAPTAIN: "Capitana",
-  COACH: "Entrenador",
-  ADMIN: "Administración",
-  SUBCOMMITTEE: "Subcomisión",
-  /* Tipos de evento */
-  MATCH: "Partido",
-  TRAINING: "Entrenamiento",
-  CLUB_EVENT: "Evento del club",
 }
-
 const stateToneMap: Record<string, Tone> = {
   DRAFT: "neutral",
   SCHEDULED: "selected",

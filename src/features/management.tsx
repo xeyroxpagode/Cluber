@@ -8,6 +8,8 @@ import {
   dateTimeLabel,
   entryLabel,
   periodLabel,
+  roleTextOf,
+  roleText,
   teamName,
   type CompetitionEntry,
   type StructureType,
@@ -55,14 +57,6 @@ import {
   SectionHeader,
 } from "../shared/patterns"
 import { useQueryState } from "../shared/use-query-state"
-
-const ROLE_LABEL: Record<string, string> = {
-  PLAYER: "Jugadora",
-  CAPTAIN: "Capitana",
-  COACH: "Entrenador",
-  ADMIN: "Administración",
-  SUBCOMMITTEE: "Subcomisión",
-}
 
 const STRUCTURE_LABEL: Record<StructureType, string> = {
   SEASON: "Temporadas",
@@ -232,7 +226,7 @@ export function PeopleManagement() {
                 className="min-w-44"
               >
                 <option value="">Todos</option>
-                {Object.entries(ROLE_LABEL).map(([value, label]) => (
+                {Object.entries(roleText).map(([value, label]) => (
                   <option key={value} value={value}>
                     {label}
                   </option>
@@ -310,7 +304,7 @@ export function PeopleManagement() {
                           : roles
                               .map(
                                 (assignment) =>
-                                  `${ROLE_LABEL[assignment.role]} · ${roleScopeLabel(state, assignment)}`,
+                                  `${roleTextOf(assignment.role)} · ${roleScopeLabel(state, assignment)}`,
                               )
                               .join("  ·  ")}
                       </span>
@@ -768,7 +762,7 @@ export function PersonAdminDetail() {
               {roles.map((role) => (
                 <li key={role.id}>
                   <RowStatic
-                    title={ROLE_LABEL[role.role] ?? role.role}
+                    title={roleTextOf(role.role)}
                     detail={`${roleScopeLabel(state, role)} · ${periodLabel(
                       role.validFrom,
                       role.validUntil,
