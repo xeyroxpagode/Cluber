@@ -1,0 +1,379 @@
+[
+  {
+    "id": "UCD-IAM-01",
+    "actors": [
+      "ACT-UNAUTHENTICATED",
+      "ACT-SUBCOMMITTEE",
+      "ACT-AUTHENTICATED",
+      "ACT-ADMIN"
+    ],
+    "ucs": [
+      "UC-IAM-09",
+      "UC-IAM-02",
+      "UC-IAM-03",
+      "UC-IAM-05",
+      "UC-IAM-07",
+      "UC-IAM-10",
+      "UC-IAM-01",
+      "UC-IAM-04",
+      "UC-IAM-06",
+      "UC-IAM-08"
+    ],
+    "inc": 3,
+    "ext": 0,
+    "gen": 2,
+    "cross": 14,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 2
+  },
+  {
+    "id": "UCD-PPL-01",
+    "actors": [
+      "ACT-AUTHENTICATED",
+      "ACT-PLAYER",
+      "ACT-ADMIN"
+    ],
+    "ucs": [
+      "UC-IAM-09",
+      "UC-PPL-01",
+      "UC-PPL-02",
+      "UC-PPL-03",
+      "UC-PPL-04",
+      "UC-PPL-05",
+      "UC-PPL-15",
+      "UC-PPL-16",
+      "UC-PPL-17"
+    ],
+    "inc": 5,
+    "ext": 0,
+    "gen": 2,
+    "cross": 9,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 2
+  },
+  {
+    "id": "UCD-PPL-02",
+    "actors": [
+      "ACT-PLAYER",
+      "ACT-GUARDIAN",
+      "ACT-ADMIN"
+    ],
+    "ucs": [
+      "UC-IAM-09",
+      "UC-PPL-06",
+      "UC-PPL-07",
+      "UC-PPL-08",
+      "UC-PPL-09",
+      "UC-PPL-10",
+      "UC-PPL-11",
+      "UC-PPL-12",
+      "UC-PPL-13",
+      "UC-PPL-14"
+    ],
+    "inc": 7,
+    "ext": 0,
+    "gen": 0,
+    "cross": 5,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 3
+  },
+  {
+    "id": "UCD-STR-01",
+    "actors": [
+      "ACT-ADMIN"
+    ],
+    "ucs": [
+      "UC-IAM-09",
+      "UC-STR-01",
+      "UC-STR-02",
+      "UC-STR-03",
+      "UC-STR-04",
+      "UC-STR-05",
+      "UC-STR-06",
+      "UC-STR-07",
+      "UC-STR-08"
+    ],
+    "inc": 8,
+    "ext": 0,
+    "gen": 0,
+    "cross": 5,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 2
+  },
+  {
+    "id": "UCD-STR-02",
+    "actors": [
+      "ACT-ADMIN"
+    ],
+    "ucs": [
+      "UC-IAM-09",
+      "UC-STR-09",
+      "UC-STR-10",
+      "UC-STR-11",
+      "UC-STR-12",
+      "UC-STR-13",
+      "UC-STR-14",
+      "UC-STR-15"
+    ],
+    "inc": 7,
+    "ext": 0,
+    "gen": 0,
+    "cross": 5,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 2
+  },
+  {
+    "id": "UCD-EVT-01",
+    "actors": [
+      "ACT-SUBCOMMITTEE",
+      "ACT-COACH"
+    ],
+    "ucs": [
+      "UC-EVT-01",
+      "UC-EVT-02",
+      "UC-EVT-03",
+      "UC-EVT-13",
+      "UC-EVT-14",
+      "UC-EVT-15"
+    ],
+    "inc": 0,
+    "ext": 0,
+    "gen": 0,
+    "cross": 2,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 4
+  },
+  {
+    "id": "UCD-EVT-02a",
+    "actors": [
+      "ACT-SUBCOMMITTEE",
+      "ACT-COACH"
+    ],
+    "ucs": [
+      "UC-EVT-04",
+      "UC-EVT-05",
+      "UC-EVT-07",
+      "UC-EVT-08",
+      "UC-EVT-11",
+      "UC-EVT-12"
+    ],
+    "inc": 4,
+    "ext": 1,
+    "gen": 0,
+    "cross": 19,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 3
+  },
+  {
+    "id": "UCD-EVT-02b",
+    "actors": [
+      "ACT-SUBCOMMITTEE",
+      "ACT-COACH"
+    ],
+    "ucs": [
+      "UC-EVT-06",
+      "UC-EVT-09",
+      "UC-EVT-10"
+    ],
+    "inc": 0,
+    "ext": 0,
+    "gen": 0,
+    "cross": 0,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 3
+  },
+  {
+    "id": "UCD-EVT-03",
+    "actors": [
+      "ACT-AUTHENTICATED",
+      "ACT-CAPTAIN",
+      "ACT-SUBCOMMITTEE",
+      "ACT-COACH"
+    ],
+    "ucs": [
+      "UC-EVT-11",
+      "UC-EVT-16",
+      "UC-EVT-17",
+      "UC-EVT-18",
+      "UC-EVT-19"
+    ],
+    "inc": 1,
+    "ext": 0,
+    "gen": 3,
+    "cross": 0,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 4
+  },
+  {
+    "id": "UCD-PRT-01",
+    "actors": [
+      "ACT-COACH",
+      "ACT-GUARDIAN",
+      "ACT-PLAYER"
+    ],
+    "ucs": [
+      "UC-PRT-01",
+      "UC-PRT-02",
+      "UC-PRT-03",
+      "UC-PRT-04",
+      "UC-PRT-05",
+      "UC-PRT-06",
+      "UC-PRT-07"
+    ],
+    "inc": 0,
+    "ext": 4,
+    "gen": 0,
+    "cross": 2,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 2
+  },
+  {
+    "id": "UCD-PRT-02",
+    "actors": [
+      "ACT-ADMIN",
+      "ACT-SUBCOMMITTEE",
+      "ACT-CAPTAIN",
+      "ACT-COACH"
+    ],
+    "ucs": [
+      "UC-IAM-09",
+      "UC-PRT-08",
+      "UC-PRT-09",
+      "UC-PRT-10",
+      "UC-PRT-11",
+      "UC-PRT-12",
+      "UC-PRT-13"
+    ],
+    "inc": 1,
+    "ext": 1,
+    "gen": 0,
+    "cross": 3,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 2
+  },
+  {
+    "id": "UCD-COM-01",
+    "actors": [
+      "ACT-AUTHENTICATED",
+      "ACT-SUBCOMMITTEE"
+    ],
+    "ucs": [
+      "UC-COM-01",
+      "UC-COM-02",
+      "UC-COM-03",
+      "UC-COM-04",
+      "UC-COM-05"
+    ],
+    "inc": 0,
+    "ext": 0,
+    "gen": 1,
+    "cross": 0,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 3
+  },
+  {
+    "id": "UCD-COM-02",
+    "actors": [
+      "ACT-AUTHENTICATED"
+    ],
+    "ucs": [
+      "UC-COM-06",
+      "UC-COM-07",
+      "UC-COM-08",
+      "UC-COM-09",
+      "UC-COM-10",
+      "UC-COM-11",
+      "UC-COM-12",
+      "UC-COM-13",
+      "UC-COM-14"
+    ],
+    "inc": 0,
+    "ext": 0,
+    "gen": 0,
+    "cross": 0,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 2
+  },
+  {
+    "id": "UCD-CMP-01",
+    "actors": [
+      "ACT-COACH",
+      "ACT-ADMIN",
+      "ACT-SUBCOMMITTEE"
+    ],
+    "ucs": [
+      "UC-CMP-01",
+      "UC-CMP-02",
+      "UC-CMP-03",
+      "UC-CMP-08",
+      "UC-CMP-09",
+      "UC-IAM-09"
+    ],
+    "inc": 4,
+    "ext": 0,
+    "gen": 0,
+    "cross": 9,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 4
+  },
+  {
+    "id": "UCD-CMP-02",
+    "actors": [
+      "ACT-ADMIN",
+      "ACT-SUBCOMMITTEE"
+    ],
+    "ucs": [
+      "UC-IAM-09",
+      "UC-CMP-04",
+      "UC-CMP-05",
+      "UC-CMP-06",
+      "UC-CMP-07"
+    ],
+    "inc": 4,
+    "ext": 0,
+    "gen": 0,
+    "cross": 6,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 4
+  },
+  {
+    "id": "UCD-INS-01",
+    "actors": [
+      "ACT-ADMIN",
+      "ACT-CAPTAIN",
+      "ACT-PLAYER",
+      "ACT-SUBCOMMITTEE",
+      "ACT-COACH",
+      "ACT-AUTHENTICATED"
+    ],
+    "ucs": [
+      "UC-INS-01",
+      "UC-INS-02",
+      "UC-INS-03",
+      "UC-INS-04",
+      "UC-INS-05"
+    ],
+    "inc": 0,
+    "ext": 0,
+    "gen": 5,
+    "cross": 0,
+    "pen": 0,
+    "ovf": 0,
+    "cols": 2
+  }
+]

@@ -1,0 +1,49 @@
+GEI E4 — VALIDACIÓN DE ARTEFACTOS DRAW.IO DE CASOS DE USO
+========================================================================
+Archivos .drawio analizados ............ 17
+Errores XML .......................... 0
+Celdas mxCell con ID duplicado ....... 0
+Referencias rotas (parent/edge) ....... 0
+
+COBERTURA DE CASOS DE USO
+CU canónicos en el catálogo ........... 102
+UC únicos representados en los diagramas .. 102
+MISSING .............................. 0
+UNKNOWN_UC ........................... 0
+RENAMED_ID ........................... 0
+UC fuera de su diagrama de dominio ... 0
+
+ACTORES
+UNKNOWN_ACTOR ........................ 0
+Actores E2 representados ................. 8 / 8
+Actor dentro del boundary ............. 0
+UC fuera del boundary ................ 0
+NO_NEW_GENERALIZATION ................ 0
+Generalizaciones dibujadas ........... 19
+
+RELACIONES
+Relaciones dibujadas ................. 50
+UNKNOWN_RELATION_ENDPOINT ............ 0
+UNAUTHORIZED_NEW_RELATION ............ 0
+REJECTED_RELATION_DRAWN .............. 0
+Relaciones aprobadas no dibujadas .... 0
+
+QA GEOMÉTRICA (sin renderizador draw.io disponible)
+UCD-IAM-01   cols=2 aristas= 13 assoc=10 rel= 3 generalización=2 cruces= 14 penetración=0 texto-desbordado=0
+UCD-PPL-01   cols=2 aristas= 13 assoc= 8 rel= 5 generalización=2 cruces=  9 penetración=0 texto-desbordado=0
+UCD-PPL-02   cols=3 aristas= 17 assoc=10 rel= 7 generalización=0 cruces=  5 penetración=0 texto-desbordado=0
+UCD-STR-01   cols=2 aristas= 16 assoc= 8 rel= 8 generalización=0 cruces=  5 penetración=0 texto-desbordado=0
+UCD-STR-02   cols=2 aristas= 14 assoc= 7 rel= 7 generalización=0 cruces=  5 penetración=0 texto-desbordado=0
+UCD-EVT-01   cols=4 aristas= 12 assoc=12 rel= 0 generalización=0 cruces=  2 penetración=0 texto-desbordado=0
+UCD-EVT-02a  cols=3 aristas= 17 assoc=12 rel= 5 generalización=0 cruces= 19 penetración=0 texto-desbordado=0
+UCD-EVT-02b  cols=3 aristas=  6 assoc= 6 rel= 0 generalización=0 cruces=  0 penetración=0 texto-desbordado=0
+UCD-EVT-03   cols=4 aristas=  7 assoc= 6 rel= 1 generalización=3 cruces=  0 penetración=0 texto-desbordado=0
+UCD-PRT-01   cols=2 aristas= 12 assoc= 8 rel= 4 generalización=0 cruces=  2 penetración=0 texto-desbordado=0
+UCD-PRT-02   cols=2 aristas= 12 assoc=10 rel= 2 generalización=0 cruces=  3 penetración=0 texto-desbordado=0
+UCD-COM-01   cols=3 aristas=  5 assoc= 5 rel= 0 generalización=1 cruces=  0 penetración=0 texto-desbordado=0
+UCD-COM-02   cols=2 aristas=  9 assoc= 9 rel= 0 generalización=0 cruces=  0 penetración=0 texto-desbordado=0
+UCD-CMP-01   cols=4 aristas= 15 assoc=11 rel= 4 generalización=0 cruces=  9 penetración=0 texto-desbordado=0
+UCD-CMP-02   cols=4 aristas= 12 assoc= 8 rel= 4 generalización=0 cruces=  6 penetración=0 texto-desbordado=0
+UCD-INS-01   cols=2 aristas= 11 assoc=11 rel= 0 generalización=5 cruces=  0 penetración=0 texto-desbordado=0
+
+RESULT: PASS (0 findings)
