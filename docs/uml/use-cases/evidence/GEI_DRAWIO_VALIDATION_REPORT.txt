@@ -22,28 +22,63 @@ NO_NEW_GENERALIZATION ................ 0
 Generalizaciones dibujadas ........... 19
 
 RELACIONES
-Relaciones dibujadas ................. 50
+Relaciones dibujadas ................. 6
 UNKNOWN_RELATION_ENDPOINT ............ 0
 UNAUTHORIZED_NEW_RELATION ............ 0
 REJECTED_RELATION_DRAWN .............. 0
 Relaciones aprobadas no dibujadas .... 0
 
-QA GEOMÉTRICA (sin renderizador draw.io disponible)
-UCD-IAM-01   cols=2 aristas= 13 assoc=10 rel= 3 generalización=2 cruces= 14 penetración=0 texto-desbordado=0
-UCD-PPL-01   cols=2 aristas= 13 assoc= 8 rel= 5 generalización=2 cruces=  9 penetración=0 texto-desbordado=0
-UCD-PPL-02   cols=3 aristas= 17 assoc=10 rel= 7 generalización=0 cruces=  5 penetración=0 texto-desbordado=0
-UCD-STR-01   cols=2 aristas= 16 assoc= 8 rel= 8 generalización=0 cruces=  5 penetración=0 texto-desbordado=0
-UCD-STR-02   cols=2 aristas= 14 assoc= 7 rel= 7 generalización=0 cruces=  5 penetración=0 texto-desbordado=0
-UCD-EVT-01   cols=4 aristas= 12 assoc=12 rel= 0 generalización=0 cruces=  2 penetración=0 texto-desbordado=0
-UCD-EVT-02a  cols=3 aristas= 17 assoc=12 rel= 5 generalización=0 cruces= 19 penetración=0 texto-desbordado=0
-UCD-EVT-02b  cols=3 aristas=  6 assoc= 6 rel= 0 generalización=0 cruces=  0 penetración=0 texto-desbordado=0
-UCD-EVT-03   cols=4 aristas=  7 assoc= 6 rel= 1 generalización=3 cruces=  0 penetración=0 texto-desbordado=0
-UCD-PRT-01   cols=2 aristas= 12 assoc= 8 rel= 4 generalización=0 cruces=  2 penetración=0 texto-desbordado=0
-UCD-PRT-02   cols=2 aristas= 12 assoc=10 rel= 2 generalización=0 cruces=  3 penetración=0 texto-desbordado=0
-UCD-COM-01   cols=3 aristas=  5 assoc= 5 rel= 0 generalización=1 cruces=  0 penetración=0 texto-desbordado=0
-UCD-COM-02   cols=2 aristas=  9 assoc= 9 rel= 0 generalización=0 cruces=  0 penetración=0 texto-desbordado=0
-UCD-CMP-01   cols=4 aristas= 15 assoc=11 rel= 4 generalización=0 cruces=  9 penetración=0 texto-desbordado=0
-UCD-CMP-02   cols=4 aristas= 12 assoc= 8 rel= 4 generalización=0 cruces=  6 penetración=0 texto-desbordado=0
-UCD-INS-01   cols=2 aristas= 11 assoc=11 rel= 0 generalización=5 cruces=  0 penetración=0 texto-desbordado=0
+QA GEOMÉTRICA (medida con las reglas de anclaje de diagrams.net)
+UCD-IAM-01   cols=2 aristas= 10 assoc=10 rel= 0 generalización=2 cruces= 34 solape=    0px penetración=0 texto-desbordado=0
+UCD-PPL-01   cols=2 aristas=  8 assoc= 8 rel= 0 generalización=2 cruces= 21 solape=    0px penetración=0 texto-desbordado=0
+UCD-PPL-02   cols=2 aristas= 10 assoc=10 rel= 0 generalización=0 cruces= 20 solape=    0px penetración=0 texto-desbordado=0
+UCD-STR-01   cols=2 aristas=  8 assoc= 8 rel= 0 generalización=0 cruces= 19 solape=    0px penetración=0 texto-desbordado=0
+UCD-STR-02   cols=2 aristas=  7 assoc= 7 rel= 0 generalización=0 cruces= 11 solape=    0px penetración=0 texto-desbordado=0
+UCD-EVT-01   cols=1 aristas= 12 assoc=12 rel= 0 generalización=0 cruces= 49 solape=    0px penetración=0 texto-desbordado=0
+UCD-EVT-02a  cols=4 aristas= 17 assoc=12 rel= 5 generalización=0 cruces=116 solape=  144px penetración=0 texto-desbordado=0
+UCD-EVT-02b  cols=1 aristas=  6 assoc= 6 rel= 0 generalización=0 cruces=  4 solape=    0px penetración=0 texto-desbordado=0
+UCD-EVT-03   cols=1 aristas=  7 assoc= 6 rel= 1 generalización=3 cruces= 19 solape=    0px penetración=0 texto-desbordado=0
+UCD-PRT-01   cols=2 aristas=  8 assoc= 8 rel= 0 generalización=0 cruces= 17 solape=    0px penetración=0 texto-desbordado=0
+UCD-PRT-02   cols=1 aristas= 10 assoc=10 rel= 0 generalización=0 cruces= 22 solape=    0px penetración=0 texto-desbordado=0
+UCD-COM-01   cols=1 aristas=  5 assoc= 5 rel= 0 generalización=1 cruces=  4 solape=    0px penetración=0 texto-desbordado=0
+UCD-COM-02   cols=2 aristas=  9 assoc= 9 rel= 0 generalización=0 cruces= 21 solape=    0px penetración=0 texto-desbordado=0
+UCD-CMP-01   cols=1 aristas= 11 assoc=11 rel= 0 generalización=0 cruces= 37 solape=    0px penetración=0 texto-desbordado=0
+UCD-CMP-02   cols=1 aristas=  8 assoc= 8 rel= 0 generalización=0 cruces= 16 solape=    0px penetración=0 texto-desbordado=0
+UCD-INS-01   cols=1 aristas= 11 assoc=11 rel= 0 generalización=5 cruces= 48 solape=   38px penetración=0 texto-desbordado=0
+
+QA DE ANCLAJE Y SOLAPE (E4-0.1, midiendo el archivo real)
+DRAWIO_INVALID_WAYPOINTS ............. 0
+RAW_ANGLE_IN_ATTRIBUTE ............... 0
+EDGE_LABEL_BAD_OFFSET ............... 0
+CONNECTOR_OVERLAP (pares) ............ 10
+Solape colineal total ................. 182 px
+LABEL_FIGURE_OVERLAP ................ 0
+ACTOR_OVERLAP ....................... 0
+TYPOGRAPHY_BELOW_11PT ............... 0
+
+QA DE ETIQUETAS DE RELACIÓN (E4 D-10, geometría re-derivada del archivo)
+RELATION_LABEL_OVERLAP .............. 0
+RELATION_LABEL_TO_NODE_OVERLAP ..... 0
+RELATION_LABEL_OUTSIDE_PAGE ........ 0
+RELATION_LABEL_UNREADABLE .......... 0
+Etiquetas de relación medidas ....... 6
+
+PÁGINA Y RECORTE DE TEXTO
+OUT_OF_PAGE (ELEMENT_OFF_PAGE) ...... 0
+TEXT_CLIPPING (texto fuera de página) 0
+TEXT_CLIPPING (texto mayor que elipse) 0
+TYPOGRAPHY_BELOW_THRESHOLD ......... 0
+
+ADVERTENCIAS (no bloqueantes)
+  [CONNECTOR_OVERLAP] UCD-EVT-02a__GEI_Event_Material_Change.drawio: e12 x e18 = 37px
+  [CONNECTOR_OVERLAP] UCD-EVT-02a__GEI_Event_Material_Change.drawio: e12 x e20 = 10px
+  [CONNECTOR_OVERLAP] UCD-EVT-02a__GEI_Event_Material_Change.drawio: e14 x e16 = 37px
+  [CONNECTOR_OVERLAP] UCD-EVT-02a__GEI_Event_Material_Change.drawio: e14 x e18 = 28px
+  [CONNECTOR_OVERLAP] UCD-EVT-02a__GEI_Event_Material_Change.drawio: e18 x e22 = 16px
+  [CONNECTOR_OVERLAP] UCD-EVT-02a__GEI_Event_Material_Change.drawio: e18 x e23 = 16px
+  [CONNECTOR_OVERLAP] UCD-INS-01__GEI_Search_Reports_Audit.drawio: e24 x e26 = 10px
+  [CONNECTOR_OVERLAP] UCD-INS-01__GEI_Search_Reports_Audit.drawio: e25 x e27 = 10px
+  [CONNECTOR_OVERLAP] UCD-INS-01__GEI_Search_Reports_Audit.drawio: e28 x e30 = 10px
+  [CONNECTOR_OVERLAP] UCD-INS-01__GEI_Search_Reports_Audit.drawio: e29 x e31 = 10px
 
 RESULT: PASS (0 findings)
