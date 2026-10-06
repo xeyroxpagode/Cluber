@@ -1,0 +1,2 @@
+﻿
+C:\Users\thega\Desktop\Gei-Hockey-Managment-System\docs\uml\use-cases\source\UCD-COM-01__GEI_Announcements.drawio -> docs\uml\use-cases\export\pdf\UCD-COM-01__GEI_Announcements.pdf

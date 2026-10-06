@@ -1,0 +1,2 @@
+﻿
+C:\Users\thega\Desktop\Gei-Hockey-Managment-System\docs\uml\use-cases\source\UCD-CMP-01__GEI_Competition_Lifecycle.drawio -> docs\uml\use-cases\export\pdf\UCD-CMP-01__GEI_Competition_Lifecycle.pdf

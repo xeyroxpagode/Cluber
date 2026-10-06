@@ -1,0 +1,2 @@
+﻿
+C:\Users\thega\Desktop\Gei-Hockey-Managment-System\docs\uml\use-cases\source\UCD-CMP-02__GEI_Competition_Entries.drawio -> docs\uml\use-cases\export\png\UCD-CMP-02__GEI_Competition_Entries.png

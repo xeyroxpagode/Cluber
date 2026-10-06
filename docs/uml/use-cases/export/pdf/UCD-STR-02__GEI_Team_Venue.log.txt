@@ -1,0 +1,2 @@
+﻿
+C:\Users\thega\Desktop\Gei-Hockey-Managment-System\docs\uml\use-cases\source\UCD-STR-02__GEI_Team_Venue.drawio -> docs\uml\use-cases\export\pdf\UCD-STR-02__GEI_Team_Venue.pdf

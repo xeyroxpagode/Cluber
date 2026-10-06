@@ -1,0 +1,2 @@
+﻿
+C:\Users\thega\Desktop\Gei-Hockey-Managment-System\docs\uml\use-cases\source\UCD-PRT-02__GEI_Match_Result_Eligibility.drawio -> docs\uml\use-cases\export\png\UCD-PRT-02__GEI_Match_Result_Eligibility.png

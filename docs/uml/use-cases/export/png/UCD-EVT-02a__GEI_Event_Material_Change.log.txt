@@ -1,0 +1,2 @@
+﻿
+C:\Users\thega\Desktop\Gei-Hockey-Managment-System\docs\uml\use-cases\source\UCD-EVT-02a__GEI_Event_Material_Change.drawio -> docs\uml\use-cases\export\png\UCD-EVT-02a__GEI_Event_Material_Change.png

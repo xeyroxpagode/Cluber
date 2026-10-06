@@ -1,0 +1,2 @@
+﻿
+C:\Users\thega\Desktop\Gei-Hockey-Managment-System\docs\uml\use-cases\source\UCD-PRT-01__GEI_Availability_Selection_Attendance.drawio -> docs\uml\use-cases\export\png\UCD-PRT-01__GEI_Availability_Selection_Attendance.png

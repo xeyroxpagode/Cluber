@@ -1,0 +1,2 @@
+﻿
+C:\Users\thega\Desktop\Gei-Hockey-Managment-System\docs\uml\use-cases\source\UCD-IAM-01__GEI_Identity_Access.drawio -> docs\uml\use-cases\export\pdf\UCD-IAM-01__GEI_Identity_Access.pdf

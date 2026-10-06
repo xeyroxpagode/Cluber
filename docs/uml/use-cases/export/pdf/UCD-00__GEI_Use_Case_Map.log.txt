@@ -1,0 +1,2 @@
+﻿
+C:\Users\thega\Desktop\Gei-Hockey-Managment-System\docs\uml\use-cases\source\UCD-00__GEI_Use_Case_Map.drawio -> docs\uml\use-cases\export\pdf\UCD-00__GEI_Use_Case_Map.pdf

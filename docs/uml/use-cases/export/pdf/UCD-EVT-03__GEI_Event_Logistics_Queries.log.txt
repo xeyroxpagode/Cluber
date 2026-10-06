@@ -1,0 +1,2 @@
+﻿
+C:\Users\thega\Desktop\Gei-Hockey-Managment-System\docs\uml\use-cases\source\UCD-EVT-03__GEI_Event_Logistics_Queries.drawio -> docs\uml\use-cases\export\pdf\UCD-EVT-03__GEI_Event_Logistics_Queries.pdf

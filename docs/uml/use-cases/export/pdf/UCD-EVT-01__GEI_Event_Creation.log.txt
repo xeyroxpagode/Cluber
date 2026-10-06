@@ -1,0 +1,2 @@
+﻿
+C:\Users\thega\Desktop\Gei-Hockey-Managment-System\docs\uml\use-cases\source\UCD-EVT-01__GEI_Event_Creation.drawio -> docs\uml\use-cases\export\pdf\UCD-EVT-01__GEI_Event_Creation.pdf
