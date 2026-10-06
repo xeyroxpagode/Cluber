@@ -1,17 +1,14 @@
-// E4 diagram topology. Canonical UC only — no invented CU, no umbrella CU.
-import { INC01_SOURCES, REAUTH_TARGET, INC02_EDGES, EXT_EDGES } from "./relations.mjs";
+// E4 diagram topology. Canonical UC only — no invented CU, no umbrella UC.
+import { INC02_INCLUDE, INC02_EXTEND, EXT_EDGES, REAUTH_TARGET, REAUTH_CONDITION } from "./relations.mjs";
 
-const inc01 = (doms) => {
-  const out = [];
-  for (const d of doms) for (const src of INC01_SOURCES[d]) out.push({ from: src, to: REAUTH_TARGET, kind: "include", id: "INC-01" });
-  return out;
-};
-const inc02 = (ids) =>
-  INC02_EDGES.filter(([s]) => ids.includes(s)).map(([s, c]) => ({ from: s, to: "UC-EVT-11", kind: "include", id: "INC-02", condition: c }));
+const inc02 = (ids) => [
+  ...INC02_INCLUDE.filter(([s]) => ids.includes(s)).map(([s, c]) => ({ from: s, to: "UC-EVT-11", kind: "include", id: "INC-02", condition: c })),
+  ...INC02_EXTEND.filter(([s, b]) => ids.includes(s) && ids.includes(b)).map(([s, b, c]) => ({ from: s, to: b, kind: "extend", id: "INC-02", condition: c })),
+];
 const exts = (ids) => {
   const out = [];
   for (const k of ["EXT-01", "EXT-02", "EXT-03", "EXT-04"]) {
-    for (const [from, to, cond] of EXT_EDGES[k]) if (ids.includes(from) && ids.includes(to)) out.push({ from, to, kind: "extend", id: k, condition: cond });
+    for (const [from, to, cond] of EXT_EDGES[k] || []) if (ids.includes(from) && ids.includes(to)) out.push({ from, to, kind: "extend", id: k, condition: cond });
   }
   return out;
 };
@@ -66,8 +63,8 @@ export const SPECS = [
       pair(A.SUB, ["UC-IAM-09"]),
       pair(A.UNAUTH, ["UC-IAM-01", "UC-IAM-04"]),
     ),
-    relations: inc01(["IAM"]),
-    note: "UC-IAM-09 se dibuja también en UCD-PPL, UCD-STR, UCD-CMP y UCD-PRT: mismo elemento del modelo.",
+    relations: [],
+    note: "UC-IAM-09 se dibuja también en UCD-IAM-01: mismo elemento del modelo.",
   },
   {
     id: "UCD-PPL-01", file: "UCD-PPL-01__GEI_Person_Profile_Membership.drawio",
@@ -75,7 +72,6 @@ export const SPECS = [
     boundaryLabel: "GEI · PPL — Persona, perfil y membresía",
     purpose: "Alta de personas, completitud del perfil de jugadora, vinculación cuenta–persona y membresía al club.",
     ucs: ["UC-PPL-01", "UC-PPL-02", "UC-PPL-03", "UC-PPL-04", "UC-PPL-05", "UC-PPL-15", "UC-PPL-16", "UC-PPL-17"],
-    refId: "UC-IAM-09", refSlot: [2, 2],
     abstractActor: A.AUTH,
     actors: [A.ADMIN, A.PLAYER, A.AUTH],
     associations: flat(
@@ -83,8 +79,8 @@ export const SPECS = [
       pair(A.PLAYER, ["UC-PPL-15"]),
       pair(A.AUTH, ["UC-PPL-16", "UC-PPL-17"]),
     ),
-    relations: inc01(["PPL"]).slice(0, 5),
-    note: "UC-IAM-09 se dibuja también en UCD-IAM-01: mismo elemento del modelo.",
+    relations: [],
+    note: "Gestión sensible: reautenticación [REAUTHENTICATION_REQUIRED].",
   },
   {
     id: "UCD-PPL-02", file: "UCD-PPL-02__GEI_Team_Roles_Representation.drawio",
@@ -92,7 +88,6 @@ export const SPECS = [
     boundaryLabel: "GEI · PPL — Equipo, roles y representación",
     purpose: "Incorporación, cambio y retiro de equipo; roles con alcance; representación; menor delegado.",
     ucs: ["UC-PPL-06", "UC-PPL-07", "UC-PPL-08", "UC-PPL-09", "UC-PPL-10", "UC-PPL-11", "UC-PPL-12", "UC-PPL-13", "UC-PPL-14"],
-    refId: "UC-IAM-09", refSlot: [3, 2],
     abstractActor: null,
     actors: [A.ADMIN, A.GUARD, A.PLAYER],
     associations: flat(
@@ -100,8 +95,8 @@ export const SPECS = [
       pair(A.GUARD, ["UC-PPL-13", "UC-PPL-14"]),
       pair(A.PLAYER, ["UC-PPL-14"]),
     ),
-    relations: inc01(["PPL"]).slice(5),
-    note: "UC-IAM-09 se dibuja también en UCD-IAM-01: mismo elemento del modelo.",
+    relations: [],
+    note: "Gestión sensible: reautenticación [REAUTHENTICATION_REQUIRED].",
   },
   {
     id: "UCD-STR-01", file: "UCD-STR-01__GEI_Season_Division_Line.drawio",
@@ -109,12 +104,11 @@ export const SPECS = [
     boundaryLabel: "GEI · STR — Temporada, división y línea",
     purpose: "Registro, actualización y archivo de temporada, división y línea.",
     ucs: ["UC-STR-01", "UC-STR-02", "UC-STR-03", "UC-STR-04", "UC-STR-05", "UC-STR-06", "UC-STR-07", "UC-STR-08"],
-    refId: "UC-IAM-09", refSlot: [2, 1],
     abstractActor: null,
     actors: [A.ADMIN],
     associations: pair(A.ADMIN, ["UC-STR-01", "UC-STR-02", "UC-STR-03", "UC-STR-04", "UC-STR-05", "UC-STR-06", "UC-STR-07", "UC-STR-08"]),
-    relations: inc01(["STR"]).slice(0, 8),
-    note: "UC-IAM-09 se dibuja también en UCD-IAM-01: mismo elemento del modelo.",
+    relations: [],
+    note: "Gestión sensible: reautenticación [REAUTHENTICATION_REQUIRED].",
   },
   {
     id: "UCD-STR-02", file: "UCD-STR-02__GEI_Team_Venue.drawio",
@@ -122,12 +116,11 @@ export const SPECS = [
     boundaryLabel: "GEI · STR — Equipo y sede",
     purpose: "Identidad estable del equipo; registro, corrección y archivo de sedes.",
     ucs: ["UC-STR-09", "UC-STR-10", "UC-STR-11", "UC-STR-12", "UC-STR-13", "UC-STR-14", "UC-STR-15"],
-    refId: "UC-IAM-09", refSlot: [2, 1],
     abstractActor: null,
     actors: [A.ADMIN],
     associations: pair(A.ADMIN, ["UC-STR-09", "UC-STR-10", "UC-STR-11", "UC-STR-12", "UC-STR-13", "UC-STR-14", "UC-STR-15"]),
-    relations: inc01(["STR"]).slice(8),
-    note: "UC-IAM-09 se dibuja también en UCD-IAM-01: mismo elemento del modelo.",
+    relations: [],
+    note: "Gestión sensible: reautenticación [REAUTHENTICATION_REQUIRED].",
   },
   {
     id: "UCD-EVT-01", file: "UCD-EVT-01__GEI_Event_Creation.drawio",
@@ -155,7 +148,8 @@ export const SPECS = [
       pair(A.COACH, ["UC-EVT-04", "UC-EVT-05", "UC-EVT-07", "UC-EVT-08", "UC-EVT-11", "UC-EVT-12"]),
       pair(A.SUB, ["UC-EVT-04", "UC-EVT-05", "UC-EVT-07", "UC-EVT-08", "UC-EVT-11", "UC-EVT-12"]),
     ),
-    relations: [...inc02(["UC-EVT-04", "UC-EVT-05", "UC-EVT-07", "UC-EVT-08"]), ...exts(["UC-EVT-04", "UC-EVT-12"])],
+    relations: [...inc02(["UC-EVT-04", "UC-EVT-05", "UC-EVT-07", "UC-EVT-08", "UC-EVT-11"]), ...exts(["UC-EVT-04", "UC-EVT-12"])],
+    note: "UC-EVT-11: include de posponer/cancelar/restaurar; extend de editar [MATERIAL_CHANGE].",
   },
   {
     id: "UCD-EVT-02b", file: "UCD-EVT-02b__GEI_Event_State_Transitions.drawio",
@@ -186,7 +180,7 @@ export const SPECS = [
       pair(A.CAPTAIN, ["UC-EVT-16"]),
       pair(A.AUTH, ["UC-EVT-17", "UC-EVT-18", "UC-EVT-19"]),
     ),
-    relations: inc02(["UC-EVT-16"]),
+    relations: inc02(["UC-EVT-16", "UC-EVT-11"]),
     note: "UC-EVT-11 se dibuja también en UCD-EVT-02a: mismo elemento del modelo.",
   },
   {
@@ -203,6 +197,7 @@ export const SPECS = [
       pair(A.COACH, ["UC-PRT-02", "UC-PRT-03", "UC-PRT-04", "UC-PRT-05", "UC-PRT-06", "UC-PRT-07"]),
     ),
     relations: exts(["UC-PRT-02", "UC-PRT-03", "UC-PRT-04", "UC-PRT-05", "UC-PRT-06", "UC-PRT-07"]),
+    note: "UC-PRT-07 y UC-PRT-04 son CU hermanos: no hay include ni extend.",
   },
   {
     id: "UCD-PRT-02", file: "UCD-PRT-02__GEI_Match_Result_Eligibility.drawio",
@@ -210,7 +205,6 @@ export const SPECS = [
     boundaryLabel: "GEI · PRT — Resultado de partido y habilitación",
     purpose: "Registro, finalización y corrección del resultado; estadísticas del partido; restricción y consulta de habilitación.",
     ucs: ["UC-PRT-08", "UC-PRT-09", "UC-PRT-10", "UC-PRT-11", "UC-PRT-12", "UC-PRT-13"],
-    refId: "UC-IAM-09", refSlot: [3, 1],
     abstractActor: null,
     actors: [A.COACH, A.CAPTAIN, A.SUB, A.ADMIN],
     associations: flat(
@@ -219,8 +213,8 @@ export const SPECS = [
       pair(A.SUB, ["UC-PRT-12", "UC-PRT-13"]),
       pair(A.ADMIN, ["UC-PRT-12", "UC-PRT-13"]),
     ),
-    relations: [...exts(["UC-PRT-08", "UC-PRT-09", "UC-PRT-10"]), ...inc01(["PRT"])],
-    note: "UC-IAM-09 se dibuja también en UCD-IAM-01: mismo elemento del modelo.",
+    relations: [...exts(["UC-PRT-08", "UC-PRT-09", "UC-PRT-10"]), ...inc02([])],
+    note: "UC-PRT-10 es CU hermano de UC-PRT-09: no hay include ni extend.",
   },
   {
     id: "UCD-COM-01", file: "UCD-COM-01__GEI_Announcements.drawio",
@@ -254,7 +248,6 @@ export const SPECS = [
     boundaryLabel: "GEI · CMP — Competencia y referencia externa",
     purpose: "Registrar, activar y cerrar la competencia; registrar y consultar la referencia externa.",
     ucs: ["UC-CMP-01", "UC-CMP-02", "UC-CMP-03", "UC-CMP-08", "UC-CMP-09"],
-    refId: "UC-IAM-09", refSlot: [3, 1],
     abstractActor: null,
     actors: [A.SUB, A.ADMIN, A.COACH],
     associations: flat(
@@ -262,8 +255,8 @@ export const SPECS = [
       pair(A.ADMIN, ["UC-CMP-01", "UC-CMP-02", "UC-CMP-03", "UC-CMP-08", "UC-CMP-09"]),
       pair(A.COACH, ["UC-CMP-09"]),
     ),
-    relations: inc01(["CMP"]).slice(0, 3).concat(inc01(["CMP"]).slice(7)),
-    note: "UC-IAM-09 se dibuja también en UCD-IAM-01: mismo elemento del modelo.",
+    relations: [],
+    note: "Gestión sensible: reautenticación [REAUTHENTICATION_REQUIRED].",
   },
   {
     id: "UCD-CMP-02", file: "UCD-CMP-02__GEI_Competition_Entries.drawio",
@@ -271,15 +264,14 @@ export const SPECS = [
     boundaryLabel: "GEI · CMP — Inscripciones de equipo y línea",
     purpose: "Inscribir un equipo o una línea en la competencia, activar la inscripción y finalizarla.",
     ucs: ["UC-CMP-04", "UC-CMP-05", "UC-CMP-06", "UC-CMP-07"],
-    refId: "UC-IAM-09", refSlot: [3, 1],
     abstractActor: null,
     actors: [A.SUB, A.ADMIN],
     associations: flat(
       pair(A.SUB, ["UC-CMP-04", "UC-CMP-05", "UC-CMP-06", "UC-CMP-07"]),
       pair(A.ADMIN, ["UC-CMP-04", "UC-CMP-05", "UC-CMP-06", "UC-CMP-07"]),
     ),
-    relations: inc01(["CMP"]).slice(3, 7),
-    note: "UC-IAM-09 se dibuja también en UCD-IAM-01: mismo elemento del modelo.",
+    relations: [],
+    note: "Gestión sensible: reautenticación [REAUTHENTICATION_REQUIRED].",
   },
   {
     id: "UCD-INS-01", file: "UCD-INS-01__GEI_Search_Reports_Audit.drawio",
