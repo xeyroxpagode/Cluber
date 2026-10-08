@@ -1,0 +1,47 @@
+<mxfile host="app.diagrams.net" modified="2026-10-08T02:19:34.961Z" agent="GEI State Diagram Generator" version="1.0" etag="state-diagram">
+  <diagram name="SM-COMPETITIONENTRY-01__CompetitionEntry_Lifecycle" id="mxCell_1791425974961_ckxhaxy4i">
+    <mxGraphModel dx="0" dy="0" grid="1" gridSize="20" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="init" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1A1A1A;strokeColor=#1A1A1A;fontSize=11;fontFamily=Helvetica;" vertex="1" parent="1">
+<mxGeometry x="100" y="200" width="24" height="24" as="geometry"></mxGeometry>
+</mxCell>
+        <mxCell id="s1" value="PENDING
+Inscripción registrada, pendiente activación. scope=TEAM (team_id) o scope=LINE (div+lín+temp)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A1A1A;fontSize=11;fontFamily=Helvetica;" vertex="1" parent="1">
+<mxGeometry x="100" y="300" width="180" height="80" as="geometry"></mxGeometry>
+</mxCell>
+        <mxCell id="s2" value="ACTIVE
+Inscripción activa, usable por partidos de esa competencia" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A1A1A;fontSize=11;fontFamily=Helvetica;" vertex="1" parent="1">
+<mxGeometry x="400" y="300" width="180" height="80" as="geometry"></mxGeometry>
+</mxCell>
+        <mxCell id="s3" value="ENDED
+Finalizada, histórico conservado, consecuencia explicada" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A1A1A;fontSize=11;fontFamily=Helvetica;" vertex="1" parent="1">
+<mxGeometry x="700" y="300" width="180" height="80" as="geometry"></mxGeometry>
+</mxCell>
+        <mxCell id="edge_0" value="inscribir equipo (Subcomisión/Admin)
+[ ACTIVE ∧ equipo existe ]
+/ scope=TEAM PENDING por team_id" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;fontFamily=Helvetica;strokeColor=#1A1A1A;" edge="1" parent="1" source="init" target="s1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="100" y="200"/><mxPoint x="100" y="300"/></Array></mxGeometry></mxCell>
+        <mxCell id="edge_1" value="inscribir línea (Subcomisión/Admin)
+[ ACTIVE ∧ línea existe ∧ temporada válida ]
+/ scope=LINE PENDING por div+lín+temp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;fontFamily=Helvetica;strokeColor=#1A1A1A;" edge="1" parent="1" source="init" target="s1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="100" y="200"/><mxPoint x="100" y="300"/></Array></mxGeometry></mxCell>
+        <mxCell id="edge_2" value="activar inscripción (Subcomisión/Admin)
+[ PENDING ∧ alcance compatible ]
+/ ACTIVE, usable por partidos" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;fontFamily=Helvetica;strokeColor=#1A1A1A;" edge="1" parent="1" source="s1" target="s2"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="250" y="300"/><mxPoint x="250" y="300"/></Array></mxGeometry></mxCell>
+        <mxCell id="edge_3" value="finalizar inscripción (Subcomisión/Admin)
+[ ACTIVE ∧ serialización si en uso ]
+/ ENDED, consecuencia explicada, histórico conservado" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;fontFamily=Helvetica;strokeColor=#1A1A1A;" edge="1" parent="1" source="s2" target="s3"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="550" y="300"/><mxPoint x="550" y="300"/></Array></mxGeometry></mxCell>
+        <mxCell id="mxCell_1791425974961_gbp1dmnph" value="TRANSICIONES PROHIBIDAS (no dibujadas como flechas):
+• Usar en partido si PENDING (requiere ACTIVE)
+• Cambiar scope TEAM↔LINE (incompatibles, COMPETITION_SCOPE_MISMATCH)
+• ENDED → ACTIVE (no en V1)
+• Finalizar sin serializar si en uso (REQ-SYS-018)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F57F17;fontSize=10;fontFamily=Helvetica;strokeWidth=1;dashed=1;" vertex="1" parent="1">
+<mxGeometry x="800" y="50" width="350" height="100" as="geometry"></mxGeometry>
+</mxCell>
+        <mxCell id="mxCell_1791425974961_3nvh5scm1" value="CompetitionEntry Lifecycle (scopes TEAM/LINE son datos, no estados)" style="html=1;fontSize=14;fontFamily=Helvetica;fontStyle=1;align=center;" vertex="1" parent="1">
+<mxGeometry x="50" y="20" width="400" height="30" as="geometry"></mxGeometry>
+</mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

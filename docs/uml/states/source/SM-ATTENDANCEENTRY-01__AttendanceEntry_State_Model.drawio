@@ -1,0 +1,57 @@
+<mxfile host="app.diagrams.net" modified="2026-10-08T02:19:34.956Z" agent="GEI State Diagram Generator" version="1.0" etag="state-diagram">
+  <diagram name="SM-ATTENDANCEENTRY-01__AttendanceEntry_State_Model" id="mxCell_1791425974956_rxrtc1xj1">
+    <mxGraphModel dx="0" dy="0" grid="1" gridSize="20" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="init" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1A1A1A;strokeColor=#1A1A1A;fontSize=11;fontFamily=Helvetica;" vertex="1" parent="1">
+<mxGeometry x="300" y="80" width="24" height="24" as="geometry"></mxGeometry>
+</mxCell>
+        <mxCell id="s1" value="PRESENT
+Valor persistido con timestamp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A1A1A;fontSize=11;fontFamily=Helvetica;" vertex="1" parent="1">
+<mxGeometry x="100" y="200" width="180" height="80" as="geometry"></mxGeometry>
+</mxCell>
+        <mxCell id="s2" value="ABSENT
+Valor persistido con timestamp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A1A1A;fontSize=11;fontFamily=Helvetica;" vertex="1" parent="1">
+<mxGeometry x="300" y="200" width="180" height="80" as="geometry"></mxGeometry>
+</mxCell>
+        <mxCell id="s3" value="JUSTIFIED
+Valor persistido con timestamp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A1A1A;fontSize=11;fontFamily=Helvetica;" vertex="1" parent="1">
+<mxGeometry x="500" y="200" width="180" height="80" as="geometry"></mxGeometry>
+</mxCell>
+        <mxCell id="d1" value="UNRECORDED
+DERIVADO: sin fila en attendance_entries para persona/evento" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A1A1A;fontSize=11;fontFamily=Helvetica;dashed=1;fillColor=#F5F5F5;" vertex="1" parent="1">
+<mxGeometry x="300" y="400" width="220" height="80" as="geometry"></mxGeometry>
+</mxCell>
+        <mxCell id="edge_0" value="inicial (sin fila)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;fontFamily=Helvetica;strokeColor=#1A1A1A;" edge="1" parent="1" source="init" target="d1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="300" y="80"/><mxPoint x="300" y="400"/></Array></mxGeometry></mxCell>
+        <mxCell id="edge_1" value="registrar PRESENTE
+[ OPEN ∧ SCHEDULED/IN_PROGRESS ∧ TRAINING/MATCH ∧ Coach ]
+/ fila creada, persistencia inmediata" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;fontFamily=Helvetica;strokeColor=#1A1A1A;" edge="1" parent="1" source="d1" target="s1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="200" y="400"/><mxPoint x="200" y="200"/></Array></mxGeometry></mxCell>
+        <mxCell id="edge_2" value="registrar AUSENTE
+[ mismos guards ]
+/ fila creada" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;fontFamily=Helvetica;strokeColor=#1A1A1A;" edge="1" parent="1" source="d1" target="s2"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="300" y="400"/><mxPoint x="300" y="200"/></Array></mxGeometry></mxCell>
+        <mxCell id="edge_3" value="registrar JUSTIFICADO
+[ mismos guards ]
+/ fila creada" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;fontFamily=Helvetica;strokeColor=#1A1A1A;" edge="1" parent="1" source="d1" target="s3"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="400" y="400"/><mxPoint x="400" y="200"/></Array></mxGeometry></mxCell>
+        <mxCell id="edge_4" value="corregir
+[ motivo obligatorio ∧ Coach ]
+/ anterior+nuevo+motivo+autor+fecha persistidos, antes/después visibles" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;fontFamily=Helvetica;strokeColor=#1A1A1A;" edge="1" parent="1" source="s1" target="s1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="-60" y="-80"/><mxPoint x="60" y="-80"/></Array></mxGeometry></mxCell>
+        <mxCell id="edge_5" value="corregir
+[ mismo guard ]
+/ auditoría completa" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;fontFamily=Helvetica;strokeColor=#1A1A1A;" edge="1" parent="1" source="s2" target="s2"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="-60" y="-80"/><mxPoint x="60" y="-80"/></Array></mxGeometry></mxCell>
+        <mxCell id="edge_6" value="corregir
+[ mismo guard ]
+/ auditoría completa" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;fontFamily=Helvetica;strokeColor=#1A1A1A;" edge="1" parent="1" source="s3" target="s3"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="-60" y="-80"/><mxPoint x="60" y="-80"/></Array></mxGeometry></mxCell>
+        <mxCell id="mxCell_1791425974956_ze93hboto" value="TRANSICIONES PROHIBIDAS (no dibujadas como flechas):
+• Marcar en planilla CLOSED (requiere corrección UC-PRT-07)
+• CLOSED → OPEN (reapertura no requisito, corrección la cubre)
+• Evento tipo no admite asistencia (matriz REQ-PRT-019)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F57F17;fontSize=10;fontFamily=Helvetica;strokeWidth=1;dashed=1;" vertex="1" parent="1">
+<mxGeometry x="800" y="50" width="350" height="100" as="geometry"></mxGeometry>
+</mxCell>
+        <mxCell id="mxCell_1791425974956_wzhtjzh91" value="AttendanceEntry State Model" style="html=1;fontSize=14;fontFamily=Helvetica;fontStyle=1;align=center;" vertex="1" parent="1">
+<mxGeometry x="50" y="20" width="400" height="30" as="geometry"></mxGeometry>
+</mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
