@@ -1,0 +1,39 @@
+GEI USE CASE SPECIFICATION — MACHINE QA REPORT
+Fecha: 2026-10-07
+Specs analizadas: 102 (esperado 102)
+
+PASS  SPEC_COUNT                         102
+PASS  DUPLICATE_UC_ID                    0
+PASS  MISSING_SPEC                       0
+PASS  UNKNOWN_SPEC                       0
+PASS  ACADEMIC_HEADING_MISSING           0
+PASS  MISSING_CREATION_DATE              0
+PASS  MISSING_UPDATE_DATE                0
+PASS  MISSING_VERSION                    0
+PASS  MISSING_AUTHORS                    0
+PASS  MISSING_DESCRIPTION                0
+PASS  MISSING_ACTORS                     0
+PASS  MISSING_PRECONDITIONS              0
+PASS  MISSING_POSTCONDITIONS             0
+PASS  MISSING_EXTENSION_POINTS           0
+PASS  MISSING_PRIORITY                   0
+PASS  MISSING_BASIC_FLOW                 0
+PASS  MISSING_ALTERNATIVE_SECTION        0
+PASS  MISSING_TRACE_BLOCK                0
+PASS  E3_NAME_DRIFT                      0
+PASS  BASIC_FLOW_NOT_SEQUENTIAL          0
+PASS  ALTERNATIVE_DANGLING               0
+PASS  SUBFLOW_WITHOUT_PARENT             0
+PASS  NESTING_OVER_3_LEVELS              0
+PASS  MISSING_REQ_TRACE                  0
+PASS  UNKNOWN_REQ                        0
+PASS  UNKNOWN_ACTOR                      0
+PASS  PRIORITY_MISMATCH                  0
+PASS  E4_RELATION_DRIFT                  0
+PASS  UI_LANGUAGE_IN_STEPS               0
+PASS  UNACCOUNTED_AC                     0
+PASS  AC_TOTAL_ACCOUNTED                 454
+PASS  DOMAIN_COUNTS                      0
+
+TOTAL CHECKS: 32 · FAIL: 0
+MACHINE QA: PASS
