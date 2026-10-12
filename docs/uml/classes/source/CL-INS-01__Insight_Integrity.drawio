@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mxfile host="GEI-E8" modified="2026-10-10T00:00:00.000Z" agent="GEI-E8-class-diagram-authoring" version="24.7.17" type="device">
+  <diagram id="CL-INS-01" name="CL-INS-01__Insight_Integrity">
+    <mxGraphModel dx="1169" dy="827" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="935" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="INS — Insight &amp; Integrity (Class Diagram)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="10" width="1129" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="audit" value="&lt;&lt;canonical&gt;&gt; AuditEntry&#xA;+ id: UUID {id}&#xA;+ occurredAt: DateTime&#xA;+ actorPersonId: UUID&#xA;+ action: String (vocabulario canónico)&#xA;+ targetType: String&#xA;+ targetId: UUID&#xA;+ reason: String?&#xA;+ diff: JSON (datos sensibles redactados)&#xA;(append-only; sin contraseñas/hashes/tokens/cookies/cuerpos)&#xA;+ AuditEntry(actorPersonId, action, targetType, targetId, reason?, diff?)&#xA;/ actor: Person&#xA;(Solo Admin consulta; filtros por rango fechas y actor)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#37474F;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="20" y="60" width="450" height="225" as="geometry" />
+        </mxCell>
+        <mxCell id="svc-history" value="&lt;&lt;service&gt;&gt; History&#xA;● Derivada de entidades origen + AuditEntry&#xA;● Correcciones asistencia/resultado&#xA;● Revisiones convocatoria (SelectionRevision)&#xA;● Historial evento (Event.state changes)&#xA;● Correcciones comunicado (Announcement)&#xA;● Estado mensaje (Message.state)&#xA;● Con fecha real y actor&#xA;● NO tabla genérica ni timeline personal (REQ-INS-012)&#xA;● Por superficie (UC-INS-04)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#37474F;strokeWidth=1;dashed=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="500" y="60" width="300" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="svc-report" value="&lt;&lt;service&gt;&gt; Report&#xA;● Attendance Report (UC-INS-02)&#xA;  - PRESENT/ABSENT/JUSTIFIED/UNRECORRED&#xA;  - Alcance: propio / equipo / club&#xA;  - Jugadora ve lo suyo; Admin NO accede (PT §5)&#xA;  - Cada fila enlaza al origen (AttendanceEntry/Sheet)&#xA;● Performance Report (UC-INS-03)&#xA;  - Basado en MatchRecord (PLAYED)&#xA;  - matches_played derivado de resultado, no asistencia&#xA;  - Jugadora ve lo suyo&#xA;  - Cada fila enlaza al partido&#xA;● Período aplicado visible y modificable (REQ-INS-006)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#37474F;strokeWidth=1;dashed=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="250" width="300" height="205" as="geometry" />
+        </mxCell>
+        <mxCell id="svc-search" value="&lt;&lt;service&gt;&gt; Search&#xA;● Cubre: personas, equipos, eventos, divisiones/líneas&#xA;● 'Sin consulta' ≠ 'cero resultados' (REQ-INS-001)&#xA;● Vacío con siguiente paso&#xA;● PII por field authority (REQ-INS-002, REQ-PPL-011)&#xA;● Estructura por división y línea (no texto libre)&#xA;● Consulta sobrevive a back navigation (REQ-INS-003)&#xA;● Proyección read-only (no dueña de datos)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#37474F;strokeWidth=1;dashed=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="830" y="60" width="300" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="person" value="&lt;&lt;ref&gt;&gt; Person&#xA;+ id: UUID {id}&#xA;+ firstName: String&#xA;+ lastName: String" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#606060;strokeWidth=1;dashed=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="20" y="295" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="domain-classes" value="&lt;&lt;ref&gt;&gt; Clases de Dominio (fuente de History/Report/Search)&#xA;Event, MatchRecord, PlayerMatchStats, AttendanceEntry/Sheet,&#xA;SelectionRevision, Announcement, Message, Conversation,&#xA;TeamAssignment, RoleAssignment, GuardianRelationship,&#xA;Team, Division, Line, Season, Venue,&#xA;Competition, CompetitionEntry, EligibilityConstraint,&#xA;Person, Account, Membership" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#606060;strokeWidth=1;dashed=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="395" width="460" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-audit-person" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#37474F;strokeWidth=2;endArrow=open;exitX=0.09;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="audit" target="person" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="60" y="310" />
+              <mxPoint x="60" y="340" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-history-domain" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#37474F;strokeWidth=1;endArrow=open;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.37;entryDx=0;entryDy=0;" edge="1" source="svc-history" target="domain-classes" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="490" y="150" />
+              <mxPoint x="490" y="450" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-report-domain" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#37474F;strokeWidth=1;endArrow=open;dashed=1;exitX=0;exitY=0.83;exitDx=0;exitDy=0;entryX=1;entryY=0.17;entryDx=0;entryDy=0;" edge="1" source="svc-report" target="domain-classes" parent="1">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="rel-search-domain" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#37474F;strokeWidth=1;endArrow=open;dashed=1;exitX=0.23;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.63;entryDx=0;entryDy=0;" edge="1" source="svc-search" target="domain-classes" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="900" y="340" />
+              <mxPoint x="900" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl1" value="0..*" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="64" y="277" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl2" value="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="24" y="332" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="invariants" value="Invariantes Críticas (PT §25, REQ-INS-008 a 012):&#xA;● AuditEntry: append-only; qué cambió, quién, cuándo, motivo, enlace al objeto&#xA;● Datos sensibles redactados en diff; SIN secrets (passwords, hashes, tokens, cookies, cuerpos)&#xA;● Solo Admin consulta auditoría (filtros por rango fechas y actor)&#xA;● History: se deriva de entidades origen + auditoría; NO tabla genérica ni timeline personal&#xA;● History: correcciones asistencia/resultado, revisiones convocatoria, historial evento, correcciones comunicado, estado mensaje&#xA;● Reports: proyecciones read-only; alcance por autoridad (propio/equipo/club)&#xA;● Attendance Report: Admin NO accede (PT §5); cada fila enlaza al origen&#xA;● Performance Report: matches_played derivado de resultado, no asistencia; cada fila enlaza al partido&#xA;● Search: proyección read-only; PII por field authority; 'sin consulta' ≠ 'cero resultados'&#xA;● Proyecciones NO son dueñas de datos (REQ-SYS-019): Inicio, Calendario, Equipos, Búsqueda, Informes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F57F17;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="555" width="550" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="sources" value="Fuentes:&#xA;PT §25 (tabla 41)&#xA;REQ-INS-001 a 012&#xA;UC-INS-01 a 05&#xA;R-58" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#37474F;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="755" width="320" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="note-sm" value="NOTA: History, Report, Search NO tienen state machine.&#xA;Son proyecciones derivadas (read-only), no entidades persistidas con lifecycle.&#xA;E6 §3: 'NO_STATE_MACHINE' para estos conceptos." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="350" y="755" width="300" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="note-pii" value="PII Field Authority (PT §6, REQ-PPL-011):&#xA;● Campo no autorizado NO existe en respuesta (no se oculta en pantalla)&#xA;● DNI: solo ADMIN&#xA;● Fecha nacimiento completa: solo ADMIN&#xA;● Tel/Email: self, ADMIN, COACH/CAPTAIN team actual si necesidad operativa&#xA;● Guardian: ve nombre, equipo, eventos, disponibilidad del menor; NO DNI, NO DOB, NO eligibility reason/source, NO chats privados, NO auditoría&#xA;● ADMIN NO lee chats privados por ser ADMIN (regla Nunca)&#xA;● CAPTAIN NO ve DNI por pertenecer al Team (regla Nunca)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F57F17;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="660" y="755" width="480" height="150" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

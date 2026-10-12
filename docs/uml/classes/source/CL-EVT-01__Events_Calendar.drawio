@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mxfile host="GEI-E8" modified="2026-10-10T00:00:00.000Z" agent="GEI-E8-class-diagram-authoring" version="24.7.17" type="device">
+  <diagram id="CL-EVT-01" name="CL-EVT-01__Events_Calendar">
+    <mxGraphModel dx="1169" dy="827" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1210" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="EVT — Events &amp; Calendar (Class Diagram)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="10" width="1129" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="event" value="&lt;&lt;canonical&gt;&gt; Event&#xA;+ id: UUID {id}&#xA;+ type: EventType&#xA;+ title: String&#xA;+ startAt: DateTime?&#xA;+ endAt: DateTime?&#xA;+ timeZone: String&#xA;+ venueId: UUID?&#xA;+ state: EventState&#xA;+ clubWideTarget: Boolean&#xA;+ seriesId: UUID?&#xA;+ occurrenceIndex: Integer?&#xA;+ coordinationRevision: Integer&#xA;+ creatorPersonId: UUID&#xA;+ createdAt: DateTime&#xA;+ updatedAt: DateTime&#xA;+ version: Integer&#xA;/ targetTeams: Team[0..*]&#xA;/ targetPersons: Person[0..*]&#xA;/ logistics: EventLogistics[0..1]&#xA;/ match: Match[0..1]&#xA;/ attendanceSheet: AttendanceSheet[0..1]&#xA;/ availabilityResponses: Availability[0..*]&#xA;/ selection: Selection[0..1]&#xA;/ matchRecord: MatchRecord[0..1]&#xA;/ jornada: Jornada[0..1]&#xA;+ Event(type, title, startAt?, endAt?, timeZone, venueId?, clubWideTarget, targetTeams, targetPersons, creatorPersonId)&#xA;+ schedule(startAt, endAt, venueId?): Boolean&#xA;+ editNonMaterial(title?, metadata)&#xA;+ proposeMaterialChange(changes): ImpactPreviewToken&#xA;+ executeMaterialChange(token, confirmedChanges): Boolean&#xA;+ postpone(reason): Boolean&#xA;+ resume(newStartAt, newEndAt, newVenueId?): Boolean&#xA;+ cancel(reason): Boolean&#xA;+ restore(): Boolean&#xA;+ start(): Boolean&#xA;+ complete(): Boolean&#xA;+ abandon(reason): Boolean&#xA;+ resolveConcurrencyConflict(baseVersion, localDraft, serverVersion)&#xA;+ updateLogistics(logistics)&#xA;/ isScheduled(): Boolean&#xA;/ acceptsAvailability(): Boolean&#xA;/ getTargetPersons(): Person[0..*]&#xA;/ getConcreteTeam(): Team?&#xA;- validateInvariants(): Boolean" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="60" width="400" height="665" as="geometry" />
+        </mxCell>
+        <mxCell id="match" value="&lt;&lt;canonical&gt;&gt; Match (subtipo type=MATCH)&#xA;+ eventId: UUID {id}{fk}&#xA;+ opponent: String&#xA;+ competitionEntryId: UUID?&#xA;+ meetingAt: DateTime?&#xA;+ departureAt: DateTime?&#xA;+ meetingPoint: String?&#xA;+ transportNote: String?&#xA;+ arrivalInstructions: String?&#xA;/ concreteTeam: Team (único target, inmutable si SCHEDULED)&#xA;+ Match(eventId, opponent)&#xA;+ updateLogistics(meetingAt?, departureAt?, meetingPoint?, transportNote?, arrivalInstructions?)&#xA;/ getCompetitionEntry(jornada): CompetitionEntry?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="450" y="60" width="350" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="series" value="&lt;&lt;canonical&gt;&gt; EventSeries&#xA;+ id: UUID {id}&#xA;+ name: String&#xA;+ state: EventSeriesState&#xA;+ recurrenceRule: String&#xA;+ maxOccurrences: Integer (&lt;=366)&#xA;/ targetTeams: Team[0..*]&#xA;/ targetPersons: Person[0..*]&#xA;/ occurrences: Event[0..*]&#xA;/ overrides: EventOccurrenceOverride[0..*]&#xA;+ EventSeries(name, recurrenceRule, targetTeams, targetPersons, creatorPersonId)&#xA;+ editOccurrences(scope, changes): Event[0..*]&#xA;+ end(): Boolean" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="450" y="280" width="350" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="override" value="&lt;&lt;canonical&gt;&gt; EventOccurrenceOverride&#xA;+ id: UUID {id}&#xA;+ seriesId: UUID&#xA;+ occurrenceIndex: Integer&#xA;+ overriddenEventId: UUID?&#xA;+ customTitle: String?&#xA;+ customStartAt: DateTime?&#xA;+ customEndAt: DateTime?&#xA;+ customVenueId: UUID?&#xA;+ isCancelled: Boolean" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="450" y="510" width="350" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="jornada" value="&lt;&lt;canonical&gt;&gt; Jornada&#xA;+ id: UUID {id}&#xA;+ seasonId: UUID&#xA;+ competitionId: UUID?&#xA;+ name: String&#xA;+ date: Date&#xA;/ matches: Match[0..*] (&lt;=100 atómico)&#xA;/ season: Season&#xA;/ competition: Competition[0..1]&#xA;+ Jornada(seasonId, name, date, competitionId?)&#xA;+ bulkScheduleMatches(matches): Boolean&#xA;+ addMatch(matchId): Boolean&#xA;+ removeMatch(matchId): Boolean" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="830" y="60" width="300" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="jornadamatch" value="&lt;&lt;associationClass&gt;&gt; JornadaMatch&#xA;+ jornadaId: UUID&#xA;+ matchId: UUID&#xA;(Jornada 1 — 0..* Match; Match 0..1 Jornada)&#xA;Bulk atómico ≤100&#xA;Season match = Season jornada&#xA;Si competitionId → usa CompetitionEntry de esa competition" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=1;dashed=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="830" y="290" width="300" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="logistics" value="&lt;&lt;canonical&gt;&gt; EventLogistics&#xA;+ id: UUID {id}&#xA;+ eventId: UUID {unique}&#xA;+ meetingAt: DateTime?&#xA;+ departureAt: DateTime?&#xA;+ meetingPoint: String?&#xA;+ transportNote: String?&#xA;+ arrivalInstructions: String?&#xA;/ event: Event&#xA;+ EventLogistics(eventId)&#xA;+ update(meetingAt?, departureAt?, meetingPoint?, transportNote?, arrivalInstructions?)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="830" y="435" width="300" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="targetteam" value="&lt;&lt;associationClass&gt;&gt; EventTargetTeam&#xA;+ id: UUID {id}&#xA;+ eventId: UUID&#xA;+ teamId: UUID&#xA;+ addedAt: DateTime&#xA;+ addedByPersonId: UUID&#xA;(Event 0..* ◇— 0..* Team; clubWideTarget=false)&#xA;MATCH: exactamente 1 team target" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=1;dashed=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="735" width="300" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="targetperson" value="&lt;&lt;associationClass&gt;&gt; EventTargetPerson&#xA;+ id: UUID {id}&#xA;+ eventId: UUID&#xA;+ personId: UUID&#xA;+ addedAt: DateTime&#xA;+ addedByPersonId: UUID&#xA;(Event 0..* ◇— 0..* Person; destinatarios personales)&#xA;MATCH: 0 person targets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=1;dashed=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="340" y="735" width="300" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="seriestargetteam" value="&lt;&lt;associationClass&gt;&gt; EventSeriesTargetTeam&#xA;+ seriesId: UUID&#xA;+ teamId: UUID&#xA;(EventSeries 0..* ◇— 0..* Team; destinatarios de serie)&#xA;Se heredan por ocurrencias salvo override" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=1;dashed=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="660" y="735" width="230" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="seriestargetperson" value="&lt;&lt;associationClass&gt;&gt; EventSeriesTargetPerson&#xA;+ seriesId: UUID&#xA;+ personId: UUID&#xA;(EventSeries 0..* ◇— 0..* Person; destinatarios personales serie)&#xA;Se heredan por ocurrencias salvo override" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=1;dashed=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="900" y="735" width="230" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-eventtype" value="&lt;&lt;enumeration&gt;&gt; EventType&#xA;TRAINING&#xA;MATCH&#xA;CLUB_EVENT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="895" width="130" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-eventstate" value="&lt;&lt;enumeration&gt;&gt; EventState&#xA;DRAFT&#xA;SCHEDULED&#xA;POSTPONED&#xA;CANCELLED&#xA;IN_PROGRESS&#xA;COMPLETED&#xA;ABANDONED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="680" y="895" width="140" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-seriesstate" value="&lt;&lt;enumeration&gt;&gt; EventSeriesState&#xA;ACTIVE&#xA;ENDED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="830" y="895" width="130" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-matchresult" value="&lt;&lt;enumeration&gt;&gt; MatchResultType&#xA;PLAYED&#xA;FORFEIT&#xA;ABANDONED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="970" y="895" width="160" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-event-logistics" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#C2185B;strokeWidth=2;endArrow=none;startArrow=none;dashed=0;exitX=1;exitY=0.96;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="event" target="logistics" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="435" y="700" />
+              <mxPoint x="814" y="700" />
+              <mxPoint x="814" y="530" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-event-match" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#C2185B;strokeWidth=2;endArrow=none;startArrow=none;dashed=0;exitX=1;exitY=0.14;exitDx=0;exitDy=0;entryX=0;entryY=0.41;entryDx=0;entryDy=0;" edge="1" source="event" target="match" parent="1">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="rel-event-series" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#C2185B;strokeWidth=2;endArrow=open;dashed=1;exitX=1;exitY=0.48;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="event" target="series" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="435" y="380" />
+              <mxPoint x="435" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-series-override" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#C2185B;strokeWidth=2;endArrow=none;startArrow=none;dashed=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="series" target="override" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-event-targetteam" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#C2185B;strokeWidth=2;endArrow=open;dashed=1;exitX=0.45;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="event" target="targetteam" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-event-targetperson" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#C2185B;strokeWidth=2;endArrow=open;dashed=1;exitX=1;exitY=0.95;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="event" target="targetperson" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="435" y="690" />
+              <mxPoint x="435" y="720" />
+              <mxPoint x="490" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-series-targetteam" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#C2185B;strokeWidth=2;endArrow=open;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="series" target="seriestargetteam" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="806" y="390" />
+              <mxPoint x="806" y="745" />
+              <mxPoint x="775" y="745" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-series-targetperson" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#C2185B;strokeWidth=2;endArrow=open;dashed=1;exitX=1;exitY=0.73;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="series" target="seriestargetperson" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="822" y="440" />
+              <mxPoint x="822" y="728" />
+              <mxPoint x="1015" y="728" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-jornada-match" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#C2185B;strokeWidth=2;endArrow=open;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="jornada" target="jornadamatch" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="comp1" value="◇" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#C2185B;" vertex="1" parent="1">
+          <mxGeometry x="620" y="692" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="comp2" value="◇" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#C2185B;" vertex="1" parent="1">
+          <mxGeometry x="428" y="142" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="comp3" value="◇" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#C2185B;" vertex="1" parent="1">
+          <mxGeometry x="620" y="497" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="invariants" value="Invariantes Críticas (PT §10, §11, §16):&#xA;● endAt &gt; startAt si ambos; SCHEDULED/IN_PROGRESS/COMPLETED exigen startAt&#xA;● POSTPONED puede no tener schedule; conserva Availability, no acepta nuevas&#xA;● MATCH: exactamente 1 team target, 0 person targets, clubWideTarget=false&#xA;● MATCH: subtipo row obligatorio; team inmutable una vez SCHEDULED&#xA;● Cambio material: coordinationRevision++, deriva NEEDS_RECONFIRMATION, notifica&#xA;● Regla A/B Venue: corregir metadatos ≠ cambiar venue de Event&#xA;● EventSeries: máx 366 ocurrencias; 3 alcances edición (esta/siguientes/toda)&#xA;● Jornada: bulk atómico ≤100; season match = season jornada; 1 match ≤1 jornada&#xA;● COMPLETED/ABANDONED terminales; no reabren; correcciones no retroceden lifecycle&#xA;● Training: ≥1 Team O Person target; ClubEvent: clubWide ∨ directed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F57F17;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="985" width="540" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="sources" value="Fuentes:&#xA;PT §9, §10, §11, §12, §14, §15, §16, §25&#xA;REQ-EVT-001 a 024&#xA;REQ-PRT-001 a 019, REQ-COM-014/016/017&#xA;UC-EVT-01 a 19, UC-PRT-01/02/03/05/06/07/08/09/10&#xA;SM-EVENT-01, SM-EVENTSERIES-01&#xA;R-16 a R-24" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#37474F;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="580" y="1055" width="400" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="note-inheritance" value="NOTA: Training, Match, ClubEvent NO son subclases UML (no hay Generalization).&#xA;Son discriminados por Event.type + Match row opcional + clubWideTarget.&#xA;E6 SM-EVENT-01 documenta 'Subtipo Match — Variantes Adicionales', no herencia." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="895" width="500" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

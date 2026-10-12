@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mxfile host="GEI-E8" modified="2026-10-10T00:00:00.000Z" agent="GEI-E8-class-diagram-authoring" version="24.7.17" type="device">
+  <diagram id="CL-PRT-01" name="CL-PRT-01__Participation">
+    <mxGraphModel dx="1169" dy="827" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1420" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="PRT — Participation (Class Diagram)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="10" width="1129" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="availability" value="&lt;&lt;canonical&gt;&gt; Availability&#xA;+ id: UUID {id}&#xA;+ eventId: UUID&#xA;+ personId: UUID (sujeto)&#xA;+ respondedByPersonId: UUID&#xA;+ value: AvailabilityValue (YES/MAYBE/NO)&#xA;+ respondedAt: DateTime&#xA;+ coordinationRevision: Integer&#xA;/ state: AvailValue | AvailDerived (NO_RESPONSE, NEEDS_RECONFIRMATION)&#xA;+ Availability(eventId, personId, respondedByPersonId, value)&#xA;+ changeResponse(newValue)&#xA;/ needsReconfirmation(): Boolean" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="60" width="350" height="205" as="geometry" />
+        </mxCell>
+        <mxCell id="selection" value="&lt;&lt;canonical&gt;&gt; Selection&#xA;+ id: UUID {id}&#xA;+ matchId: UUID {unique}&#xA;/ currentDraft: SelectionRevision[0..1]&#xA;/ publishedRevisions: SelectionRevision[0..*]&#xA;+ Selection(matchId)&#xA;+ getOrCreateDraft(): SelectionRevision&#xA;+ publishDraft(coachPersonId): SelectionRevision&#xA;/ getCurrentConflicts(): Conflict[0..*]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="275" width="350" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="selrev" value="&lt;&lt;canonical&gt;&gt; SelectionRevision&#xA;+ id: UUID {id}&#xA;+ selectionId: UUID&#xA;+ state: SelRevState (DRAFT/PUBLISHED)&#xA;+ publishedAt: DateTime?&#xA;+ publishedByPersonId: UUID?&#xA;+ autosaveVersion: Integer&#xA;/ entries: SelectionEntry[0..*]&#xA;+ SelectionRevision(selectionId, entries)&#xA;+ autosave(entries, version): Boolean&#xA;+ publish(coachPersonId)&#xA;/ isImmutable(): Boolean" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="60" width="350" height="205" as="geometry" />
+        </mxCell>
+        <mxCell id="selentry" value="&lt;&lt;canonical&gt;&gt; SelectionEntry&#xA;+ id: UUID {id}&#xA;+ revisionId: UUID&#xA;+ personId: UUID&#xA;+ role: String (selected/alternate/etc.)&#xA;+ order: Integer?&#xA;(parte de SelectionRevision; inmutable si PUBLISHED)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="275" width="350" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="attsheet" value="&lt;&lt;canonical&gt;&gt; AttendanceSheet&#xA;+ id: UUID {id}&#xA;+ eventId: UUID {unique}&#xA;+ closedAt: DateTime?&#xA;+ closedByPersonId: UUID?&#xA;/ state: SheetState (OPEN/CLOSED derivado de closedAt)&#xA;/ entries: AttendanceEntry[0..*]&#xA;+ AttendanceSheet(eventId)&#xA;+ recordEntry(personId, value, recordedBy): AttendanceEntry&#xA;+ close(coachPersonId): Boolean&#xA;+ correctEntry(entryId, newValue, reason, correctedBy): AttendanceEntry&#xA;/ getUnrecordedPersons(): Person[0..*]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="450" width="350" height="205" as="geometry" />
+        </mxCell>
+        <mxCell id="attentry" value="&lt;&lt;canonical&gt;&gt; AttendanceEntry&#xA;+ id: UUID {id}&#xA;+ sheetId: UUID&#xA;+ personId: UUID&#xA;+ value: AttendanceValue (PRESENT/ABSENT/JUSTIFIED)&#xA;+ recordedAt: DateTime?&#xA;+ recordedByPersonId: UUID?&#xA;+ correctedAt: DateTime?&#xA;+ correctedByPersonId: UUID?&#xA;+ correctionReason: String?&#xA;+ previousValue: AttendanceValue?&#xA;/ state: AttValue | AttDerived (UNRECORRED si value=NULL)&#xA;+ AttendanceEntry(sheetId, personId, value, recordedBy)&#xA;+ correct(newValue, reason, correctedBy)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="420" width="350" height="235" as="geometry" />
+        </mxCell>
+        <mxCell id="matchrecord" value="&lt;&lt;canonical&gt;&gt; MatchRecord&#xA;+ id: UUID {id}&#xA;+ matchId: UUID {unique}&#xA;+ state: MRState (DRAFT/FINAL)&#xA;+ resultType: MatchResultType (PLAYED/FORFEIT/ABANDONED)&#xA;+ homeScore: Integer?&#xA;+ awayScore: Integer?&#xA;+ observations: String?&#xA;+ finalizedAt: DateTime?&#xA;+ finalizedByPersonId: UUID?&#xA;+ correctedAt: DateTime?&#xA;+ correctedByPersonId: UUID?&#xA;+ correctionReason: String?&#xA;+ previousResultType: MatchResultType?&#xA;+ previousHomeScore: Integer?&#xA;+ previousAwayScore: Integer?&#xA;/ playerStats: PlayerMatchStats[0..*]&#xA;+ MatchRecord(matchId)&#xA;+ updateDraft(resultType?, homeScore?, awayScore?, observations?)&#xA;+ finalize(coachPersonId): Boolean&#xA;+ correct(resultType, homeScore, awayScore, reason, correctedBy)&#xA;+ addPlayerStats(personId, stats)&#xA;/ isFinal(): Boolean&#xA;/ isCompatibleWithEvent(): Boolean" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="665" width="400" height="375" as="geometry" />
+        </mxCell>
+        <mxCell id="playerstats" value="&lt;&lt;canonical&gt;&gt; PlayerMatchStats&#xA;+ id: UUID {id}&#xA;+ matchRecordId: UUID&#xA;+ personId: UUID&#xA;+ minutesPlayed: Integer?&#xA;+ goals: Integer?&#xA;+ assists: Integer?&#xA;+ yellowCards: Integer?&#xA;+ redCards: Integer?&#xA;+ mvp: Boolean?&#xA;(solo si MatchRecord.resultType = PLAYED)&#xA;+ PlayerMatchStats(matchRecordId, personId, ...?)&#xA;/ matchesPlayed: Integer (derivado global: count MatchRecord PLAYED/FORFEIT con stats)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="450" y="665" width="350" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="eligibility" value="&lt;&lt;canonical&gt;&gt; EligibilityConstraint&#xA;+ id: UUID {id}&#xA;+ personId: UUID&#xA;+ state: EligState (PENDING/BLOCKED)&#xA;+ scope: EligScope (CLUB/COMPETITION/ENTRY/EVENT)&#xA;+ scopeRefId: UUID?&#xA;+ source: EligSource (INTERNAL/AHBA/OTHER)&#xA;+ reason: EligReason (ADMIN/DISCIPLINE/FEDERATION/MEDICAL_CLEARANCE/OTHER)&#xA;+ note: String?&#xA;+ validFrom: DateTime&#xA;+ validUntil: DateTime?&#xA;/ isActiveBlocking: Boolean&#xA;+ EligibilityConstraint(personId, state, scope, scopeRefId?, source, reason, note?, from, until?)&#xA;/ appliesTo(scope, scopeRefId): Boolean" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="830" y="60" width="300" height="235" as="geometry" />
+        </mxCell>
+        <mxCell id="services" value="&lt;&lt;service&gt;&gt; EligibilityPolicy&#xA;+ deriveEligible(person, scope, scopeRefId): Boolean&#xA;(ELIGIBLE = ¬∃ active BLOCKED constraint aplicable)&#xA;&#xA;● AvailabilityPolicy&#xA;+ deriveState(availability, event): AvailabilityState&#xA;(NO_RESPONSE / NEEDS_RECONFIRMATION)&#xA;&#xA;● SelectionConflictPolicy&#xA;+ computeConflicts(revision): Conflict[0..*]&#xA;(ELIGIBILITY_BLOCKED/PENDING, NO_LONGER_EVENT_TARGET, NO_LONGER_TEAM_AFFILIATED)&#xA;&#xA;● AttendancePolicy&#xA;+ deriveUnrecorded(event): Person[0..*]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;dashed=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="830" y="305" width="300" height="235" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-availvalue" value="&lt;&lt;enumeration&gt;&gt; AvailabilityValue&#xA;YES&#xA;MAYBE&#xA;NO" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="1320" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-availderived" value="&lt;&lt;enumeration&gt;&gt; AvailabilityDerived&#xA;NO_RESPONSE&#xA;NEEDS_RECONFIRMATION" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="155" y="1320" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-selrevstate" value="&lt;&lt;enumeration&gt;&gt; SelectionRevisionState&#xA;DRAFT&#xA;PUBLISHED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="340" y="1320" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-attvalue" value="&lt;&lt;enumeration&gt;&gt; AttendanceValue&#xA;PRESENT&#xA;ABSENT&#xA;JUSTIFIED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="525" y="1320" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-attderived" value="&lt;&lt;enumeration&gt;&gt; AttendanceDerived&#xA;UNRECORRED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="680" y="1320" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-sheetstate" value="&lt;&lt;enumeration&gt;&gt; AttendanceSheetState&#xA;OPEN&#xA;CLOSED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="815" y="1320" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-mrstate" value="&lt;&lt;enumeration&gt;&gt; MatchRecordState&#xA;DRAFT&#xA;FINAL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="950" y="1320" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-matchresult" value="&lt;&lt;enumeration&gt;&gt; MatchResultType&#xA;PLAYED&#xA;FORFEIT&#xA;ABANDONED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="1025" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-eligstate" value="&lt;&lt;enumeration&gt;&gt; EligibilityState&#xA;PENDING&#xA;BLOCKED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="955" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-eligderived" value="&lt;&lt;enumeration&gt;&gt; EligibilityDerived&#xA;ELIGIBLE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="895" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-avail-event" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#7B1FA2;strokeWidth=2;endArrow=open;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="availability" target="selection" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-avail-person" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#7B1FA2;strokeWidth=2;endArrow=open;exitX=1;exitY=0.49;exitDx=0;exitDy=0;entryX=0;entryY=0.39;entryDx=0;entryDy=0;" edge="1" source="availability" target="selrev" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="385" y="160" />
+              <mxPoint x="385" y="140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-sel-match" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#7B1FA2;strokeWidth=2;endArrow=open;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.68;entryDx=0;entryDy=0;" edge="1" source="selection" target="selrev" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="385" y="357" />
+              <mxPoint x="385" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-selrev-entry" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#7B1FA2;strokeWidth=2;endArrow=none;startArrow=none;dashed=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="selrev" target="selentry" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-attsheet-event" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#7B1FA2;strokeWidth=2;endArrow=open;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.55;entryDx=0;entryDy=0;" edge="1" source="attsheet" target="attentry" parent="1">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="rel-attsheet-entry" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#7B1FA2;strokeWidth=2;endArrow=none;startArrow=none;dashed=0;exitX=1;exitY=0.68;exitDx=0;exitDy=0;entryX=0;entryY=0.72;entryDx=0;entryDy=0;" edge="1" source="attsheet" target="attentry" parent="1">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="rel-attentry-person" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#7B1FA2;strokeWidth=2;endArrow=open;exitX=0;exitY=0.51;exitDx=0;exitDy=0;entryX=1;entryY=0.31;entryDx=0;entryDy=0;exitX=0;exitY=0.34;exitDx=0;exitDy=0;entryX=0.8;entryY=0;entryDx=0;entryDy=0;" edge="1" source="attentry" target="matchrecord" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="385" y="500" />
+              <mxPoint x="385" y="660" />
+              <mxPoint x="300" y="660" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-mr-match" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#7B1FA2;strokeWidth=2;endArrow=open;exitX=1;exitY=0.41;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="matchrecord" target="playerstats" parent="1">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="rel-mr-stats" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#7B1FA2;strokeWidth=2;endArrow=none;startArrow=none;dashed=0;exitX=1;exitY=0.52;exitDx=0;exitDy=0;entryX=0;entryY=0.89;entryDx=0;entryDy=0;" edge="1" source="matchrecord" target="playerstats" parent="1">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="rel-stats-person" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#7B1FA2;strokeWidth=2;endArrow=open;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.6;entryDx=0;entryDy=0;" edge="1" source="playerstats" target="eligibility" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="790" y="730" />
+              <mxPoint x="790" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-elig-person" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#7B1FA2;strokeWidth=2;endArrow=open;exitX=0.07;exitY=1;exitDx=0;exitDy=0;entryX=0.8;entryY=1;entryDx=0;entryDy=0;" edge="1" source="eligibility" target="availability" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="790" y="295" />
+              <mxPoint x="790" y="270" />
+              <mxPoint x="300" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="comp1" value="◇" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#7B1FA2;" vertex="1" parent="1">
+          <mxGeometry x="568" y="262" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="comp2" value="◇" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#7B1FA2;" vertex="1" parent="1">
+          <mxGeometry x="378" y="582" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="comp3" value="◇" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#7B1FA2;" vertex="1" parent="1">
+          <mxGeometry x="428" y="852" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="comp4" value="◇" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#7B1FA2;" vertex="1" parent="1">
+          <mxGeometry x="188" y="262" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="invariants" value="Invariantes Críticas (PT §9, §12, §13, §14, §15):&#xA;● Disponibilidad, Convocatoria, Asistencia, Habilitación = 4 conceptos INDEPENDIENTES (REQ-PRT-018)&#xA;● Availability: solo Event SCHEDULED; POSTPONED conserva, no acepta nuevas&#xA;● NEEDS_RECONFIRMATION solo por cambio coordinativo (coordinationRevision)&#xA;● SelectionRevision PUBLISHED = inmutable; republicar = nueva revisión (no reescribe)&#xA;● Publicación NO se bloquea por conflictos derivados (REQ-PRT-006)&#xA;● Conflictos: ELIGIBILITY_BLOCKED/PENDING, NO_LONGER_EVENT_TARGET, NO_LONGER_TEAM_AFFILIATED (PT §14)&#xA;● AttendanceSheet: OPEN/CLOSED derivado de closedAt; NO reapertura inventada&#xA;● UNRECORRED ≠ ABSENT (nunca se convierte; informe no cuenta como ausente)&#xA;● Corrección asistencia: motivo obligatorio; NO reabre planilla&#xA;● MatchRecord: DRAFT→FINAL terminal; corrección explícita separada (no transición inversa)&#xA;● Compatibilidad: PLAYED/FORFEIT → Event.COMPLETED; ABANDONED → Event.ABANDONED&#xA;● PlayerMatchStats solo PLAYED; matches_played derivado de resultado, no asistencia&#xA;● EligibilityConstraint: ELIGIBLE = sin BLOCKED activa aplicable; NO datos clínicos&#xA;● ELIGIBLE NUNCA se infiere de Availability (REQ-PRT-018)&#xA;● Mutación habilitación auditada; alcance limita dónde aplica (PT §13, REQ-CMP-008)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F57F17;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="1050" width="760" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="sources" value="Fuentes:&#xA;PT §9, §12, §13, §14, §15, §25&#xA;REQ-PRT-001 a 019&#xA;UC-PRT-01 a 13&#xA;SM-AVAILABILITY-01, SM-SELECTIONREV-01, SM-ATTENDANCEENTRY-01, SM-MATCHRECORD-01, SM-ELIGIBILITY-01&#xA;R-25 a R-40" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#37474F;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="830" y="550" width="300" height="120" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

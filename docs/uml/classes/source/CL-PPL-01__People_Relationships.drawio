@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mxfile host="GEI-E8" modified="2026-10-10T00:00:00.000Z" agent="GEI-E8-class-diagram-authoring" version="24.7.17" type="device">
+  <diagram id="CL-PPL-01" name="CL-PPL-01__People_Relationships">
+    <mxGraphModel dx="1169" dy="827" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="PPL — People &amp; Relationships (Class Diagram)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="10" width="1129" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="person" value="&lt;&lt;ref&gt;&gt; Person&#xA;+ id: UUID {id}&#xA;+ firstName: String&#xA;+ lastName: String&#xA;/ fullName: String&#xA;/ activeTeamAssignments: TeamAssignment[0..*]&#xA;/ activeRoleAssignments: RoleAssignment[0..*]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#606060;strokeWidth=1;dashed=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="20" y="60" width="300" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="team" value="&lt;&lt;ref&gt;&gt; Team&#xA;+ id: UUID {id}&#xA;/ name: String (Season+Div+Line)&#xA;/ isActive: Boolean" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#606060;strokeWidth=1;dashed=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="20" y="235" width="250" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="competition" value="&lt;&lt;ref&gt;&gt; Competition&#xA;+ id: UUID {id}&#xA;+ name: String" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#606060;strokeWidth=1;dashed=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="20" y="335" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="teamassignment" value="&lt;&lt;canonical&gt;&gt;&lt;&lt;associationClass&gt;&gt; TeamAssignment&#xA;+ id: UUID {id}&#xA;+ personId: UUID&#xA;+ teamId: UUID&#xA;+ validFrom: Date&#xA;+ validUntil: Date&#xA;/ isActive: Boolean&#xA;+ TeamAssignment(personId, teamId, validFrom, validUntil?)&#xA;+ end(validUntil): Boolean" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="350" y="60" width="350" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="roleassignment" value="&lt;&lt;canonical&gt;&gt;&lt;&lt;associationClass&gt;&gt; RoleAssignment&#xA;+ id: UUID {id}&#xA;+ personId: UUID&#xA;+ role: RoleType&#xA;+ scopeType: ScopeType&#xA;+ scopeRefId: UUID?&#xA;+ validFrom: DateTime&#xA;+ validUntil: DateTime?&#xA;+ temporalExclusions: DateTime[]&#xA;/ isActive: Boolean&#xA;+ RoleAssignment(personId, role, scopeType, scopeRefId?, validFrom, validUntil?)&#xA;+ end(validUntil): Boolean&#xA;+ addTemporalExclusion(period)&#xA;+ removeTemporalExclusion(period)&#xA;/ isValidScope(): Boolean" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="350" y="235" width="400" height="255" as="geometry" />
+        </mxCell>
+        <mxCell id="guardian" value="&lt;&lt;canonical&gt;&gt;&lt;&lt;associationClass&gt;&gt; GuardianRelationship (reflexiva)&#xA;+ id: UUID {id}&#xA;+ guardianPersonId: UUID&#xA;+ childPersonId: UUID&#xA;+ relationshipType: RelationshipType&#xA;+ validFrom: Date&#xA;+ validUntil: Date?&#xA;+ canViewChildInfo: Boolean&#xA;+ canRespondAvailability: Boolean&#xA;/ isActive: Boolean&#xA;+ GuardianRelationship(guardian, child, type, from, until?, view, respond)&#xA;+ end(validUntil): Boolean&#xA;+ updatePermissions(view?, respond?)&#xA;/ grantsViewChildInfo(): Boolean&#xA;/ grantsRespondAvailability(): Boolean" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="350" y="500" width="400" height="255" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-roletype" value="&lt;&lt;enumeration&gt;&gt; RoleType&#xA;PLAYER&#xA;CAPTAIN&#xA;COACH&#xA;SUBCOMMITTEE&#xA;ADMIN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="800" y="60" width="150" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-scopetype" value="&lt;&lt;enumeration&gt;&gt; ScopeType&#xA;CLUB&#xA;TEAM&#xA;EVENT&#xA;LINE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="800" y="180" width="150" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="enum-relationshiptype" value="&lt;&lt;enumeration&gt;&gt; RelationshipType&#xA;MOTHER&#xA;FATHER&#xA;GUARDIAN&#xA;OTHER" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="800" y="290" width="150" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-ta-person" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#1565C0;strokeWidth=2;endArrow=open;exitX=0;exitY=0.48;exitDx=0;exitDy=0;entryX=1;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="teamassignment" target="person" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="100" as="points" />
+            <Array as="points">
+              <mxPoint x="326" y="139" />
+              <mxPoint x="326" y="110" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-ta-team" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#1565C0;strokeWidth=2;endArrow=open;exitX=0;exitY=0.82;exitDx=0;exitDy=0;entryX=1;entryY=0.28;entryDx=0;entryDy=0;" edge="1" source="teamassignment" target="team" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="150" as="points" />
+            <Array as="points">
+              <mxPoint x="319" y="195" />
+              <mxPoint x="319" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-ra-person" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#1565C0;strokeWidth=2;endArrow=open;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.45;entryDx=0;entryDy=0;" edge="1" source="roleassignment" target="person" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="250" as="points" />
+            <Array as="points">
+              <mxPoint x="312" y="299" />
+              <mxPoint x="312" y="135" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-ra-team" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#1565C0;strokeWidth=2;endArrow=open;exitX=0;exitY=0.45;exitDx=0;exitDy=0;entryX=1;entryY=0.61;entryDx=0;entryDy=0;" edge="1" source="roleassignment" target="team" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="300" as="points" />
+            <Array as="points">
+              <mxPoint x="305" y="350" />
+              <mxPoint x="305" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-ra-comp" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#1565C0;strokeWidth=2;endArrow=open;exitX=0;exitY=0.82;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="roleassignment" target="competition" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="350" as="points" />
+            <Array as="points">
+              <mxPoint x="342" y="430" />
+              <mxPoint x="342" y="445" />
+              <mxPoint x="120" y="445" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-gr-guardian" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#1565C0;strokeWidth=2;endArrow=open;exitX=0;exitY=0.27;exitDx=0;exitDy=0;entryX=1;entryY=0.58;entryDx=0;entryDy=0;" edge="1" source="guardian" target="person" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="450" as="points" />
+            <Array as="points">
+              <mxPoint x="346" y="569" />
+              <mxPoint x="346" y="155" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-gr-child" style="edgeStyle=orthogonalEdgeStyle;edge;whiteSpace=wrap;html=1;strokeColor=#1565C0;strokeWidth=2;endArrow=open;exitX=0;exitY=0.43;exitDx=0;exitDy=0;entryX=1;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="guardian" target="person" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="500" as="points" />
+            <Array as="points">
+              <mxPoint x="330" y="610" />
+              <mxPoint x="330" y="175" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl1" value="0..*" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="306" y="132" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl2" value="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="303" y="102" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl3" value="0..*" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="306" y="292" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl4" value="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="303" y="127" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl5" value="0..1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="246" y="282" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl6" value="0..*" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="288" y="342" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl7" value="0..* (guardian)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="282" y="562" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl8" value="0..* (child)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="274" y="602" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl9" value="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="303" y="147" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl10" value="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="303" y="167" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="invariants" value="Invariantes Clave:&#xA;● Person ≠ Account ≠ Membership ≠ TeamAssignment ≠ RoleAssignment ≠ GuardianRelationship (separadas)&#xA;● TeamAssignment = afiliación PLAYER (solo); Coach usa RoleAssignment (PT §17)&#xA;● RoleAssignment: 5 roles × scopes válidos (PT §5); combinación inválida → INVALID_ROLE_SCOPE&#xA;● Multi-rol = unión de RoleAssignment vigentes (no herencia)&#xA;● GuardianRelationship: delegación (no rol); 2 flags independientes; individual por menor&#xA;● Guardian no requiere Membership; no otorga rol deportivo; no accesorio comunicacional&#xA;● Asignar jugadora: atómico TeamAssignment + RoleAssignment PLAYER (PT §17)&#xA;● Cambiar equipo: cierra anterior + crea nuevo; CAPTAIN NO se transfiere (PT §17)&#xA;● Retirar jugadora: cierra TeamAssignment + PLAYER + CAPTAIN si existía (PT §17)&#xA;● Finalizar Membership con dependencias activas → rechazado (REQ-PPL-004)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F57F17;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="800" y="400" width="350" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="sources" value="Fuentes:&#xA;PT §5, §17, §20, §25&#xA;REQ-PPL-001 a 016&#xA;UC-PPL-01 a 17&#xA;SM (temporal model E6 §3)&#xA;R-03 a R-09" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#37474F;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="800" y="700" width="350" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="note-ac" value="Nota: TeamAssignment, RoleAssignment y GuardianRelationship son clases canónicas que TAMBIÉN funcionan como clases de asociación N:M con identidad, atributos y vigencia propia." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="760" width="750" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
