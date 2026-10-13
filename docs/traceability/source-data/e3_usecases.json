@@ -1,0 +1,5279 @@
+{
+ "source_files": [
+  "docs\\use-cases\\GEI_MASTER_USE_CASE_INVENTORY_FREEZE_V1.md",
+  "docs\\use-cases\\GEI_REQ_ACTOR_USE_CASE_MATRIX_V1.md",
+  "docs\\use-cases\\GEI_E3_MISSING_AUDIT_ERRATA_V1.md"
+ ],
+ "counts": {
+  "usecases": 102,
+  "req_uc_relations": 792
+ },
+ "usecases": [
+  {
+   "id": "UC-IAM-01",
+   "name": "Iniciar sesión",
+   "domain": "IAM"
+  },
+  {
+   "id": "UC-IAM-02",
+   "name": "Deshabilitar una cuenta",
+   "domain": "IAM"
+  },
+  {
+   "id": "UC-IAM-03",
+   "name": "Emitir un código de activación",
+   "domain": "IAM"
+  },
+  {
+   "id": "UC-IAM-04",
+   "name": "Activar una cuenta con un código de un solo uso",
+   "domain": "IAM"
+  },
+  {
+   "id": "UC-IAM-05",
+   "name": "Restablecer el acceso de una cuenta",
+   "domain": "IAM"
+  },
+  {
+   "id": "UC-IAM-06",
+   "name": "Cambiar mi contraseña",
+   "domain": "IAM"
+  },
+  {
+   "id": "UC-IAM-07",
+   "name": "Consultar mis sesiones activas",
+   "domain": "IAM"
+  },
+  {
+   "id": "UC-IAM-08",
+   "name": "Cerrar una sesión remota",
+   "domain": "IAM"
+  },
+  {
+   "id": "UC-IAM-09",
+   "name": "Reautenticar para una gestión sensible",
+   "domain": "IAM"
+  },
+  {
+   "id": "UC-IAM-10",
+   "name": "Retomar el trabajo tras una interrupción de sesión",
+   "domain": "IAM"
+  },
+  {
+   "id": "UC-PPL-01",
+   "name": "Registrar una persona",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-02",
+   "name": "Completar el perfil de una jugadora",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-03",
+   "name": "Vincular una cuenta a una persona",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-04",
+   "name": "Registrar una membresía al club",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-05",
+   "name": "Finalizar una membresía al club",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-06",
+   "name": "Incorporar una jugadora a un equipo",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-07",
+   "name": "Cambiar de equipo a una jugadora",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-08",
+   "name": "Retirar a una jugadora del equipo",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-09",
+   "name": "Asignar un rol con alcance",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-10",
+   "name": "Finalizar un rol asignado",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-11",
+   "name": "Registrar una relación de representación",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-12",
+   "name": "Finalizar una relación de representación",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-13",
+   "name": "Consultar la información del menor delegado",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-14",
+   "name": "Consultar quién actúa por mi cuenta",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-15",
+   "name": "Conocer qué falta en mi perfil y cómo completarlo",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-16",
+   "name": "Consultar mi perfil",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-PPL-17",
+   "name": "Editar mi contacto",
+   "domain": "PPL"
+  },
+  {
+   "id": "UC-STR-01",
+   "name": "Registrar una temporada",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-STR-02",
+   "name": "Actualizar los datos de una temporada",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-STR-03",
+   "name": "Registrar una división",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-STR-04",
+   "name": "Actualizar una división",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-STR-05",
+   "name": "Archivar una división",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-STR-06",
+   "name": "Registrar una línea",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-STR-07",
+   "name": "Actualizar una línea",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-STR-08",
+   "name": "Archivar una línea",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-STR-09",
+   "name": "Registrar un equipo",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-STR-10",
+   "name": "Actualizar un equipo",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-STR-11",
+   "name": "Activar un equipo",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-STR-12",
+   "name": "Archivar un equipo",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-STR-13",
+   "name": "Registrar una sede",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-STR-14",
+   "name": "Corregir los datos de una sede",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-STR-15",
+   "name": "Archivar una sede",
+   "domain": "STR"
+  },
+  {
+   "id": "UC-EVT-01",
+   "name": "Crear un entrenamiento",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-02",
+   "name": "Crear un partido",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-03",
+   "name": "Crear un evento del club",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-04",
+   "name": "Editar un evento",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-05",
+   "name": "Posponer un evento",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-06",
+   "name": "Reanudar un evento pospuesto",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-07",
+   "name": "Cancelar un evento",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-08",
+   "name": "Restaurar un evento cancelado",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-09",
+   "name": "Completar un evento",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-10",
+   "name": "Abandonar un evento",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-11",
+   "name": "Revisar el impacto de un cambio material",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-12",
+   "name": "Resolver un conflicto de edición concurrente",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-13",
+   "name": "Crear una serie de eventos",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-14",
+   "name": "Finalizar una serie de eventos",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-15",
+   "name": "Programar una jornada",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-16",
+   "name": "Actualizar la logística de un evento",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-17",
+   "name": "Consultar el calendario",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-18",
+   "name": "Revisar lo que requiere mi atención",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-EVT-19",
+   "name": "Consultar un evento",
+   "domain": "EVT"
+  },
+  {
+   "id": "UC-PRT-01",
+   "name": "Responder mi disponibilidad",
+   "domain": "PRT"
+  },
+  {
+   "id": "UC-PRT-02",
+   "name": "Preparar la convocatoria de un partido",
+   "domain": "PRT"
+  },
+  {
+   "id": "UC-PRT-03",
+   "name": "Publicar la convocatoria de un partido",
+   "domain": "PRT"
+  },
+  {
+   "id": "UC-PRT-04",
+   "name": "Revisar los conflictos de una convocatoria",
+   "domain": "PRT"
+  },
+  {
+   "id": "UC-PRT-05",
+   "name": "Registrar la asistencia de un evento",
+   "domain": "PRT"
+  },
+  {
+   "id": "UC-PRT-06",
+   "name": "Cerrar la asistencia de un evento",
+   "domain": "PRT"
+  },
+  {
+   "id": "UC-PRT-07",
+   "name": "Corregir la asistencia de un evento",
+   "domain": "PRT"
+  },
+  {
+   "id": "UC-PRT-08",
+   "name": "Registrar el resultado de un partido",
+   "domain": "PRT"
+  },
+  {
+   "id": "UC-PRT-09",
+   "name": "Finalizar el resultado de un partido",
+   "domain": "PRT"
+  },
+  {
+   "id": "UC-PRT-10",
+   "name": "Corregir el resultado de un partido",
+   "domain": "PRT"
+  },
+  {
+   "id": "UC-PRT-11",
+   "name": "Consultar las estadísticas de un partido",
+   "domain": "PRT"
+  },
+  {
+   "id": "UC-PRT-12",
+   "name": "Registrar una restricción de habilitación",
+   "domain": "PRT"
+  },
+  {
+   "id": "UC-PRT-13",
+   "name": "Consultar el estado de habilitación de una jugadora",
+   "domain": "PRT"
+  },
+  {
+   "id": "UC-COM-01",
+   "name": "Redactar un comunicado",
+   "domain": "COM"
+  },
+  {
+   "id": "UC-COM-02",
+   "name": "Publicar un comunicado",
+   "domain": "COM"
+  },
+  {
+   "id": "UC-COM-03",
+   "name": "Corregir un comunicado publicado",
+   "domain": "COM"
+  },
+  {
+   "id": "UC-COM-04",
+   "name": "Archivar un comunicado",
+   "domain": "COM"
+  },
+  {
+   "id": "UC-COM-05",
+   "name": "Consultar un comunicado",
+   "domain": "COM"
+  },
+  {
+   "id": "UC-COM-06",
+   "name": "Abrir una conversación directa",
+   "domain": "COM"
+  },
+  {
+   "id": "UC-COM-07",
+   "name": "Crear una conversación de grupo",
+   "domain": "COM"
+  },
+  {
+   "id": "UC-COM-08",
+   "name": "Abrir la conversación canónica del equipo o del evento",
+   "domain": "COM"
+  },
+  {
+   "id": "UC-COM-09",
+   "name": "Enviar un mensaje",
+   "domain": "COM"
+  },
+  {
+   "id": "UC-COM-10",
+   "name": "Editar un mensaje propio",
+   "domain": "COM"
+  },
+  {
+   "id": "UC-COM-11",
+   "name": "Eliminar un mensaje propio",
+   "domain": "COM"
+  },
+  {
+   "id": "UC-COM-12",
+   "name": "Archivar una conversación de grupo",
+   "domain": "COM"
+  },
+  {
+   "id": "UC-COM-13",
+   "name": "Consultar mis notificaciones",
+   "domain": "COM"
+  },
+  {
+   "id": "UC-COM-14",
+   "name": "Marcar una notificación como leída",
+   "domain": "COM"
+  },
+  {
+   "id": "UC-CMP-01",
+   "name": "Registrar una competencia",
+   "domain": "CMP"
+  },
+  {
+   "id": "UC-CMP-02",
+   "name": "Activar una competencia",
+   "domain": "CMP"
+  },
+  {
+   "id": "UC-CMP-03",
+   "name": "Cerrar una competencia",
+   "domain": "CMP"
+  },
+  {
+   "id": "UC-CMP-04",
+   "name": "Inscribir un equipo en una competencia",
+   "domain": "CMP"
+  },
+  {
+   "id": "UC-CMP-05",
+   "name": "Inscribir una línea en una competencia",
+   "domain": "CMP"
+  },
+  {
+   "id": "UC-CMP-06",
+   "name": "Activar una inscripción en una competencia",
+   "domain": "CMP"
+  },
+  {
+   "id": "UC-CMP-07",
+   "name": "Finalizar una inscripción en una competencia",
+   "domain": "CMP"
+  },
+  {
+   "id": "UC-CMP-08",
+   "name": "Registrar una referencia externa",
+   "domain": "CMP"
+  },
+  {
+   "id": "UC-CMP-09",
+   "name": "Consultar una referencia externa",
+   "domain": "CMP"
+  },
+  {
+   "id": "UC-INS-01",
+   "name": "Buscar en el club",
+   "domain": "INS"
+  },
+  {
+   "id": "UC-INS-02",
+   "name": "Consultar el informe de asistencia",
+   "domain": "INS"
+  },
+  {
+   "id": "UC-INS-03",
+   "name": "Consultar el informe de rendimiento",
+   "domain": "INS"
+  },
+  {
+   "id": "UC-INS-04",
+   "name": "Consultar el historial de un objeto",
+   "domain": "INS"
+  },
+  {
+   "id": "UC-INS-05",
+   "name": "Consultar la auditoría administrativa",
+   "domain": "INS"
+  }
+ ],
+ "req_uc": [
+  {
+   "req": "REQ-IAM-001",
+   "uc": "UC-IAM-01",
+   "actor": "ACT-UNAUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-IAM-002",
+   "uc": "UC-IAM-02",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-IAM-002",
+   "uc": "UC-IAM-03",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-IAM-002",
+   "uc": "UC-IAM-04",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-IAM-003",
+   "uc": "UC-IAM-04",
+   "actor": "ACT-UNAUTHENTICATED (consume)",
+   "note": "P"
+  },
+  {
+   "req": "REQ-IAM-003",
+   "uc": "UC-IAM-03",
+   "actor": "ACT-UNAUTHENTICATED (consume)",
+   "note": "P"
+  },
+  {
+   "req": "REQ-IAM-004",
+   "uc": "UC-IAM-05",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-IAM-005",
+   "uc": "UC-IAM-06",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-IAM-009",
+   "uc": "UC-IAM-09",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-IAM-010",
+   "uc": "UC-IAM-07",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-IAM-010",
+   "uc": "UC-IAM-08",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-IAM-012",
+   "uc": "UC-IAM-01",
+   "actor": "SYSTEM_INTERNAL (los 8 actores)",
+   "note": "S"
+  },
+  {
+   "req": "REQ-IAM-013",
+   "uc": "UC-IAM-02",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-IAM-013",
+   "uc": "UC-IAM-05",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-IAM-013",
+   "uc": "UC-IAM-09",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-IAM-013",
+   "uc": "UC-PPL-10",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-IAM-014",
+   "uc": "UC-PPL-03",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-IAM-014",
+   "uc": "UC-IAM-03",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-IAM-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-IAM-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-IAM-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-IAM-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-IAM-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-IAM-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-IAM-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-IAM-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-IAM-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-IAM-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-15",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-16",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PPL-17",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-STR-15",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-15",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-16",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-17",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-18",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-EVT-19",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PRT-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PRT-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PRT-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PRT-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PRT-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PRT-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PRT-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PRT-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PRT-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PRT-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PRT-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PRT-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-PRT-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-COM-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-COM-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-COM-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-COM-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-COM-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-COM-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-COM-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-COM-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-COM-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-COM-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-COM-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-COM-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-COM-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-COM-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-CMP-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-CMP-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-CMP-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-CMP-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-CMP-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-CMP-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-CMP-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-CMP-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-CMP-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-INS-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-INS-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-INS-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-INS-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-016",
+   "uc": "UC-INS-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-IAM-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-IAM-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-IAM-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-IAM-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-IAM-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-IAM-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-IAM-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-IAM-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-IAM-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-IAM-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-15",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-16",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PPL-17",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-STR-15",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-15",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-16",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-17",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-18",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-EVT-19",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PRT-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PRT-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PRT-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PRT-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PRT-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PRT-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PRT-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PRT-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PRT-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PRT-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PRT-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PRT-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-PRT-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-COM-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-COM-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-COM-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-COM-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-COM-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-COM-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-COM-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-COM-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-COM-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-COM-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-COM-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-COM-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-COM-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-COM-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-CMP-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-CMP-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-CMP-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-CMP-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-CMP-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-CMP-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-CMP-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-CMP-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-CMP-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-INS-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-INS-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-INS-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-INS-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-017",
+   "uc": "UC-INS-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-IAM-020",
+   "uc": "UC-IAM-10",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-001",
+   "uc": "UC-PPL-01",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-002",
+   "uc": "UC-PPL-02",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-002",
+   "uc": "UC-PPL-15",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-003",
+   "uc": "UC-PPL-03",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-004",
+   "uc": "UC-PPL-04",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-004",
+   "uc": "UC-PPL-05",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-005",
+   "uc": "UC-PPL-06",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-005",
+   "uc": "UC-PPL-07",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-006",
+   "uc": "UC-PPL-09",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-006",
+   "uc": "UC-PPL-10",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-007",
+   "uc": "UC-PPL-06",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-007",
+   "uc": "UC-PPL-07",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-007",
+   "uc": "UC-PPL-08",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-007",
+   "uc": "UC-PPL-10",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-008",
+   "uc": "UC-PPL-11",
+   "actor": "ACT-ADMIN (gestiona)",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-008",
+   "uc": "UC-PPL-12",
+   "actor": "ACT-ADMIN (gestiona)",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-009",
+   "uc": "UC-PPL-13",
+   "actor": "ACT-GUARDIAN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-010",
+   "uc": "UC-PPL-14",
+   "actor": "ACT-PLAYER (menor)",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-IAM-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-IAM-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-IAM-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-IAM-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-IAM-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-IAM-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-IAM-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-IAM-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-IAM-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-IAM-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-15",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-16",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PPL-17",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-STR-15",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-15",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-16",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-17",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-18",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-EVT-19",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PRT-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PRT-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PRT-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PRT-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PRT-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PRT-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PRT-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PRT-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PRT-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PRT-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PRT-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PRT-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-PRT-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-COM-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-COM-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-COM-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-COM-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-COM-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-COM-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-COM-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-COM-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-COM-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-COM-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-COM-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-COM-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-COM-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-COM-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-CMP-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-CMP-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-CMP-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-CMP-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-CMP-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-CMP-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-CMP-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-CMP-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-CMP-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-INS-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-INS-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-INS-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-INS-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-011",
+   "uc": "UC-INS-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-PPL-012",
+   "uc": "UC-PPL-11",
+   "actor": "ACT-GUARDIAN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-012",
+   "uc": "UC-PPL-12",
+   "actor": "ACT-GUARDIAN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-012",
+   "uc": "UC-PRT-01",
+   "actor": "ACT-GUARDIAN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-012",
+   "uc": "UC-COM-06",
+   "actor": "ACT-GUARDIAN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-013",
+   "uc": "UC-PPL-15",
+   "actor": "ACT-PLAYER",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-014",
+   "uc": "UC-STR-04",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-014",
+   "uc": "UC-STR-07",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-014",
+   "uc": "UC-STR-09",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-014",
+   "uc": "UC-STR-10",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-015",
+   "uc": "UC-PPL-05",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-015",
+   "uc": "UC-PPL-08",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-015",
+   "uc": "UC-PPL-10",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-015",
+   "uc": "UC-PPL-12",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-015",
+   "uc": "UC-STR-05",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PPL-016",
+   "uc": "UC-PPL-16",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PPL-016",
+   "uc": "UC-PPL-17",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-001",
+   "uc": "UC-STR-01",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-001",
+   "uc": "UC-STR-02",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-002",
+   "uc": "UC-STR-03",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-002",
+   "uc": "UC-STR-04",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-002",
+   "uc": "UC-STR-05",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-003",
+   "uc": "UC-STR-06",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-003",
+   "uc": "UC-STR-07",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-003",
+   "uc": "UC-STR-08",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-004",
+   "uc": "UC-STR-09",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-004",
+   "uc": "UC-STR-10",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-STR-004",
+   "uc": "UC-STR-11",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-004",
+   "uc": "UC-STR-12",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-005",
+   "uc": "UC-STR-13",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-005",
+   "uc": "UC-STR-14",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-005",
+   "uc": "UC-STR-15",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-006",
+   "uc": "UC-STR-05",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-STR-006",
+   "uc": "UC-STR-08",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-STR-006",
+   "uc": "UC-STR-12",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-STR-006",
+   "uc": "UC-STR-15",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-STR-007",
+   "uc": "UC-EVT-19",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-STR-007",
+   "uc": "UC-EVT-17",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-01",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-02",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-03",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-04",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-05",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-06",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-07",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-08",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-09",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-10",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-11",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-12",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-13",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-14",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-008",
+   "uc": "UC-STR-15",
+   "actor": "ACT-ADMIN",
+   "note": "S (referencia colectiva de la matriz: «UC-STR-01 … UC-STR-15»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-01",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-02",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-03",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-04",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-05",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-06",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-07",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-08",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-09",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-10",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-11",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-12",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-13",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-14",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-009",
+   "uc": "UC-STR-15",
+   "actor": "ACT-SUBCOMMITTEE (recibe la denegación)",
+   "note": "S (referencia colectiva de la matriz: «los 15 CU de STR»)"
+  },
+  {
+   "req": "REQ-STR-010",
+   "uc": "UC-INS-01",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-STR-010",
+   "uc": "UC-EVT-19",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-STR-010",
+   "uc": "UC-PPL-16",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-IAM-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-IAM-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-IAM-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-IAM-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-IAM-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-IAM-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-IAM-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-IAM-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-IAM-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-IAM-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-15",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-16",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PPL-17",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-STR-15",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-15",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-16",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-17",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-18",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-EVT-19",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PRT-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PRT-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PRT-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PRT-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PRT-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PRT-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PRT-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PRT-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PRT-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PRT-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PRT-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PRT-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-PRT-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-COM-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-COM-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-COM-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-COM-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-COM-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-COM-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-COM-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-COM-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-COM-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-COM-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-COM-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-COM-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-COM-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-COM-14",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-CMP-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-CMP-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-CMP-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-CMP-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-CMP-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-CMP-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-CMP-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-CMP-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-CMP-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-INS-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-INS-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-INS-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-INS-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-011",
+   "uc": "UC-INS-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-STR-012",
+   "uc": "UC-STR-14",
+   "actor": "ACT-ADMIN (regla A)",
+   "note": "P"
+  },
+  {
+   "req": "REQ-STR-012",
+   "uc": "UC-EVT-04",
+   "actor": "ACT-ADMIN (regla A)",
+   "note": "S"
+  },
+  {
+   "req": "REQ-STR-012",
+   "uc": "UC-EVT-16",
+   "actor": "ACT-ADMIN (regla A)",
+   "note": "S"
+  },
+  {
+   "req": "REQ-STR-013",
+   "uc": "UC-COM-01",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-STR-013",
+   "uc": "UC-EVT-01",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-STR-013",
+   "uc": "UC-EVT-02",
+   "actor": "ACT-ADMIN",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-001",
+   "uc": "UC-EVT-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-001",
+   "uc": "UC-EVT-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-001",
+   "uc": "UC-EVT-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-002",
+   "uc": "UC-EVT-01",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-003",
+   "uc": "UC-EVT-02",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-004",
+   "uc": "UC-EVT-03",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-005",
+   "uc": "UC-EVT-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-005",
+   "uc": "UC-EVT-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-005",
+   "uc": "UC-EVT-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-005",
+   "uc": "UC-EVT-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-006",
+   "uc": "UC-EVT-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-006",
+   "uc": "UC-EVT-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-007",
+   "uc": "UC-EVT-05",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-007",
+   "uc": "UC-EVT-06",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-007",
+   "uc": "UC-EVT-07",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-007",
+   "uc": "UC-EVT-08",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-007",
+   "uc": "UC-EVT-09",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-007",
+   "uc": "UC-EVT-10",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-008",
+   "uc": "UC-EVT-07",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-008",
+   "uc": "UC-EVT-09",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-008",
+   "uc": "UC-EVT-10",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-008",
+   "uc": "UC-EVT-19",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-009",
+   "uc": "UC-EVT-01",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-009",
+   "uc": "UC-EVT-02",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-009",
+   "uc": "UC-EVT-03",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-010",
+   "uc": "UC-EVT-04",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-011",
+   "uc": "UC-EVT-04",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-011",
+   "uc": "UC-EVT-05",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-011",
+   "uc": "UC-EVT-07",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-011",
+   "uc": "UC-EVT-08",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-011",
+   "uc": "UC-EVT-16",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-012",
+   "uc": "UC-EVT-11",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-013",
+   "uc": "UC-EVT-12",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-014",
+   "uc": "UC-EVT-13",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-015",
+   "uc": "UC-EVT-04",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-016",
+   "uc": "UC-EVT-14",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-017",
+   "uc": "UC-PRT-01",
+   "actor": "ACT-PLAYER",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-017",
+   "uc": "UC-PRT-02",
+   "actor": "ACT-PLAYER",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-017",
+   "uc": "UC-PRT-05",
+   "actor": "ACT-PLAYER",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-017",
+   "uc": "UC-PRT-08",
+   "actor": "ACT-PLAYER",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-017",
+   "uc": "UC-EVT-19",
+   "actor": "ACT-PLAYER",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-018",
+   "uc": "UC-EVT-15",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-019",
+   "uc": "UC-EVT-16",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-020",
+   "uc": "UC-EVT-17",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-021",
+   "uc": "UC-EVT-18",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-022",
+   "uc": "UC-EVT-17",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-022",
+   "uc": "UC-EVT-18",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-022",
+   "uc": "UC-EVT-19",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-023",
+   "uc": "UC-EVT-19",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-EVT-024",
+   "uc": "UC-EVT-15",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "S"
+  },
+  {
+   "req": "REQ-EVT-024",
+   "uc": "UC-CMP-07",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-001",
+   "uc": "UC-PRT-01",
+   "actor": "ACT-PLAYER",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PRT-002",
+   "uc": "UC-PRT-01",
+   "actor": "ACT-GUARDIAN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PRT-003",
+   "uc": "UC-PRT-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-003",
+   "uc": "UC-PRT-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-003",
+   "uc": "UC-EVT-18",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-004",
+   "uc": "UC-PRT-01",
+   "actor": "ACT-PLAYER",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-004",
+   "uc": "UC-EVT-06",
+   "actor": "ACT-PLAYER",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-004",
+   "uc": "UC-EVT-08",
+   "actor": "ACT-PLAYER",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-005",
+   "uc": "UC-PRT-02",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PRT-005",
+   "uc": "UC-PRT-03",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PRT-005",
+   "uc": "UC-INS-04",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-006",
+   "uc": "UC-PRT-03",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-006",
+   "uc": "UC-PRT-04",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-007",
+   "uc": "UC-PRT-04",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PRT-008",
+   "uc": "UC-PRT-02",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-008",
+   "uc": "UC-PRT-03",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-009",
+   "uc": "UC-PRT-05",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PRT-010",
+   "uc": "UC-PRT-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-010",
+   "uc": "UC-INS-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-011",
+   "uc": "UC-PRT-06",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PRT-012",
+   "uc": "UC-PRT-07",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PRT-013",
+   "uc": "UC-PRT-08",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PRT-013",
+   "uc": "UC-PRT-09",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PRT-014",
+   "uc": "UC-PRT-10",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PRT-015",
+   "uc": "UC-PRT-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-015",
+   "uc": "UC-PRT-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-015",
+   "uc": "UC-EVT-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-015",
+   "uc": "UC-EVT-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-016",
+   "uc": "UC-PRT-11",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PRT-016",
+   "uc": "UC-INS-03",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-017",
+   "uc": "UC-PRT-12",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PRT-017",
+   "uc": "UC-PRT-13",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-PRT-018",
+   "uc": "UC-PRT-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "sin marcador P/S (referencia colectiva de la matriz: «los 13 CU de PRT»)"
+  },
+  {
+   "req": "REQ-PRT-018",
+   "uc": "UC-PRT-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "sin marcador P/S (referencia colectiva de la matriz: «los 13 CU de PRT»)"
+  },
+  {
+   "req": "REQ-PRT-018",
+   "uc": "UC-PRT-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "sin marcador P/S (referencia colectiva de la matriz: «los 13 CU de PRT»)"
+  },
+  {
+   "req": "REQ-PRT-018",
+   "uc": "UC-PRT-04",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "sin marcador P/S (referencia colectiva de la matriz: «los 13 CU de PRT»)"
+  },
+  {
+   "req": "REQ-PRT-018",
+   "uc": "UC-PRT-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "sin marcador P/S (referencia colectiva de la matriz: «los 13 CU de PRT»)"
+  },
+  {
+   "req": "REQ-PRT-018",
+   "uc": "UC-PRT-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "sin marcador P/S (referencia colectiva de la matriz: «los 13 CU de PRT»)"
+  },
+  {
+   "req": "REQ-PRT-018",
+   "uc": "UC-PRT-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "sin marcador P/S (referencia colectiva de la matriz: «los 13 CU de PRT»)"
+  },
+  {
+   "req": "REQ-PRT-018",
+   "uc": "UC-PRT-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "sin marcador P/S (referencia colectiva de la matriz: «los 13 CU de PRT»)"
+  },
+  {
+   "req": "REQ-PRT-018",
+   "uc": "UC-PRT-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "sin marcador P/S (referencia colectiva de la matriz: «los 13 CU de PRT»)"
+  },
+  {
+   "req": "REQ-PRT-018",
+   "uc": "UC-PRT-10",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "sin marcador P/S (referencia colectiva de la matriz: «los 13 CU de PRT»)"
+  },
+  {
+   "req": "REQ-PRT-018",
+   "uc": "UC-PRT-11",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "sin marcador P/S (referencia colectiva de la matriz: «los 13 CU de PRT»)"
+  },
+  {
+   "req": "REQ-PRT-018",
+   "uc": "UC-PRT-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "sin marcador P/S (referencia colectiva de la matriz: «los 13 CU de PRT»)"
+  },
+  {
+   "req": "REQ-PRT-018",
+   "uc": "UC-PRT-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "sin marcador P/S (referencia colectiva de la matriz: «los 13 CU de PRT»)"
+  },
+  {
+   "req": "REQ-PRT-019",
+   "uc": "UC-PRT-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-019",
+   "uc": "UC-PRT-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-PRT-019",
+   "uc": "UC-PRT-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-001",
+   "uc": "UC-COM-01",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-COM-001",
+   "uc": "UC-COM-02",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-COM-001",
+   "uc": "UC-COM-04",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-COM-002",
+   "uc": "UC-COM-01",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-002",
+   "uc": "UC-COM-02",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-003",
+   "uc": "UC-COM-02",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-003",
+   "uc": "UC-COM-03",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-003",
+   "uc": "UC-COM-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-004",
+   "uc": "UC-COM-03",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-COM-005",
+   "uc": "UC-COM-05",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-COM-006",
+   "uc": "UC-COM-06",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-COM-007",
+   "uc": "UC-COM-07",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-COM-007",
+   "uc": "UC-COM-12",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-COM-008",
+   "uc": "UC-COM-08",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-COM-009",
+   "uc": "UC-COM-09",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-COM-010",
+   "uc": "UC-COM-10",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-COM-010",
+   "uc": "UC-COM-11",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-COM-011",
+   "uc": "UC-COM-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-011",
+   "uc": "UC-COM-12",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-012",
+   "uc": "UC-COM-06",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-012",
+   "uc": "UC-COM-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-012",
+   "uc": "UC-COM-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-012",
+   "uc": "UC-COM-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-013",
+   "uc": "UC-COM-06",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-013",
+   "uc": "UC-COM-07",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-013",
+   "uc": "UC-COM-08",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-014",
+   "uc": "UC-COM-13",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-015",
+   "uc": "UC-COM-13",
+   "actor": "ACT-PLAYER",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-015",
+   "uc": "UC-PRT-03",
+   "actor": "ACT-PLAYER",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-016",
+   "uc": "UC-COM-13",
+   "actor": "ACT-PLAYER",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-016",
+   "uc": "UC-EVT-04",
+   "actor": "ACT-PLAYER",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-017",
+   "uc": "UC-COM-13",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-017",
+   "uc": "UC-PRT-01",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-017",
+   "uc": "UC-PRT-05",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-017",
+   "uc": "UC-PRT-07",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-017",
+   "uc": "UC-COM-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-COM-018",
+   "uc": "UC-COM-13",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-COM-018",
+   "uc": "UC-COM-14",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-CMP-001",
+   "uc": "UC-CMP-01",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-CMP-001",
+   "uc": "UC-CMP-02",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-CMP-002",
+   "uc": "UC-CMP-03",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-CMP-003",
+   "uc": "UC-CMP-04",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-CMP-003",
+   "uc": "UC-CMP-05",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-CMP-003",
+   "uc": "UC-CMP-06",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-CMP-003",
+   "uc": "UC-CMP-07",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-CMP-004",
+   "uc": "UC-CMP-04",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "S"
+  },
+  {
+   "req": "REQ-CMP-004",
+   "uc": "UC-CMP-05",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "S"
+  },
+  {
+   "req": "REQ-CMP-004",
+   "uc": "UC-CMP-06",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "S"
+  },
+  {
+   "req": "REQ-CMP-005",
+   "uc": "UC-EVT-02",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-CMP-005",
+   "uc": "UC-EVT-15",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-CMP-005",
+   "uc": "UC-CMP-04",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-CMP-005",
+   "uc": "UC-CMP-05",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-CMP-006",
+   "uc": "UC-CMP-08",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-CMP-006",
+   "uc": "UC-CMP-09",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "P"
+  },
+  {
+   "req": "REQ-CMP-007",
+   "uc": "UC-CMP-08",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-CMP-007",
+   "uc": "UC-CMP-09",
+   "actor": "SYSTEM_INTERNAL",
+   "note": "S"
+  },
+  {
+   "req": "REQ-CMP-008",
+   "uc": "UC-PRT-12",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "S"
+  },
+  {
+   "req": "REQ-CMP-008",
+   "uc": "UC-PRT-13",
+   "actor": "ACT-SUBCOMMITTEE",
+   "note": "S"
+  },
+  {
+   "req": "REQ-INS-001",
+   "uc": "UC-INS-01",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-INS-002",
+   "uc": "UC-INS-01",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-INS-003",
+   "uc": "UC-INS-01",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-INS-004",
+   "uc": "UC-INS-02",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-INS-005",
+   "uc": "UC-INS-03",
+   "actor": "ACT-COACH",
+   "note": "P"
+  },
+  {
+   "req": "REQ-INS-006",
+   "uc": "UC-INS-02",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-INS-006",
+   "uc": "UC-INS-03",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S"
+  },
+  {
+   "req": "REQ-INS-007",
+   "uc": "UC-INS-02",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-INS-007",
+   "uc": "UC-INS-03",
+   "actor": "ACT-COACH",
+   "note": "S"
+  },
+  {
+   "req": "REQ-INS-008",
+   "uc": "UC-INS-05",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-INS-009",
+   "uc": "UC-INS-05",
+   "actor": "ACT-ADMIN",
+   "note": "P"
+  },
+  {
+   "req": "REQ-INS-011",
+   "uc": "UC-INS-04",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "P"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-IAM-01",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-IAM-02",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-IAM-03",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-IAM-04",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-IAM-05",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-IAM-06",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-IAM-07",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-IAM-08",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-IAM-09",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-IAM-10",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-01",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-02",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-03",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-04",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-05",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-06",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-07",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-08",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-09",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-10",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-11",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-12",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-13",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-14",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-15",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-16",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PPL-17",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-01",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-02",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-03",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-04",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-05",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-06",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-07",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-08",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-09",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-10",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-11",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-12",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-13",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-14",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-STR-15",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-01",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-02",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-03",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-04",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-05",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-06",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-07",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-08",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-09",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-10",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-11",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-12",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-13",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-14",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-15",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-16",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-17",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-18",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-EVT-19",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PRT-01",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PRT-02",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PRT-03",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PRT-04",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PRT-05",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PRT-06",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PRT-07",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PRT-08",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PRT-09",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PRT-10",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PRT-11",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PRT-12",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-PRT-13",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-COM-01",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-COM-02",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-COM-03",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-COM-04",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-COM-05",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-COM-06",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-COM-07",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-COM-08",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-COM-09",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-COM-10",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-COM-11",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-COM-12",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-COM-13",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-COM-14",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-CMP-01",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-CMP-02",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-CMP-03",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-CMP-04",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-CMP-05",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-CMP-06",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-CMP-07",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-CMP-08",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-CMP-09",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-INS-01",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-INS-02",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-INS-03",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-INS-04",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  },
+  {
+   "req": "REQ-SYS-012",
+   "uc": "UC-INS-05",
+   "actor": "ACT-AUTHENTICATED",
+   "note": "S (referencia colectiva de la matriz: «los 102 CU»)"
+  }
+ ],
+ "ucs_without_req": [],
+ "reqs_without_uc": []
+}

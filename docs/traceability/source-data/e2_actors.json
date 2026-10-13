@@ -1,0 +1,916 @@
+{
+  "source_files": [
+    "docs/actors/GEI_ACTOR_MODEL_FREEZE_V1.md",
+    "docs/actors/GEI_ACTOR_CATALOG_V1.md",
+    "docs/actors/GEI_ACTOR_REQUIREMENT_MATRIX_V1.md",
+    "docs/actors/GEI_ACTOR_AUTHORITY_BOUNDARY_MATRIX_V1.md"
+  ],
+  "counts": {
+    "actors": 8,
+    "actor_req_relations": 173,
+    "actor_uc_relations": 0
+  },
+  "actors": [
+    {
+      "id": "ACT-UNAUTHENTICATED",
+      "name": "Persona no autenticada",
+      "description": "Persona externa que interactúa con GEI sin sesión; puede autenticarse o consumir un código de un solo uso; sin fuente de autoridad de dominio."
+    },
+    {
+      "id": "ACT-AUTHENTICATED",
+      "name": "Persona autenticada",
+      "description": "Actor abstracto no instanciable: capacidad común de toda persona con Account ACTIVE y sesión vigente; no concede acceso a la aplicación por sí solo."
+    },
+    {
+      "id": "ACT-PLAYER",
+      "name": "Jugadora",
+      "description": "Persona con RoleAssignment PLAYER vigente sobre un equipo dentro de Membership vigente; responde su propia disponibilidad."
+    },
+    {
+      "id": "ACT-CAPTAIN",
+      "name": "Capitana",
+      "description": "Persona con RoleAssignment CAPTAIN vigente; actor independiente con autoridad propia sobre la logística de su equipo (scope TEAM)."
+    },
+    {
+      "id": "ACT-COACH",
+      "name": "Entrenador/a",
+      "description": "Persona con RoleAssignment COACH vigente (scope TEAM o EVENT); autoridad deportiva sobre eventos, convocatoria, asistencia y resultado."
+    },
+    {
+      "id": "ACT-SUBCOMMITTEE",
+      "name": "Subcomisión de hockey",
+      "description": "Persona con RoleAssignment SUBCOMMITTEE vigente (scope CLUB); autoridad oficial: comunicados, habilitación y competencias."
+    },
+    {
+      "id": "ACT-ADMIN",
+      "name": "Administración del club",
+      "description": "Persona con RoleAssignment ADMIN vigente (scope CLUB); autoridad administrativa sobre identidad, cuentas, estructura y auditoría; sin autoridad deportiva."
+    },
+    {
+      "id": "ACT-GUARDIAN",
+      "name": "Responsable / guardian",
+      "description": "Adulto con al menos una GuardianRelationship vigente; actor DELEGATED_HUMAN con scope CHILD; no es RoleAssignment ni requiere Membership."
+    }
+  ],
+  "actor_req": [
+    {
+      "actor": "ACT-UNAUTHENTICATED",
+      "req": "REQ-IAM-001"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-IAM-001"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-IAM-002"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-IAM-003"
+    },
+    {
+      "actor": "ACT-UNAUTHENTICATED",
+      "req": "REQ-IAM-003"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-IAM-004"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-IAM-005"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-IAM-009"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-IAM-009"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-IAM-010"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-IAM-012"
+    },
+    {
+      "actor": "ACT-GUARDIAN",
+      "req": "REQ-IAM-012"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-IAM-013"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-IAM-014"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-IAM-020"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-001"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-002"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-PPL-002"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-003"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-004"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-005"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-006"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-007"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-PPL-007"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-008"
+    },
+    {
+      "actor": "ACT-GUARDIAN",
+      "req": "REQ-PPL-008"
+    },
+    {
+      "actor": "ACT-GUARDIAN",
+      "req": "REQ-PPL-009"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-PPL-010"
+    },
+    {
+      "actor": "ACT-GUARDIAN",
+      "req": "REQ-PPL-012"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-PPL-013"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-013"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-014"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-015"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-PPL-016"
+    },
+    {
+      "actor": "ACT-GUARDIAN",
+      "req": "REQ-PPL-016"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-001"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-002"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-003"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-004"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-005"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-006"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-008"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-STR-009"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-009"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-STR-010"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-012"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-STR-012"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-STR-012"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-013"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-002"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-002"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-003"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-003"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-004"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-004"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-007"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-007"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-EVT-008"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-009"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-009"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-010"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-010"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-011"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-011"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-EVT-011"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-012"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-012"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-013"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-013"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-EVT-013"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-014"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-014"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-015"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-015"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-016"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-016"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-EVT-017"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-017"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-017"
+    },
+    {
+      "actor": "ACT-GUARDIAN",
+      "req": "REQ-EVT-017"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-018"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-018"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-019"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-EVT-019"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-019"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-EVT-020"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-EVT-021"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-EVT-022"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-EVT-023"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-024"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-EVT-024"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-PRT-001"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-PRT-001"
+    },
+    {
+      "actor": "ACT-GUARDIAN",
+      "req": "REQ-PRT-002"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-PRT-004"
+    },
+    {
+      "actor": "ACT-GUARDIAN",
+      "req": "REQ-PRT-004"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-005"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-006"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-007"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-008"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-009"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-011"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-012"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-013"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-014"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-016"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-PRT-017"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PRT-017"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-017"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-COM-001"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-COM-002"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-COM-004"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-005"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-006"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-COM-006"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-COM-006"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-COM-006"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-007"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-COM-007"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-COM-007"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-COM-007"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-008"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-COM-008"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-COM-008"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-COM-008"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-009"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-COM-009"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-COM-009"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-COM-009"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-010"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-013"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-014"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-COM-015"
+    },
+    {
+      "actor": "ACT-GUARDIAN",
+      "req": "REQ-COM-015"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-COM-016"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-COM-016"
+    },
+    {
+      "actor": "ACT-GUARDIAN",
+      "req": "REQ-COM-016"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-018"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-CMP-001"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-CMP-001"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-CMP-002"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-CMP-002"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-CMP-003"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-CMP-003"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-CMP-004"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-CMP-004"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-CMP-005"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-CMP-005"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-CMP-006"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-CMP-006"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-CMP-008"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-CMP-008"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-CMP-008"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-INS-001"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-INS-002"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-INS-003"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-INS-004"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-INS-004"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-INS-004"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-INS-004"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-INS-004"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-INS-005"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-INS-005"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-INS-005"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-INS-005"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-INS-005"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-INS-006"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-INS-007"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-INS-007"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-INS-008"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-INS-009"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-INS-011"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-SYS-012"
+    }
+  ],
+  "actor_uc": [],
+  "authority": [
+    {
+      "actor": "ACT-UNAUTHENTICATED",
+      "scopes": [
+        "SELF"
+      ],
+      "field_authority": [
+        "CERO PII: no recibe ningún dato del club ni de terceros; sólo su propia credencial"
+      ],
+      "delegation": "NONE — sin fuente de autoridad (REQ-IAM-001, REQ-IAM-003)"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "scopes": [
+        "SELF"
+      ],
+      "field_authority": [
+        "SELF DATA V/E propio",
+        "CONTACT V/E propio",
+        "SECURITY V/E propio",
+        "ACCOUNT STATE V propio"
+      ],
+      "delegation": "NONE — no delega ni recibe delegación; no concede acceso a la aplicación sin rol o delegación (REQ-IAM-012)"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "scopes": [
+        "SELF",
+        "TEAM"
+      ],
+      "field_authority": [
+        "SELF DATA V/E",
+        "OTHER PERSON BASIC V (equipo)",
+        "CONTACT V equipo con necesidad operativa",
+        "DNI/DOB de terceros — (default deny)",
+        "ELIGIBILITY STATUS — (ACTOR-DECISION-01)",
+        "ELIGIBILITY REASON/SOURCE —",
+        "MESSAGE BODY C (participante + período)",
+        "AUDIT —"
+      ],
+      "delegation": "NONE — puede además tener GuardianRelationship como fuente separada (PT §5 fila 3)"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "scopes": [
+        "SELF",
+        "TEAM"
+      ],
+      "field_authority": [
+        "SELF DATA V/E",
+        "OTHER PERSON BASIC V (equipo)",
+        "CONTACT V equipo con necesidad operativa",
+        "DNI — (regla Nunca, REQ-PPL-011 AC 1)",
+        "DOB —",
+        "ELIGIBILITY STATUS — (ACTOR-DECISION-01)",
+        "MESSAGE BODY C",
+        "AUDIT —"
+      ],
+      "delegation": "NONE — no delega por su cuenta; sólo si además tiene GuardianRelationship"
+    },
+    {
+      "actor": "ACT-COACH",
+      "scopes": [
+        "SELF",
+        "TEAM",
+        "EVENT"
+      ],
+      "field_authority": [
+        "SELF DATA V/E",
+        "OTHER PERSON BASIC V (su equipo)",
+        "CONTACT V equipo con necesidad operativa",
+        "DNI —",
+        "DOB —",
+        "ELIGIBILITY STATUS V con alcance",
+        "ELIGIBILITY REASON/SOURCE — (REQ-PRT-017, REQ-CMP-008)",
+        "GUARDIAN RELATIONSHIP C (info operativa mínima)",
+        "MESSAGE BODY C",
+        "AUDIT —"
+      ],
+      "delegation": "NONE — no hereda ni delega autoridad de guardián"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "scopes": [
+        "SELF",
+        "TEAM_SET",
+        "CLUB"
+      ],
+      "field_authority": [
+        "SELF DATA V/E",
+        "OTHER PERSON BASIC V (club)",
+        "CONTACT — (no está en la lista de PT §6)",
+        "DNI —",
+        "DOB —",
+        "ELIGIBILITY STATUS/REASON/SOURCE V (REQ-CMP-008, REQ-PRT-017)",
+        "MESSAGE BODY — sin entitlement",
+        "AUDIT —"
+      ],
+      "delegation": "NONE"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "scopes": [
+        "SELF",
+        "CLUB"
+      ],
+      "field_authority": [
+        "SELF DATA V",
+        "OTHER PERSON BASIC V/E",
+        "CONTACT V/E",
+        "DNI V/E (único actor)",
+        "DOB V/E (único actor)",
+        "ACCOUNT STATE V/E",
+        "SECURITY C (reset administrativo, REQ-IAM-004)",
+        "ELIGIBILITY STATUS/REASON/SOURCE V",
+        "GUARDIAN RELATIONSHIP V/E",
+        "CHILD INFO C (sólo la relación que gestiona)",
+        "MESSAGE BODY — sin entitlement (regla Nunca, REQ-COM-012 AC 1)",
+        "AUDIT DETAILS V con redacción (REQ-INS-009)",
+        "AUDIT EDIT/DELETE — (REQ-INS-010)"
+      ],
+      "delegation": "Delegante: crea y finaliza la GuardianRelationship (REQ-PPL-008 AC 3); no delega autoridad administrativa a ACT-GUARDIAN"
+    },
+    {
+      "actor": "ACT-GUARDIAN",
+      "scopes": [
+        "SELF",
+        "CHILD"
+      ],
+      "field_authority": [
+        "SELF DATA V/E",
+        "CONTACT V/E propios; del menor — (PT §6 v1.0.1, CON-08)",
+        "CHILD INFO V por flag can_view_child_info: nombre, apellido, equipo, eventos relevantes, disponibilidad, info operativa",
+        "DNI del menor —",
+        "DOB completa del menor —",
+        "ELIGIBILITY del menor —",
+        "OTRO MENOR — (regla Nunca, REQ-PPL-008 AC 4)",
+        "MESSAGE BODY —",
+        "AUDIT —"
+      ],
+      "delegation": "DELEGATED — authority source GuardianRelationship con flags can_view_child_info y can_respond_availability, independientes por relación; creada y finalizada por ACT-ADMIN"
+    }
+  ],
+  "critical_checks": [
+    {
+      "check": "ADMIN no obtiene autoridad deportiva por defecto",
+      "documented": true,
+      "evidence": "Freeze §14.1: \"ACT-ADMIN NO implica autoridad deportiva de ningún tipo\"; REQ-EVT-002 AC \"Admin sin autoridad ⇒ denegado\"; REQ-INS-004 AC \"el acceso es denegado\" (NOTES: \"No es un defecto\"); PT §5 \"ADMIN no es superusuario deportivo\"; no existe SUPERUSER"
+    },
+    {
+      "check": "CAPTAIN no hereda de COACH",
+      "documented": true,
+      "evidence": "PT §5: \"CAPTAIN no hereda poder de Coach\"; Freeze §7.4 opción C (CAPTAIN extends COACH) RECHAZADA; REQ-EVT-019 marca la logística como autoridad propia de CAPTAIN (Team scope), única fila donde CAPTAIN tiene ✓ y PLAYER tiene —"
+    },
+    {
+      "check": "Guardian depende de GuardianRelationship",
+      "documented": true,
+      "evidence": "Freeze §5.1: authority source = GuardianRelationship; PT §5 \"Guardian no es Role\"; REQ-PPL-012 (representación independiente del rol deportivo); REQ-PPL-008 AC 3 (finalizada deja de conceder acceso); flags can_view_child_info / can_respond_availability"
+    },
+    {
+      "check": "ACT-AUTHENTICATED no concede permisos adicionales",
+      "documented": true,
+      "evidence": "Freeze §4.2 regla dura: REQ-IAM-012 exige rol interno vigente o delegación con permiso; sin ninguno ⇒ /no-access sin datos ni destinos; Freeze §4.1 \"Does NOT imply: acceso a la aplicación por sí solo\"; proyecciones excluidas deliberadamente (§4.3)"
+    }
+  ],
+  "notes": "actor_uc está vacío porque la etapa E2 no registra relaciones actor-caso de uso; los nombres UC son de E3 (matriz REQ-ACTOR-UC de la Etapa 3). actor_req cubre los 104 REQ MAPPED (actor primario + secundarios nombrados explícitamente), según el conteo documentado en GEI_ACTOR_REQUIREMENT_MATRIX_V1.md §11.3; menciones genéricas (\"todos los concretos\", \"los 8 actores\") no se expanden y los 52 REQ SYSTEM_INTERNAL/NOT_APPLICABLE no aportan relaciones."
+}

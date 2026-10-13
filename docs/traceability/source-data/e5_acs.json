@@ -1,0 +1,6541 @@
+{
+ "source_files": [
+  "docs/use-cases/specifications/GEI_USE_CASE_SPECIFICATION_FREEZE_V1.md",
+  "docs/use-cases/specifications/GEI_USE_CASE_SPECIFICATION_INDEX_V1.md",
+  "docs/use-cases/specifications/GEI_USE_CASE_SPEC_TRACEABILITY_V1.md",
+  "docs/use-cases/specifications/GEI_UC_SPEC_CMP_V1.md",
+  "docs/use-cases/specifications/GEI_UC_SPEC_COM_V1.md",
+  "docs/use-cases/specifications/GEI_UC_SPEC_EVT_V1.md",
+  "docs/use-cases/specifications/GEI_UC_SPEC_IAM_V1.md",
+  "docs/use-cases/specifications/GEI_UC_SPEC_INS_V1.md",
+  "docs/use-cases/specifications/GEI_UC_SPEC_PPL_V1.md",
+  "docs/use-cases/specifications/GEI_UC_SPEC_PRT_V1.md",
+  "docs/use-cases/specifications/GEI_UC_SPEC_STR_V1.md"
+ ],
+ "counts": {
+  "acs": 454,
+  "ucs_specified": 102,
+  "reqs": 157,
+  "reqs_with_matrix_pairs": 133,
+  "reqs_transversal": 24,
+  "acs_reqs_with_pairs": 388,
+  "acs_transversal": 66,
+  "uc_req_rows": 444,
+  "uc_req_rows_ficha_only": 172,
+  "ucs_per_domain": {
+   "IAM": 10,
+   "PPL": 17,
+   "STR": 15,
+   "EVT": 19,
+   "PRT": 13,
+   "COM": 14,
+   "CMP": 9,
+   "INS": 5
+  }
+ },
+ "coverage_granularity": "REQ×UC",
+ "coverage_granularity_note": "GEI_USE_CASE_SPEC_TRACEABILITY_V1.md §2 registra cobertura REQ×UC (por ficha): cada fila UC→REQ lleva el nº de AC del REQ y la representación de CADA AC en esa ficha (la representación por AC es idéntica en todas las fichas que listan el REQ, porque depende del coverage del REQ y del texto del AC, no del UC). §3 registra además la cobertura por REQ con los UC mapeados en la matriz directa E3 (subconjunto: 172 de las 444 filas §2 son «ficha E3», sin par directo). ucs_aplicable se extrae de §2 (unión de fichas).",
+ "validation": {
+  "s2_rows_regenerated": 444,
+  "s2_rows_frozen_doc": 444,
+  "s2_row_mismatches": 0,
+  "unknown_reqs_in_fichas": [],
+  "duplicate_ac_texts": [],
+  "reqs_with_pairs_without_any_ficha": [
+   "REQ-SYS-025"
+  ],
+  "matrix_only_gaps": [
+   {
+    "req": "REQ-IAM-013",
+    "ucs_matrix_only": [
+     "UC-IAM-09"
+    ]
+   },
+   {
+    "req": "REQ-PPL-012",
+    "ucs_matrix_only": [
+     "UC-COM-06"
+    ]
+   },
+   {
+    "req": "REQ-STR-008",
+    "ucs_matrix_only": [
+     "UC-STR-04",
+     "UC-STR-07"
+    ]
+   },
+   {
+    "req": "REQ-STR-010",
+    "ucs_matrix_only": [
+     "UC-PPL-16"
+    ]
+   },
+   {
+    "req": "REQ-STR-013",
+    "ucs_matrix_only": [
+     "UC-EVT-02"
+    ]
+   },
+   {
+    "req": "REQ-EVT-017",
+    "ucs_matrix_only": [
+     "UC-PRT-08"
+    ]
+   },
+   {
+    "req": "REQ-PRT-003",
+    "ucs_matrix_only": [
+     "UC-PRT-04"
+    ]
+   },
+   {
+    "req": "REQ-PRT-005",
+    "ucs_matrix_only": [
+     "UC-INS-04"
+    ]
+   },
+   {
+    "req": "REQ-COM-003",
+    "ucs_matrix_only": [
+     "UC-COM-05"
+    ]
+   },
+   {
+    "req": "REQ-SYS-014",
+    "ucs_matrix_only": [
+     "UC-EVT-18",
+     "UC-EVT-19"
+    ]
+   },
+   {
+    "req": "REQ-SYS-018",
+    "ucs_matrix_only": [
+     "UC-EVT-02",
+     "UC-EVT-03",
+     "UC-PPL-06"
+    ]
+   },
+   {
+    "req": "REQ-SYS-023",
+    "ucs_matrix_only": [
+     "UC-EVT-17"
+    ]
+   },
+   {
+    "req": "REQ-SYS-025",
+    "ucs_matrix_only": [
+     "UC-COM-13"
+    ]
+   }
+  ],
+  "transversal_without_ficha": [
+   "REQ-IAM-007",
+   "REQ-IAM-017",
+   "REQ-IAM-018",
+   "REQ-STR-009",
+   "REQ-SYS-001",
+   "REQ-SYS-002",
+   "REQ-SYS-003",
+   "REQ-SYS-004",
+   "REQ-SYS-005",
+   "REQ-SYS-008",
+   "REQ-SYS-021",
+   "REQ-SYS-022",
+   "REQ-SYS-026",
+   "REQ-SYS-027"
+  ],
+  "transversal_with_ficha": [
+   "REQ-IAM-016",
+   "REQ-PPL-011",
+   "REQ-PRT-018",
+   "REQ-STR-011",
+   "REQ-SYS-006",
+   "REQ-SYS-007",
+   "REQ-SYS-009",
+   "REQ-SYS-010",
+   "REQ-SYS-012",
+   "REQ-SYS-015"
+  ]
+ },
+ "ac_id_format_note": "La fuente E1/E5 NO define identificadores «AC-XXX»: los criterios de aceptación son bullets GIVEN/WHEN/THEN sin numerar dentro de cada REQ del catálogo. El único formato de referencia individual que usa la fuente es «REQ-XXX-NNN AC n» (ordinal 1-based dentro del REQ), usado p. ej. en GEI_UC_SPEC_COM_V1.md («REQ-COM-007 AC 4 literal») y GEI_UC_SPEC_IAM_V1.md («REQ-IAM-001 AC 3»). ac_id usa ese formato.",
+ "acs": [
+  {
+   "ac_id": "REQ-IAM-001 AC 1",
+   "req": "REQ-IAM-001",
+   "ucs_aplicable": [
+    "UC-IAM-01",
+    "UC-IAM-09"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-001 AC 2",
+   "req": "REQ-IAM-001",
+   "ucs_aplicable": [
+    "UC-IAM-01",
+    "UC-IAM-09"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-001 AC 3",
+   "req": "REQ-IAM-001",
+   "ucs_aplicable": [
+    "UC-IAM-01",
+    "UC-IAM-09"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-002 AC 1",
+   "req": "REQ-IAM-002",
+   "ucs_aplicable": [
+    "UC-IAM-02",
+    "UC-IAM-03",
+    "UC-IAM-04"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": "→ DISABLED",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-002 AC 2",
+   "req": "REQ-IAM-002",
+   "ucs_aplicable": [
+    "UC-IAM-02",
+    "UC-IAM-03",
+    "UC-IAM-04"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": "→ ACTIVE",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-002 AC 3",
+   "req": "REQ-IAM-002",
+   "ucs_aplicable": [
+    "UC-IAM-02",
+    "UC-IAM-03",
+    "UC-IAM-04"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-003 AC 1",
+   "req": "REQ-IAM-003",
+   "ucs_aplicable": [
+    "UC-IAM-03",
+    "UC-IAM-04",
+    "UC-IAM-05",
+    "UC-PPL-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": "→ ACTIVE",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-003 AC 2",
+   "req": "REQ-IAM-003",
+   "ucs_aplicable": [
+    "UC-IAM-03",
+    "UC-IAM-04",
+    "UC-IAM-05",
+    "UC-PPL-03"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-003 AC 3",
+   "req": "REQ-IAM-003",
+   "ucs_aplicable": [
+    "UC-IAM-03",
+    "UC-IAM-04",
+    "UC-IAM-05",
+    "UC-PPL-03"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-003 AC 4",
+   "req": "REQ-IAM-003",
+   "ucs_aplicable": [
+    "UC-IAM-03",
+    "UC-IAM-04",
+    "UC-IAM-05",
+    "UC-PPL-03"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-004 AC 1",
+   "req": "REQ-IAM-004",
+   "ucs_aplicable": [
+    "UC-IAM-05"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": "→ SETUP_REQUIRED",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-004 AC 2",
+   "req": "REQ-IAM-004",
+   "ucs_aplicable": [
+    "UC-IAM-05"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-005 AC 1",
+   "req": "REQ-IAM-005",
+   "ucs_aplicable": [
+    "UC-IAM-06"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-005 AC 2",
+   "req": "REQ-IAM-005",
+   "ucs_aplicable": [
+    "UC-IAM-06"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-005 AC 3",
+   "req": "REQ-IAM-005",
+   "ucs_aplicable": [
+    "UC-IAM-06"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-006 AC 1",
+   "req": "REQ-IAM-006",
+   "ucs_aplicable": [
+    "UC-IAM-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-006 AC 2",
+   "req": "REQ-IAM-006",
+   "ucs_aplicable": [
+    "UC-IAM-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-006 AC 3",
+   "req": "REQ-IAM-006",
+   "ucs_aplicable": [
+    "UC-IAM-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-007 AC 1",
+   "req": "REQ-IAM-007",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-IAM-007 AC 2",
+   "req": "REQ-IAM-007",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-IAM-008 AC 1",
+   "req": "REQ-IAM-008",
+   "ucs_aplicable": [
+    "UC-IAM-01",
+    "UC-IAM-07",
+    "UC-IAM-08"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-008 AC 2",
+   "req": "REQ-IAM-008",
+   "ucs_aplicable": [
+    "UC-IAM-01",
+    "UC-IAM-07",
+    "UC-IAM-08"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-008 AC 3",
+   "req": "REQ-IAM-008",
+   "ucs_aplicable": [
+    "UC-IAM-01",
+    "UC-IAM-07",
+    "UC-IAM-08"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-009 AC 1",
+   "req": "REQ-IAM-009",
+   "ucs_aplicable": [
+    "UC-IAM-09"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-009 AC 2",
+   "req": "REQ-IAM-009",
+   "ucs_aplicable": [
+    "UC-IAM-09"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-009 AC 3",
+   "req": "REQ-IAM-009",
+   "ucs_aplicable": [
+    "UC-IAM-09"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-010 AC 1",
+   "req": "REQ-IAM-010",
+   "ucs_aplicable": [
+    "UC-IAM-07",
+    "UC-IAM-08"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-010 AC 2",
+   "req": "REQ-IAM-010",
+   "ucs_aplicable": [
+    "UC-IAM-07",
+    "UC-IAM-08"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-010 AC 3",
+   "req": "REQ-IAM-010",
+   "ucs_aplicable": [
+    "UC-IAM-07",
+    "UC-IAM-08"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-011 AC 1",
+   "req": "REQ-IAM-011",
+   "ucs_aplicable": [
+    "UC-IAM-08"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-011 AC 2",
+   "req": "REQ-IAM-011",
+   "ucs_aplicable": [
+    "UC-IAM-08"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-012 AC 1",
+   "req": "REQ-IAM-012",
+   "ucs_aplicable": [
+    "UC-IAM-01",
+    "UC-PPL-11",
+    "UC-PPL-16"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-012 AC 2",
+   "req": "REQ-IAM-012",
+   "ucs_aplicable": [
+    "UC-IAM-01",
+    "UC-PPL-11",
+    "UC-PPL-16"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-012 AC 3",
+   "req": "REQ-IAM-012",
+   "ucs_aplicable": [
+    "UC-IAM-01",
+    "UC-PPL-11",
+    "UC-PPL-16"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-013 AC 1",
+   "req": "REQ-IAM-013",
+   "ucs_aplicable": [
+    "UC-IAM-02",
+    "UC-IAM-05",
+    "UC-IAM-09",
+    "UC-PPL-09",
+    "UC-PPL-10"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-IAM-09"
+  },
+  {
+   "ac_id": "REQ-IAM-013 AC 2",
+   "req": "REQ-IAM-013",
+   "ucs_aplicable": [
+    "UC-IAM-02",
+    "UC-IAM-05",
+    "UC-IAM-09",
+    "UC-PPL-09",
+    "UC-PPL-10"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-IAM-09"
+  },
+  {
+   "ac_id": "REQ-IAM-014 AC 1",
+   "req": "REQ-IAM-014",
+   "ucs_aplicable": [
+    "UC-IAM-03",
+    "UC-PPL-01",
+    "UC-PPL-03"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-014 AC 2",
+   "req": "REQ-IAM-014",
+   "ucs_aplicable": [
+    "UC-IAM-03",
+    "UC-PPL-01",
+    "UC-PPL-03"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-014 AC 3",
+   "req": "REQ-IAM-014",
+   "ucs_aplicable": [
+    "UC-IAM-03",
+    "UC-PPL-01",
+    "UC-PPL-03"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-015 AC 1",
+   "req": "REQ-IAM-015",
+   "ucs_aplicable": [
+    "UC-IAM-05",
+    "UC-IAM-06",
+    "UC-IAM-09"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-015 AC 2",
+   "req": "REQ-IAM-015",
+   "ucs_aplicable": [
+    "UC-IAM-05",
+    "UC-IAM-06",
+    "UC-IAM-09"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-015 AC 3",
+   "req": "REQ-IAM-015",
+   "ucs_aplicable": [
+    "UC-IAM-05",
+    "UC-IAM-06",
+    "UC-IAM-09"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-015 AC 4",
+   "req": "REQ-IAM-015",
+   "ucs_aplicable": [
+    "UC-IAM-05",
+    "UC-IAM-06",
+    "UC-IAM-09"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-016 AC 1",
+   "req": "REQ-IAM-016",
+   "ucs_aplicable": [
+    "UC-EVT-11",
+    "UC-PPL-09"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-016 AC 2",
+   "req": "REQ-IAM-016",
+   "ucs_aplicable": [
+    "UC-EVT-11",
+    "UC-PPL-09"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-016 AC 3",
+   "req": "REQ-IAM-016",
+   "ucs_aplicable": [
+    "UC-EVT-11",
+    "UC-PPL-09"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-017 AC 1",
+   "req": "REQ-IAM-017",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-IAM-017 AC 2",
+   "req": "REQ-IAM-017",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-IAM-017 AC 3",
+   "req": "REQ-IAM-017",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-IAM-018 AC 1",
+   "req": "REQ-IAM-018",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-IAM-018 AC 2",
+   "req": "REQ-IAM-018",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-IAM-019 AC 1",
+   "req": "REQ-IAM-019",
+   "ucs_aplicable": [
+    "UC-IAM-01",
+    "UC-IAM-06"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-019 AC 2",
+   "req": "REQ-IAM-019",
+   "ucs_aplicable": [
+    "UC-IAM-01",
+    "UC-IAM-06"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-020 AC 1",
+   "req": "REQ-IAM-020",
+   "ucs_aplicable": [
+    "UC-IAM-10"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-IAM-020 AC 2",
+   "req": "REQ-IAM-020",
+   "ucs_aplicable": [
+    "UC-IAM-10"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-001 AC 1",
+   "req": "REQ-PPL-001",
+   "ucs_aplicable": [
+    "UC-PPL-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": "→ DNI",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-001 AC 2",
+   "req": "REQ-PPL-001",
+   "ucs_aplicable": [
+    "UC-PPL-01"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-001 AC 3",
+   "req": "REQ-PPL-001",
+   "ucs_aplicable": [
+    "UC-PPL-01"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-002 AC 1",
+   "req": "REQ-PPL-002",
+   "ucs_aplicable": [
+    "UC-PPL-02",
+    "UC-PPL-06",
+    "UC-PPL-15"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-002 AC 2",
+   "req": "REQ-PPL-002",
+   "ucs_aplicable": [
+    "UC-PPL-02",
+    "UC-PPL-06",
+    "UC-PPL-15"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-003 AC 1",
+   "req": "REQ-PPL-003",
+   "ucs_aplicable": [
+    "UC-IAM-04",
+    "UC-PPL-03"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-003 AC 2",
+   "req": "REQ-PPL-003",
+   "ucs_aplicable": [
+    "UC-IAM-04",
+    "UC-PPL-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-004 AC 1",
+   "req": "REQ-PPL-004",
+   "ucs_aplicable": [
+    "UC-COM-06",
+    "UC-COM-09",
+    "UC-PPL-04",
+    "UC-PPL-05",
+    "UC-PPL-06",
+    "UC-PPL-08"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-004 AC 2",
+   "req": "REQ-PPL-004",
+   "ucs_aplicable": [
+    "UC-COM-06",
+    "UC-COM-09",
+    "UC-PPL-04",
+    "UC-PPL-05",
+    "UC-PPL-06",
+    "UC-PPL-08"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-004 AC 3",
+   "req": "REQ-PPL-004",
+   "ucs_aplicable": [
+    "UC-COM-06",
+    "UC-COM-09",
+    "UC-PPL-04",
+    "UC-PPL-05",
+    "UC-PPL-06",
+    "UC-PPL-08"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-004 AC 4",
+   "req": "REQ-PPL-004",
+   "ucs_aplicable": [
+    "UC-COM-06",
+    "UC-COM-09",
+    "UC-PPL-04",
+    "UC-PPL-05",
+    "UC-PPL-06",
+    "UC-PPL-08"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-005 AC 1",
+   "req": "REQ-PPL-005",
+   "ucs_aplicable": [
+    "UC-PPL-06",
+    "UC-PPL-07"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-005 AC 2",
+   "req": "REQ-PPL-005",
+   "ucs_aplicable": [
+    "UC-PPL-06",
+    "UC-PPL-07"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-006 AC 1",
+   "req": "REQ-PPL-006",
+   "ucs_aplicable": [
+    "UC-PPL-05",
+    "UC-PPL-06",
+    "UC-PPL-09",
+    "UC-PPL-10",
+    "UC-PPL-16"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-006 AC 2",
+   "req": "REQ-PPL-006",
+   "ucs_aplicable": [
+    "UC-PPL-05",
+    "UC-PPL-06",
+    "UC-PPL-09",
+    "UC-PPL-10",
+    "UC-PPL-16"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-006 AC 3",
+   "req": "REQ-PPL-006",
+   "ucs_aplicable": [
+    "UC-PPL-05",
+    "UC-PPL-06",
+    "UC-PPL-09",
+    "UC-PPL-10",
+    "UC-PPL-16"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-007 AC 1",
+   "req": "REQ-PPL-007",
+   "ucs_aplicable": [
+    "UC-PPL-06",
+    "UC-PPL-07",
+    "UC-PPL-08",
+    "UC-PPL-10"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-007 AC 2",
+   "req": "REQ-PPL-007",
+   "ucs_aplicable": [
+    "UC-PPL-06",
+    "UC-PPL-07",
+    "UC-PPL-08",
+    "UC-PPL-10"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": "→ CAPTAIN",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-007 AC 3",
+   "req": "REQ-PPL-007",
+   "ucs_aplicable": [
+    "UC-PPL-06",
+    "UC-PPL-07",
+    "UC-PPL-08",
+    "UC-PPL-10"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-008 AC 1",
+   "req": "REQ-PPL-008",
+   "ucs_aplicable": [
+    "UC-PPL-11",
+    "UC-PPL-12",
+    "UC-PPL-13",
+    "UC-PPL-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-008 AC 2",
+   "req": "REQ-PPL-008",
+   "ucs_aplicable": [
+    "UC-PPL-11",
+    "UC-PPL-12",
+    "UC-PPL-13",
+    "UC-PPL-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-008 AC 3",
+   "req": "REQ-PPL-008",
+   "ucs_aplicable": [
+    "UC-PPL-11",
+    "UC-PPL-12",
+    "UC-PPL-13",
+    "UC-PPL-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-008 AC 4",
+   "req": "REQ-PPL-008",
+   "ucs_aplicable": [
+    "UC-PPL-11",
+    "UC-PPL-12",
+    "UC-PPL-13",
+    "UC-PPL-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-009 AC 1",
+   "req": "REQ-PPL-009",
+   "ucs_aplicable": [
+    "UC-PPL-11",
+    "UC-PPL-13",
+    "UC-PPL-17"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-009 AC 2",
+   "req": "REQ-PPL-009",
+   "ucs_aplicable": [
+    "UC-PPL-11",
+    "UC-PPL-13",
+    "UC-PPL-17"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-009 AC 3",
+   "req": "REQ-PPL-009",
+   "ucs_aplicable": [
+    "UC-PPL-11",
+    "UC-PPL-13",
+    "UC-PPL-17"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-010 AC 1",
+   "req": "REQ-PPL-010",
+   "ucs_aplicable": [
+    "UC-PPL-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-010 AC 2",
+   "req": "REQ-PPL-010",
+   "ucs_aplicable": [
+    "UC-PPL-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-011 AC 1",
+   "req": "REQ-PPL-011",
+   "ucs_aplicable": [
+    "UC-COM-05",
+    "UC-EVT-19",
+    "UC-INS-01",
+    "UC-INS-05",
+    "UC-PPL-01",
+    "UC-PPL-02",
+    "UC-PPL-13",
+    "UC-PPL-15",
+    "UC-PPL-17",
+    "UC-PRT-04",
+    "UC-PRT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-011 AC 2",
+   "req": "REQ-PPL-011",
+   "ucs_aplicable": [
+    "UC-COM-05",
+    "UC-EVT-19",
+    "UC-INS-01",
+    "UC-INS-05",
+    "UC-PPL-01",
+    "UC-PPL-02",
+    "UC-PPL-13",
+    "UC-PPL-15",
+    "UC-PPL-17",
+    "UC-PRT-04",
+    "UC-PRT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-011 AC 3",
+   "req": "REQ-PPL-011",
+   "ucs_aplicable": [
+    "UC-COM-05",
+    "UC-EVT-19",
+    "UC-INS-01",
+    "UC-INS-05",
+    "UC-PPL-01",
+    "UC-PPL-02",
+    "UC-PPL-13",
+    "UC-PPL-15",
+    "UC-PPL-17",
+    "UC-PRT-04",
+    "UC-PRT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-011 AC 4",
+   "req": "REQ-PPL-011",
+   "ucs_aplicable": [
+    "UC-COM-05",
+    "UC-EVT-19",
+    "UC-INS-01",
+    "UC-INS-05",
+    "UC-PPL-01",
+    "UC-PPL-02",
+    "UC-PPL-13",
+    "UC-PPL-15",
+    "UC-PPL-17",
+    "UC-PRT-04",
+    "UC-PRT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-012 AC 1",
+   "req": "REQ-PPL-012",
+   "ucs_aplicable": [
+    "UC-COM-06",
+    "UC-PPL-09",
+    "UC-PPL-11",
+    "UC-PPL-12",
+    "UC-PRT-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-COM-06"
+  },
+  {
+   "ac_id": "REQ-PPL-012 AC 2",
+   "req": "REQ-PPL-012",
+   "ucs_aplicable": [
+    "UC-COM-06",
+    "UC-PPL-09",
+    "UC-PPL-11",
+    "UC-PPL-12",
+    "UC-PRT-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-COM-06"
+  },
+  {
+   "ac_id": "REQ-PPL-013 AC 1",
+   "req": "REQ-PPL-013",
+   "ucs_aplicable": [
+    "UC-PPL-02",
+    "UC-PPL-15"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-013 AC 2",
+   "req": "REQ-PPL-013",
+   "ucs_aplicable": [
+    "UC-PPL-02",
+    "UC-PPL-15"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-013 AC 3",
+   "req": "REQ-PPL-013",
+   "ucs_aplicable": [
+    "UC-PPL-02",
+    "UC-PPL-15"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-014 AC 1",
+   "req": "REQ-PPL-014",
+   "ucs_aplicable": [
+    "UC-STR-02",
+    "UC-STR-03",
+    "UC-STR-04",
+    "UC-STR-07",
+    "UC-STR-09",
+    "UC-STR-10"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-014 AC 2",
+   "req": "REQ-PPL-014",
+   "ucs_aplicable": [
+    "UC-STR-02",
+    "UC-STR-03",
+    "UC-STR-04",
+    "UC-STR-07",
+    "UC-STR-09",
+    "UC-STR-10"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-015 AC 1",
+   "req": "REQ-PPL-015",
+   "ucs_aplicable": [
+    "UC-CMP-03",
+    "UC-CMP-07",
+    "UC-COM-04",
+    "UC-COM-11",
+    "UC-EVT-14",
+    "UC-INS-04",
+    "UC-PPL-01",
+    "UC-PPL-05",
+    "UC-PPL-07",
+    "UC-PPL-08",
+    "UC-PPL-10",
+    "UC-PPL-12",
+    "UC-PRT-12",
+    "UC-STR-05",
+    "UC-STR-08",
+    "UC-STR-12",
+    "UC-STR-15"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-015 AC 2",
+   "req": "REQ-PPL-015",
+   "ucs_aplicable": [
+    "UC-CMP-03",
+    "UC-CMP-07",
+    "UC-COM-04",
+    "UC-COM-11",
+    "UC-EVT-14",
+    "UC-INS-04",
+    "UC-PPL-01",
+    "UC-PPL-05",
+    "UC-PPL-07",
+    "UC-PPL-08",
+    "UC-PPL-10",
+    "UC-PPL-12",
+    "UC-PRT-12",
+    "UC-STR-05",
+    "UC-STR-08",
+    "UC-STR-12",
+    "UC-STR-15"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-016 AC 1",
+   "req": "REQ-PPL-016",
+   "ucs_aplicable": [
+    "UC-PPL-04",
+    "UC-PPL-16",
+    "UC-PPL-17"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-016 AC 2",
+   "req": "REQ-PPL-016",
+   "ucs_aplicable": [
+    "UC-PPL-04",
+    "UC-PPL-16",
+    "UC-PPL-17"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-016 AC 3",
+   "req": "REQ-PPL-016",
+   "ucs_aplicable": [
+    "UC-PPL-04",
+    "UC-PPL-16",
+    "UC-PPL-17"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PPL-016 AC 4",
+   "req": "REQ-PPL-016",
+   "ucs_aplicable": [
+    "UC-PPL-04",
+    "UC-PPL-16",
+    "UC-PPL-17"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-001 AC 1",
+   "req": "REQ-STR-001",
+   "ucs_aplicable": [
+    "UC-STR-01",
+    "UC-STR-02"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-001 AC 2",
+   "req": "REQ-STR-001",
+   "ucs_aplicable": [
+    "UC-STR-01",
+    "UC-STR-02"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-001 AC 3",
+   "req": "REQ-STR-001",
+   "ucs_aplicable": [
+    "UC-STR-01",
+    "UC-STR-02"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-002 AC 1",
+   "req": "REQ-STR-002",
+   "ucs_aplicable": [
+    "UC-STR-03",
+    "UC-STR-04",
+    "UC-STR-05"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-002 AC 2",
+   "req": "REQ-STR-002",
+   "ucs_aplicable": [
+    "UC-STR-03",
+    "UC-STR-04",
+    "UC-STR-05"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-002 AC 3",
+   "req": "REQ-STR-002",
+   "ucs_aplicable": [
+    "UC-STR-03",
+    "UC-STR-04",
+    "UC-STR-05"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-003 AC 1",
+   "req": "REQ-STR-003",
+   "ucs_aplicable": [
+    "UC-STR-06",
+    "UC-STR-07",
+    "UC-STR-08"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-003 AC 2",
+   "req": "REQ-STR-003",
+   "ucs_aplicable": [
+    "UC-STR-06",
+    "UC-STR-07",
+    "UC-STR-08"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-003 AC 3",
+   "req": "REQ-STR-003",
+   "ucs_aplicable": [
+    "UC-STR-06",
+    "UC-STR-07",
+    "UC-STR-08"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-004 AC 1",
+   "req": "REQ-STR-004",
+   "ucs_aplicable": [
+    "UC-PPL-06",
+    "UC-STR-09",
+    "UC-STR-10",
+    "UC-STR-11",
+    "UC-STR-12"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-004 AC 2",
+   "req": "REQ-STR-004",
+   "ucs_aplicable": [
+    "UC-PPL-06",
+    "UC-STR-09",
+    "UC-STR-10",
+    "UC-STR-11",
+    "UC-STR-12"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-004 AC 3",
+   "req": "REQ-STR-004",
+   "ucs_aplicable": [
+    "UC-PPL-06",
+    "UC-STR-09",
+    "UC-STR-10",
+    "UC-STR-11",
+    "UC-STR-12"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-004 AC 4",
+   "req": "REQ-STR-004",
+   "ucs_aplicable": [
+    "UC-PPL-06",
+    "UC-STR-09",
+    "UC-STR-10",
+    "UC-STR-11",
+    "UC-STR-12"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-005 AC 1",
+   "req": "REQ-STR-005",
+   "ucs_aplicable": [
+    "UC-STR-13",
+    "UC-STR-14",
+    "UC-STR-15"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-005 AC 2",
+   "req": "REQ-STR-005",
+   "ucs_aplicable": [
+    "UC-STR-13",
+    "UC-STR-14",
+    "UC-STR-15"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-005 AC 3",
+   "req": "REQ-STR-005",
+   "ucs_aplicable": [
+    "UC-STR-13",
+    "UC-STR-14",
+    "UC-STR-15"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-006 AC 1",
+   "req": "REQ-STR-006",
+   "ucs_aplicable": [
+    "UC-STR-05",
+    "UC-STR-08",
+    "UC-STR-12",
+    "UC-STR-15"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-006 AC 2",
+   "req": "REQ-STR-006",
+   "ucs_aplicable": [
+    "UC-STR-05",
+    "UC-STR-08",
+    "UC-STR-12",
+    "UC-STR-15"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-007 AC 1",
+   "req": "REQ-STR-007",
+   "ucs_aplicable": [
+    "UC-EVT-17",
+    "UC-EVT-19"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-008 AC 1",
+   "req": "REQ-STR-008",
+   "ucs_aplicable": [
+    "UC-STR-01",
+    "UC-STR-02",
+    "UC-STR-03",
+    "UC-STR-04",
+    "UC-STR-05",
+    "UC-STR-06",
+    "UC-STR-07",
+    "UC-STR-08",
+    "UC-STR-09",
+    "UC-STR-10",
+    "UC-STR-11",
+    "UC-STR-12",
+    "UC-STR-13",
+    "UC-STR-14",
+    "UC-STR-15"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-STR-04, UC-STR-07"
+  },
+  {
+   "ac_id": "REQ-STR-008 AC 2",
+   "req": "REQ-STR-008",
+   "ucs_aplicable": [
+    "UC-STR-01",
+    "UC-STR-02",
+    "UC-STR-03",
+    "UC-STR-04",
+    "UC-STR-05",
+    "UC-STR-06",
+    "UC-STR-07",
+    "UC-STR-08",
+    "UC-STR-09",
+    "UC-STR-10",
+    "UC-STR-11",
+    "UC-STR-12",
+    "UC-STR-13",
+    "UC-STR-14",
+    "UC-STR-15"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-STR-04, UC-STR-07"
+  },
+  {
+   "ac_id": "REQ-STR-009 AC 1",
+   "req": "REQ-STR-009",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-STR-009 AC 2",
+   "req": "REQ-STR-009",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-STR-010 AC 1",
+   "req": "REQ-STR-010",
+   "ucs_aplicable": [
+    "UC-CMP-04",
+    "UC-CMP-05",
+    "UC-EVT-19",
+    "UC-INS-01",
+    "UC-PPL-16",
+    "UC-STR-04",
+    "UC-STR-06",
+    "UC-STR-09"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-PPL-16"
+  },
+  {
+   "ac_id": "REQ-STR-010 AC 2",
+   "req": "REQ-STR-010",
+   "ucs_aplicable": [
+    "UC-CMP-04",
+    "UC-CMP-05",
+    "UC-EVT-19",
+    "UC-INS-01",
+    "UC-PPL-16",
+    "UC-STR-04",
+    "UC-STR-06",
+    "UC-STR-09"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-PPL-16"
+  },
+  {
+   "ac_id": "REQ-STR-011 AC 1",
+   "req": "REQ-STR-011",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-STR-01",
+    "UC-STR-02",
+    "UC-STR-04",
+    "UC-STR-06",
+    "UC-STR-07",
+    "UC-STR-10",
+    "UC-STR-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-011 AC 2",
+   "req": "REQ-STR-011",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-STR-01",
+    "UC-STR-02",
+    "UC-STR-04",
+    "UC-STR-06",
+    "UC-STR-07",
+    "UC-STR-10",
+    "UC-STR-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-012 AC 1",
+   "req": "REQ-STR-012",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-04",
+    "UC-EVT-16",
+    "UC-EVT-19",
+    "UC-STR-14"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-012 AC 2",
+   "req": "REQ-STR-012",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-04",
+    "UC-EVT-16",
+    "UC-EVT-19",
+    "UC-STR-14"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-STR-013 AC 1",
+   "req": "REQ-STR-013",
+   "ucs_aplicable": [
+    "UC-COM-01",
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-03",
+    "UC-STR-09",
+    "UC-STR-13"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-EVT-02"
+  },
+  {
+   "ac_id": "REQ-EVT-001 AC 1",
+   "req": "REQ-EVT-001",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-03",
+    "UC-EVT-04",
+    "UC-EVT-13",
+    "UC-EVT-15"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-001 AC 2",
+   "req": "REQ-EVT-001",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-03",
+    "UC-EVT-04",
+    "UC-EVT-13",
+    "UC-EVT-15"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-001 AC 3",
+   "req": "REQ-EVT-001",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-03",
+    "UC-EVT-04",
+    "UC-EVT-13",
+    "UC-EVT-15"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-002 AC 1",
+   "req": "REQ-EVT-002",
+   "ucs_aplicable": [
+    "UC-EVT-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-002 AC 2",
+   "req": "REQ-EVT-002",
+   "ucs_aplicable": [
+    "UC-EVT-01"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-002 AC 3",
+   "req": "REQ-EVT-002",
+   "ucs_aplicable": [
+    "UC-EVT-01"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-002 AC 4",
+   "req": "REQ-EVT-002",
+   "ucs_aplicable": [
+    "UC-EVT-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-003 AC 1",
+   "req": "REQ-EVT-003",
+   "ucs_aplicable": [
+    "UC-EVT-02",
+    "UC-EVT-15"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-003 AC 2",
+   "req": "REQ-EVT-003",
+   "ucs_aplicable": [
+    "UC-EVT-02",
+    "UC-EVT-15"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-003 AC 3",
+   "req": "REQ-EVT-003",
+   "ucs_aplicable": [
+    "UC-EVT-02",
+    "UC-EVT-15"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-003 AC 4",
+   "req": "REQ-EVT-003",
+   "ucs_aplicable": [
+    "UC-EVT-02",
+    "UC-EVT-15"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-004 AC 1",
+   "req": "REQ-EVT-004",
+   "ucs_aplicable": [
+    "UC-EVT-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-004 AC 2",
+   "req": "REQ-EVT-004",
+   "ucs_aplicable": [
+    "UC-EVT-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-004 AC 3",
+   "req": "REQ-EVT-004",
+   "ucs_aplicable": [
+    "UC-EVT-03"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-005 AC 1",
+   "req": "REQ-EVT-005",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-03",
+    "UC-EVT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-005 AC 2",
+   "req": "REQ-EVT-005",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-03",
+    "UC-EVT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-006 AC 1",
+   "req": "REQ-EVT-006",
+   "ucs_aplicable": [
+    "UC-EVT-02",
+    "UC-EVT-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-006 AC 2",
+   "req": "REQ-EVT-006",
+   "ucs_aplicable": [
+    "UC-EVT-02",
+    "UC-EVT-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-007 AC 1",
+   "req": "REQ-EVT-007",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-EVT-09",
+    "UC-EVT-10"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": "→ POSTPONED",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-007 AC 2",
+   "req": "REQ-EVT-007",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-EVT-09",
+    "UC-EVT-10"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": "→ SCHEDULED",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-007 AC 3",
+   "req": "REQ-EVT-007",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-EVT-09",
+    "UC-EVT-10"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": "→ SCHEDULED",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-007 AC 4",
+   "req": "REQ-EVT-007",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-EVT-09",
+    "UC-EVT-10"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-007 AC 5",
+   "req": "REQ-EVT-007",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-EVT-09",
+    "UC-EVT-10"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-008 AC 1",
+   "req": "REQ-EVT-008",
+   "ucs_aplicable": [
+    "UC-EVT-05",
+    "UC-EVT-07",
+    "UC-EVT-09",
+    "UC-EVT-10",
+    "UC-EVT-16",
+    "UC-EVT-17",
+    "UC-EVT-19",
+    "UC-INS-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-008 AC 2",
+   "req": "REQ-EVT-008",
+   "ucs_aplicable": [
+    "UC-EVT-05",
+    "UC-EVT-07",
+    "UC-EVT-09",
+    "UC-EVT-10",
+    "UC-EVT-16",
+    "UC-EVT-17",
+    "UC-EVT-19",
+    "UC-INS-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-008 AC 3",
+   "req": "REQ-EVT-008",
+   "ucs_aplicable": [
+    "UC-EVT-05",
+    "UC-EVT-07",
+    "UC-EVT-09",
+    "UC-EVT-10",
+    "UC-EVT-16",
+    "UC-EVT-17",
+    "UC-EVT-19",
+    "UC-INS-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-009 AC 1",
+   "req": "REQ-EVT-009",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-03"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": "→ SCHEDULED",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-009 AC 2",
+   "req": "REQ-EVT-009",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-03"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-009 AC 3",
+   "req": "REQ-EVT-009",
+   "ucs_aplicable": [
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-03"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-010 AC 1",
+   "req": "REQ-EVT-010",
+   "ucs_aplicable": [
+    "UC-EVT-04"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-010 AC 2",
+   "req": "REQ-EVT-010",
+   "ucs_aplicable": [
+    "UC-EVT-04"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-011 AC 1",
+   "req": "REQ-EVT-011",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-05",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-EVT-11",
+    "UC-EVT-16",
+    "UC-STR-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-011 AC 2",
+   "req": "REQ-EVT-011",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-05",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-EVT-11",
+    "UC-EVT-16",
+    "UC-STR-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-011 AC 3",
+   "req": "REQ-EVT-011",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-05",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-EVT-11",
+    "UC-EVT-16",
+    "UC-STR-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-011 AC 4",
+   "req": "REQ-EVT-011",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-05",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-EVT-11",
+    "UC-EVT-16",
+    "UC-STR-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-012 AC 1",
+   "req": "REQ-EVT-012",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-11"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-012 AC 2",
+   "req": "REQ-EVT-012",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-11"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-012 AC 3",
+   "req": "REQ-EVT-012",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-11"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-012 AC 4",
+   "req": "REQ-EVT-012",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-11"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-013 AC 1",
+   "req": "REQ-EVT-013",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-12"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-013 AC 2",
+   "req": "REQ-EVT-013",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-12"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-013 AC 3",
+   "req": "REQ-EVT-013",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-12"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-014 AC 1",
+   "req": "REQ-EVT-014",
+   "ucs_aplicable": [
+    "UC-EVT-13"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-014 AC 2",
+   "req": "REQ-EVT-014",
+   "ucs_aplicable": [
+    "UC-EVT-13"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-015 AC 1",
+   "req": "REQ-EVT-015",
+   "ucs_aplicable": [
+    "UC-EVT-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-015 AC 2",
+   "req": "REQ-EVT-015",
+   "ucs_aplicable": [
+    "UC-EVT-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-015 AC 3",
+   "req": "REQ-EVT-015",
+   "ucs_aplicable": [
+    "UC-EVT-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-015 AC 4",
+   "req": "REQ-EVT-015",
+   "ucs_aplicable": [
+    "UC-EVT-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-015 AC 5",
+   "req": "REQ-EVT-015",
+   "ucs_aplicable": [
+    "UC-EVT-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-016 AC 1",
+   "req": "REQ-EVT-016",
+   "ucs_aplicable": [
+    "UC-EVT-13",
+    "UC-EVT-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": "→ ENDED",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-016 AC 2",
+   "req": "REQ-EVT-016",
+   "ucs_aplicable": [
+    "UC-EVT-13",
+    "UC-EVT-14"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-017 AC 1",
+   "req": "REQ-EVT-017",
+   "ucs_aplicable": [
+    "UC-EVT-03",
+    "UC-EVT-19",
+    "UC-PRT-01",
+    "UC-PRT-02",
+    "UC-PRT-05",
+    "UC-PRT-08"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-PRT-08"
+  },
+  {
+   "ac_id": "REQ-EVT-017 AC 2",
+   "req": "REQ-EVT-017",
+   "ucs_aplicable": [
+    "UC-EVT-03",
+    "UC-EVT-19",
+    "UC-PRT-01",
+    "UC-PRT-02",
+    "UC-PRT-05",
+    "UC-PRT-08"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-PRT-08"
+  },
+  {
+   "ac_id": "REQ-EVT-017 AC 3",
+   "req": "REQ-EVT-017",
+   "ucs_aplicable": [
+    "UC-EVT-03",
+    "UC-EVT-19",
+    "UC-PRT-01",
+    "UC-PRT-02",
+    "UC-PRT-05",
+    "UC-PRT-08"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-PRT-08"
+  },
+  {
+   "ac_id": "REQ-EVT-017 AC 4",
+   "req": "REQ-EVT-017",
+   "ucs_aplicable": [
+    "UC-EVT-03",
+    "UC-EVT-19",
+    "UC-PRT-01",
+    "UC-PRT-02",
+    "UC-PRT-05",
+    "UC-PRT-08"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-PRT-08"
+  },
+  {
+   "ac_id": "REQ-EVT-018 AC 1",
+   "req": "REQ-EVT-018",
+   "ucs_aplicable": [
+    "UC-EVT-15"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-018 AC 2",
+   "req": "REQ-EVT-018",
+   "ucs_aplicable": [
+    "UC-EVT-15"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-018 AC 3",
+   "req": "REQ-EVT-018",
+   "ucs_aplicable": [
+    "UC-EVT-15"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-018 AC 4",
+   "req": "REQ-EVT-018",
+   "ucs_aplicable": [
+    "UC-EVT-15"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-018 AC 5",
+   "req": "REQ-EVT-018",
+   "ucs_aplicable": [
+    "UC-EVT-15"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-019 AC 1",
+   "req": "REQ-EVT-019",
+   "ucs_aplicable": [
+    "UC-EVT-16",
+    "UC-EVT-19"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-019 AC 2",
+   "req": "REQ-EVT-019",
+   "ucs_aplicable": [
+    "UC-EVT-16",
+    "UC-EVT-19"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-019 AC 3",
+   "req": "REQ-EVT-019",
+   "ucs_aplicable": [
+    "UC-EVT-16",
+    "UC-EVT-19"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-020 AC 1",
+   "req": "REQ-EVT-020",
+   "ucs_aplicable": [
+    "UC-EVT-17"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-020 AC 2",
+   "req": "REQ-EVT-020",
+   "ucs_aplicable": [
+    "UC-EVT-17"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-020 AC 3",
+   "req": "REQ-EVT-020",
+   "ucs_aplicable": [
+    "UC-EVT-17"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-021 AC 1",
+   "req": "REQ-EVT-021",
+   "ucs_aplicable": [
+    "UC-EVT-18",
+    "UC-PRT-04"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-021 AC 2",
+   "req": "REQ-EVT-021",
+   "ucs_aplicable": [
+    "UC-EVT-18",
+    "UC-PRT-04"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-021 AC 3",
+   "req": "REQ-EVT-021",
+   "ucs_aplicable": [
+    "UC-EVT-18",
+    "UC-PRT-04"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-022 AC 1",
+   "req": "REQ-EVT-022",
+   "ucs_aplicable": [
+    "UC-EVT-17",
+    "UC-EVT-18",
+    "UC-EVT-19"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-022 AC 2",
+   "req": "REQ-EVT-022",
+   "ucs_aplicable": [
+    "UC-EVT-17",
+    "UC-EVT-18",
+    "UC-EVT-19"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-023 AC 1",
+   "req": "REQ-EVT-023",
+   "ucs_aplicable": [
+    "UC-EVT-19"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-023 AC 2",
+   "req": "REQ-EVT-023",
+   "ucs_aplicable": [
+    "UC-EVT-19"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-023 AC 3",
+   "req": "REQ-EVT-023",
+   "ucs_aplicable": [
+    "UC-EVT-19"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-024 AC 1",
+   "req": "REQ-EVT-024",
+   "ucs_aplicable": [
+    "UC-CMP-03",
+    "UC-CMP-06",
+    "UC-CMP-07",
+    "UC-EVT-07",
+    "UC-EVT-15",
+    "UC-STR-15"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-EVT-024 AC 2",
+   "req": "REQ-EVT-024",
+   "ucs_aplicable": [
+    "UC-CMP-03",
+    "UC-CMP-06",
+    "UC-CMP-07",
+    "UC-EVT-07",
+    "UC-EVT-15",
+    "UC-STR-15"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-001 AC 1",
+   "req": "REQ-PRT-001",
+   "ucs_aplicable": [
+    "UC-PRT-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-001 AC 2",
+   "req": "REQ-PRT-001",
+   "ucs_aplicable": [
+    "UC-PRT-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-001 AC 3",
+   "req": "REQ-PRT-001",
+   "ucs_aplicable": [
+    "UC-PRT-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-002 AC 1",
+   "req": "REQ-PRT-002",
+   "ucs_aplicable": [
+    "UC-PRT-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-002 AC 2",
+   "req": "REQ-PRT-002",
+   "ucs_aplicable": [
+    "UC-PRT-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-002 AC 3",
+   "req": "REQ-PRT-002",
+   "ucs_aplicable": [
+    "UC-PRT-01"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-003 AC 1",
+   "req": "REQ-PRT-003",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-18",
+    "UC-PRT-01",
+    "UC-PRT-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-PRT-04"
+  },
+  {
+   "ac_id": "REQ-PRT-003 AC 2",
+   "req": "REQ-PRT-003",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-18",
+    "UC-PRT-01",
+    "UC-PRT-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-PRT-04"
+  },
+  {
+   "ac_id": "REQ-PRT-003 AC 3",
+   "req": "REQ-PRT-003",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-18",
+    "UC-PRT-01",
+    "UC-PRT-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-PRT-04"
+  },
+  {
+   "ac_id": "REQ-PRT-003 AC 4",
+   "req": "REQ-PRT-003",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-18",
+    "UC-PRT-01",
+    "UC-PRT-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-PRT-04"
+  },
+  {
+   "ac_id": "REQ-PRT-004 AC 1",
+   "req": "REQ-PRT-004",
+   "ucs_aplicable": [
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-PRT-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-004 AC 2",
+   "req": "REQ-PRT-004",
+   "ucs_aplicable": [
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-PRT-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-004 AC 3",
+   "req": "REQ-PRT-004",
+   "ucs_aplicable": [
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-PRT-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-005 AC 1",
+   "req": "REQ-PRT-005",
+   "ucs_aplicable": [
+    "UC-INS-04",
+    "UC-PRT-02",
+    "UC-PRT-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-INS-04"
+  },
+  {
+   "ac_id": "REQ-PRT-005 AC 2",
+   "req": "REQ-PRT-005",
+   "ucs_aplicable": [
+    "UC-INS-04",
+    "UC-PRT-02",
+    "UC-PRT-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-INS-04"
+  },
+  {
+   "ac_id": "REQ-PRT-005 AC 3",
+   "req": "REQ-PRT-005",
+   "ucs_aplicable": [
+    "UC-INS-04",
+    "UC-PRT-02",
+    "UC-PRT-03"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-INS-04"
+  },
+  {
+   "ac_id": "REQ-PRT-005 AC 4",
+   "req": "REQ-PRT-005",
+   "ucs_aplicable": [
+    "UC-INS-04",
+    "UC-PRT-02",
+    "UC-PRT-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-INS-04"
+  },
+  {
+   "ac_id": "REQ-PRT-006 AC 1",
+   "req": "REQ-PRT-006",
+   "ucs_aplicable": [
+    "UC-PRT-03",
+    "UC-PRT-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-006 AC 2",
+   "req": "REQ-PRT-006",
+   "ucs_aplicable": [
+    "UC-PRT-03",
+    "UC-PRT-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-006 AC 3",
+   "req": "REQ-PRT-006",
+   "ucs_aplicable": [
+    "UC-PRT-03",
+    "UC-PRT-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-007 AC 1",
+   "req": "REQ-PRT-007",
+   "ucs_aplicable": [
+    "UC-EVT-18",
+    "UC-PRT-04"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-007 AC 2",
+   "req": "REQ-PRT-007",
+   "ucs_aplicable": [
+    "UC-EVT-18",
+    "UC-PRT-04"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-007 AC 3",
+   "req": "REQ-PRT-007",
+   "ucs_aplicable": [
+    "UC-EVT-18",
+    "UC-PRT-04"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-008 AC 1",
+   "req": "REQ-PRT-008",
+   "ucs_aplicable": [
+    "UC-PRT-02",
+    "UC-PRT-03"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-008 AC 2",
+   "req": "REQ-PRT-008",
+   "ucs_aplicable": [
+    "UC-PRT-02",
+    "UC-PRT-03"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-008 AC 3",
+   "req": "REQ-PRT-008",
+   "ucs_aplicable": [
+    "UC-PRT-02",
+    "UC-PRT-03"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-008 AC 4",
+   "req": "REQ-PRT-008",
+   "ucs_aplicable": [
+    "UC-PRT-02",
+    "UC-PRT-03"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-009 AC 1",
+   "req": "REQ-PRT-009",
+   "ucs_aplicable": [
+    "UC-PRT-05",
+    "UC-PRT-06"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-009 AC 2",
+   "req": "REQ-PRT-009",
+   "ucs_aplicable": [
+    "UC-PRT-05",
+    "UC-PRT-06"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-009 AC 3",
+   "req": "REQ-PRT-009",
+   "ucs_aplicable": [
+    "UC-PRT-05",
+    "UC-PRT-06"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-009 AC 4",
+   "req": "REQ-PRT-009",
+   "ucs_aplicable": [
+    "UC-PRT-05",
+    "UC-PRT-06"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-010 AC 1",
+   "req": "REQ-PRT-010",
+   "ucs_aplicable": [
+    "UC-INS-02",
+    "UC-PRT-05"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-010 AC 2",
+   "req": "REQ-PRT-010",
+   "ucs_aplicable": [
+    "UC-INS-02",
+    "UC-PRT-05"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-010 AC 3",
+   "req": "REQ-PRT-010",
+   "ucs_aplicable": [
+    "UC-INS-02",
+    "UC-PRT-05"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-011 AC 1",
+   "req": "REQ-PRT-011",
+   "ucs_aplicable": [
+    "UC-EVT-09",
+    "UC-PRT-06"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-011 AC 2",
+   "req": "REQ-PRT-011",
+   "ucs_aplicable": [
+    "UC-EVT-09",
+    "UC-PRT-06"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-012 AC 1",
+   "req": "REQ-PRT-012",
+   "ucs_aplicable": [
+    "UC-INS-02",
+    "UC-PRT-06",
+    "UC-PRT-07"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-012 AC 2",
+   "req": "REQ-PRT-012",
+   "ucs_aplicable": [
+    "UC-INS-02",
+    "UC-PRT-06",
+    "UC-PRT-07"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-012 AC 3",
+   "req": "REQ-PRT-012",
+   "ucs_aplicable": [
+    "UC-INS-02",
+    "UC-PRT-06",
+    "UC-PRT-07"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-013 AC 1",
+   "req": "REQ-PRT-013",
+   "ucs_aplicable": [
+    "UC-EVT-09",
+    "UC-INS-03",
+    "UC-PRT-08",
+    "UC-PRT-09",
+    "UC-PRT-10"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-013 AC 2",
+   "req": "REQ-PRT-013",
+   "ucs_aplicable": [
+    "UC-EVT-09",
+    "UC-INS-03",
+    "UC-PRT-08",
+    "UC-PRT-09",
+    "UC-PRT-10"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-013 AC 3",
+   "req": "REQ-PRT-013",
+   "ucs_aplicable": [
+    "UC-EVT-09",
+    "UC-INS-03",
+    "UC-PRT-08",
+    "UC-PRT-09",
+    "UC-PRT-10"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-014 AC 1",
+   "req": "REQ-PRT-014",
+   "ucs_aplicable": [
+    "UC-INS-03",
+    "UC-PRT-09",
+    "UC-PRT-10"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-014 AC 2",
+   "req": "REQ-PRT-014",
+   "ucs_aplicable": [
+    "UC-INS-03",
+    "UC-PRT-09",
+    "UC-PRT-10"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-015 AC 1",
+   "req": "REQ-PRT-015",
+   "ucs_aplicable": [
+    "UC-EVT-09",
+    "UC-EVT-10",
+    "UC-PRT-08",
+    "UC-PRT-09",
+    "UC-PRT-11"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-015 AC 2",
+   "req": "REQ-PRT-015",
+   "ucs_aplicable": [
+    "UC-EVT-09",
+    "UC-EVT-10",
+    "UC-PRT-08",
+    "UC-PRT-09",
+    "UC-PRT-11"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-015 AC 3",
+   "req": "REQ-PRT-015",
+   "ucs_aplicable": [
+    "UC-EVT-09",
+    "UC-EVT-10",
+    "UC-PRT-08",
+    "UC-PRT-09",
+    "UC-PRT-11"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-016 AC 1",
+   "req": "REQ-PRT-016",
+   "ucs_aplicable": [
+    "UC-EVT-10",
+    "UC-INS-03",
+    "UC-PRT-08",
+    "UC-PRT-09",
+    "UC-PRT-11"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-016 AC 2",
+   "req": "REQ-PRT-016",
+   "ucs_aplicable": [
+    "UC-EVT-10",
+    "UC-INS-03",
+    "UC-PRT-08",
+    "UC-PRT-09",
+    "UC-PRT-11"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-016 AC 3",
+   "req": "REQ-PRT-016",
+   "ucs_aplicable": [
+    "UC-EVT-10",
+    "UC-INS-03",
+    "UC-PRT-08",
+    "UC-PRT-09",
+    "UC-PRT-11"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-017 AC 1",
+   "req": "REQ-PRT-017",
+   "ucs_aplicable": [
+    "UC-PRT-04",
+    "UC-PRT-12",
+    "UC-PRT-13"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-017 AC 2",
+   "req": "REQ-PRT-017",
+   "ucs_aplicable": [
+    "UC-PRT-04",
+    "UC-PRT-12",
+    "UC-PRT-13"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-017 AC 3",
+   "req": "REQ-PRT-017",
+   "ucs_aplicable": [
+    "UC-PRT-04",
+    "UC-PRT-12",
+    "UC-PRT-13"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-017 AC 4",
+   "req": "REQ-PRT-017",
+   "ucs_aplicable": [
+    "UC-PRT-04",
+    "UC-PRT-12",
+    "UC-PRT-13"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-017 AC 5",
+   "req": "REQ-PRT-017",
+   "ucs_aplicable": [
+    "UC-PRT-04",
+    "UC-PRT-12",
+    "UC-PRT-13"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-018 AC 1",
+   "req": "REQ-PRT-018",
+   "ucs_aplicable": [
+    "UC-PRT-01",
+    "UC-PRT-04",
+    "UC-PRT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-018 AC 2",
+   "req": "REQ-PRT-018",
+   "ucs_aplicable": [
+    "UC-PRT-01",
+    "UC-PRT-04",
+    "UC-PRT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-018 AC 3",
+   "req": "REQ-PRT-018",
+   "ucs_aplicable": [
+    "UC-PRT-01",
+    "UC-PRT-04",
+    "UC-PRT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-019 AC 1",
+   "req": "REQ-PRT-019",
+   "ucs_aplicable": [
+    "UC-PRT-01",
+    "UC-PRT-05",
+    "UC-PRT-08"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-019 AC 2",
+   "req": "REQ-PRT-019",
+   "ucs_aplicable": [
+    "UC-PRT-01",
+    "UC-PRT-05",
+    "UC-PRT-08"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-PRT-019 AC 3",
+   "req": "REQ-PRT-019",
+   "ucs_aplicable": [
+    "UC-PRT-01",
+    "UC-PRT-05",
+    "UC-PRT-08"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-001 AC 1",
+   "req": "REQ-COM-001",
+   "ucs_aplicable": [
+    "UC-COM-01",
+    "UC-COM-02",
+    "UC-COM-04"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-001 AC 2",
+   "req": "REQ-COM-001",
+   "ucs_aplicable": [
+    "UC-COM-01",
+    "UC-COM-02",
+    "UC-COM-04"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-001 AC 3",
+   "req": "REQ-COM-001",
+   "ucs_aplicable": [
+    "UC-COM-01",
+    "UC-COM-02",
+    "UC-COM-04"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-002 AC 1",
+   "req": "REQ-COM-002",
+   "ucs_aplicable": [
+    "UC-COM-01",
+    "UC-COM-02"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-002 AC 2",
+   "req": "REQ-COM-002",
+   "ucs_aplicable": [
+    "UC-COM-01",
+    "UC-COM-02"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-002 AC 3",
+   "req": "REQ-COM-002",
+   "ucs_aplicable": [
+    "UC-COM-01",
+    "UC-COM-02"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-003 AC 1",
+   "req": "REQ-COM-003",
+   "ucs_aplicable": [
+    "UC-COM-02",
+    "UC-COM-03",
+    "UC-COM-05"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-COM-05"
+  },
+  {
+   "ac_id": "REQ-COM-003 AC 2",
+   "req": "REQ-COM-003",
+   "ucs_aplicable": [
+    "UC-COM-02",
+    "UC-COM-03",
+    "UC-COM-05"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-COM-05"
+  },
+  {
+   "ac_id": "REQ-COM-004 AC 1",
+   "req": "REQ-COM-004",
+   "ucs_aplicable": [
+    "UC-COM-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-004 AC 2",
+   "req": "REQ-COM-004",
+   "ucs_aplicable": [
+    "UC-COM-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-004 AC 3",
+   "req": "REQ-COM-004",
+   "ucs_aplicable": [
+    "UC-COM-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-005 AC 1",
+   "req": "REQ-COM-005",
+   "ucs_aplicable": [
+    "UC-COM-02",
+    "UC-COM-05"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-005 AC 2",
+   "req": "REQ-COM-005",
+   "ucs_aplicable": [
+    "UC-COM-02",
+    "UC-COM-05"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-006 AC 1",
+   "req": "REQ-COM-006",
+   "ucs_aplicable": [
+    "UC-COM-06",
+    "UC-COM-08"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-006 AC 2",
+   "req": "REQ-COM-006",
+   "ucs_aplicable": [
+    "UC-COM-06",
+    "UC-COM-08"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-006 AC 3",
+   "req": "REQ-COM-006",
+   "ucs_aplicable": [
+    "UC-COM-06",
+    "UC-COM-08"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-007 AC 1",
+   "req": "REQ-COM-007",
+   "ucs_aplicable": [
+    "UC-COM-07",
+    "UC-COM-12"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-007 AC 2",
+   "req": "REQ-COM-007",
+   "ucs_aplicable": [
+    "UC-COM-07",
+    "UC-COM-12"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-007 AC 3",
+   "req": "REQ-COM-007",
+   "ucs_aplicable": [
+    "UC-COM-07",
+    "UC-COM-12"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-007 AC 4",
+   "req": "REQ-COM-007",
+   "ucs_aplicable": [
+    "UC-COM-07",
+    "UC-COM-12"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-008 AC 1",
+   "req": "REQ-COM-008",
+   "ucs_aplicable": [
+    "UC-COM-08"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-008 AC 2",
+   "req": "REQ-COM-008",
+   "ucs_aplicable": [
+    "UC-COM-08"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-008 AC 3",
+   "req": "REQ-COM-008",
+   "ucs_aplicable": [
+    "UC-COM-08"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-009 AC 1",
+   "req": "REQ-COM-009",
+   "ucs_aplicable": [
+    "UC-COM-09"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-009 AC 2",
+   "req": "REQ-COM-009",
+   "ucs_aplicable": [
+    "UC-COM-09"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-009 AC 3",
+   "req": "REQ-COM-009",
+   "ucs_aplicable": [
+    "UC-COM-09"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-010 AC 1",
+   "req": "REQ-COM-010",
+   "ucs_aplicable": [
+    "UC-COM-10",
+    "UC-COM-11"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-010 AC 2",
+   "req": "REQ-COM-010",
+   "ucs_aplicable": [
+    "UC-COM-10",
+    "UC-COM-11"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-010 AC 3",
+   "req": "REQ-COM-010",
+   "ucs_aplicable": [
+    "UC-COM-10",
+    "UC-COM-11"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-011 AC 1",
+   "req": "REQ-COM-011",
+   "ucs_aplicable": [
+    "UC-COM-08",
+    "UC-COM-09",
+    "UC-COM-12"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-011 AC 2",
+   "req": "REQ-COM-011",
+   "ucs_aplicable": [
+    "UC-COM-08",
+    "UC-COM-09",
+    "UC-COM-12"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-011 AC 3",
+   "req": "REQ-COM-011",
+   "ucs_aplicable": [
+    "UC-COM-08",
+    "UC-COM-09",
+    "UC-COM-12"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-012 AC 1",
+   "req": "REQ-COM-012",
+   "ucs_aplicable": [
+    "UC-COM-06",
+    "UC-COM-07",
+    "UC-COM-08",
+    "UC-COM-09",
+    "UC-PPL-11",
+    "UC-PPL-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-012 AC 2",
+   "req": "REQ-COM-012",
+   "ucs_aplicable": [
+    "UC-COM-06",
+    "UC-COM-07",
+    "UC-COM-08",
+    "UC-COM-09",
+    "UC-PPL-11",
+    "UC-PPL-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-012 AC 3",
+   "req": "REQ-COM-012",
+   "ucs_aplicable": [
+    "UC-COM-06",
+    "UC-COM-07",
+    "UC-COM-08",
+    "UC-COM-09",
+    "UC-PPL-11",
+    "UC-PPL-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-013 AC 1",
+   "req": "REQ-COM-013",
+   "ucs_aplicable": [
+    "UC-COM-06",
+    "UC-COM-07",
+    "UC-COM-08"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-013 AC 2",
+   "req": "REQ-COM-013",
+   "ucs_aplicable": [
+    "UC-COM-06",
+    "UC-COM-07",
+    "UC-COM-08"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-014 AC 1",
+   "req": "REQ-COM-014",
+   "ucs_aplicable": [
+    "UC-COM-02",
+    "UC-COM-13",
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-PRT-03"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-014 AC 2",
+   "req": "REQ-COM-014",
+   "ucs_aplicable": [
+    "UC-COM-02",
+    "UC-COM-13",
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-PRT-03"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-014 AC 3",
+   "req": "REQ-COM-014",
+   "ucs_aplicable": [
+    "UC-COM-02",
+    "UC-COM-13",
+    "UC-EVT-05",
+    "UC-EVT-06",
+    "UC-EVT-07",
+    "UC-EVT-08",
+    "UC-PRT-03"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-015 AC 1",
+   "req": "REQ-COM-015",
+   "ucs_aplicable": [
+    "UC-COM-13",
+    "UC-PRT-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-015 AC 2",
+   "req": "REQ-COM-015",
+   "ucs_aplicable": [
+    "UC-COM-13",
+    "UC-PRT-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-015 AC 3",
+   "req": "REQ-COM-015",
+   "ucs_aplicable": [
+    "UC-COM-13",
+    "UC-PRT-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-016 AC 1",
+   "req": "REQ-COM-016",
+   "ucs_aplicable": [
+    "UC-COM-13",
+    "UC-EVT-01",
+    "UC-EVT-04",
+    "UC-EVT-13"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-016 AC 2",
+   "req": "REQ-COM-016",
+   "ucs_aplicable": [
+    "UC-COM-13",
+    "UC-EVT-01",
+    "UC-EVT-04",
+    "UC-EVT-13"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-016 AC 3",
+   "req": "REQ-COM-016",
+   "ucs_aplicable": [
+    "UC-COM-13",
+    "UC-EVT-01",
+    "UC-EVT-04",
+    "UC-EVT-13"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-017 AC 1",
+   "req": "REQ-COM-017",
+   "ucs_aplicable": [
+    "UC-COM-09",
+    "UC-COM-13",
+    "UC-PRT-01",
+    "UC-PRT-05",
+    "UC-PRT-07"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-017 AC 2",
+   "req": "REQ-COM-017",
+   "ucs_aplicable": [
+    "UC-COM-09",
+    "UC-COM-13",
+    "UC-PRT-01",
+    "UC-PRT-05",
+    "UC-PRT-07"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-017 AC 3",
+   "req": "REQ-COM-017",
+   "ucs_aplicable": [
+    "UC-COM-09",
+    "UC-COM-13",
+    "UC-PRT-01",
+    "UC-PRT-05",
+    "UC-PRT-07"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-017 AC 4",
+   "req": "REQ-COM-017",
+   "ucs_aplicable": [
+    "UC-COM-09",
+    "UC-COM-13",
+    "UC-PRT-01",
+    "UC-PRT-05",
+    "UC-PRT-07"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-018 AC 1",
+   "req": "REQ-COM-018",
+   "ucs_aplicable": [
+    "UC-COM-13",
+    "UC-COM-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-018 AC 2",
+   "req": "REQ-COM-018",
+   "ucs_aplicable": [
+    "UC-COM-13",
+    "UC-COM-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-018 AC 3",
+   "req": "REQ-COM-018",
+   "ucs_aplicable": [
+    "UC-COM-13",
+    "UC-COM-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-COM-018 AC 4",
+   "req": "REQ-COM-018",
+   "ucs_aplicable": [
+    "UC-COM-13",
+    "UC-COM-14"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-001 AC 1",
+   "req": "REQ-CMP-001",
+   "ucs_aplicable": [
+    "UC-CMP-01",
+    "UC-CMP-02"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": "→ DRAFT",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-001 AC 2",
+   "req": "REQ-CMP-001",
+   "ucs_aplicable": [
+    "UC-CMP-01",
+    "UC-CMP-02"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": "→ ACTIVE",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-001 AC 3",
+   "req": "REQ-CMP-001",
+   "ucs_aplicable": [
+    "UC-CMP-01",
+    "UC-CMP-02"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-002 AC 1",
+   "req": "REQ-CMP-002",
+   "ucs_aplicable": [
+    "UC-CMP-03"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-002 AC 2",
+   "req": "REQ-CMP-002",
+   "ucs_aplicable": [
+    "UC-CMP-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-003 AC 1",
+   "req": "REQ-CMP-003",
+   "ucs_aplicable": [
+    "UC-CMP-02",
+    "UC-CMP-04",
+    "UC-CMP-05",
+    "UC-CMP-06",
+    "UC-CMP-07"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": "→ PENDING",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-003 AC 2",
+   "req": "REQ-CMP-003",
+   "ucs_aplicable": [
+    "UC-CMP-02",
+    "UC-CMP-04",
+    "UC-CMP-05",
+    "UC-CMP-06",
+    "UC-CMP-07"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": "→ ACTIVE",
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-003 AC 3",
+   "req": "REQ-CMP-003",
+   "ucs_aplicable": [
+    "UC-CMP-02",
+    "UC-CMP-04",
+    "UC-CMP-05",
+    "UC-CMP-06",
+    "UC-CMP-07"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-003 AC 4",
+   "req": "REQ-CMP-003",
+   "ucs_aplicable": [
+    "UC-CMP-02",
+    "UC-CMP-04",
+    "UC-CMP-05",
+    "UC-CMP-06",
+    "UC-CMP-07"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-004 AC 1",
+   "req": "REQ-CMP-004",
+   "ucs_aplicable": [
+    "UC-CMP-04",
+    "UC-CMP-05",
+    "UC-CMP-06"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-004 AC 2",
+   "req": "REQ-CMP-004",
+   "ucs_aplicable": [
+    "UC-CMP-04",
+    "UC-CMP-05",
+    "UC-CMP-06"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-004 AC 3",
+   "req": "REQ-CMP-004",
+   "ucs_aplicable": [
+    "UC-CMP-04",
+    "UC-CMP-05",
+    "UC-CMP-06"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-005 AC 1",
+   "req": "REQ-CMP-005",
+   "ucs_aplicable": [
+    "UC-CMP-04",
+    "UC-CMP-05",
+    "UC-CMP-06",
+    "UC-EVT-02",
+    "UC-EVT-15"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-005 AC 2",
+   "req": "REQ-CMP-005",
+   "ucs_aplicable": [
+    "UC-CMP-04",
+    "UC-CMP-05",
+    "UC-CMP-06",
+    "UC-EVT-02",
+    "UC-EVT-15"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-006 AC 1",
+   "req": "REQ-CMP-006",
+   "ucs_aplicable": [
+    "UC-CMP-01",
+    "UC-CMP-08",
+    "UC-CMP-09"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-006 AC 2",
+   "req": "REQ-CMP-006",
+   "ucs_aplicable": [
+    "UC-CMP-01",
+    "UC-CMP-08",
+    "UC-CMP-09"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-006 AC 3",
+   "req": "REQ-CMP-006",
+   "ucs_aplicable": [
+    "UC-CMP-01",
+    "UC-CMP-08",
+    "UC-CMP-09"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-007 AC 1",
+   "req": "REQ-CMP-007",
+   "ucs_aplicable": [
+    "UC-CMP-08",
+    "UC-CMP-09",
+    "UC-PRT-12",
+    "UC-PRT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-007 AC 2",
+   "req": "REQ-CMP-007",
+   "ucs_aplicable": [
+    "UC-CMP-08",
+    "UC-CMP-09",
+    "UC-PRT-12",
+    "UC-PRT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-007 AC 3",
+   "req": "REQ-CMP-007",
+   "ucs_aplicable": [
+    "UC-CMP-08",
+    "UC-CMP-09",
+    "UC-PRT-12",
+    "UC-PRT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-008 AC 1",
+   "req": "REQ-CMP-008",
+   "ucs_aplicable": [
+    "UC-CMP-09",
+    "UC-PRT-12",
+    "UC-PRT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-008 AC 2",
+   "req": "REQ-CMP-008",
+   "ucs_aplicable": [
+    "UC-CMP-09",
+    "UC-PRT-12",
+    "UC-PRT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-008 AC 3",
+   "req": "REQ-CMP-008",
+   "ucs_aplicable": [
+    "UC-CMP-09",
+    "UC-PRT-12",
+    "UC-PRT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-CMP-008 AC 4",
+   "req": "REQ-CMP-008",
+   "ucs_aplicable": [
+    "UC-CMP-09",
+    "UC-PRT-12",
+    "UC-PRT-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-001 AC 1",
+   "req": "REQ-INS-001",
+   "ucs_aplicable": [
+    "UC-INS-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-001 AC 2",
+   "req": "REQ-INS-001",
+   "ucs_aplicable": [
+    "UC-INS-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-001 AC 3",
+   "req": "REQ-INS-001",
+   "ucs_aplicable": [
+    "UC-INS-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-002 AC 1",
+   "req": "REQ-INS-002",
+   "ucs_aplicable": [
+    "UC-INS-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-002 AC 2",
+   "req": "REQ-INS-002",
+   "ucs_aplicable": [
+    "UC-INS-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-003 AC 1",
+   "req": "REQ-INS-003",
+   "ucs_aplicable": [
+    "UC-INS-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-003 AC 2",
+   "req": "REQ-INS-003",
+   "ucs_aplicable": [
+    "UC-INS-01"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-004 AC 1",
+   "req": "REQ-INS-004",
+   "ucs_aplicable": [
+    "UC-INS-02"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-004 AC 2",
+   "req": "REQ-INS-004",
+   "ucs_aplicable": [
+    "UC-INS-02"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-004 AC 3",
+   "req": "REQ-INS-004",
+   "ucs_aplicable": [
+    "UC-INS-02"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-004 AC 4",
+   "req": "REQ-INS-004",
+   "ucs_aplicable": [
+    "UC-INS-02"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-004 AC 5",
+   "req": "REQ-INS-004",
+   "ucs_aplicable": [
+    "UC-INS-02"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-005 AC 1",
+   "req": "REQ-INS-005",
+   "ucs_aplicable": [
+    "UC-INS-03",
+    "UC-PRT-09"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-005 AC 2",
+   "req": "REQ-INS-005",
+   "ucs_aplicable": [
+    "UC-INS-03",
+    "UC-PRT-09"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-005 AC 3",
+   "req": "REQ-INS-005",
+   "ucs_aplicable": [
+    "UC-INS-03",
+    "UC-PRT-09"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-006 AC 1",
+   "req": "REQ-INS-006",
+   "ucs_aplicable": [
+    "UC-INS-02",
+    "UC-INS-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-006 AC 2",
+   "req": "REQ-INS-006",
+   "ucs_aplicable": [
+    "UC-INS-02",
+    "UC-INS-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-006 AC 3",
+   "req": "REQ-INS-006",
+   "ucs_aplicable": [
+    "UC-INS-02",
+    "UC-INS-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-007 AC 1",
+   "req": "REQ-INS-007",
+   "ucs_aplicable": [
+    "UC-INS-02",
+    "UC-INS-03"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-007 AC 2",
+   "req": "REQ-INS-007",
+   "ucs_aplicable": [
+    "UC-INS-02",
+    "UC-INS-03"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-008 AC 1",
+   "req": "REQ-INS-008",
+   "ucs_aplicable": [
+    "UC-INS-05"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-008 AC 2",
+   "req": "REQ-INS-008",
+   "ucs_aplicable": [
+    "UC-INS-05"
+   ],
+   "spec_step": "Camino alternativo",
+   "representation": "ALTERNATIVE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-008 AC 3",
+   "req": "REQ-INS-008",
+   "ucs_aplicable": [
+    "UC-INS-05"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-009 AC 1",
+   "req": "REQ-INS-009",
+   "ucs_aplicable": [
+    "UC-COM-03",
+    "UC-EVT-16",
+    "UC-IAM-08",
+    "UC-INS-04",
+    "UC-INS-05",
+    "UC-PPL-07",
+    "UC-PRT-07",
+    "UC-PRT-10",
+    "UC-PRT-12"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-009 AC 2",
+   "req": "REQ-INS-009",
+   "ucs_aplicable": [
+    "UC-COM-03",
+    "UC-EVT-16",
+    "UC-IAM-08",
+    "UC-INS-04",
+    "UC-INS-05",
+    "UC-PPL-07",
+    "UC-PRT-07",
+    "UC-PRT-10",
+    "UC-PRT-12"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-009 AC 3",
+   "req": "REQ-INS-009",
+   "ucs_aplicable": [
+    "UC-COM-03",
+    "UC-EVT-16",
+    "UC-IAM-08",
+    "UC-INS-04",
+    "UC-INS-05",
+    "UC-PPL-07",
+    "UC-PRT-07",
+    "UC-PRT-10",
+    "UC-PRT-12"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-010 AC 1",
+   "req": "REQ-INS-010",
+   "ucs_aplicable": [
+    "UC-INS-05"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-010 AC 2",
+   "req": "REQ-INS-010",
+   "ucs_aplicable": [
+    "UC-INS-05"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-011 AC 1",
+   "req": "REQ-INS-011",
+   "ucs_aplicable": [
+    "UC-COM-03",
+    "UC-COM-10",
+    "UC-EVT-19",
+    "UC-INS-04",
+    "UC-PRT-03",
+    "UC-PRT-07",
+    "UC-PRT-10"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-011 AC 2",
+   "req": "REQ-INS-011",
+   "ucs_aplicable": [
+    "UC-COM-03",
+    "UC-COM-10",
+    "UC-EVT-19",
+    "UC-INS-04",
+    "UC-PRT-03",
+    "UC-PRT-07",
+    "UC-PRT-10"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-011 AC 3",
+   "req": "REQ-INS-011",
+   "ucs_aplicable": [
+    "UC-COM-03",
+    "UC-COM-10",
+    "UC-EVT-19",
+    "UC-INS-04",
+    "UC-PRT-03",
+    "UC-PRT-07",
+    "UC-PRT-10"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-011 AC 4",
+   "req": "REQ-INS-011",
+   "ucs_aplicable": [
+    "UC-COM-03",
+    "UC-COM-10",
+    "UC-EVT-19",
+    "UC-INS-04",
+    "UC-PRT-03",
+    "UC-PRT-07",
+    "UC-PRT-10"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-011 AC 5",
+   "req": "REQ-INS-011",
+   "ucs_aplicable": [
+    "UC-COM-03",
+    "UC-COM-10",
+    "UC-EVT-19",
+    "UC-INS-04",
+    "UC-PRT-03",
+    "UC-PRT-07",
+    "UC-PRT-10"
+   ],
+   "spec_step": "Camino básico",
+   "representation": "BASIC_STEP",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-012 AC 1",
+   "req": "REQ-INS-012",
+   "ucs_aplicable": [
+    "UC-INS-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-INS-012 AC 2",
+   "req": "REQ-INS-012",
+   "ucs_aplicable": [
+    "UC-INS-04"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-001 AC 1",
+   "req": "REQ-SYS-001",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-001 AC 2",
+   "req": "REQ-SYS-001",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-001 AC 3",
+   "req": "REQ-SYS-001",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-001 AC 4",
+   "req": "REQ-SYS-001",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-002 AC 1",
+   "req": "REQ-SYS-002",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-002 AC 2",
+   "req": "REQ-SYS-002",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-003 AC 1",
+   "req": "REQ-SYS-003",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-003 AC 2",
+   "req": "REQ-SYS-003",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-003 AC 3",
+   "req": "REQ-SYS-003",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-003 AC 4",
+   "req": "REQ-SYS-003",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-004 AC 1",
+   "req": "REQ-SYS-004",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-004 AC 2",
+   "req": "REQ-SYS-004",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-005 AC 1",
+   "req": "REQ-SYS-005",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-005 AC 2",
+   "req": "REQ-SYS-005",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-005 AC 3",
+   "req": "REQ-SYS-005",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-006 AC 1",
+   "req": "REQ-SYS-006",
+   "ucs_aplicable": [
+    "UC-COM-03",
+    "UC-PRT-07",
+    "UC-PRT-10"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-006 AC 2",
+   "req": "REQ-SYS-006",
+   "ucs_aplicable": [
+    "UC-COM-03",
+    "UC-PRT-07",
+    "UC-PRT-10"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-006 AC 3",
+   "req": "REQ-SYS-006",
+   "ucs_aplicable": [
+    "UC-COM-03",
+    "UC-PRT-07",
+    "UC-PRT-10"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-007 AC 1",
+   "req": "REQ-SYS-007",
+   "ucs_aplicable": [
+    "UC-COM-01",
+    "UC-COM-11",
+    "UC-EVT-18"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-007 AC 2",
+   "req": "REQ-SYS-007",
+   "ucs_aplicable": [
+    "UC-COM-01",
+    "UC-COM-11",
+    "UC-EVT-18"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-007 AC 3",
+   "req": "REQ-SYS-007",
+   "ucs_aplicable": [
+    "UC-COM-01",
+    "UC-COM-11",
+    "UC-EVT-18"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-008 AC 1",
+   "req": "REQ-SYS-008",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-008 AC 2",
+   "req": "REQ-SYS-008",
+   "ucs_aplicable": [],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-009 AC 1",
+   "req": "REQ-SYS-009",
+   "ucs_aplicable": [
+    "UC-EVT-11",
+    "UC-IAM-06"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-009 AC 2",
+   "req": "REQ-SYS-009",
+   "ucs_aplicable": [
+    "UC-EVT-11",
+    "UC-IAM-06"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-009 AC 3",
+   "req": "REQ-SYS-009",
+   "ucs_aplicable": [
+    "UC-EVT-11",
+    "UC-IAM-06"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-010 AC 1",
+   "req": "REQ-SYS-010",
+   "ucs_aplicable": [
+    "UC-EVT-12",
+    "UC-IAM-10",
+    "UC-PPL-15",
+    "UC-PPL-17"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-010 AC 2",
+   "req": "REQ-SYS-010",
+   "ucs_aplicable": [
+    "UC-EVT-12",
+    "UC-IAM-10",
+    "UC-PPL-15",
+    "UC-PPL-17"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-010 AC 3",
+   "req": "REQ-SYS-010",
+   "ucs_aplicable": [
+    "UC-EVT-12",
+    "UC-IAM-10",
+    "UC-PPL-15",
+    "UC-PPL-17"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-011 AC 1",
+   "req": "REQ-SYS-011",
+   "ucs_aplicable": [
+    "UC-EVT-18",
+    "UC-INS-01",
+    "UC-INS-02"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-011 AC 2",
+   "req": "REQ-SYS-011",
+   "ucs_aplicable": [
+    "UC-EVT-18",
+    "UC-INS-01",
+    "UC-INS-02"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-011 AC 3",
+   "req": "REQ-SYS-011",
+   "ucs_aplicable": [
+    "UC-EVT-18",
+    "UC-INS-01",
+    "UC-INS-02"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-011 AC 4",
+   "req": "REQ-SYS-011",
+   "ucs_aplicable": [
+    "UC-EVT-18",
+    "UC-INS-01",
+    "UC-INS-02"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-012 AC 1",
+   "req": "REQ-SYS-012",
+   "ucs_aplicable": [
+    "UC-COM-05",
+    "UC-EVT-17"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-012 AC 2",
+   "req": "REQ-SYS-012",
+   "ucs_aplicable": [
+    "UC-COM-05",
+    "UC-EVT-17"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-012 AC 3",
+   "req": "REQ-SYS-012",
+   "ucs_aplicable": [
+    "UC-COM-05",
+    "UC-EVT-17"
+   ],
+   "spec_step": "Transversal (CROSS_CUTTING — respetada por la ficha sin paso narrado)",
+   "representation": "CROSS_CUTTING",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-013 AC 1",
+   "req": "REQ-SYS-013",
+   "ucs_aplicable": [
+    "UC-COM-13",
+    "UC-COM-14",
+    "UC-EVT-17",
+    "UC-INS-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-013 AC 2",
+   "req": "REQ-SYS-013",
+   "ucs_aplicable": [
+    "UC-COM-13",
+    "UC-COM-14",
+    "UC-EVT-17",
+    "UC-INS-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-013 AC 3",
+   "req": "REQ-SYS-013",
+   "ucs_aplicable": [
+    "UC-COM-13",
+    "UC-COM-14",
+    "UC-EVT-17",
+    "UC-INS-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-014 AC 1",
+   "req": "REQ-SYS-014",
+   "ucs_aplicable": [
+    "UC-EVT-17",
+    "UC-EVT-18",
+    "UC-EVT-19"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-EVT-18, UC-EVT-19"
+  },
+  {
+   "ac_id": "REQ-SYS-014 AC 2",
+   "req": "REQ-SYS-014",
+   "ucs_aplicable": [
+    "UC-EVT-17",
+    "UC-EVT-18",
+    "UC-EVT-19"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-EVT-18, UC-EVT-19"
+  },
+  {
+   "ac_id": "REQ-SYS-014 AC 3",
+   "req": "REQ-SYS-014",
+   "ucs_aplicable": [
+    "UC-EVT-17",
+    "UC-EVT-18",
+    "UC-EVT-19"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-EVT-18, UC-EVT-19"
+  },
+  {
+   "ac_id": "REQ-SYS-015 AC 1",
+   "req": "REQ-SYS-015",
+   "ucs_aplicable": [
+    "UC-CMP-09",
+    "UC-COM-13",
+    "UC-EVT-11"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-015 AC 2",
+   "req": "REQ-SYS-015",
+   "ucs_aplicable": [
+    "UC-CMP-09",
+    "UC-COM-13",
+    "UC-EVT-11"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-015 AC 3",
+   "req": "REQ-SYS-015",
+   "ucs_aplicable": [
+    "UC-CMP-09",
+    "UC-COM-13",
+    "UC-EVT-11"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-016 AC 1",
+   "req": "REQ-SYS-016",
+   "ucs_aplicable": [
+    "UC-COM-09",
+    "UC-IAM-10"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-016 AC 2",
+   "req": "REQ-SYS-016",
+   "ucs_aplicable": [
+    "UC-COM-09",
+    "UC-IAM-10"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-016 AC 3",
+   "req": "REQ-SYS-016",
+   "ucs_aplicable": [
+    "UC-COM-09",
+    "UC-IAM-10"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-017 AC 1",
+   "req": "REQ-SYS-017",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-12"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-017 AC 2",
+   "req": "REQ-SYS-017",
+   "ucs_aplicable": [
+    "UC-EVT-04",
+    "UC-EVT-12"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-018 AC 1",
+   "req": "REQ-SYS-018",
+   "ucs_aplicable": [
+    "UC-CMP-07",
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-03",
+    "UC-EVT-15",
+    "UC-PPL-06",
+    "UC-PRT-02",
+    "UC-PRT-03"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-EVT-02, UC-EVT-03, UC-PPL-06"
+  },
+  {
+   "ac_id": "REQ-SYS-018 AC 2",
+   "req": "REQ-SYS-018",
+   "ucs_aplicable": [
+    "UC-CMP-07",
+    "UC-EVT-01",
+    "UC-EVT-02",
+    "UC-EVT-03",
+    "UC-EVT-15",
+    "UC-PPL-06",
+    "UC-PRT-02",
+    "UC-PRT-03"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-EVT-02, UC-EVT-03, UC-PPL-06"
+  },
+  {
+   "ac_id": "REQ-SYS-019 AC 1",
+   "req": "REQ-SYS-019",
+   "ucs_aplicable": [
+    "UC-EVT-17",
+    "UC-EVT-18",
+    "UC-INS-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-019 AC 2",
+   "req": "REQ-SYS-019",
+   "ucs_aplicable": [
+    "UC-EVT-17",
+    "UC-EVT-18",
+    "UC-INS-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-020 AC 1",
+   "req": "REQ-SYS-020",
+   "ucs_aplicable": [
+    "UC-INS-05"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-020 AC 2",
+   "req": "REQ-SYS-020",
+   "ucs_aplicable": [
+    "UC-INS-05"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-021 AC 1",
+   "req": "REQ-SYS-021",
+   "ucs_aplicable": [],
+   "spec_step": "NOT_APPLICABLE_WITH_REASON (sin representación en ficha)",
+   "representation": "NOT_APPLICABLE_WITH_REASON",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — verificado por inspección de transporte y almacenamiento, no por objetivo de usuario"
+  },
+  {
+   "ac_id": "REQ-SYS-021 AC 2",
+   "req": "REQ-SYS-021",
+   "ucs_aplicable": [],
+   "spec_step": "NOT_APPLICABLE_WITH_REASON (sin representación en ficha)",
+   "representation": "NOT_APPLICABLE_WITH_REASON",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — verificado por inspección de transporte y almacenamiento, no por objetivo de usuario"
+  },
+  {
+   "ac_id": "REQ-SYS-021 AC 3",
+   "req": "REQ-SYS-021",
+   "ucs_aplicable": [],
+   "spec_step": "NOT_APPLICABLE_WITH_REASON (sin representación en ficha)",
+   "representation": "NOT_APPLICABLE_WITH_REASON",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — verificado por inspección de transporte y almacenamiento, no por objetivo de usuario"
+  },
+  {
+   "ac_id": "REQ-SYS-022 AC 1",
+   "req": "REQ-SYS-022",
+   "ucs_aplicable": [],
+   "spec_step": "NOT_APPLICABLE_WITH_REASON (sin representación en ficha)",
+   "representation": "NOT_APPLICABLE_WITH_REASON",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — EVIDENCE_PENDING — disponibilidad/respaldo, medición operativa, sin comportamiento de CU"
+  },
+  {
+   "ac_id": "REQ-SYS-022 AC 2",
+   "req": "REQ-SYS-022",
+   "ucs_aplicable": [],
+   "spec_step": "NOT_APPLICABLE_WITH_REASON (sin representación en ficha)",
+   "representation": "NOT_APPLICABLE_WITH_REASON",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — EVIDENCE_PENDING — disponibilidad/respaldo, medición operativa, sin comportamiento de CU"
+  },
+  {
+   "ac_id": "REQ-SYS-022 AC 3",
+   "req": "REQ-SYS-022",
+   "ucs_aplicable": [],
+   "spec_step": "NOT_APPLICABLE_WITH_REASON (sin representación en ficha)",
+   "representation": "NOT_APPLICABLE_WITH_REASON",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — EVIDENCE_PENDING — disponibilidad/respaldo, medición operativa, sin comportamiento de CU"
+  },
+  {
+   "ac_id": "REQ-SYS-023 AC 1",
+   "req": "REQ-SYS-023",
+   "ucs_aplicable": [
+    "UC-EVT-17",
+    "UC-INS-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-EVT-17"
+  },
+  {
+   "ac_id": "REQ-SYS-023 AC 2",
+   "req": "REQ-SYS-023",
+   "ucs_aplicable": [
+    "UC-EVT-17",
+    "UC-INS-01"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "ucs_aplicable incluye UC mapeados sólo por la matriz E3 (§3 del Traceability), sin fila §2: UC-EVT-17"
+  },
+  {
+   "ac_id": "REQ-SYS-024 AC 1",
+   "req": "REQ-SYS-024",
+   "ucs_aplicable": [
+    "UC-COM-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-024 AC 2",
+   "req": "REQ-SYS-024",
+   "ucs_aplicable": [
+    "UC-COM-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null
+  },
+  {
+   "ac_id": "REQ-SYS-025 AC 1",
+   "req": "REQ-SYS-025",
+   "ucs_aplicable": [
+    "UC-COM-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-025 AC 2",
+   "req": "REQ-SYS-025",
+   "ucs_aplicable": [
+    "UC-COM-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-025 AC 3",
+   "req": "REQ-SYS-025",
+   "ucs_aplicable": [
+    "UC-COM-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-025 AC 4",
+   "req": "REQ-SYS-025",
+   "ucs_aplicable": [
+    "UC-COM-13"
+   ],
+   "spec_step": "TRAZABILIDAD INTERNA GEI · Business rules (bloque de trazabilidad / precondición)",
+   "representation": "BUSINESS_RULE",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — regla interna transversal — registrada en los bloques de trazabilidad que aplican"
+  },
+  {
+   "ac_id": "REQ-SYS-026 AC 1",
+   "req": "REQ-SYS-026",
+   "ucs_aplicable": [],
+   "spec_step": "NOT_APPLICABLE_WITH_REASON (sin representación en ficha)",
+   "representation": "NOT_APPLICABLE_WITH_REASON",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — evolución compatible — restricción de despliegue, sin comportamiento de CU"
+  },
+  {
+   "ac_id": "REQ-SYS-026 AC 2",
+   "req": "REQ-SYS-026",
+   "ucs_aplicable": [],
+   "spec_step": "NOT_APPLICABLE_WITH_REASON (sin representación en ficha)",
+   "representation": "NOT_APPLICABLE_WITH_REASON",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — evolución compatible — restricción de despliegue, sin comportamiento de CU"
+  },
+  {
+   "ac_id": "REQ-SYS-027 AC 1",
+   "req": "REQ-SYS-027",
+   "ucs_aplicable": [],
+   "spec_step": "NOT_APPLICABLE_WITH_REASON (sin representación en ficha)",
+   "representation": "NOT_APPLICABLE_WITH_REASON",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — EXTERNAL — procesos de la organización, fuera de GEI"
+  },
+  {
+   "ac_id": "REQ-SYS-027 AC 2",
+   "req": "REQ-SYS-027",
+   "ucs_aplicable": [],
+   "spec_step": "NOT_APPLICABLE_WITH_REASON (sin representación en ficha)",
+   "representation": "NOT_APPLICABLE_WITH_REASON",
+   "state_transition": null,
+   "activity": null,
+   "class_op": null,
+   "note": "REQ sin fila §2 (ninguna ficha lo lista en TRAZABILIDAD INTERNA) — EXTERNAL — procesos de la organización, fuera de GEI"
+  }
+ ]
+}
