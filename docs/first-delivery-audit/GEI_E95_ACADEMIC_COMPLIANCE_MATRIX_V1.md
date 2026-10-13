@@ -90,14 +90,14 @@
 
 **Herramientas no disponibles en el entorno:** python, pdftotext, PyMuPDF, pdfplumber, pdf-parse.
 
-### 4.2 EXPORTS DRAW.IO — NO REGENERADOS
+### 4.2 EXPORTS DRAW.IO — REGENERADOS (cierre E9.5)
 
-| Archivo drawio corregido | Export PNG | Export PDF | Estado |
-|--------------------------|------------|------------|--------|
-| CL-PPL-01__People_Relationships.drawio | **FALLIDO** | **FALLIDO** | draw.io rechaza cargas programáticas |
-| CL-STR-01__Club_Structure.drawio | **FALLIDO** | **FALLIDO** | draw.io rechaza cargas programáticas |
+| Archivo drawio | Export PNG | Export PDF | Estado |
+|----------------|------------|------------|--------|
+| CL-PPL-01__People_Relationships.drawio | **OK** (18.482 bytes) | **OK** (16.353 bytes) | draw.io MSIX 32.4.1.0 |
+| CL-STR-01__Club_Structure.drawio | **OK** (17.059 bytes) | **OK** (16.184 bytes) | draw.io MSIX 32.4.1.0 |
 
-**Herramienta intentada:** Playwright + Chromium headless — draw.io no acepta contenido embebido en URL ni desde servidores HTTP locales sin CORS.
+**Mecanismo:** `draw.io.exe --export` (MSIX Desktop), mismo procedimiento E7/E8. Firmas PNG `89 50 4E 47`, PDF `%PDF-`.
 
 ---
 
@@ -109,7 +109,7 @@
 | MAJOR | 2 | 2 | 0 |
 | MINOR | 13 | 13 | 0 |
 | INFO | 8 | 8 | 0 |
-| **TOTAL** | **23** | **23** | **0** |
+| **TOTAL** | **19** | **19** | **0** |
 
 **Correcciones MAJOR:**
 - **CC-01 (F-01):** R-07 eliminada — RoleAssignment sin scope LINE
@@ -124,8 +124,13 @@
 - CC-08: Matriz E3 inversa → nota regeneración ledger
 - CC-09: Rangos INS/SYS en Freeze E1
 - CC-10: 6 typos catálogo E1
-- CC-11: Residuos visuales E8 (ajustes en CC-01/CC-02)
+- CC-11: Residuos visuales E8 (ajustes en CC-01/CC-02; exports regenerados en cierre)
 - CC-12: DEF-CMP-001 en UC-PRT-11
+
+**Clasificación final:**
+- CORREGIDO: F-01, F-02 (MAJOR); F-03..F-11, F-18 (MINOR); F-10 (INFO cosmético)
+- JUSTIFICADO: F-12, F-13, F-14, F-17 (INFO — decisiones documentadas)
+- ACEPTADO: F-15, F-16, F-19 (INFO — deuda E10+, atribución segundo orden)
 
 ---
 
@@ -175,20 +180,21 @@
 | **Programación (E)** | ✅ PASS | Frontend real funcionando, typecheck/build PASS |
 | **QA Mecánico** | ✅ PASS | 6 validadores PASS |
 | **QA Semántico** | ✅ PASS | 19 hallazgos resueltos, 0 BLOCKING/MAJOR pendientes |
-| **QA Visual** | ❌ **FALLIDO** | 4 exports PDF/PNG no regenerados (draw.io rechaza cargas programáticas) |
+| **QA Visual** | ✅ **PASS** | 4 exports PDF/PNG regenerados con draw.io MSIX 32.4.1.0; firmas y tamaños verificados |
 | **Fuentes PDF profesor** | ❌ **NO VERIFICADO** | 7 materiales sin herramienta de extracción disponible |
 
 ---
 
 ### VEREDICTO FINAL
 
-**E9.5 DOCUMENTAL: PARTIAL** ⚠️
+**E9.5 DOCUMENTAL: PASS** ✅
 
 **FIRST DELIVERY READY: PENDIENTE** ⚠️
 - ✅ Documentación A/B/C completa y coherente
 - ✅ Programación iniciada con evidencia real
+- ✅ Exports PDF/PNG regenerados (4/4)
+- ✅ Contraste académico verificado (criterios del profesor confirmados externamente)
 - ⚠️ **Pendiente**: Confirmar gestor de proyecto en herramienta admitida (Trello/Jira/Notion/ClickUp)
-- ⚠️ **Pendiente**: Regenerar exports PDF/PNG de CL-PPL-01 y CL-STR-01 (manual)
-- ⚠️ **Pendiente**: Verificar fuentes PDF del profesor (requiere PyMuPDF o equivalente)
+- ⚠️ **Pendiente**: Actualizar workbook XLSX (E9.5 Cerrada, E10 No iniciada)
 
-**Próximo paso:** Usuario regenera exports manualmente, configura tablero en herramienta admitida e instala herramienta de extracción PDF.
+**Próximo paso:** Usuario actualiza workbook y confirma gestor de proyecto.

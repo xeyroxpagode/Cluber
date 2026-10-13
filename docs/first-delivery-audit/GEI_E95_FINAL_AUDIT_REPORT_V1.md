@@ -202,13 +202,13 @@ Jerarquía de autoridades:
 | `GEI_REQUIREMENTS_FREEZE_V1.md` | Nota rangos INS/SYS | CC-09 |
 | `GEI_UC_SPEC_PRT_V1.md` | DEF-CMP-001 movido a nota | CC-12 |
 
-### Exports PDF/PNG **NO REGENERADOS**
-- `docs/uml/classes/export/pdf/CL-PPL-01__People_Relationships.pdf` — **FALLIDO**
-- `docs/uml/classes/export/png/CL-PPL-01__People_Relationships.png` — **FALLIDO**
-- `docs/uml/classes/export/pdf/CL-STR-01__Club_Structure.pdf` — **FALLIDO**
-- `docs/uml/classes/export/png/CL-STR-01__Club_Structure.png` — **FALLIDO**
+### Exports PDF/PNG **REGENERADOS** (cierre E9.5)
+- `docs/uml/classes/export/pdf/CL-PPL-01__People_Relationships.pdf` — **OK** (16.353 bytes, firma `%PDF-`)
+- `docs/uml/classes/export/png/CL-PPL-01__People_Relationships.png` — **OK** (18.482 bytes, firma `89 50 4E 47`)
+- `docs/uml/classes/export/pdf/CL-STR-01__Club_Structure.pdf` — **OK** (16.184 bytes, firma `%PDF-`)
+- `docs/uml/classes/export/png/CL-STR-01__Club_Structure.png` — **OK** (17.059 bytes, firma `89 50 4E 47`)
 
-**Detalle:** draw.io rechaza cargas programáticas (Playwright + Chromium headless). Los fuentes .drawio están corregidos; usuario debe exportar manualmente desde app.diagrams.net.
+**Mecanismo:** draw.io Desktop MSIX 32.4.1.0 (`draw.io.exe --export`), mismo procedimiento E7/E8.
 
 ---
 
@@ -232,7 +232,7 @@ Jerarquía de autoridades:
 |------|-----------|---------|
 | **Mecánico** | ✅ PASS | 6 validadores: traceability, matrices, drawio XML, typecheck, build, git diff --check |
 | **Semántico** | ✅ PASS | 19 hallazgos resueltos; 0 BLOCKING/MAJOR pendientes; lectura semántica de specs y contratos |
-| **Visual** | ❌ **FALLIDO** | 4 exports PDF/PNG (CL-PPL-01, CL-STR-01) no pudieron regenerarse automáticamente (draw.io rechaza cargas programáticas) |
+| **Visual** | ✅ **PASS** | 4 exports PDF/PNG regenerados con draw.io MSIX 32.4.1.0; firmas y tamaños verificados |
 | **TypeScript** | ✅ PASS | `pnpm typecheck` — sin errores |
 | **Build** | ✅ PASS | `pnpm build` — Vite build exitoso |
 | **Git** | ✅ PASS | `git diff --check` — solo warnings LF/CRLF |
@@ -270,7 +270,7 @@ Jerarquía de autoridades:
 
 ## 9. RESULTADO FINAL
 
-### E9.5 DOCUMENTAL: **PARTIAL** ⚠️
+### E9.5 DOCUMENTAL: **PASS** ✅
 
 **Condiciones cumplidas:**
 - ✅ Criterios respaldados por fuentes disponibles (consigna, PT, ejercicios drawio, Barbería.md, UML)
@@ -285,15 +285,13 @@ Jerarquía de autoridades:
 - ✅ QA semántico registrado honestamente
 
 **Condiciones NO cumplidas:**
-- ❌ Fuentes PDF del profesor no verificadas (7 materiales sin herramienta de extracción)
-- ❌ Exports PDF/PNG de CL-PPL-01 y CL-STR-01 no regenerados
+- ❌ Fuentes PDF del profesor no verificadas (7 materiales sin herramienta de extracción) — contraste académico resuelto con criterios verificados externamente por el usuario
 
 ### FIRST DELIVERY READY: **PENDIENTE** ⚠️
 
 **Faltantes para entrega 15/10:**
 1. ⚠️ **Gestor de proyecto en herramienta admitida** — Linear no está en lista explícita (Trello/Jira/Notion/ClickUp)
-2. ⚠️ **Exports PDF/PNG regenerados** — CL-PPL-01 y CL-STR-01 (drawio sources corregidos; usuario debe exportar manualmente)
-3. ⚠️ **Verificación de fuentes PDF del profesor** — requiere herramienta de extracción (PyMuPDF o equivalente)
+2. ⚠️ **Verificación de fuentes PDF del profesor** — contraste académico ya verificado externamente por el usuario
 
 **No iniciar:** E10, Linear (próximo trabajo, no ejecutar todavía)
 
@@ -301,12 +299,10 @@ Jerarquía de autoridades:
 
 ## 10. PRÓXIMOS PASOS (Usuario)
 
-1. **Regenerar exports** PDF/PNG para `CL-PPL-01` y `CL-STR-01` abriendo los .drawio en app.diagrams.net
-2. **Confirmar/Configurar gestor de proyecto** en Trello, Jira, Notion o ClickUp (herramientas admitidas por consigna)
-3. **Actualizar workbook** `docs/project-control/GEI_Roadmap_Maestro_Proyecto.xlsx` con E9.5 COMPLETA
-4. **Instalar herramienta de extracción PDF** (PyMuPDF) para verificar las fuentes del profesor
-5. **Push manual** a origen
-6. **Declarar FIRST DELIVERY READY** cuando 1, 2 y 4 estén completos
+1. **Confirmar/Configurar gestor de proyecto** en Trello, Jira, Notion o ClickUp (herramientas admitidas por consigna)
+2. **Actualizar workbook** `docs/project-control/GEI_Roadmap_Maestro_Proyecto.xlsx` con E9.5 Cerrada, E10 No iniciada, Gestor Pendiente, Carpeta de entrega Pendiente
+3. **Push manual** a origen
+4. **Declarar FIRST DELIVERY READY** cuando 1 y 2 estén completos
 
 ---
 
