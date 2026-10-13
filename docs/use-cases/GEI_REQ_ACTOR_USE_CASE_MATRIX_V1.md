@@ -341,6 +341,8 @@ actor de E2.
 
 # 12. TRAZABILIDAD INVERSA — UC → REQ
 
+> **Nota (Errata E9.5 / F-08):** La dirección **forward (§2–10) es la autoridad** (completa y consistente con los gates E3). Esta inversa (§12) se regenera desde el ledger E9 para consistencia. La inversa original consolidada por separado en E3 omitía 8 pares forward y tenía presencia parcial/nula en referencias colectivas.
+
 Cada CU con su lista completa de REQ. **Gate §28: 0 CU sin REQ.**
 
 | UC | REQ que lo sustentan |

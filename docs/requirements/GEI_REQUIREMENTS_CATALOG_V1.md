@@ -381,7 +381,7 @@ del sistema (patrón PT §79). Ninguno de los dos estados abre una laguna de esp
 ### REQ-IAM-015 — Política de contraseñas
 - **STATEMENT:** Una contraseña válida debe tener entre 12 y 128 caracteres, admitir Unicode y espacios, no exigir reglas arbitrarias de complejidad y no estar sujeta a expiración forzada periódica; debe almacenarse con Argon2id.
 - **TYPE:** NON-FUNCTIONAL · **CATEGORY:** SECURITY · **DOMAIN:** IAM · **SCOPE:** IN · **PRIORITY:** P0
-- **GOAL:** Permitir contraseñas fuertes yTlanas de usar sin reglas arbitrarias.
+- **GOAL:** Permitir contraseñas fuertes y **planas** de usar sin reglas arbitrarias.
 - **PRELIMINARY ACTOR:** System
 - **SOURCE(S):** PT §48; PT §75 (Security); S4IR §8 P0-4
 - **ACCEPTANCE CRITERIA:**
@@ -483,7 +483,7 @@ del sistema (patrón PT §79). Ninguno de los dos estados abre una laguna de esp
 ### REQ-PPL-002 — Completitud del perfil de jugadora
 - **STATEMENT:** Para ingresar al roster, una jugadora debe tener nombre, apellido, DNI, fecha de nacimiento, teléfono y email; si falta algo, el sistema debe identificarlo.
 - **TYPE:** FUNCTIONAL · **CATEGORY:** BUSINESS_RULE · **DOMAIN:** PPL · **SCOPE:** IN · **PRIORITY:** P0
-- **GOAL:** Que el club no NTTenga jugadoras sin datos de contacto o identificación necessários para operar.
+- **GOAL:** Que el club no **tenga** jugadoras sin datos de contacto o identificación **necesarios** para operar.
 - **PRELIMINARY ACTOR:** Admin
 - **SOURCE(S):** PT §17 (`422 PLAYER_PROFILE_INCOMPLETE`; Player roster completeness); PT §2; PT §38
 - **ACCEPTANCE CRITERIA:**
@@ -927,7 +927,7 @@ del sistema (patrón PT §79). Ninguno de los dos estados abre una laguna de esp
 ### REQ-EVT-004 — Crear un evento del club
 - **STATEMENT:** Un entrenador con alcance de evento o la Subcomisión con alcance de club debe poder crear un evento del club, either para todo el club o dirigido a equipos o personas concretas.
 - **TYPE:** FUNCTIONAL · **CATEGORY:** CAPABILITY · **DOMAIN:** EVT · **SCOPE:** IN · **PRIORITY:** P1
-- **GOAL:** Que el club puedaJd convocar a actividades que no son entrenar ni jugar (reuniones,.tasks, eventos de organización).
+- **GOAL:** Que el club **pueda** convocar a actividades que no son entrenar ni jugar (reuniones, **tareas**, eventos de organización).
 - **PRELIMINARY ACTOR:** Coach · Subcommittee
 - **SOURCE(S):** PT §3 IN (`ClubEvent`); PT §10 (`CLUB_EVENT: club-wide o targeted`; `club_wide_target=true → 0 Team targets; 0 Person targets`); PT §5; PT §38 (`EVENT_TARGET_INVALID`); PT §76 (`RF13–16 → Communication/Events/Notifications`)
 - **ACCEPTANCE CRITERIA:**
@@ -941,7 +941,7 @@ del sistema (patrón PT §79). Ninguno de los dos estados abre una laguna de esp
 ### REQ-EVT-005 — Destinatarios plurales de un evento
 - **STATEMENT:** Un evento debe poder tener varios equipos destino y varias personas destino al mismo tiempo, según lo permita su tipo, y el sistema debe presentar esos destinarios en lenguaje de usuario.
 - **TYPE:** FUNCTIONAL · **CATEGORY:** BUSINESS_RULE · **DOMAIN:** EVT · **SCOPE:** IN · **PRIORITY:** P0
-- **GOAL:** Que un unwelcome evento para varias categorías no requiera crear un evento por categoría.
+- **GOAL:** Que un **evento** para varias categorías no requiera crear un evento por categoría.
 - **PRELIMINARY ACTOR:** Coach · Subcommittee
 - **SOURCE(S):** PT §3 IN (`Event targets`); PT §10; PT §25 (`event_target_teams`, `event_target_persons`, `event_series_target_teams/persons`); PT §82; S4IR §9 (P1-03 CLOSED); IAR §6 R12
 - **ACCEPTANCE CRITERIA:**
@@ -1495,8 +1495,8 @@ del sistema (patrón PT §79). Ninguno de los dos estados abre una laguna de esp
 - **PRELIMINARY ACTOR:** System
 - **SOURCE(S):** PT §4 (definiciones canónicas de Availability, Selection, Attendance, Eligibility); PT §75 (`Availability != Selection != Attendance != Eligibility`); PT §15 (`Attendance != Match participation`); PT §32 (`No frontend choreography SaveDraft -> Publish to fake atomicity`)
 - **ACCEPTANCE CRITERIA:**
-  - GIVEN una persona que respondió "sí" a la disponibilidad WHEN se consulta la convocatoria THEN no se la reporta como convoctada por esa respuesta.
-  - GIVEN una persona convoctada WHEN se registra su ausencia THEN su disponibilidad previa no se altera.
+- GIVEN una persona que respondió "sí" a la disponibilidad WHEN se consulta la convocatoria THEN no se la reporta como **convocada** por esa respuesta.
+- GIVEN una persona **convocada** WHEN se registra su ausencia THEN su disponibilidad previa no se altera.
   - GIVEN una persona con asistencia presente WHEN se consulta su participación en el partido THEN ese dato proviene del resultado, no de la asistencia.
 - **RELATED BUSINESS RULES:** REQ-PRT-001, REQ-PRT-005, REQ-PRT-009, REQ-PRT-017.
 - **DEPENDENCIES:** REQ-PRT-001, REQ-PRT-005, REQ-PRT-009, REQ-PRT-017

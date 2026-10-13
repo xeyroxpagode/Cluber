@@ -48,7 +48,9 @@ Los 14 procesos funcionales seleccionados para diagramación de actividad, elegi
 | AD-COM-01 | `AD-COM-01__Announcement_Publication.drawio` | Publicación de comunicado con audiencia snapshot | UC-COM-01, UC-COM-02, UC-COM-03, UC-COM-04 | — |
 | AD-CMP-01 | `AD-CMP-01__Competition_Entry_Lifecycle.drawio` | Ciclo de competencia e inscripción (TEAM/LINE) | UC-CMP-01, UC-CMP-02, UC-CMP-03, UC-CMP-04, UC-CMP-05, UC-CMP-06, UC-CMP-07 | UC-IAM-09 (guard) |
 
-**Cobertura:** 45 CUs `DD` (directly diagrammed), 5 CUs `CC` (covered by composite process), 52 CUs `NS` (not selected simple flow), 0 CUs `BA` (blocked by ambiguity). 102/102 evaluados.
+**Cobertura:** 40 CUs `DD` (directly diagrammed), 5 CUs `CC` (covered by composite process), 57 CUs `NS` (not selected simple flow), 0 CUs `BA` (blocked by ambiguity). 102/102 evaluados.
+
+> **Nota (Errata E9.5):** Corrección de conteo según F-04. DD=40 (no 45), CC=5, NS=57 (no 52). Total 40+5+57=102. Clasificaciones resueltas: PPL-11=NS, COM-03/04=DIRECT, PRT-12=NS, IAM-09=CC.
 
 ---
 ## 3. PROCESOS EXCLUIDOS Y JUSTIFICACIÓN

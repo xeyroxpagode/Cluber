@@ -481,10 +481,10 @@ Camino alternativo:
 2.2. Si el actor no tiene alcance sobre el partido, GEI deniega la operación.
 
 TRAZABILIDAD INTERNA GEI
-- Requirements: `REQ-PRT-016` (P) · `REQ-PRT-015` (S) · `DEF-CMP-001` (regla de alcance)
+- Requirements: `REQ-PRT-016` (P) · `REQ-PRT-015` (S)
 - Authority source: `RoleAssignment COACH` / `RoleAssignment CAPTAIN`
 - Scope: `TEAM` / `EVENT`
-- Business rules: sólo `PLAYED`; los partidos jugados se derivan del resultado, nunca de la asistencia; `DEF-CMP-001` — ampliar el set de estadísticas es decisión pendiente, no de V1
+- Business rules: sólo `PLAYED`; los partidos jugados se derivan del resultado, nunca de la asistencia; ampliar el set de estadísticas es decisión pendiente (`DEF-CMP-001`), no de V1
 - Estado / objeto afectado: consulta sin mutación
 - Includes: Ninguno.
 - Extends: Ninguno.

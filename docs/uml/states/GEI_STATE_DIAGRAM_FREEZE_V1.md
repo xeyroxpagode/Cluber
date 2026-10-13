@@ -19,7 +19,7 @@ Este documento es la **autoridad de los diagramas de estados** de GEI a partir d
 | `docs/uml/states/GEI_STATE_RECONSTRUCTION_AUDIT_V1.md` | Auditoría previa obligatoria (proceso, evidencia, hallazgos) |
 | `docs/uml/states/GEI_STATE_CANDIDATE_INVENTORY_V1.md` | Inventario de 29 objetos evaluados con clasificación |
 | `docs/uml/states/GEI_STATE_MODEL_CATALOG_V1.md` | Catálogo canónico de 17 máquinas admitidas |
-| `docs/uml/states/GEI_STATE_TRANSITION_MATRIX_V1.md` | Registro completo de 62 transiciones permitidas + 65 prohibidas |
+| `docs/uml/states/GEI_STATE_TRANSITION_MATRIX_V1.md` | Registro completo de 65 transiciones permitidas + 68 prohibidas |
 | `docs/uml/states/GEI_STATE_TRACEABILITY_MATRIX_V1.md` | Trazabilidad REQ/AC → UC → Máquina → Estado/Transición/Guard |
 | `docs/uml/states/GEI_STATE_DIAGRAM_MANIFEST_V1.md` | Manifest de 17 diagramas Draw.io con validaciones |
 | `docs/uml/states/source/` | **17 archivos `.drawio` fuente autoritativa (editable)** |
@@ -129,7 +129,9 @@ Este documento es la **autoridad de los diagramas de estados** de GEI a partir d
 | `SM-MESSAGE-01` | 3 | 3 |
 | `SM-COMPETITION-01` | 3 | 3 |
 | `SM-COMPETITIONENTRY-01` | 4 | 4 |
-| **TOTAL** | **62** | **65** |
+| **TOTAL** | **65** | **68** |
+
+> **Nota (Errata E9.5):** El total de transiciones permitidas reales es 65 (no 62). TR-036 es una fila de ausencia documentada ("No existe"), no una transición real. Prohibiciones: 68 filas PROH-001..068. La Transition Matrix tiene 66 filas TR = 65 transiciones reales + TR-036 (ausencia).
 
 ---
 

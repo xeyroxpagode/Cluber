@@ -36,16 +36,16 @@
 
 | ID | Origen | Destino | Tipo UML | Nombre/Rol | Mult. Origen | Mult. Destino | Ownership |
 |---|---|---|---|---|---|---|---|
-| R-01 | Account | Person | Association | `account` / `person` | 1 | 1 | Account |
+| R-01 | Account | Person | Association | `account` / `person` | 1 | 0..1 | Account |
 | R-02 | Membership | Person | Association | `memberships` / `person` | 0..* | 1 | Membership |
 | R-03 | TeamAssignment | Person | Association | `teamAssignments` / `person` | 0..* | 1 | TeamAssignment |
 | R-04 | TeamAssignment | Team | Association | `teamAssignments` / `team` | 0..* | 1 | TeamAssignment |
 | R-05 | RoleAssignment | Person | Association | `roleAssignments` / `person` | 0..* | 1 | RoleAssignment |
 | R-06 | RoleAssignment | Team | Association | `roleAssignments` / `team` (scope TEAM/EVENT) | 0..* | 0..1 | RoleAssignment |
-| R-07 | RoleAssignment | Competition | Association | `roleAssignments` / `competition` (scope LINE) | 0..* | 0..1 | RoleAssignment |
+
 | R-08 | GuardianRelationship | Person (guardian) | Association | `guardianRelationships` / `guardianPerson` | 0..* | 1 | GuardianRelationship |
 | R-09 | GuardianRelationship | Person (child) | Association | `guardianRelationships` / `childPerson` | 0..* | 1 | GuardianRelationship |
-| R-10 | Division | Season | Association | `divisions` / `season` | 0..* | 1 | Division |
+
 | R-11 | Line | Division | Association | `lines` / `division` | 0..* | 1 | Line |
 | R-12 | Team | Season | Association | `teams` / `season` | 0..* | 1 | Team |
 | R-13 | Team | Division | Association | `teams` / `division` | 0..* | 1 | Team |
@@ -135,15 +135,15 @@
 | **Invariantes** | Solo para PLAYER (RoleAssignment PLAYER atómico con AssignPlayerToTeam); vigencia temporal; distinta de Membership y RoleAssignment; Coach usa RoleAssignment |
 | **Fuente** | REQ-PPL-005/007, PT §17, UC-PPL-06/07/08 |
 
-### R-05/R-06/R-07: RoleAssignment ↔ Person + Team/Competition (N:M con clase propia)
+### R-05/R-06: RoleAssignment ↔ Person + Team (N:M con clase propia)
 | Campo | Valor |
 |---|---|
 | **Tipo** | Association Class (`RoleAssignment` es clase canónica) |
-| **Navegabilidad** | `RoleAssignment → Person` (sí); `RoleAssignment → Team/Competition` (según scope); `Person → RoleAssignment[*]` (sí) |
+| **Navegabilidad** | `RoleAssignment → Person` (sí); `RoleAssignment → Team` (scope TEAM/EVENT); `Person → RoleAssignment[*]` (sí) |
 | **Mult. Person** | `0..*` (multi-rol = unión de assignments vigentes) |
-| **Mult. Team/Competition** | `0..*` (roles asignados) |
+| **Mult. Team** | `0..*` (roles asignados) |
 | **Ownership** | RoleAssignment |
-| **Invariantes** | 5 roles × scopes válidos (tabla PT §5); combinación inválida → `INVALID_ROLE_SCOPE`; `temporalExclusions` dentro de vigencia; expirada no computa |
+| **Invariantes** | 5 roles × scopes válidos (tabla PT §5: CLUB, TEAM, EVENT); combinación inválida → `INVALID_ROLE_SCOPE`; `temporalExclusions` dentro de vigencia; expirada no computa |
 | **Fuente** | REQ-PPL-006/009/010, PT §5, UC-PPL-09/10 |
 
 ### R-08/R-09: GuardianRelationship ↔ Person (reflexiva N:M con clase propia)
@@ -161,12 +161,11 @@
 
 ## 3.2 ESTRUCTURA DEL CLUB
 
-### R-10/R-11/R-12/R-13/R-14: Season/Division/Line/Team (Jerarquía de identidad)
+### R-11/R-12/R-13/R-14: Division/Line/Team (Jerarquía de identidad)
 | Campo | Valor |
 |---|---|
 | **Tipo** | Association (Composition semántica: Team no existe sin Season+Division+Line) |
 | **Navegabilidad** | `Team → Season/Division/Line` (sí); inversa navegable |
-| **Mult. Season→Division** | `1 — 0..*` |
 | **Mult. Division→Line** | `1 — 0..*` |
 | **Mult. Season→Team** | `1 — 0..*` |
 | **Mult. Division→Team** | `1 — 0..*` |
@@ -579,7 +578,7 @@
 
 | Tipo UML | Cantidad | Notas |
 |---|---|---|
-| **Association** | 28 | Estructurales bidireccionales/unidireccionales |
+| **Association** | 26 | Estructurales bidireccionales/unidireccionales |
 | **Composition** | 8 | Ownership fuerte: Event◆Logistics, Event◆Match, Selection◆Revision, Revision◆Entry, Sheet◆Entry, MatchRecord◆Stats, Series◆Override, Conversation◆Message |
 | **Aggregation** | 0 | No hay agregaciones puras en dominio deportivo (todo es Composition o Association) |
 | **Generalization** | 0 | **No hay herencia UML en dominio deportivo** (Training/Match/ClubEvent = discriminación por tipo; Conversation types = enum) |
@@ -587,7 +586,7 @@
 | **Association Class** | 10 | EventTargetTeam/Person, EventSeriesTargetTeam/Person, AnnouncementTargetTeam, ConversationParticipant, JornadaMatch, GuardianRelationship (reflexiva), TeamAssignment, RoleAssignment, CompetitionEntry (scope) |
 | **Reflexive Association** | 1 | GuardianRelationship (Person ↔ Person) |
 
-**Total relaciones documentadas: 59**
+**Total relaciones documentadas: 57**
 
 ---
 

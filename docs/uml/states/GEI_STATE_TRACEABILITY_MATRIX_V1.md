@@ -186,7 +186,7 @@ Cada CU se clasifica: `STATE_TRANSITION` (modifica lifecycle), `STATE_GUARD_ONLY
 
 | Transición | Máquina | Estado Origen → Destino | Estado | Comentario |
 |---|---|---|---|---|
-| *(ninguna)* | — | — | **OK** | Todas las 62 transiciones permitidas tienen REQ/AC/UC de respaldo |
+| *(ninguna)* | — | — | **OK** | Todas las 65 transiciones permitidas reales tienen REQ/AC/UC de respaldo (TR-036 es fila de ausencia, no transición) |
 
 ---
 

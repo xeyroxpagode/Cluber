@@ -523,6 +523,8 @@ tiene fuente y motivo.
 | Búsqueda, informes y auditoría | INS | `REQ-INS-001` … `REQ-INS-012` | 10 |
 | Transversal | SYS | `REQ-SYS-001` … `REQ-SYS-027` | 29 |
 | **Total IN** | | | **157** |
+
+> **Nota (Errata E9.5 / F-09):** Los rangos nominales INS (001–012 = 12) y SYS (001–027 = 27) difieren de los conteos reales (INS=10, SYS=29) porque REQ-INS-010/012 tienen `DOMAIN: SYS` en su bloque pero prefijo INS. El total 157 cuadra por ambas vías.
 | Pospuestos | — | `DEF-*` (14) | 14 |
 | Fuera de V1 | — | `OUT-*` (26) | 26 |
 | Decisiones abiertas | — | `REQ-DECISION-NEEDED-01/02` | 2 |

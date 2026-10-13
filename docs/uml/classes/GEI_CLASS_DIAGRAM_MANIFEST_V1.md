@@ -110,9 +110,8 @@
 **Clases referencia:**
 - `Person` (ref, PK + nombre)
 - `Team` (ref, PK + nombre derivado)
-- `Competition` (ref, PK + nombre) — solo para RoleAssignment scope LINE
 - `RoleType` **<<enumeration>>**
-- `ScopeType` **<<enumeration>>**
+- `ScopeType` **<<enumeration>>** (CLUB, TEAM, EVENT)
 - `RelationshipType` **<<enumeration>>**
 
 **Relaciones clave:**
@@ -120,7 +119,6 @@
 - TeamAssignment `0..*` — `1` Team (R-04)
 - RoleAssignment `0..*` — `1` Person (R-05)
 - RoleAssignment `0..*` — `0..1` Team (scope TEAM/EVENT) (R-06)
-- RoleAssignment `0..*` — `0..1` Competition (scope LINE) (R-07)
 - GuardianRelationship `0..*` — `1` Person (guardian) (R-08)
 - GuardianRelationship `0..*` — `1` Person (child) (R-09) **reflexiva**
 
@@ -137,7 +135,6 @@
 - `StructureArchivedStatus` **<<enumeration>>**
 
 **Relaciones clave:**
-- Division `0..*` — `1` Season (R-10)
 - Line `0..*` — `1` Division (R-11)
 - Team `0..*` — `1` Season (R-12) **identidad**
 - Team `0..*` — `1` Division (R-13) **identidad**

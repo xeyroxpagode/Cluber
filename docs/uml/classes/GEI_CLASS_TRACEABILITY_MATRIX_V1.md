@@ -23,7 +23,7 @@ No permitir conceptos funcionales huérfanos.
 
 # 2. TRAZABILIDAD REQ → UC → CLASE (MUESTRA REPRESENTATIVA)
 
-> **Nota:** Matriz completa 157 REQ × 102 CU × 37 clases en archivo adjunto `GEI_CLASS_TRACEABILITY_FULL_V1.csv`. Aquí muestra representativa por dominio.
+> **Nota (Errata E9.5):** La matriz completa 157 REQ × 102 CU × 37 clases está suplantada formalmente por el ledger E9 `GEI_TRACEABILITY_LEDGER_V1.csv` (3.929 relaciones verificadas). El archivo `GEI_CLASS_TRACEABILITY_FULL_V1.csv` referenciado originalmente no existe en el repositorio.
 
 ## 2.1 IAM — IDENTITY & ACCESS
 

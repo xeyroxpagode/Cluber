@@ -31,13 +31,15 @@
 ## 2. RESUMEN EJECUTIVO
 
 - **14 diagramas de actividad** generados sobre 102 CUs evaluados.
-- **45 CUs DIRECTLY_DIAGRAMMED** (DD): cada uno tiene un diagrama propio.
+- **40 CUs DIRECTLY_DIAGRAMMED** (DD): cada uno tiene un diagrama propio.
 - **5 CUs COVERED_BY_COMPOSITE_PROCESS** (CC): trazados dentro de procesos compuestos.
-- **52 CUs NOT_SELECTED_SIMPLE_FLOW** (NS): flujos lineales sin diagrama propio.
+- **57 CUs NOT_SELECTED_SIMPLE_FLOW** (NS): flujos lineales sin diagrama propio.
 - **0 CUs BLOCKED_BY_AMBIGUITY** (BA): sin hallazgos bloqueantes.
 - **100%** de los diagramas .drawio generados y válidos XML.
 - **100%** de los diagramas Aprobaron QA visual.
 - **Gate PASS**: E7 cerrado, condiciones para E8 cumplidas.
+
+> **Nota (Errata E9.5):** Corrección de conteo según F-04. DD=40 (no 45), CC=5, NS=57 (no 52). Total 40+5+57=102. Clasificaciones resueltas: PPL-11=NS, COM-03/04=DIRECT, PRT-12=NS, IAM-09=CC.
 
 ---
 ## 3. DIAGRAMAS POR DOMINIO

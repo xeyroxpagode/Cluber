@@ -378,7 +378,9 @@ Registro completo y exhaustivo de todas las transiciones permitidas y prohibidas
 | `SM-MESSAGE-01` | 3 | 3 |
 | `SM-COMPETITION-01` | 3 | 3 |
 | `SM-COMPETITIONENTRY-01` | 4 | 4 |
-| **TOTAL** | **62** | **65** |
+| **TOTAL** | **65** | **68** |
+
+> **Nota (Errata E9.5):** Total transiciones permitidas reales = 65. TR-036 es fila de ausencia documentada. Prohibiciones = 68.
 
 ---
 
