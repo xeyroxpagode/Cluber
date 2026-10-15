@@ -1,0 +1,1594 @@
+{
+  "version": "1.1",
+  "counts": {
+    "total_historical": 158,
+    "KEEP": 116,
+    "KEEP_EDIT": 22,
+    "MOVED_TO_TECH": 8,
+    "SUPERSEDED": 0,
+    "DEFER": 2,
+    "OUT": 10,
+    "active": 138
+  },
+  "requirements": [
+    {
+      "id": "REQ-IAM-001",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Permitir login con Person.email y contraseña para toda cuenta ACTIVE.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-001 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-002",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Controlar el acceso al club y poder suspenderlo sin borrar información.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-002 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-003",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Verificar por email y activar por primera vez una cuenta sin intervención administrativa sobre la credencial.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-003 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-004",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Recuperar y restablecer la contraseña mediante email verificado.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-004 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-005",
+      "type": "functional",
+      "category": "SECURITY",
+      "goal": "Permitir rotar la credencial sin intervención administrativa.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-005 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-006",
+      "type": "nonfunctional",
+      "category": "SECURITY",
+      "goal": "Que un token capturado en el navegador no sirva para actuar en el sistema.",
+      "nfr_destination": null,
+      "disposition": "MOVED_TO_TECH",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-006 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-007",
+      "type": "nonfunctional",
+      "category": "SECURITY",
+      "goal": "Impedir que un tercero haga actuar al usuario con su sesión.",
+      "nfr_destination": null,
+      "disposition": "MOVED_TO_TECH",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-007 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-008",
+      "type": "nonfunctional",
+      "category": "SECURITY",
+      "goal": "Que las sesiones unattended no queden abiertas indefinidamente.",
+      "nfr_destination": null,
+      "disposition": "MOVED_TO_TECH",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-008 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-009",
+      "type": "functional",
+      "category": "SECURITY",
+      "goal": "Que una sesión dejada abierta no habilite por sí sola operaciones destructivas o de alto impacto.",
+      "nfr_destination": null,
+      "disposition": "MOVED_TO_TECH",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-009 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-010",
+      "type": "functional",
+      "category": "SECURITY",
+      "goal": "Gestionar la sesión propia y cerrar la sesión actual.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-010 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-011",
+      "type": "nonfunctional",
+      "category": "RELIABILITY",
+      "goal": "Que cerrar sesión en una pestaña cierre también el acceso de las demás.",
+      "nfr_destination": null,
+      "disposition": "MOVED_TO_TECH",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-011 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-012",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Autorizar exclusivamente mediante roles y scopes vigentes, sin delegación Guardian.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-012 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-013",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Impedir que el club quede sin nadie que pueda administrar cuentas, estructura y accesos.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-013 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-014",
+      "type": "functional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Mantener username único, estable y case-insensitive como identidad de perfil, nunca como credencial.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-014 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-015",
+      "type": "nonfunctional",
+      "category": "SECURITY",
+      "goal": "Permitir contraseñas fuertes yTlanas de usar sin reglas arbitrarias.",
+      "nfr_destination": null,
+      "disposition": "MOVED_TO_TECH",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-015 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-016",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Autorizar cada acción con rol y alcance vigentes; toda ausencia de permiso resulta en DENY.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-016 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-017",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Que la interfaz no ofrezca ni calle acciones por su cuenta y que dos superficies no discrepen.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-017 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-018",
+      "type": "nonfunctional",
+      "category": "AUTHORIZATION",
+      "goal": "Evitar que el control de acceso se desincronice entre superficies.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-018 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-019",
+      "type": "nonfunctional",
+      "category": "SECURITY",
+      "goal": "Frenar ataques de fuerza bruta y abuso sin confiar en una instancia única.",
+      "nfr_destination": null,
+      "disposition": "MOVED_TO_TECH",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-019 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-IAM-020",
+      "type": "functional",
+      "category": "RELIABILITY",
+      "goal": "Que un corte de sesión no cause pérdida de datos ni un falso éxito.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-IAM-020 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-001",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Identificar a las personas del club sin exigir de más en el alta.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-001 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-002",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que el club no NTTenga jugadoras sin datos de contacto o identificación necessários para operar.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-002 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-003",
+      "type": "functional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Mantener Account 1:1 con Person; Person.email es el único email y login identifier.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-003 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-004",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Distinguir \"es del club\" de \"está en este equipo\", que son cosas distintas.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-004 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-005",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Poder responder \"¿a qué equipo/azzona juega?\" sin inferirlo de un rol.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-005 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-006",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Que la autoridad de una persona sea la unión de sus asignaciones vigentes y no un único campo.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-006 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-007",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que una jugadora nunca quede con afiliacion sin rol ni con rol sin afiliacion al cambiar de equipo.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-007 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-008",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que un adulto responsable pueda cumplir la gestión del menor sin convertirse en un rol deportivo.",
+      "nfr_destination": null,
+      "disposition": "OUT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-008 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-009",
+      "type": "functional",
+      "category": "PII",
+      "goal": "Que la delegación sirva para operar sin abrir PII sensible del menor.",
+      "nfr_destination": null,
+      "disposition": "OUT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-009 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-010",
+      "type": "functional",
+      "category": "PII",
+      "goal": "Que el menor conozca quién actúa en su nombre.",
+      "nfr_destination": null,
+      "disposition": "OUT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-010 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-011",
+      "type": "functional",
+      "category": "PII",
+      "goal": "Que ningún dato sensible se exponga por pertenencia a un grupo.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-011 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-012",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Que \"tutor\" no se convierta de hecho en un séptimo rol.",
+      "nfr_destination": null,
+      "disposition": "OUT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-012 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-013",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que la jugadera no quede bloqueada sin salida y sin saber qué hacer.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-013 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-014",
+      "type": "functional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que el mismo equipo no cambie de nombre bajo los pies de la historia ya registrada.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-014 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-015",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Que \"eliminar jugadora\" no sea una operación que borre el pasado del club.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-015 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PPL-016",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que cada persona comprenda qué puede hacer, con qué cuenta entra y a quién mira.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PPL-016 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-STR-001",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Que la organización del club por temporada quede registrada y sea consultable en el futuro.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-STR-001 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-STR-002",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Que las divisiones del club (Primera, Quinta, Sexta…) sean estructura administrable.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-STR-002 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-STR-003",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Que las líneas deportivas (A/B/C/Proyección) sean estructura administrable.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-STR-003 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-STR-004",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Que la unidad sports defiliación y de eventos sea una entidad concreta y única por temporada.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-STR-004 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-STR-005",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que los lugares donde se juega existan como datos reutilizables y no como texto libre.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-STR-005 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-STR-006",
+      "type": "functional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que archivar no deje referencias colgando que rompan la historia.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-STR-006 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-STR-007",
+      "type": "functional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que un horario de entrenamiento no se desplace por la zona horaria del servidor o del dispositivo.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-STR-007 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-STR-008",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que la gestión de estructura sea una capacidad real y no una tarea que sólo el personal técnico puede hacer.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-STR-008 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-STR-009",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Que la separación entre Subcomisión y Administración sea explícita y comprensible.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-STR-009 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-STR-010",
+      "type": "functional",
+      "category": "USABILITY",
+      "goal": "Que \"Línea A\" no sea ambiguo entre divisiones ni entre temporadas.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-STR-010 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-STR-011",
+      "type": "functional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que renombrar una sede o una línea noreatribuya silenciosamente la historia de eventos y personas ajenas.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-STR-011 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-STR-012",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que corregir un nombre no genere reprogramaciones ni avisos, y que cambiar la sede de un partido si lo haga.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-STR-012 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-STR-013",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que la estructura de referencia se pueda elegir sin memorizar nombres.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-STR-013 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-001",
+      "type": "functional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que ningún evento sea una fecha incoherente.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-001 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-002",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que el club pueda convocar entrenamientos.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-002 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-003",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que el club pueda registrar su calendario de partidos.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-003 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-004",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que el club puedaJd convocar a actividades que no son entrenar ni jugar (reuniones,.tasks, eventos de organización).",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-004 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-005",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que un unwelcome evento para varias categorías no requiera crear un evento por categoría.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-005 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-006",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que un partido no cambie de equipo una vez programado, para no invalidar lo ya registrado.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-006 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-007",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Que el estado de un evento sea siempre derivable y no ambiguo.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-007 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-008",
+      "type": "functional",
+      "category": "USABILITY",
+      "goal": "Que un evento cancelado no se vea igual que uno vivo ni ofrezca acciones que ya no tienen sentido.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-008 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-009",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Que la programación de un evento sea una decisión única y coherente.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-009 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-010",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que una corrección de redacción no obligue a reconfirmar a todo el equipo.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-010 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-011",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que el sistema sepa qué cambios obligan a volver a coordinar a la gente.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-011 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-012",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que nadie coordine a un equipo a ciegas.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-012 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-013",
+      "type": "functional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que dos personas que editan lo mismo no pierdan trabajo ni se pisen sin avisar.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-013 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-014",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que las series de eventos (entrenamientos semanales, liga) sean una entidad y no una suposición.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-014 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-015",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que cambiar un entrenamiento de la semana no modifique toda la temporada por accidente.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-015 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-016",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que las series tengan un cierre explícito y un límite de protección.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-016 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-017",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que la participación en un evento se resuelva desde el propio evento.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-017 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-018",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que el club pueda programar una jornada con varios partidos de una sola vez.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-018 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-019",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que la logística de una salida a partido no viva en mensajes sueltos.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-019 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-020",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que el calendario sea consultable y compartible sin perderse el contexto.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-020 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-021",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que la primera pantalla del producto responda \"¿qué tengo que hacer?\".",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-021 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-022",
+      "type": "functional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que la persona no reciba dos verdades sobre el mismo evento.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-022 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-023",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que el evento sea la unidad de consulta del producto.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-023 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-EVT-024",
+      "type": "functional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Vincular Jornada y sus Matches directamente con Competition opcional preservando coherencia de Season.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-EVT-024 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-001",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Permitir que cada Player responda su propia Availability.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-001 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-002",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Que la disponibilidad de las menores no dependa de que la menor tenga cuenta propia.",
+      "nfr_destination": null,
+      "disposition": "OUT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-002 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-003",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Distinguir \"no han contestado\" de \"contestaron antes de que cambiara todo\".",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-003 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-004",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que no se pida a la gente confirmar disponibilidad de algo que no tiene fecha.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-004 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-005",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Que la lista de convocadas sea un hecho consumable y auditable.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-005 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-006",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que la decision de publicar sea del entrenador informado, no un bloqueo automatico del sistema.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-006 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-007",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que el entrenador sepa, sin relectura manual, qué de lo publicado ya no coincide con la realidad.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-007 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-008",
+      "type": "functional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que una convocatoria larga no se pierda por un corte o un refresco.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-008 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-009",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que quede registrado quién estuvo realmente.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-009 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-010",
+      "type": "functional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que el informe de asistencia no invente ausencias.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-010 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-011",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Que quede constancia de cuándo los datos de presencia quedaron cerrados.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-011 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-012",
+      "type": "functional",
+      "category": "HISTORY_AUDIT",
+      "goal": "Que un error de registro se pueda arreglar sin perder la traza del error.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-012 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-013",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Que el resultado oficial de un partido quede registrado como tal.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-013 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-014",
+      "type": "functional",
+      "category": "HISTORY_AUDIT",
+      "goal": "Que un resultado corregido no borre el resultado que se publicó.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-014 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-015",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que el resultado y el evento no puedan contar historias distintas.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-015 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-016",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que el rendimiento se mida sobre participación real registrada.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-016 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-017",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que la condición de poder jugar sea un dato administrable con su fundamento, no una etiqueta.",
+      "nfr_destination": null,
+      "disposition": "OUT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-017 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-018",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que \"noví\" en tres sitios no se mezcle con un solo dato mal interpretado.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-018 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-PRT-019",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que no se ofrezca participación que no aplica al tipo de evento.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-PRT-019 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-001",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Que el canal oficial del club tenga un estado inequívoco y una única autoridad.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-001 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-002",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que un comunicado para una división no se lea como si fuera para todo el club.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-002 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-003",
+      "type": "functional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que la responsabilidad de \"lo vi\" quede definida en el momento de la publicación.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-003 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-004",
+      "type": "functional",
+      "category": "HISTORY_AUDIT",
+      "goal": "Que un error en un comunicado oficial se pueda corregir sin romper la verdad de quién lo recibió.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-004 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-005",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Que la audiencia del comunicado sea un control de acceso y no una etiqueta decorativa.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-005 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-006",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que la conversación directa sea única y no se fragmente en hilos paralelos.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-006 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-007",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que existan conversaciones que no dependan de un equipo o un evento.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-007 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-008",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que la conversación de un equipo o de un partido sea siempre la misma y no se confunda con otra.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-008 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-009",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que la conversación sea el canal de coordinación diaria del club.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-009 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-010",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Que rectificar un mensaje no destruya la conversación ni su historia.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-010 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-011",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Que la conversación privada tenga límites temporales verificables.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-011 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-012",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Que \"tener el rol\" no equivalga a \"poder leer todo lo que se escribe\".",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-012 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-013",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que crear una conversación no produzca combinaciones imposibles ni una lista arbitraria.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-013 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-014",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que el aviso que recibe una persona diga qué pasó.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-014 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-015",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que nadie se entere de su convocación por ausencia.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-015 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-016",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que un cambio de destinatarios no deje sin avisar a quien debía enterarse.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-016 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-017",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que el canal de avisos siga siendo útil y no se llene de ruido.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-017 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-COM-018",
+      "type": "functional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que la lista de avisos sea una lista, no un registro duplicado ni una trampa de navegación.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-COM-018 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-CMP-001",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Registrar, editar, archivar y consultar Competition como contexto deportivo simple.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-CMP-001 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-CMP-002",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Permitir archivo explícito de Competition sin un lifecycle dedicado.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-CMP-002 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-CMP-003",
+      "type": "functional",
+      "category": "LIFECYCLE",
+      "goal": "Que la participación en una competencia tenga un registro propio y con ciclo de vida.",
+      "nfr_destination": null,
+      "disposition": "OUT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-CMP-003 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-CMP-004",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que \"inscrito\" sea una afirmación precisa y no ambigua.",
+      "nfr_destination": null,
+      "disposition": "OUT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-CMP-004 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-CMP-005",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que los resultados de un partido sean comparables dentro de la competencia que corresponde.",
+      "nfr_destination": null,
+      "disposition": "OUT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-CMP-005 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-CMP-006",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que el dato federativo oficial quede registrado sin construir una integración.",
+      "nfr_destination": null,
+      "disposition": "DEFER",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-CMP-006 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-CMP-007",
+      "type": "functional",
+      "category": "BUSINESS_RULE",
+      "goal": "Que el club no confunda el dato que GEI registra con el dato que la federación define.",
+      "nfr_destination": null,
+      "disposition": "DEFER",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-CMP-007 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-CMP-008",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Que una restricción tenga el alcance correcto y no se difunda más de lo necesario.",
+      "nfr_destination": null,
+      "disposition": "OUT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-CMP-008 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-INS-001",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que el club encuentre una persona o un evento sin navegar la jerarquía.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-INS-001 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-INS-002",
+      "type": "functional",
+      "category": "PII",
+      "goal": "Que buscar no se convierta en una vía para ver PII.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-INS-002 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-INS-003",
+      "type": "functional",
+      "category": "USABILITY",
+      "goal": "Que una búsqueda se pueda compartir y no se pierda al navegar.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-INS-003 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-INS-004",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que el club pueda ver la asistencia real sin recalcularla a mano.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-INS-004 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-INS-005",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que el rendimiento se mida sobre lo registrado y sea trazable al partido.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-INS-005 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-INS-006",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Que un informe no muestre más de lo que el actor puede ver ni una período no solicitada.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-INS-006 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-INS-007",
+      "type": "functional",
+      "category": "USABILITY",
+      "goal": "Que un informe sea el comienzo de una decisión y no un callejón.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-INS-007 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-INS-008",
+      "type": "functional",
+      "category": "CAPABILITY",
+      "goal": "Que el club pueda reconstruir quién cambió qué.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-INS-008 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-INS-009",
+      "type": "functional",
+      "category": "HISTORY_AUDIT",
+      "goal": "Que el registro de cambios sirva para comprender y no sólo para contar.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-INS-009 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-INS-010",
+      "type": "nonfunctional",
+      "category": "HISTORY_AUDIT",
+      "goal": "Que el registro sea creíble precisamente porque no se puede arreglar.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-INS-010 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-INS-011",
+      "type": "functional",
+      "category": "HISTORY_AUDIT",
+      "goal": "Que la historia exista para quien la necesita y no sólo en la base de datos.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-INS-011 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-INS-012",
+      "type": "nonfunctional",
+      "category": "HISTORY_AUDIT",
+      "goal": "Que la historia sea un hecho derivado y no un almacén paralelo que puede divergir.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-INS-012 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-001",
+      "type": "nonfunctional",
+      "category": "RESPONSIVE",
+      "goal": "Que se pueda usar el producto en la cancha, con una mano, sin perder información.",
+      "nfr_destination": "Evidencia de implementacion (catalogo 0.6/1.6, PT 78: solo la implementacion puede demostrar el criterio)",
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-001 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-002",
+      "type": "nonfunctional",
+      "category": "ACCESSIBILITY",
+      "goal": "Que registrar la asistencia de una persona no dependa de acertar un botón de 36 px.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-002 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-003",
+      "type": "nonfunctional",
+      "category": "ACCESSIBILITY",
+      "goal": "Que el producto sea operable sin ratón y comprensible con lector de pantalla.",
+      "nfr_destination": "Evidencia de implementacion (catalogo 0.6/1.6, PT 78: solo la implementacion puede demostrar el criterio)",
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-003 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-004",
+      "type": "nonfunctional",
+      "category": "ACCESSIBILITY",
+      "goal": "Que la animación informe y no moleste.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-004 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-005",
+      "type": "nonfunctional",
+      "category": "ACCESSIBILITY",
+      "goal": "Que el estado de un evento, una respuesta o una habilitación no dependa de la percepción del color.",
+      "nfr_destination": null,
+      "disposition": "KEEP_EDIT",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-005 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-006",
+      "type": "nonfunctional",
+      "category": "USABILITY",
+      "goal": "Que una jugadora nueva entienda el producto sin aprender el modelo.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-006 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-007",
+      "type": "nonfunctional",
+      "category": "USABILITY",
+      "goal": "Que el usuario sepa qué hacer sin leer todas las opciones.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-007 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-008",
+      "type": "nonfunctional",
+      "category": "USABILITY",
+      "goal": "Que la pantalla no presente todo con el mismo peso.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-008 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-009",
+      "type": "nonfunctional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que el club nunca confíe en un \"listo\" que no ocurrió.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-009 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-010",
+      "type": "nonfunctional",
+      "category": "USABILITY",
+      "goal": "Que un error de validación no cueste el trabajo hecho.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-010 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-011",
+      "type": "nonfunctional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que \"0 %\" nunca signifique \"no hay dato\".",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-011 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-012",
+      "type": "functional",
+      "category": "AUTHORIZATION",
+      "goal": "Que la interfaz diga la verdad sobre lo que se puede y lo que no se puede hacer, y por qué.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-012 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-013",
+      "type": "nonfunctional",
+      "category": "USABILITY",
+      "goal": "Que el producto sea navegable y compartible.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-013 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-014",
+      "type": "nonfunctional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que la persona nunca reciba dos versiones del mismo hecho.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-014 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-015",
+      "type": "nonfunctional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que la interfaz diga siempre la verdad sobre el estado del club.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-015 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-016",
+      "type": "nonfunctional",
+      "category": "RELIABILITY",
+      "goal": "Que un corte de red no produzca dos avisos ni una doble convocatoria.",
+      "nfr_destination": null,
+      "disposition": "MOVED_TO_TECH",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-016 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-017",
+      "type": "nonfunctional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que dos personas no se pisen sin avisarse.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-017 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-018",
+      "type": "nonfunctional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que no existan estados intermedios que el usuario pueda observar como definitivos.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-018 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-019",
+      "type": "nonfunctional",
+      "category": "DATA_INTEGRITY",
+      "goal": "Que no existan dos verdades para el mismo hecho.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-019 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-020",
+      "type": "nonfunctional",
+      "category": "SECURITY",
+      "goal": "Que un registro técnico no se convierta en una segunda copia de la PII.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-020 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-021",
+      "type": "nonfunctional",
+      "category": "SECURITY",
+      "goal": "Que el producto sirva sin exponer datos.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-021 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-022",
+      "type": "nonfunctional",
+      "category": "OPERATIONAL",
+      "goal": "Que el club no pierda la operación de la temporada por una falla.",
+      "nfr_destination": "Evidencia de implementacion (catalogo 0.6/1.6, PT 78: solo la implementacion puede demostrar el criterio)",
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-022 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-023",
+      "type": "nonfunctional",
+      "category": "PERFORMANCE",
+      "goal": "Que el club no espere para ver la asistencia de un equipo.",
+      "nfr_destination": "Evidencia de implementacion (catalogo 0.6/1.6, PT 78: solo la implementacion puede demostrar el criterio)",
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-023 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-024",
+      "type": "nonfunctional",
+      "category": "PERFORMANCE",
+      "goal": "Que un aviso de reprogramación llegue antes de que la jugadora salga de casa.",
+      "nfr_destination": "Evidencia de implementacion (catalogo 0.6/1.6, PT 78: solo la implementacion puede demostrar el criterio)",
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-024 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-025",
+      "type": "nonfunctional",
+      "category": "RELIABILITY",
+      "goal": "Que un fallo en el envío de una notificación no pueda deshacer un cambio confirmado ni hacerlo perder.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-025 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-026",
+      "type": "nonfunctional",
+      "category": "RELIABILITY",
+      "goal": "Que actualizar el sistema no rompa la operación del club.",
+      "nfr_destination": null,
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-026 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-027",
+      "type": "nonfunctional",
+      "category": "PROJECT_CONSTRAINT",
+      "goal": "Que la conformidad legal no se confunda con haber cerrado los controles técnicos.",
+      "nfr_destination": "Decision externa de organizacion / cumplimiento legal fuera del sistema (catalogo 0.6/1.6, PT 79)",
+      "disposition": "KEEP",
+      "source": "GEI Product Truth V1.1",
+      "acceptance_criteria": "La conducta descrita por REQ-SYS-027 se verifica sin depender de Guardian, Eligibility ni CompetitionEntry y respeta la autoridad V1.1."
+    },
+    {
+      "id": "REQ-SYS-028",
+      "type": "nonfunctional",
+      "category": "COMPATIBILITY",
+      "goal": "Operar en versiones soportadas de Google Chrome, Microsoft Edge y Mozilla Firefox.",
+      "disposition": "KEEP",
+      "source": "TP8 RNF09",
+      "acceptance_criteria": "Los flujos V1.1 pasan la matriz de compatibilidad en Chrome, Edge y Firefox."
+    }
+  ]
+}
