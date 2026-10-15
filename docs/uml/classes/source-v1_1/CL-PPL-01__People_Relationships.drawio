@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="GEI-V1.1" modified="2026-10-14T00:00:00.000Z" agent="GEI-v1.1-scope-reconciliation" version="24.7.17" type="device">
+  <diagram id="CL-PPL-01" name="CL-PPL-01"><mxGraphModel page="1" pageWidth="1169" pageHeight="827"><root>
+    <mxCell id="0"/><mxCell id="1" parent="0"/>
+    <mxCell id="title" value="People and Relationships V1.1" style="text;html=1;align=center;fontSize=18;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="190" y="30" width="790" height="40" as="geometry"/></mxCell>
+    <mxCell id="contract" value="Person 1 — 0..1 Account&#xA;Person 1 — 0..* Membership&#xA;Person 1 — 0..* TeamAssignment — 1 Team&#xA;Person 1 — 0..* RoleAssignment&#xA;RoleAssignment uses PLAYER, CAPTAIN, COACH, SUBCOMMITTEE or ADMIN with valid scope&#xA;Person.email is canonical login email; Account has no email&#xA;username is unique stable profile data and is not a credential" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=16;fontSize=13;fillColor=#FFFFFF;strokeColor=#263238;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="190" y="100" width="790" height="610" as="geometry"/></mxCell>
+  </root></mxGraphModel></diagram>
+</mxfile>

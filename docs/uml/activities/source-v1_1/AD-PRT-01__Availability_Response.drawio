@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="GEI-V1.1" modified="2026-10-14T00:00:00.000Z" agent="GEI-v1.1-scope-reconciliation" version="24.7.17" type="device">
+  <diagram id="AD-PRT-01" name="AD-PRT-01"><mxGraphModel page="1" pageWidth="1169" pageHeight="827"><root>
+    <mxCell id="0"/><mxCell id="1" parent="0"/>
+    <mxCell id="title" value="Own Availability Response V1.1" style="text;html=1;align=center;fontSize=18;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="190" y="30" width="790" height="40" as="geometry"/></mxCell>
+    <mxCell id="contract" value="Player opens an applicable scheduled event&#xA;System resolves the Player Person from the authenticated Account&#xA;Player selects YES, MAYBE or NO for herself&#xA;Server evaluates role/scope authority with default DENY&#xA;System stores one response for eventId plus playerPersonId&#xA;Material event change may derive NEEDS_RECONFIRMATION" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=16;fontSize=13;fillColor=#FFFFFF;strokeColor=#263238;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="190" y="100" width="790" height="610" as="geometry"/></mxCell>
+  </root></mxGraphModel></diagram>
+</mxfile>

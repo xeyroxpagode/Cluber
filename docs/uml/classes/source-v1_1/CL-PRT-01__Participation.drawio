@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="GEI-V1.1" modified="2026-10-14T00:00:00.000Z" agent="GEI-v1.1-scope-reconciliation" version="24.7.17" type="device">
+  <diagram id="CL-PRT-01" name="CL-PRT-01"><mxGraphModel page="1" pageWidth="1169" pageHeight="827"><root>
+    <mxCell id="0"/><mxCell id="1" parent="0"/>
+    <mxCell id="title" value="Participation V1.1" style="text;html=1;align=center;fontSize=18;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="190" y="30" width="790" height="40" as="geometry"/></mxCell>
+    <mxCell id="contract" value="Player 1 — 0..* Availability; the Player answers only her own response&#xA;Match 1 — 1 Selection — 1..* SelectionRevision — 0..* SelectionEntry&#xA;Published SelectionRevision is immutable; republication creates a new revision&#xA;Surviving conflicts: NO_LONGER_EVENT_TARGET and NO_LONGER_TEAM_AFFILIATED&#xA;Event 1 — 0..1 AttendanceSheet — 0..* AttendanceEntry&#xA;Match 1 — 0..1 MatchRecord — 0..* PlayerMatchStats" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=16;fontSize=13;fillColor=#FFFFFF;strokeColor=#263238;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="190" y="100" width="790" height="610" as="geometry"/></mxCell>
+  </root></mxGraphModel></diagram>
+</mxfile>
