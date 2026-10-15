@@ -1,0 +1,161 @@
+{
+  "version": "1.1",
+  "counts": {
+    "diagrams": 13
+  },
+  "diagrams": [
+    {
+      "id": "AD-IAM-01",
+      "name": "Iniciar sesión",
+      "file": "AD-IAM-01__Login.drawio",
+      "ucs_direct": [
+        "UC-IAM-01"
+      ],
+      "ucs_composite": []
+    },
+    {
+      "id": "AD-IAM-02",
+      "name": "Verificación de cuenta mediante email",
+      "file": "AD-IAM-02__Account_Activation.drawio",
+      "ucs_direct": [
+        "UC-IAM-03",
+        "UC-IAM-04"
+      ],
+      "ucs_composite": [
+        "UC-IAM-05 (cola de emisión/consumo compartida)",
+        "UC-IAM-09 (guard)"
+      ]
+    },
+    {
+      "id": "AD-PPL-01",
+      "name": "Alta de persona, vinculación de cuenta y membresía",
+      "file": "AD-PPL-01__Person_Account_Membership_Onboarding.drawio",
+      "ucs_direct": [
+        "UC-PPL-01",
+        "UC-PPL-03",
+        "UC-PPL-04"
+      ],
+      "ucs_composite": [
+        "UC-IAM-09 (guard)"
+      ]
+    },
+    {
+      "id": "AD-PPL-02",
+      "name": "Incorporación, cambio y retiro de jugadora de equipo",
+      "file": "AD-PPL-02__Player_Team_Assignment_Lifecycle.drawio",
+      "ucs_direct": [
+        "UC-PPL-06",
+        "UC-PPL-07",
+        "UC-PPL-08"
+      ],
+      "ucs_composite": [
+        "UC-PPL-02 (rechazo PLAYER_PROFILE_INCOMPLETE, SIBLING)",
+        "UC-IAM-09 (guard)"
+      ]
+    },
+    {
+      "id": "AD-EVT-01",
+      "name": "Cambio material de evento (impacto, serie, concurrencia)",
+      "file": "AD-EVT-01__Material_Event_Change.drawio",
+      "ucs_direct": [
+        "UC-EVT-04",
+        "UC-EVT-11",
+        "UC-EVT-12"
+      ],
+      "ucs_composite": [
+        "UC-EVT-16 (rama material; swimlane incluye a la Capitana)"
+      ]
+    },
+    {
+      "id": "AD-EVT-02",
+      "name": "Creación de evento por tipo (entrenamiento / partido / club)",
+      "file": "AD-EVT-02__Event_Creation.drawio",
+      "ucs_direct": [
+        "UC-EVT-01",
+        "UC-EVT-02",
+        "UC-EVT-03"
+      ],
+      "ucs_composite": []
+    },
+    {
+      "id": "AD-EVT-03",
+      "name": "Posponer, reanudar, cancelar y restaurar evento",
+      "file": "AD-EVT-03__Event_Lifecycle_Operations.drawio",
+      "ucs_direct": [
+        "UC-EVT-05",
+        "UC-EVT-06",
+        "UC-EVT-07",
+        "UC-EVT-08"
+      ],
+      "ucs_composite": []
+    },
+    {
+      "id": "AD-EVT-04",
+      "name": "Programación de jornada (operación masiva atómica ≤100)",
+      "file": "AD-EVT-04__Jornada_Bulk_Scheduling.drawio",
+      "ucs_direct": [
+        "UC-EVT-15"
+      ],
+      "ucs_composite": []
+    },
+    {
+      "id": "AD-PRT-01",
+      "name": "Respuesta de disponibilidad (jugadora y guardián)",
+      "file": "AD-PRT-01__Availability_Response.drawio",
+      "ucs_direct": [
+        "UC-PRT-01"
+      ],
+      "ucs_composite": []
+    },
+    {
+      "id": "AD-PRT-02",
+      "name": "Preparar y publicar la convocatoria de un partido",
+      "file": "AD-PRT-02__Selection_Publish.drawio",
+      "ucs_direct": [
+        "UC-PRT-02",
+        "UC-PRT-03"
+      ],
+      "ucs_composite": [
+        "UC-PRT-04 (conflictos derivados)"
+      ]
+    },
+    {
+      "id": "AD-PRT-03",
+      "name": "Registrar, cerrar y corregir asistencia",
+      "file": "AD-PRT-03__Attendance_Management.drawio",
+      "ucs_direct": [
+        "UC-PRT-05",
+        "UC-PRT-06",
+        "UC-PRT-07"
+      ],
+      "ucs_composite": []
+    },
+    {
+      "id": "AD-PRT-04",
+      "name": "Resultado del partido: registrar, finalizar y corregir",
+      "file": "AD-PRT-04__MatchRecord_Lifecycle.drawio",
+      "ucs_direct": [
+        "UC-PRT-08",
+        "UC-PRT-09",
+        "UC-PRT-10"
+      ],
+      "ucs_composite": [
+        "UC-EVT-09",
+        "UC-EVT-10"
+      ],
+      "notes": "UC-EVT-09/UC-EVT-10 figuran como 'cubiertos (contexto de compatibilidad)' en las tablas de diagramas, pero TRACEABILITY §3 los clasifica NS ('contexto en AD-PRT-04'): son productores del estado del evento que este proceso exige, no participantes."
+    },
+    {
+      "id": "AD-COM-01",
+      "name": "Publicación de comunicado con audiencia snapshot",
+      "file": "AD-COM-01__Announcement_Publication.drawio",
+      "ucs_direct": [
+        "UC-COM-01",
+        "UC-COM-02",
+        "UC-COM-03",
+        "UC-COM-04"
+      ],
+      "ucs_composite": []
+    }
+  ]
+}
