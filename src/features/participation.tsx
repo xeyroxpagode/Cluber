@@ -35,7 +35,6 @@ import {
   Sheet,
   StateBadge,
   Surface,
-  Tag,
   TextArea,
   cx,
 } from "../shared/ui"
@@ -69,11 +68,10 @@ function Missing({ title, detail }: { title: string; detail: string }) {
 export function AvailabilityPage() {
   const { eventId } = useParams()
   const { event, state } = useEvent(eventId)
-  const { actor, childId, authority } = useProduct()
+  const { actor, authority } = useProduct()
 
   if (!event) return <Missing title="Ese evento ya no está" detail="Revisá el enlace." />
 
-  const subject = childId ?? actor.id
   const roster = useMemo(() => {
     const teams = event.targetTeams
     const ids = new Set<string>()
@@ -119,7 +117,7 @@ export function AvailabilityPage() {
       )}
 
       <Surface>
-        <VasControl event={event} personId={subject} />
+        <VasControl event={event} personId={actor.id} />
       </Surface>
 
       <Surface className="grid gap-3">
@@ -157,7 +155,7 @@ export function AvailabilityPage() {
         <ul className="grid">
           {roster.map((person) => {
             const view = eventAvailabilityView(event, person.id)
-            const mine = person.id === subject
+            const mine = person.id === actor.id
             return (
               <li
                 key={person.id}
@@ -177,11 +175,6 @@ export function AvailabilityPage() {
                   value={view}
                   tone={view === "NEEDS_RECONFIRMATION" ? "attention" : undefined}
                 />
-                {authority.canRespondForChild(person.id) &&
-                  person.id !== subject &&
-                  view !== "NO_RESPONSE" && (
-                    <span className="gei-meta">respondible por vos</span>
-                  )}
               </li>
             )
           })}
@@ -322,7 +315,6 @@ export function SelectionPage() {
           {roster.map((person) => {
             const selected = working.includes(person.id)
             const codes = published ? conflictCodesFor(state, event, person.id) : []
-            const blocked = codes.includes("ELIGIBILITY_BLOCKED")
             return (
               <li
                 key={person.id}
@@ -352,9 +344,6 @@ export function SelectionPage() {
                             : "Sin responder"}
                     </span>
                   </label>
-                  {selected && blocked && (
-                    <Tag tone="danger">No puede jugar</Tag>
-                  )}
                 </div>
                 {selected && codes.length > 0 && (
                   <div className="pb-3 pl-8">

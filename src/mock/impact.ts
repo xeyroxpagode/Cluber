@@ -15,7 +15,7 @@ export const COORDINATION_FIELDS = [
   "targetPersonIds",
   "clubWide",
   "opponent",
-  "competitionEntryId",
+  "competitionId",
   "meeting",
   "departure",
   "point",

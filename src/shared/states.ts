@@ -22,7 +22,6 @@ import { labels } from "../mock/model"
 
 export const STATE_TEXT: Record<string, string> = {
   ...labels,
-  BLOCKED: "No habilitada",
   YES: "Voy",
   NO: "No voy",
   NO_RESPONSE: "Sin respuesta",
@@ -46,8 +45,6 @@ const stateToneMap: Record<string, Tone> = {
   CLOSED: "neutral",
   ENDED: "neutral",
   FINAL: "success",
-  ELIGIBLE: "success",
-  BLOCKED: "danger",
   YES: "success",
   MAYBE: "warning",
   NO: "danger",

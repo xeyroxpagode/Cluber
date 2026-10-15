@@ -19,8 +19,7 @@ import {
 } from "lucide-react"
 import { useProduct } from "../mock/store"
 import { routeContext } from "../shared/nav-context"
-import { Avatar, Button, Toast, cx } from "../shared/ui"
-import { Sheet } from "../shared/ui"
+import { Avatar, Toast, cx } from "../shared/ui"
 import { relativeLabel } from "../mock/model"
 import type { Page } from "../mock/authority"
 
@@ -52,8 +51,6 @@ export function Shell() {
     state,
     actor,
     authority,
-    childId,
-    setChildId,
     toastMessage,
     authenticated,
     hasAccess,
@@ -61,13 +58,8 @@ export function Shell() {
   } = useProduct()
   const location = useLocation()
   const navigate = useNavigate()
-  const [switcher, setSwitcher] = useState(false)
 
   const visibleNav = NAV.filter((item) => authority.canOpen(item.page))
-  const activeChildId = childId ?? authority.guardianChildren[0]?.childId ?? null
-  const activeChild = authority.guardianChildren.find(
-    (child) => child.childId === activeChildId,
-  )
 
   const unread = state.notifications.filter(
     (notice) =>
@@ -184,28 +176,6 @@ export function Shell() {
             </Link>
           </div>
         </div>
-
-        {/* Selector de menor (D3 / §28): sólo si hay más de uno */}
-        {authority.guardianChildren.length > 0 && (
-          <div className="border-t border-line bg-selected-soft px-4 py-2 sm:px-6">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="text-meta text-selected">
-                Viendo la información de{" "}
-                <span className="font-semibold">{activeChild?.name ?? "—"}</span>
-              </p>
-              {authority.guardianChildren.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => setSwitcher(true)}
-                  className="gei-target-sm inline-flex items-center gap-1 rounded-control px-2 text-meta font-semibold text-selected hover:bg-surface"
-                >
-                  Cambiar
-                  <ChevronDown size={14} aria-hidden />
-                </button>
-              )}
-            </div>
-          </div>
-        )}
       </header>
 
       <div className="flex">
@@ -282,50 +252,6 @@ export function Shell() {
       </nav>
 
       <Toast message={toastMessage} />
-
-      {switcher && (
-        <Sheet
-          title="¿A quién estás mirando?"
-          description="Cambia de menor en Inicio, Calendario, Equipos y disponibilidad."
-          onClose={() => setSwitcher(false)}
-          footer={
-            <Button variant="primary" onClick={() => setSwitcher(false)}>
-              Listo
-            </Button>
-          }
-        >
-          <ul className="grid gap-1">
-            {authority.guardianChildren.map((child) => (
-              <li key={child.childId}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setChildId(child.childId)
-                    setSwitcher(false)
-                  }}
-                  className={cx(
-                    "gei-target flex w-full items-center gap-3 rounded-control px-3 text-left transition-colors",
-                    child.childId === activeChildId
-                      ? "bg-selected-soft text-selected"
-                      : "hover:bg-control",
-                  )}
-                >
-                  <Avatar name={child.name} size="sm" />
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-body font-semibold text-ink">
-                      {child.name}
-                    </span>
-                    <span className="gei-meta block">
-                      {child.relation} · responde ¿Vas?:{" "}
-                      {child.canRespondAvailability ? "sí" : "no"}
-                    </span>
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </Sheet>
-      )}
     </div>
   )
 }

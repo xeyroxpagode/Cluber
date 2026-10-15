@@ -118,7 +118,6 @@ function makeEvent(
     coordinationRevision,
     version: 1,
     competitionId: type === "MATCH" ? "ahba" : null,
-    competitionEntryId: type === "MATCH" ? "entry-line-sexta-a" : null,
     meeting: overrides.meeting ?? "17:00",
     departure: overrides.departure ?? "",
     point: overrides.point ?? "Entrada de la cancha",
@@ -191,7 +190,7 @@ export function createSeed(): State {
       removed: [],
       author: "Tomás Beltrán",
       at: at(-1, 10),
-      conflicts: ["p4"],
+      conflicts: [],
     },
   ]
   matchCuba.history = [
@@ -269,7 +268,7 @@ export function createSeed(): State {
       after: "GEI vs. SIC 4-1 (Final)",
       actor: "Tomás Beltrán",
       at: at(-5, 21),
-      reason: "Gol de먼트氏 corregido con el acta de la árbitra.",
+      reason: "Gol en contra corregido con el acta de la árbitra.",
     },
   ]
   matchSic.attendanceHistory = [
@@ -509,33 +508,6 @@ export function createSeed(): State {
         },
       ],
     },
-    {
-      id: "guardian",
-      name: "Marcela Fernández",
-      firstName: "Marcela",
-      lastName: "Fernández",
-      dni: "28999888",
-      birth: "1980-02-02",
-      phone: "11 5000 0000",
-      email: "marcela@ejemplo.com",
-      account: "ACTIVE",
-      username: "marcela.fernandez",
-      credentialVersion: 1,
-      passwordSet: false,
-      lastActivityAt: at(-2, 20),
-      sessions: [
-        {
-          id: "sess-guardian-1",
-          device: "Chrome · Windows",
-          createdAt: at(-2, 20),
-          lastSeenAt: at(-2, 20),
-          current: true,
-        },
-      ],
-      setupToken: null,
-      // Guardian no es Role: no tiene RoleAssignment deportivo.
-      roleAssignments: [],
-    },
   ]
 
   return {
@@ -754,49 +726,13 @@ export function createSeed(): State {
         id: "ahba",
         name: "Torneo AHBA 2026 · Damas",
         organizer: "Asociación Amateur de Hockey de Buenos Aires",
-        state: "ACTIVE",
-        entries: [
-          {
-            id: "entry-line-sexta-a",
-            scope: "LINE",
-            divisionId: "d3",
-            lineId: "l1",
-            seasonId: "s1",
-            state: "ACTIVE",
-            reference: "AHBA-L6A-2026",
-          },
-          {
-            id: "entry-team-quinta-b",
-            scope: "TEAM",
-            teamId: "quinta",
-            state: "ACTIVE",
-            reference: "AHBA-5B-2026",
-          },
-          {
-            id: "entry-team-primera-a",
-            scope: "TEAM",
-            teamId: "primera",
-            state: "PENDING",
-            reference: "AHBA-1A-2026",
-          },
-        ],
+        archivedAt: null,
       },
       {
         id: "copa-gei",
         name: "Copa GEI 2026",
         organizer: "Gimnasia y Esgrima de Ituzaingó",
-        state: "ACTIVE",
-        entries: [
-          {
-            id: "entry-line-primera-a",
-            scope: "LINE",
-            divisionId: "d1",
-            lineId: "l1",
-            seasonId: "s1",
-            state: "ACTIVE",
-            reference: "COPA-1A-2026",
-          },
-        ],
+        archivedAt: null,
       },
     ],
     jornadas: [
@@ -848,50 +784,6 @@ export function createSeed(): State {
         route: "/announcements/a1",
       },
     ],
-    eligibilityConstraints: [
-      {
-        id: "ec-p4",
-        personId: "p4",
-        state: "BLOCKED",
-        scope: "ENTRY",
-        scopeRefId: "entry-line-sexta-a",
-        source: "AHBA",
-        reason: "FEDERATION",
-        note: "Pase pendiente de registración federativa.",
-        validFrom: addDays(today, -60),
-        validUntil: null,
-        createdAt: at(-60, 10),
-        createdBy: "Carolina Sánchez",
-      },
-      {
-        id: "ec-p12",
-        personId: "p12",
-        state: "PENDING",
-        scope: "CLUB",
-        scopeRefId: null,
-        source: "INTERNAL",
-        reason: "MEDICAL_CLEARANCE",
-        note: "Apto médico en revisión.",
-        validFrom: addDays(today, -20),
-        validUntil: addDays(today, 30),
-        createdAt: at(-20, 10),
-        createdBy: "Carolina Sánchez",
-      },
-      {
-        id: "ec-p9",
-        personId: "p9",
-        state: "BLOCKED",
-        scope: "COMPETITION",
-        scopeRefId: "ahba",
-        source: "INTERNAL",
-        reason: "DISCIPLINE",
-        note: "Sanción de una fecha.",
-        validFrom: addDays(today, -10),
-        validUntil: addDays(today, 4),
-        createdAt: at(-10, 10),
-        createdBy: "Carolina Sánchez",
-      },
-    ],
     memberships: [
       // p16 tiene cuenta pendiente de activar: todavía no existe Membership (D2).
       ...people
@@ -915,31 +807,5 @@ export function createSeed(): State {
           validUntil: null as string | null,
         })),
     ],
-    guardianRelationships: [
-      {
-        id: "gr-1",
-        guardianId: "guardian",
-        childId: "p2",
-        relation: "Madre",
-        canViewChildInfo: true,
-        canRespondAvailability: true,
-        validFrom: addDays(today, -200),
-        validUntil: null,
-      },
-      {
-        id: "gr-2",
-        guardianId: "guardian",
-        childId: "p8",
-        relation: "Madre",
-        canViewChildInfo: true,
-        canRespondAvailability: false,
-        validFrom: addDays(today, -200),
-        validUntil: null,
-      },
-    ],
   }
-}
-
-function state0Membership(ids: string[]) {
-  return ids.filter((id) => id !== "p16")
 }

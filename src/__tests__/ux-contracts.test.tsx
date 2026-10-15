@@ -12,7 +12,7 @@ import { Modal, Button } from "../shared/ui"
 
 describe("§4 — Home dirige la atención", () => {
   it("muestra como máximo 3 cosas que necesitan atención", () => {
-    renderScreen("/home", "/home", <Home />)
+    renderScreen("/home", "/home", <Home />, "", "player")
     const section = screen.getByRole("heading", {
       name: "Necesita tu atención",
     }).closest("section")!
@@ -22,13 +22,18 @@ describe("§4 — Home dirige la atención", () => {
   })
 
   it("cada ítem dice motivo, consecuencia y acción", () => {
-    renderScreen("/home", "/home", <Home />)
+    renderScreen("/home", "/home", <Home />, "", "player")
     const section = screen.getByRole("heading", {
       name: "Necesita tu atención",
     }).closest("section")!
     const item = within(section).getAllByRole("listitem")[0]
     expect(within(item).getByRole("link").getAttribute("href")).toBeTruthy()
     expect(item.textContent?.length ?? 0).toBeGreaterThan(40)
+  })
+
+  it("el vacío positivo se lee como todo al día", () => {
+    renderScreen("/home", "/home", <Home />, "", "subcommittee")
+    expect(screen.getByText("No hay nada pendiente")).toBeTruthy()
   })
 
   it("no deja huecos de 200 px cuando hoy no hay eventos", () => {
@@ -142,11 +147,11 @@ describe("§27 — Perfil completo sin PII", () => {
       .toBeGreaterThanOrEqual(2)
   })
 
-  it("el guardián ve a quién mira y con qué permisos", () => {
-    renderScreen("/more/profile", "/more/profile", <ProfilePage />, "", "guardian")
-    expect(screen.getByText("A quién estás mirando")).toBeTruthy()
-    expect(screen.getByText(/responde ¿Vas\?: sí/)).toBeTruthy()
-      })
+  it("el perfil no tiene secciones de representación delegada", () => {
+    renderScreen("/more/profile", "/more/profile", <ProfilePage />)
+    expect(screen.queryByText("A quién estás mirando")).toBeNull()
+    expect(screen.queryByText("Personas a cargo")).toBeNull()
+  })
 
   it("un perfil incompleto dice qué falta y no lo hace editable", () => {
     renderScreen("/more/profile", "/more/profile", <ProfilePage />, "", "player")
@@ -186,7 +191,6 @@ describe("§37 — copy con concordancia y sin jerga", () => {
   it("los estados tienen un único vocabulario", () => {
     expect(stateText("YES")).toBe("Voy")
     expect(stateText("NEEDS_RECONFIRMATION")).toBe("Hay que volver a confirmar")
-    expect(stateText("ELIGIBLE")).toBe("Habilitada")
     expect(stateText("DESCONOCIDO")).toBe("Estado a revisar")
   })
 })

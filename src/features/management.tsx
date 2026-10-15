@@ -6,29 +6,20 @@ import { todayIso } from "../mock/clock"
 import {
   dateLabel,
   dateTimeLabel,
-  entryLabel,
   periodLabel,
   roleTextOf,
   roleText,
   teamName,
-  type CompetitionEntry,
   type StructureType,
 } from "../mock/model"
 import {
   activeMemberships,
   activeRoleAssignments,
   activeTeamAssignments,
-  guardiansOf,
   membershipOf,
   profileCompleteness,
   roleScopeLabel,
 } from "../mock/derive"
-import {
-  deriveEligibility,
-  CONSTRAINT_REASON_LABEL,
-  CONSTRAINT_SCOPE_LABEL,
-  CONSTRAINT_SOURCE_LABEL,
-} from "../mock/eligibility"
 import {
   Avatar,
   Banner,
@@ -96,7 +87,7 @@ export function ManagementHome() {
         lead={
           authority.canManagePeople
             ? "Altas de personas, estructura y competencias. Sin operaciones deportivas."
-            : "Desde acá gestionás la habilitación para jugar y las competencias. Las cuentas y la estructura las maneja administración."
+            : "Competencias del club. Las personas, las cuentas y la estructura las maneja administración."
         }
       />
       {authority.canManagePeople && (incomplete.length > 0 || pending.length > 0) && (
@@ -113,11 +104,7 @@ export function ManagementHome() {
         <RowLink
           to="/management/people"
           title="Personas"
-          detail={
-            authority.canManagePeople
-              ? `${state.people.length} personas · altas, cuentas, roles y habilitación`
-              : `${state.people.length} personas · habilitación para jugar`
-          }
+          detail={`${state.people.length} personas · altas, cuentas y roles`}
         />
         {authority.canOpen("structure") && (
           <RowLink
@@ -130,7 +117,7 @@ export function ManagementHome() {
           <RowLink
             to="/management/competitions"
             title="Competencias"
-            detail={`${state.competitions.length} competencias con inscripciones por equipo y por línea`}
+            detail={`${state.competitions.filter((item) => !item.archivedAt).length} competencias activas`}
           />
         )}
       </div>
@@ -340,8 +327,6 @@ export function CreatePerson() {
     phone: "",
     dni: "",
     birth: "",
-    teamId: "",
-    membership: false,
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [pending, setPending] = useState(false)
@@ -375,13 +360,9 @@ export function CreatePerson() {
       phone: form.phone,
       dni: form.dni,
       birth: form.birth,
-      teamId: form.teamId || null,
+      teamId: null,
       role: "PLAYER",
     })
-    if (form.membership) {
-      // La Membership se inicia desde el detalle administrativo.
-      go(`/management/people/${id}`)
-    }
     setPending(false)
     setCreated({ id, code: "" })
     go(`/management/people/${id}`)
@@ -469,23 +450,14 @@ export function CreatePerson() {
           />
         </Surface>
         <Surface className="grid gap-4">
-          <SectionHeader title="Alta deportiva" hint="Opcional: se puede completar después." />
-          <Select
-            label="Equipo"
-            value={form.teamId}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, teamId: event.target.value }))
-            }
-          >
-            <option value="">Sin equipo por ahora</option>
-            {state.teams
-              .filter((team) => team.state === "ACTIVE")
-              .map((team) => (
-                <option key={team.id} value={team.id}>
-                  {teamName(state, team.id)}
-                </option>
-              ))}
-          </Select>
+          <SectionHeader
+            title="Qué sigue"
+            hint="Después del alta, la pertenencia y el equipo se operan desde su ficha."
+          />
+          <p className="gei-meta">
+            La persona queda con cuenta pendiente. Desde su ficha iniciás la
+            pertenencia y le emitís el código de activación.
+          </p>
         </Surface>
         <div className="flex flex-wrap justify-end gap-2">
           <Button variant="quiet" onClick={() => go("/management/people")}>
@@ -514,13 +486,9 @@ export function PersonAdminDetail() {
     endMembership,
     setAccountState,
     issueSetupToken,
-    createGuardianRelationship,
-    endGuardianRelationship,
-    createConstraint,
-    endConstraint,
   } = useProduct()
   const query = useQueryState()
-  const section = query.get("section", authority.canManagePeople ? "identidad" : "habilitacion")
+  const section = query.get("section", "identidad")
   useRouter()
   const [dialog, setDialog] = useState<
     | null
@@ -530,24 +498,9 @@ export function PersonAdminDetail() {
     | "account-disable"
     | "account-enable"
     | "code"
-    | "guardian"
-    | "constraint"
   >(null)
   const [code, setCode] = useState("")
   const [guardError, setGuardError] = useState("")
-  const [guard, setGuard] = useState({
-    guardianId: "",
-    relation: "Madre",
-    canViewChildInfo: true,
-    canRespondAvailability: true,
-  })
-  const [constraint, setConstraint] = useState({
-    state: "PENDING" as "PENDING" | "BLOCKED",
-    scope: "CLUB",
-    source: "INTERNAL",
-    reason: "MEDICAL_CLEARANCE",
-    note: "",
-  })
   const [identity, setIdentity] = useState({ dni: "", birth: "", phone: "", email: "" })
   const [identityErrors, setIdentityErrors] = useState<Record<string, string>>({})
   const [closeReason, setCloseReason] = useState("")
@@ -572,13 +525,7 @@ export function PersonAdminDetail() {
   const teams = activeTeamAssignments(state, person.id)
   const roles = activeRoleAssignments(state, person.id)
   const completeness = profileCompleteness(person)
-  const eligibility = deriveEligibility(state.eligibilityConstraints, person.id)
-  const constraints = state.eligibilityConstraints.filter(
-    (constraint) => constraint.personId === person.id,
-  )
-  const relations = guardiansOf(state, person.id)
   const history = state.audit.filter((entry) => entry.route.includes(person.id))
-  const guardiansAvailable = state.people.filter((item) => item.id !== person.id)
   const admin = authority.canManagePeople
 
   /* Una sola acción primaria contextual según el estado real. */
@@ -597,14 +544,7 @@ export function PersonAdminDetail() {
     { id: "pertenencia", label: "Pertenencia", show: admin },
     { id: "equipos", label: "Equipos", show: admin, count: teams.length },
     { id: "roles", label: "Roles", show: admin, count: roles.length },
-    { id: "habilitacion", label: "Habilitación", show: true },
     { id: "cuenta", label: "Cuenta", show: admin },
-    {
-      id: "representacion",
-      label: "Representación",
-      show: admin,
-      count: relations.length,
-    },
   ].filter((tab) => tab.show)
 
   return (
@@ -775,92 +715,6 @@ export function PersonAdminDetail() {
         </DetailSection>
       )}
 
-      {section === "habilitacion" && (
-        <div className="grid gap-4">
-          <Surface className="grid gap-3">
-            <SectionHeader
-              title="Estado para jugar"
-              action={
-                authority.canManageEligibility && (
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => setDialog("constraint")}
-                  >
-                    Registrar una restricción
-                  </Button>
-                )
-              }
-            />
-            <div className="flex items-center gap-2">
-              <StateBadge
-                value={eligibility === "ELIGIBLE" ? "ELIGIBLE" : eligibility}
-                emphasis
-              />
-              <span className="gei-body text-ink-strong">
-                {eligibility === "ELIGIBLE"
-                  ? "Puede jugar sin restricciones."
-                  : eligibility === "PENDING"
-                    ? "Tiene un trámite pendiente antes de jugar."
-                    : "No puede jugar hasta que se levante el bloqueo."}
-              </span>
-            </div>
-          </Surface>
-
-          <Surface className="grid gap-2">
-            <SectionHeader
-              title="Restricciones registradas"
-              meta={`${constraints.length}`}
-            />
-            {constraints.length === 0 ? (
-              <p className="gei-meta">Sin restricciones registradas.</p>
-            ) : (
-              <ul className="grid">
-                {constraints.map((item) => (
-                  <li key={item.id}>
-                    <div className="flex flex-wrap items-center gap-3 border-b border-line py-3 last:border-b-0">
-                      <div className="min-w-0 flex-1">
-                        <p className="gei-item-title">
-                          {item.state === "BLOCKED"
-                            ? "No habilitada para jugar"
-                            : "Trámite pendiente"}
-                        </p>
-                        <p className="gei-meta">
-                          {CONSTRAINT_SCOPE_LABEL[item.scope]} ·{" "}
-                          {CONSTRAINT_SOURCE_LABEL[item.source]} ·{" "}
-                          {CONSTRAINT_REASON_LABEL[item.reason]}
-                        </p>
-                        {item.note && (
-                          <p className="gei-body text-ink-strong">{item.note}</p>
-                        )}
-                        <p className="gei-meta tabular-nums">
-                          {periodLabel(item.validFrom, item.validUntil)} · cargada por{" "}
-                          {item.createdBy}
-                        </p>
-                      </div>
-                      <StateBadge
-                        value={item.state === "BLOCKED" ? "BLOCKED" : "PENDING"}
-                      />
-                      {authority.canManageEligibility && !item.validUntil && (
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          onClick={() =>
-                            endConstraint(item.id, "Levantada desde la ficha")
-                          }
-                        >
-                          Levantar
-                        </Button>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </Surface>
-        </div>
-      )}
-
       {section === "cuenta" && (
         <div className="grid gap-4">
           <Surface className="grid gap-3">
@@ -907,70 +761,6 @@ export function PersonAdminDetail() {
               </Button>
             )}
           </div>
-        </div>
-      )}
-
-      {section === "representacion" && (
-        <div className="grid gap-4">
-          <Surface className="grid gap-3">
-            <SectionHeader
-              title="Personas que pueden actuar por esta persona"
-              meta={`${relations.length} vigentes`}
-              action={
-                authority.canManageGuardianRelations && (
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => setDialog("guardian")}
-                  >
-                    Crear relación
-                  </Button>
-                )
-              }
-            />
-            {relations.length === 0 ? (
-              <p className="gei-meta">
-                No hay relaciones vigentes. Si es menor, se puede delegar la
-                consulta y la respuesta de disponibilidad sin darle un rol.
-              </p>
-            ) : (
-              <ul className="grid">
-                {relations.map((relation) => {
-                  const guardian = state.people.find(
-                    (item) => item.id === relation.guardianId,
-                  )
-                  return (
-                    <li key={relation.id}>
-                      <div className="flex flex-wrap items-center gap-3 border-b border-line py-3 last:border-b-0">
-                        <div className="min-w-0 flex-1">
-                          <p className="gei-item-title">{guardian?.name ?? "—"}</p>
-                          <p className="gei-meta">
-                            {relation.relation} · ve información:{" "}
-                            {relation.canViewChildInfo ? "sí" : "no"} · responde
-                            ¿Vas?: {relation.canRespondAvailability ? "sí" : "no"}
-                          </p>
-                          <p className="gei-meta tabular-nums">
-                            {periodLabel(relation.validFrom, relation.validUntil)}
-                          </p>
-                        </div>
-                        {authority.canManageGuardianRelations && (
-                          <Button
-                            variant="danger"
-                            size="sm"
-                            onClick={() =>
-                              endGuardianRelationship(relation.id, "Finalizada desde la ficha")
-                            }
-                          >
-                            Finalizar
-                          </Button>
-                        )}
-                      </div>
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
-          </Surface>
         </div>
       )}
 
@@ -1112,7 +902,7 @@ export function PersonAdminDetail() {
       {dialog === "account-enable" && (
         <ConfirmDialog
           title="Habilitar cuenta"
-          consequence={`${person.firstName} vuelve a poder entrar al sistema con su nombre de usuario.`}
+          consequence={`${person.firstName} vuelve a poder entrar al sistema con su correo.`}
           confirmLabel="Habilitar cuenta"
           tone="attention"
           onClose={() => setDialog(null)}
@@ -1159,197 +949,6 @@ export function PersonAdminDetail() {
                 Todavía no emitiste un código para esta persona.
               </p>
             )}
-          </div>
-        </Modal>
-      )}
-
-      {dialog === "guardian" && (
-        <Modal
-          title="Crear relación de representación"
-          description="Una relación de representación no es un rol: define qué puede ver y qué puede responder."
-          onClose={() => setDialog(null)}
-          footer={
-            <>
-              <Button variant="quiet" onClick={() => setDialog(null)}>
-                Cancelar
-              </Button>
-              <Button
-                variant="primary"
-                onClick={() => {
-                  if (!guard.guardianId) {
-                    setGuardError("Elegí quién representa.")
-                    return
-                  }
-                  createGuardianRelationship({
-                    guardianId: guard.guardianId,
-                    childId: person.id,
-                    relation: guard.relation,
-                    canViewChildInfo: guard.canViewChildInfo,
-                    canRespondAvailability: guard.canRespondAvailability,
-                  })
-                  setDialog(null)
-                }}
-              >
-                Crear relación
-              </Button>
-            </>
-          }
-        >
-          <div className="grid gap-4">
-            <Select
-              label="Quién representa"
-              value={guard.guardianId}
-              onChange={(event) => {
-                setGuard((current) => ({ ...current, guardianId: event.target.value }))
-                setGuardError("")
-              }}
-            >
-              <option value="">Elegí una persona</option>
-              {guardiansAvailable.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </Select>
-            {guardError && (
-              <p className="text-meta font-medium text-danger">{guardError}</p>
-            )}
-            <TextField
-              label="Relación"
-              value={guard.relation}
-              onChange={(event) =>
-                setGuard((current) => ({ ...current, relation: event.target.value }))
-              }
-            />
-            <fieldset className="grid gap-2">
-              <legend className="text-body font-semibold">Qué puede hacer</legend>
-              {[
-                { key: "canViewChildInfo", label: "Ver la información del menor" },
-                { key: "canRespondAvailability", label: "Responder el “¿Vas?” del menor" },
-              ].map((item) => (
-                <label
-                  key={item.key}
-                  className="flex min-h-11 cursor-pointer items-center gap-2.5 rounded-control border border-line-strong px-3"
-                >
-                  <input
-                    type="checkbox"
-                    checked={guard[item.key as "canViewChildInfo" | "canRespondAvailability"]}
-                    onChange={(event) =>
-                      setGuard((current) => ({
-                        ...current,
-                        [item.key]: event.target.checked,
-                      }))
-                    }
-                    className="size-5 accent-interactive"
-                  />
-                  <span className="text-body font-medium">{item.label}</span>
-                </label>
-              ))}
-            </fieldset>
-            <Banner tone="neutral" title="Lo que no se puede delegar">
-              <span className="text-ink-strong">
-                Ni documento, ni fecha de nacimiento, ni motivos de habilitación,
-                ni conversaciones privadas.
-              </span>
-            </Banner>
-          </div>
-        </Modal>
-      )}
-
-      {dialog === "constraint" && (
-        <Modal
-          title="Registrar una restricción de habilitación"
-          description="Queda con origen, motivo y vigencia."
-          onClose={() => setDialog(null)}
-          footer={
-            <>
-              <Button variant="quiet" onClick={() => setDialog(null)}>
-                Cancelar
-              </Button>
-              <Button
-                variant="danger"
-                onClick={() => {
-                  createConstraint({
-                    personId: person.id,
-                    state: constraint.state,
-                    scope: constraint.scope as never,
-                    scopeRefId: null,
-                    source: constraint.source as never,
-                    reason: constraint.reason as never,
-                    note: constraint.note || undefined,
-                    validFrom: todayIso(),
-                    validUntil: null,
-                  })
-                  setDialog(null)
-                }}
-              >
-                Registrar
-              </Button>
-            </>
-          }
-        >
-          <div className="grid gap-4">
-            <Select
-              label="Estado"
-              value={constraint.state}
-              onChange={(event) =>
-                setConstraint((current) => ({
-                  ...current,
-                  state: event.target.value as "PENDING" | "BLOCKED",
-                }))
-              }
-            >
-              <option value="PENDING">Trámite pendiente</option>
-              <option value="BLOCKED">No habilitada para jugar</option>
-            </Select>
-            <Select
-              label="Alcance"
-              value={constraint.scope}
-              onChange={(event) =>
-                setConstraint((current) => ({ ...current, scope: event.target.value }))
-              }
-            >
-              {Object.entries(CONSTRAINT_SCOPE_LABEL).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </Select>
-            <Select
-              label="Origen"
-              value={constraint.source}
-              onChange={(event) =>
-                setConstraint((current) => ({ ...current, source: event.target.value }))
-              }
-            >
-              {Object.entries(CONSTRAINT_SOURCE_LABEL).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </Select>
-            <Select
-              label="Motivo"
-              value={constraint.reason}
-              onChange={(event) =>
-                setConstraint((current) => ({ ...current, reason: event.target.value }))
-              }
-            >
-              {Object.entries(CONSTRAINT_REASON_LABEL).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </Select>
-            <TextArea
-              label="Nota"
-              rows={3}
-              value={constraint.note}
-              onChange={(event) =>
-                setConstraint((current) => ({ ...current, note: event.target.value }))
-              }
-              hint="Visible para Subcomisión y administración."
-            />
           </div>
         </Modal>
       )}
@@ -1595,39 +1194,21 @@ export function StructurePage() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   COMPETENCIAS — TEAM y LINE separados, mismatch visible
+   COMPETENCIAS — simple V1.1: crear, editar, archivar, consultar
    ═══════════════════════════════════════════════════════════════ */
 
 export function CompetitionsPage() {
-  const { competitionId } = useParams()
+  const { id: competitionId } = useParams()
   const {
     state,
     authority,
     createCompetition,
-    addCompetitionEntry,
-    setCompetitionState,
-    setEntryState,
+    updateCompetition,
+    archiveCompetition,
   } = useProduct()
-  const query = useQueryState()
   const [newOpen, setNewOpen] = useState(false)
-  const [entryOpen, setEntryOpen] = useState(false)
   const [error, setError] = useState("")
   const [form, setForm] = useState({ name: "", organizer: "" })
-  const [entry, setEntry] = useState<{
-    scope: "TEAM" | "LINE"
-    teamId: string
-    divisionId: string
-    lineId: string
-    seasonId: string
-    reference: string
-  }>({
-    scope: "TEAM",
-    teamId: "",
-    divisionId: "",
-    lineId: "",
-    seasonId: "",
-    reference: "",
-  })
 
   useRouter()
 
@@ -1650,7 +1231,7 @@ export function CompetitionsPage() {
         <PageContextHeader
           context="Competencias"
           title="Competencias"
-          lead="Inscripciones por equipo y por línea, con su vigencia."
+          lead="Contexto deportivo: crear, editar, archivar y consultar."
           action={
             canMutate && (
               <Button variant="primary" onClick={() => setNewOpen(true)}>
@@ -1660,18 +1241,37 @@ export function CompetitionsPage() {
           }
         />
         <div className="grid gap-1">
-          {state.competitions.map((item) => (
-            <RowLink
-              key={item.id}
-              to={`/management/competitions/${item.id}`}
-              title={item.name}
-              detail={`${item.entries.length} ${
-                item.entries.length === 1 ? "inscripción" : "inscripciones"
-              } · ${item.organizer}`}
-              meta={<StateBadge value={item.state} />}
-            />
-          ))}
+          {state.competitions
+            .filter((item) => !item.archivedAt)
+            .map((item) => (
+              <RowLink
+                key={item.id}
+                to={`/management/competitions/${item.id}`}
+                title={item.name}
+                detail={item.organizer}
+              />
+            ))}
         </div>
+        {state.competitions.some((item) => item.archivedAt) && (
+          <DetailSection
+            title="Archivadas"
+            meta={`${state.competitions.filter((item) => item.archivedAt).length}`}
+          >
+            <div className="grid gap-1">
+              {state.competitions
+                .filter((item) => item.archivedAt)
+                .map((item) => (
+                  <RowLink
+                    key={item.id}
+                    to={`/management/competitions/${item.id}`}
+                    title={item.name}
+                    detail={`${item.organizer} · archivada`}
+                    meta={<StateBadge value="ARCHIVED" />}
+                  />
+                ))}
+            </div>
+          </DetailSection>
+        )}
         {newOpen && (
           <Modal
             title="Crear competencia"
@@ -1724,6 +1324,17 @@ export function CompetitionsPage() {
       </div>
     )
 
+  const archived = !!competition.archivedAt
+  const jornadas = state.jornadas.filter(
+    (item) => item.competitionId === competition.id,
+  )
+  const matches = state.events.filter(
+    (event) => event.competitionId === competition.id,
+  )
+  const [editOpen, setEditOpen] = useState(false)
+  const [editForm, setEditForm] = useState({ name: "", organizer: "" })
+  const [archiveOpen, setArchiveOpen] = useState(false)
+
   return (
     <div className="gei-stack-page mx-auto max-w-4xl">
       <PageContextHeader
@@ -1733,13 +1344,32 @@ export function CompetitionsPage() {
         lead={competition.organizer}
         action={
           <div className="flex flex-wrap items-center gap-2">
-            <StateBadge value={competition.state} emphasis />
-            {canMutate && (
-              <Button variant="secondary" onClick={() => setEntryOpen(true)}>
-                Añadir inscripción
+            <StateBadge value={archived ? "ARCHIVED" : "ACTIVE"} emphasis />
+            {canMutate && !archived && (
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setEditForm({
+                    name: competition.name,
+                    organizer: competition.organizer,
+                  })
+                  setEditOpen(true)
+                }}
+              >
+                Editar
               </Button>
             )}
           </div>
+        }
+        below={
+          archived ? (
+            <Banner tone="neutral" title="Competencia archivada">
+              <span className="text-ink-strong">
+                Quedó como lectura histórica. Las jornadas y los partidos que la
+                referencian se siguen consultando.
+              </span>
+            </Banner>
+          ) : undefined
         }
       />
 
@@ -1749,248 +1379,131 @@ export function CompetitionsPage() {
         </Banner>
       )}
 
-      <Surface className="grid gap-3">
-        <SectionHeader title="Inscripciones" meta={`${competition.entries.length}`} />
-        {competition.entries.length === 0 ? (
-          <Empty
-            title="Sin inscripciones"
-            detail="Esta competencia todavía no tiene equipos ni líneas inscritas."
-          />
+      <DetailSection
+        title="Jornadas"
+        meta={`${jornadas.length} ${jornadas.length === 1 ? "jornada" : "jornadas"}`}
+      >
+        {jornadas.length === 0 ? (
+          <p className="gei-meta">
+            Ninguna jornada referencia a esta competencia.
+          </p>
         ) : (
-          <ul className="grid">
-            {competition.entries.map((item) => (
-              <EntryRow
-                key={item.id}
-                state={state}
-                entry={item}
-                canMutate={canMutate}
-                onChangeState={(next) => {
-                  const result = setEntryState(competition.id, item.id, next)
-                  if (!result.ok) setError(result.error ?? "")
-                }}
-              />
+          <ul className="grid gap-1">
+            {jornadas.map((jornada) => (
+              <li key={jornada.id}>
+                <RowLink
+                  to={`/jornadas/${jornada.id}`}
+                  title={jornada.name}
+                  detail={`${jornada.events.length} ${
+                    jornada.events.length === 1 ? "partido" : "partidos"
+                  }`}
+                />
+              </li>
             ))}
           </ul>
         )}
-      </Surface>
+      </DetailSection>
 
-      {canMutate && (
-        <Surface className="grid gap-3">
-          <SectionHeader title="Estado de la competencia" />
+      <DetailSection
+        title="Partidos"
+        meta={`${matches.length} ${matches.length === 1 ? "partido" : "partidos"}`}
+      >
+        {matches.length === 0 ? (
           <p className="gei-meta">
-            Para cerrar una competencia tiene que quedar sin inscripciones activas.
+            Ningún partido referencia a esta competencia.
           </p>
-          <div className="flex flex-wrap gap-2">
-            {(["DRAFT", "ACTIVE", "CLOSED"] as const)
-              .filter((next) => next !== competition.state)
-              .map((next) => (
-                <Button
-                  key={next}
-                  variant={next === "CLOSED" ? "danger" : "secondary"}
-                  onClick={() => {
-                    const result = setCompetitionState(competition.id, next)
-                    if (!result.ok) setError(result.error ?? "")
-                  }}
-                >
-                  {next === "DRAFT"
-                    ? "Volver a borrador"
-                    : next === "ACTIVE"
-                      ? "Activar competencia"
-                      : "Cerrar competencia"}
-                </Button>
-              ))}
-          </div>
-        </Surface>
+        ) : (
+          <ul className="grid gap-1">
+            {matches.map((event) => (
+              <li key={event.id}>
+                <RowLink
+                  to={`/events/${event.id}`}
+                  title={event.opponent ? `GEI vs. ${event.opponent}` : event.title}
+                  detail={`${dateLabel(event.date, true)} · ${event.time}`}
+                  meta={<StateBadge value={event.state} />}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+      </DetailSection>
+
+      {canMutate && !archived && (
+        <div className="flex flex-wrap gap-2">
+          <Button variant="danger" onClick={() => setArchiveOpen(true)}>
+            Archivar competencia
+          </Button>
+        </div>
       )}
 
-      {entryOpen && (
+      {editOpen && (
         <Modal
-          title="Añadir inscripción"
-          description="Cada inscripción es de un equipo o de una línea concreta."
-          onClose={() => setEntryOpen(false)}
+          title="Editar competencia"
+          onClose={() => setEditOpen(false)}
           footer={
             <>
-              <Button variant="quiet" onClick={() => setEntryOpen(false)}>
+              <Button variant="quiet" onClick={() => setEditOpen(false)}>
                 Cancelar
               </Button>
               <Button
                 variant="primary"
                 onClick={() => {
-                  const payload =
-                    entry.scope === "TEAM"
-                      ? ({
-                          scope: "TEAM",
-                          teamId: entry.teamId,
-                          state: "PENDING",
-                          reference: entry.reference,
-                        } as const)
-                      : ({
-                          scope: "LINE",
-                          divisionId: entry.divisionId,
-                          lineId: entry.lineId,
-                          seasonId: entry.seasonId,
-                          state: "PENDING",
-                          reference: entry.reference,
-                        } as const)
-                  const result = addCompetitionEntry(competition.id, payload)
-                  if (result.ok) setEntryOpen(false)
+                  if (!editForm.name.trim()) {
+                    setError("Poné un nombre.")
+                    return
+                  }
+                  const result = updateCompetition(competition.id, {
+                    name: editForm.name.trim(),
+                    organizer: editForm.organizer.trim(),
+                  })
+                  if (result.ok) setEditOpen(false)
                   else setError(result.error ?? "")
                 }}
               >
-                Añadir inscripción
+                Guardar
               </Button>
             </>
           }
         >
           <div className="grid gap-4">
-            <div className="grid grid-cols-2 gap-2">
-              {(["TEAM", "LINE"] as const).map((scope) => (
-                <button
-                  key={scope}
-                  type="button"
-                  aria-pressed={entry.scope === scope}
-                  onClick={() =>
-                    setEntry((current) => ({ ...current, scope }))
-                  }
-                  className={cx(
-                    "gei-target rounded-control border px-3 text-body font-semibold transition-colors",
-                    entry.scope === scope
-                      ? "border-interactive bg-selected-soft text-selected"
-                      : "border-line-strong bg-surface text-ink-muted",
-                  )}
-                >
-                  {scope === "TEAM" ? "Equipo" : "Línea"}
-                </button>
-              ))}
-            </div>
-            {entry.scope === "TEAM" ? (
-              <Select
-                label="Equipo"
-                required
-                value={entry.teamId}
-                onChange={(event) =>
-                  setEntry((current) => ({ ...current, teamId: event.target.value }))
-                }
-              >
-                <option value="">Elegí un equipo</option>
-                {state.teams.map((team) => (
-                  <option key={team.id} value={team.id}>
-                    {teamName(state, team.id)}
-                  </option>
-                ))}
-              </Select>
-            ) : (
-              <div className="grid gap-3">
-                <Select
-                  label="División"
-                  required
-                  value={entry.divisionId}
-                  onChange={(event) =>
-                    setEntry((current) => ({
-                      ...current,
-                      divisionId: event.target.value,
-                    }))
-                  }
-                >
-                  <option value="">Elegí una división</option>
-                  {state.structure
-                    .filter((item) => item.type === "DIVISION")
-                    .map((item) => (
-                      <option key={item.id} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                </Select>
-                <Select
-                  label="Línea"
-                  required
-                  value={entry.lineId}
-                  onChange={(event) =>
-                    setEntry((current) => ({ ...current, lineId: event.target.value }))
-                  }
-                >
-                  <option value="">Elegí una línea</option>
-                  {state.structure
-                    .filter((item) => item.type === "LINE")
-                    .map((item) => (
-                      <option key={item.id} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                </Select>
-                <Select
-                  label="Temporada"
-                  required
-                  value={entry.seasonId}
-                  onChange={(event) =>
-                    setEntry((current) => ({ ...current, seasonId: event.target.value }))
-                  }
-                >
-                  <option value="">Elegí una temporada</option>
-                  {state.structure
-                    .filter((item) => item.type === "SEASON")
-                    .map((item) => (
-                      <option key={item.id} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                </Select>
-              </div>
-            )}
             <TextField
-              label="Referencia externa"
-              value={entry.reference}
-              hint="Código de la asociación, si existe."
+              label="Nombre"
+              required
+              value={editForm.name}
               onChange={(event) =>
-                setEntry((current) => ({ ...current, reference: event.target.value }))
+                setEditForm((current) => ({ ...current, name: event.target.value }))
+              }
+            />
+            <TextField
+              label="Organizador"
+              value={editForm.organizer}
+              onChange={(event) =>
+                setEditForm((current) => ({
+                  ...current,
+                  organizer: event.target.value,
+                }))
               }
             />
           </div>
         </Modal>
       )}
-    </div>
-  )
-}
 
-function EntryRow({
-  state,
-  entry,
-  canMutate,
-  onChangeState,
-}: {
-  state: ReturnType<typeof useProduct>["state"]
-  entry: CompetitionEntry
-  canMutate: boolean
-  onChangeState: (next: CompetitionEntry["state"]) => void
-}) {
-  const label = entryLabel(state, entry)
-  return (
-    <li className="flex flex-wrap items-center gap-3 border-b border-line py-3 last:border-b-0">
-      <div className="min-w-0 flex-1">
-        <p className="gei-item-title">{label}</p>
-        <p className="gei-meta">
-          {entry.scope === "TEAM"
-            ? "Inscripción de equipo: exige que el partido juegue con ese equipo."
-            : "Inscripción de línea: exige la misma división, línea y temporada."}
-          {entry.reference && ` · referencia ${entry.reference}`}
-        </p>
-      </div>
-      <StateBadge value={entry.state === "ACTIVE" ? "ACTIVE" : entry.state === "ENDED" ? "ENDED" : "PENDING"} />
-      {canMutate && (
-        <div className="flex flex-wrap gap-1">
-          {entry.state !== "ACTIVE" && (
-            <Button variant="secondary" size="sm" onClick={() => onChangeState("ACTIVE")}>
-              Activar
-            </Button>
-          )}
-          {entry.state !== "ENDED" && (
-            <Button variant="danger" size="sm" onClick={() => onChangeState("ENDED")}>
-              Finalizar
-            </Button>
-          )}
-        </div>
+      {archiveOpen && (
+        <ConfirmDialog
+          title="Archivar la competencia"
+          consequence="Deja de aparecer como activa. Las jornadas y los partidos que la referencian se siguen consultando como historia."
+          confirmLabel="Archivar competencia"
+          requireReason
+          reasonLabel="Por qué se archiva"
+          onClose={() => setArchiveOpen(false)}
+          onConfirm={(reason) => {
+            const result = archiveCompetition(competition.id, reason)
+            if (result.ok) setArchiveOpen(false)
+            else setError(result.error ?? "")
+          }}
+        />
       )}
-    </li>
+    </div>
   )
 }
 
@@ -2019,20 +1532,6 @@ export function TeamAdmin() {
   const members = state.people.filter((person) =>
     activeTeamAssignments(state, person.id).some((a) => a.teamId === id),
   )
-  const entries = state.competitions.flatMap((competition) =>
-    competition.entries
-      .filter((entry) =>
-        entry.scope === "TEAM"
-          ? entry.teamId === id
-          : state.teams.find(
-              (item) =>
-                item.divisionId === entry.divisionId &&
-                item.lineId === entry.lineId &&
-                item.seasonId === entry.seasonId,
-            )?.id === id,
-      )
-      .map((entry) => ({ competition, entry })),
-  )
 
   return (
     <div className="gei-stack-page mx-auto max-w-4xl">
@@ -2040,7 +1539,7 @@ export function TeamAdmin() {
         context="Equipos"
         title={teamName(state, id)}
         back="/management/people"
-        lead="Identidad del equipo e inscripciones en competencias."
+        lead="Identidad del equipo y personas asignadas."
       />
       <DetailSection title="Identidad">
         <RowStatic title="Nombre" detail={teamName(state, id)} />
@@ -2061,23 +1560,6 @@ export function TeamAdmin() {
             />
           ))}
         </div>
-      </DetailSection>
-      <DetailSection title="Inscripciones en competencias" meta={`${entries.length}`}>
-        {entries.length === 0 ? (
-          <p className="gei-meta">Este equipo no está inscrito en ninguna competencia.</p>
-        ) : (
-          <ul className="grid">
-            {entries.map(({ competition, entry }) => (
-              <li key={entry.id}>
-                <RowStatic
-                  title={competition.name}
-                  detail={entryLabel(state, entry)}
-                  meta={<StateBadge value={entry.state === "ACTIVE" ? "ACTIVE" : entry.state === "ENDED" ? "ENDED" : "PENDING"} />}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
       </DetailSection>
     </div>
   )

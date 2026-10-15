@@ -4,7 +4,7 @@ import type { ReactNode } from "react"
 import { Harness, renderScreen } from "./harness"
 import { useProduct } from "../mock/store"
 import { JornadaPage } from "../features/events"
-import { PersonAdminDetail } from "../features/management"
+import { PersonAdminDetail, CompetitionsPage, TeamAdmin } from "../features/management"
 import { screen } from "@testing-library/react"
 
 const wrapper = ({ children }: { children: ReactNode }) => (
@@ -90,9 +90,22 @@ describe("C08 — jornada real", () => {
   })
 })
 
-describe("C06 / D6 — habilitación por autoridad", () => {
-  it("la Subcomisión entra a la ficha y sólo ve la sección de habilitación", () => {
+describe("C06 — ficha administrativa V1.1, sin habilitación", () => {
+  it("la Subcomisión no abre fichas de personas", () => {
     window.history.replaceState({}, "", "/?demo=subcommittee")
+    renderScreen(
+      "/management/people/:id",
+      "/management/people/p4",
+      <PersonAdminDetail />,
+    )
+    expect(
+      screen.getByText("No tenés acceso a las fichas de personas"),
+    ).toBeTruthy()
+    window.history.replaceState({}, "", "/")
+  })
+
+  it("la ficha no tiene sección de habilitación ni de representación", () => {
+    window.history.replaceState({}, "", "/?demo=admin")
     renderScreen(
       "/management/people/:id",
       "/management/people/p4",
@@ -100,32 +113,8 @@ describe("C06 / D6 — habilitación por autoridad", () => {
     )
     const tabs = screen.getByRole("tablist", { name: "Secciones de la ficha" })
     expect(tabs).toBeTruthy()
-    expect(screen.getByRole("tab", { name: "Habilitación" })).toBeTruthy()
-    expect(screen.queryByRole("tab", { name: "Cuenta" })).toBeNull()
-    expect(screen.queryByRole("tab", { name: "Identidad" })).toBeNull()
-    window.history.replaceState({}, "", "/")
-  })
-
-  it("la Subcomisión ve el motivo y el origen de la restricción", () => {
-    window.history.replaceState({}, "", "/?demo=subcommittee")
-    renderScreen(
-      "/management/people/:id",
-      "/management/people/p4",
-      <PersonAdminDetail />,
-    )
-    expect(screen.getByText(/Pase pendiente de registración federativa/)).toBeTruthy()
-    expect(screen.getByText(/Referencia de la asociación/)).toBeTruthy()
-    expect(screen.getByText(/Trámite federativo/)).toBeTruthy()
-    window.history.replaceState({}, "", "/")
-  })
-
-  it("administración sí ve todas las secciones", () => {
-    window.history.replaceState({}, "", "/?demo=admin")
-    renderScreen(
-      "/management/people/:id",
-      "/management/people/p4",
-      <PersonAdminDetail />,
-    )
+    expect(screen.queryByRole("tab", { name: "Habilitación" })).toBeNull()
+    expect(screen.queryByRole("tab", { name: "Representación" })).toBeNull()
     expect(screen.getByRole("tab", { name: "Cuenta" })).toBeTruthy()
     expect(screen.getByRole("tab", { name: "Identidad" })).toBeTruthy()
     window.history.replaceState({}, "", "/")
@@ -231,5 +220,114 @@ describe("D7 — audiencia de comunicado real", () => {
     expect(notice.recipients.length).toBeGreaterThan(0)
     expect(notice.recipients.every(shouldReach)).toBe(true)
     expect(notice.recipients).not.toContain("coach")
+  })
+})
+describe("V1.1 � login por email, competencia simple, jornada opcional", () => {
+  it("el login usa Person.email m�s contrase�a, nunca username", () => {
+    const { result } = api()
+    let ok = false
+    act(() => {
+      ok = result.current.login("tomas.beltran@gei.com.ar", "cualquiera")
+    })
+    expect(ok).toBe(true)
+    expect(result.current.actor.id).toBe("coach")
+  })
+
+  it("el username no autentica aunque exista", () => {
+    const { result } = api()
+    let ok = true
+    act(() => {
+      ok = result.current.login("tomas.beltran", "cualquiera")
+    })
+    expect(ok).toBe(false)
+  })
+
+  it("sin contrase�a no hay login", () => {
+    const { result } = api()
+    let ok = true
+    act(() => {
+      ok = result.current.login("tomas.beltran@gei.com.ar", "")
+    })
+    expect(ok).toBe(false)
+  })
+
+  it("la competencia se crea, se edita y se archiva; archivada es s�lo lectura", () => {
+    const { result } = api()
+    let id = ""
+    act(() => {
+      id = result.current.createCompetition({
+        name: "Copa de prueba",
+        organizer: "Club",
+      })
+    })
+    expect(id).toBeTruthy()
+    let edited = { ok: false }
+    act(() => {
+      edited = result.current.updateCompetition(id, { name: "Copa de prueba 2" })
+    })
+    expect(edited.ok).toBe(true)
+    let archived = { ok: false }
+    act(() => {
+      archived = result.current.archiveCompetition(id, "Fin de la prueba")
+    })
+    expect(archived.ok).toBe(true)
+    const stored = result.current.state.competitions.find((c) => c.id === id)!
+    expect(stored.archivedAt).toBeTruthy()
+    let again = { ok: true }
+    act(() => {
+      again = result.current.updateCompetition(id, { name: "Otro nombre" })
+    })
+    expect(again.ok).toBe(false)
+  })
+
+  it("la jornada admite competencia opcional", () => {
+    const { result } = api()
+    let response: { ok: boolean; id?: string; error?: string } = { ok: false }
+    act(() => {
+      response = result.current.createJornada({
+        name: "Fecha sin competencia",
+        seasonId: "s1",
+        competitionId: null,
+        eventIds: ["match-septima-quinta"],
+      })
+    })
+    expect(response.ok).toBe(true)
+    const jornada = result.current.state.jornadas.find(
+      (item) => item.id === response.id,
+    )!
+    expect(jornada.competitionId).toBeNull()
+  })
+})
+
+describe("V1.1 � competencias simples y equipo admin renderizan", () => {
+  it("la lista muestra las competencias activas y el detalle su contexto", () => {
+    window.history.replaceState({}, "", "/?demo=admin")
+    renderScreen(
+      "/management/competitions",
+      "/management/competitions",
+      <CompetitionsPage />,
+    )
+    expect(screen.getByText(/Torneo AHBA/)).toBeTruthy()
+    window.history.replaceState({}, "", "/")
+  })
+
+  it("el detalle de competencia lista jornadas y partidos que la referencian", () => {
+    window.history.replaceState({}, "", "/?demo=admin")
+    renderScreen(
+      "/management/competitions/:id",
+      "/management/competitions/ahba",
+      <CompetitionsPage />,
+    )
+    expect(screen.getByRole("heading", { name: "Jornadas" })).toBeTruthy()
+    expect(screen.getByRole("heading", { name: "Partidos" })).toBeTruthy()
+    window.history.replaceState({}, "", "/")
+  })
+
+  it("el equipo admin muestra identidad y personas sin inscripciones", () => {
+    window.history.replaceState({}, "", "/?demo=admin")
+    renderScreen("/management/teams/:id", "/management/teams/sexta", <TeamAdmin />)
+    expect(screen.getAllByText("Sexta A").length).toBeGreaterThan(0)
+    expect(screen.queryByText(/Inscripciones/)).toBeNull()
+    window.history.replaceState({}, "", "/")
   })
 })

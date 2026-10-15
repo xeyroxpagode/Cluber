@@ -1,19 +1,21 @@
 import type { Event, Person, State } from "./model"
 import {
-  activeGuardianRelations,
   activeRoleAssignments,
   activeTeamAssignments,
-  hasRoleIn,
   roleScopeLabel,
 } from "./derive"
 import { todayIso } from "./clock"
 
 /**
- * Única fuente de autoridad (Stage 6 §15).
+ * Única fuente de autoridad (Stage 6 §15 · V1.1).
  *
  * Fórmula: ROLE + ACTION + SCOPE + OBJECT STATE + FIELD AUTHORITY + SOURCE.
  * Toda pantalla y todo route consume de acá. Prohibido `role === "ADMIN"`
  * o `capabilities.sport` como gate paralelo.
+ *
+ * V1.1: sin Guardian, sin Eligibility. ADMIN no es superusuario deportivo.
+ * SUBCOMMITTEE es autoridad oficial (comunicados, competencias) y no
+ * administra personas, cuentas ni estructura.
  */
 
 export type Page =
@@ -61,27 +63,13 @@ export interface Authority {
   canManageStructure: boolean
   canManageCompetitions: boolean
   canViewCompetitions: boolean
-  canManageEligibility: boolean
-  canManageMembership: boolean
-  canManageGuardianRelations: boolean
   canViewAudit: boolean
-  /** Disponibilidad */
+  /** Disponibilidad: cada jugadora responde sólo la propia (V1.1). */
   canRespondOwn: boolean
-  canRespondForChild: (childId: string) => boolean
   /** PII y detalle restringido */
   canViewDni: boolean
   canViewBirth: boolean
   canViewContact: (person: Person) => boolean
-  canViewEligibilityStatus: (person: Person) => boolean
-  canViewEligibilityReason: boolean
-  /** Guardia */
-  guardianChildren: Array<{
-    childId: string
-    name: string
-    relation: string
-    canViewChildInfo: boolean
-    canRespondAvailability: boolean
-  }>
   /** Navegación */
   canOpen: (page: Page) => boolean
   /** Etiquetas de alcance ya resueltas */
@@ -94,11 +82,7 @@ function coachScopeIds(actor: Person): string[] {
     .map((item) => item.target)
 }
 
-export function getAuthority(
-  state: State,
-  actor: Person,
-  childId: string | null = null,
-): Authority {
+export function getAuthority(state: State, actor: Person): Authority {
   const roles = activeRoleAssignments(state, actor.id)
   const roleNames = Array.from(new Set(roles.map((r) => r.role)))
   const admin = roleNames.includes("ADMIN")
@@ -115,7 +99,7 @@ export function getAuthority(
         new Set([
           ...coachTeams,
           ...captainTeams,
-          ...activeTeamAssignments(state, childId ?? actor.id).map(
+          ...activeTeamAssignments(state, actor.id).map(
             (a) => a.teamId,
           ),
         ]),
@@ -128,23 +112,6 @@ export function getAuthority(
     roles.some((r) => r.scope === "EVENT" && r.target === event.id)
 
   const officialOnEvent = (event: Event) => clubWide
-
-  const guardians = activeGuardianRelations(state, actor.id)
-  const guardianChildren = guardians.map((relation) => {
-    const child = state.people.find((person) => person.id === relation.childId)
-    return {
-      childId: relation.childId,
-      name: child?.name ?? "Menor",
-      relation: relation.relation,
-      canViewChildInfo: relation.canViewChildInfo,
-      canRespondAvailability: relation.canRespondAvailability,
-    }
-  })
-
-  const canRespondForChild = (id: string) =>
-    guardians.some(
-      (r) => r.childId === id && r.canRespondAvailability && !r.validUntil,
-    )
 
   const isSelfPlayer = roleNames.includes("PLAYER") || roleNames.includes("CAPTAIN")
   const hasMembership = state.memberships.some(
@@ -194,12 +161,8 @@ export function getAuthority(
     canManageStructure: admin,
     canManageCompetitions: admin || official,
     canViewCompetitions: admin || official,
-    canManageEligibility: admin || official,
-    canManageMembership: admin,
-    canManageGuardianRelations: admin,
     canViewAudit: admin,
     canRespondOwn: isSelfPlayer && hasMembership,
-    canRespondForChild,
     canViewDni: admin,
     canViewBirth: admin,
     canViewContact: (person: Person) => {
@@ -215,16 +178,6 @@ export function getAuthority(
         captainTeams.some((id) => theirTeams.includes(id))
       )
     },
-    canViewEligibilityStatus: (person: Person) => {
-      if (person.id === actor.id) return true
-      if (clubWide) return true
-      const theirTeams = activeTeamAssignments(state, person.id).map(
-        (a) => a.teamId,
-      )
-      return coachTeams.some((id) => theirTeams.includes(id))
-    },
-    canViewEligibilityReason: official || admin,
-    guardianChildren,
     canOpen: (page: Page) => {
       switch (page) {
         case "more":
@@ -235,9 +188,9 @@ export function getAuthority(
         case "notifications":
           return true
         case "teams":
-          return teamIds.length > 0 || guardianChildren.length > 0
+          return teamIds.length > 0
         case "communication":
-          return authority.canChat || guardians.length > 0
+          return authority.canChat
         case "reports":
           return isSelfPlayer || coachTeams.length > 0 || official
         case "audit":
@@ -247,8 +200,7 @@ export function getAuthority(
         case "structure":
           return admin
         case "people":
-          // La Subcomisión entra a la ficha para la habilitación, no para cuentas.
-          return admin || official
+          return admin
         case "competitions":
           return admin || official
         case "announcements":
@@ -263,6 +215,5 @@ export function getAuthority(
     },
   }
 
-  void hasRoleIn
   return authority
 }

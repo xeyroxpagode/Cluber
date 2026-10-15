@@ -6,9 +6,8 @@ import {
   activeMemberships,
   activeRoleAssignments,
   activeTeamAssignments,
-  entryMatchesEvent,
+  conflictCodesFor,
   eventsInScopeOfPerson,
-  guardiansOf,
   profileCompleteness,
   roleScopeLabel,
   scopeTeamIds,
@@ -19,10 +18,8 @@ import { classifyChange, computeImpact } from "../mock/impact"
 import { seriesOccurrences } from "../mock/series"
 import { getAuthority } from "../mock/authority"
 import {
-  entryLabel,
   eventAvailabilityView,
   eventTargetsText,
-  lineEntryLabel,
   teamName,
 } from "../mock/model"
 import { todayIso } from "../mock/clock"
@@ -262,10 +259,6 @@ describe("§16 — verdad de persona derivada, no legada", () => {
     expect(roleScopeLabel(state, roles[0])).toBe("Sexta A")
   })
 
-  it("el guardian no tiene roles deportivos", () => {
-    expect(activeRoleAssignments(state, "guardian")).toHaveLength(0)
-  })
-
   it("pertenencia y equipo son cosas distintas", () => {
     expect(activeMemberships(state, "p2")).toHaveLength(1)
     expect(activeTeamAssignments(state, "p2")).toHaveLength(1)
@@ -280,60 +273,30 @@ describe("§16 — verdad de persona derivada, no legada", () => {
   })
 })
 
-describe("D2 / D3 — Membership y representación", () => {
+describe("D2 — Membership", () => {
   it("crear una persona no alcanza: la pertenencia se opera aparte", () => {
     const withoutMembership = state.people.filter(
       (person) => activeMemberships(state, person.id).length === 0,
     )
     expect(withoutMembership.map((p) => p.id)).toContain("p16")
   })
-
-  it("una relación de representación declara los dos permisos por separado", () => {
-    const relations = guardiansOf(state, "p2")
-    expect(relations).toHaveLength(1)
-    expect(relations[0].canViewChildInfo).toBe(true)
-    expect(relations[0].canRespondAvailability).toBe(true)
-  })
-
-  it("la segunda relación puede permitir ver y no responder", () => {
-    const relations = guardiansOf(state, "p8")
-    expect(relations[0].canViewChildInfo).toBe(true)
-    expect(relations[0].canRespondAvailability).toBe(false)
-  })
 })
 
-describe("D4 — Entry TEAM vs LINE", () => {
-  const competition = state.competitions.find((c) => c.id === "ahba")!
-  const lineEntry = competition.entries.find((e) => e.scope === "LINE")!
-  const teamEntry = competition.entries.find((e) => e.scope === "TEAM")!
-
-  it("una inscripción de línea nunca se muestra como 'Línea A' pelado", () => {
-    const label = lineEntryLabel(state, lineEntry)
-    expect(label).toBe("Línea A · Sexta · Temporada 2026")
-    expect(label.split(" · ")).toHaveLength(3)
+describe("V1.1 — Competition simple, sin inscripciones ni lifecycle", () => {
+  it("la competencia es crear, editar, archivar y consultar", () => {
+    const competition = state.competitions.find((c) => c.id === "ahba")!
+    expect(competition.name).toBe("Torneo AHBA 2026 · Damas")
+    expect(competition.archivedAt).toBeNull()
+    const raw = competition as unknown as Record<string, unknown>
+    expect(raw.entries).toBeUndefined()
+    expect(raw.state).toBeUndefined()
   })
 
-  it("una inscripción de equipo dice Equipo · <equipo>", () => {
-    expect(entryLabel(state, teamEntry)).toBe("Equipo · Quinta B")
-  })
-
-  it("el alcance se resuelve contra el equipo concreto del partido", () => {
-    const sextaMatch = state.events.find(
-      (e) => e.targetTeams.includes("sexta") && e.type === "MATCH",
-    )!
-    expect(entryMatchesEvent(state, lineEntry, sextaMatch).ok).toBe(true)
-    expect(entryMatchesEvent(state, teamEntry, sextaMatch).ok).toBe(false)
-    expect(entryMatchesEvent(state, teamEntry, sextaMatch).reason).toMatch(
-      /otro equipo/,
-    )
-  })
-
-  it("una entrada LINE de otra división no resuelve", () => {
-    const primeraMatch = state.events.find(
-      (e) => e.targetTeams.includes("primera") && e.type === "MATCH",
-    )
-    if (primeraMatch)
-      expect(entryMatchesEvent(state, lineEntry, primeraMatch).ok).toBe(false)
+  it("Match y Jornada referencian directo por competitionId opcional", () => {
+    const match = state.events.find((e) => e.id === "match-cuba")!
+    expect(match.competitionId).toBe("ahba")
+    const jornada = state.jornadas.find((j) => j.id === "j1")!
+    expect(jornada.competitionId).toBe("ahba")
   })
 })
 
@@ -342,20 +305,7 @@ describe("D5 / D6 — autoridad de campo y completitud de perfil", () => {
     expect(getAuthority(state, person("admin")).canViewDni).toBe(true)
     expect(getAuthority(state, person("coach")).canViewDni).toBe(false)
     expect(getAuthority(state, person("p2")).canViewDni).toBe(false)
-    expect(getAuthority(state, person("guardian")).canViewDni).toBe(false)
-  })
-
-  it("el motivo de elegibilidad es de Subcomisión y administración", () => {
-    expect(getAuthority(state, person("subcommittee")).canViewEligibilityReason).toBe(true)
-    expect(getAuthority(state, person("admin")).canViewEligibilityReason).toBe(true)
-    expect(getAuthority(state, person("coach")).canViewEligibilityReason).toBe(false)
-    expect(getAuthority(state, person("p2")).canViewEligibilityReason).toBe(false)
-  })
-
-  it("la jugadora ve su propio estado de habilitación y no el detalle", () => {
-    const authority = getAuthority(state, person("p2"))
-    expect(authority.canViewEligibilityStatus(person("p2"))).toBe(true)
-    expect(authority.canViewEligibilityStatus(person("p0"))).toBe(false)
+    expect(getAuthority(state, person("subcommittee")).canViewDni).toBe(false)
   })
 
   it("un perfil incompleto dice exactamente qué falta", () => {
@@ -366,11 +316,9 @@ describe("D5 / D6 — autoridad de campo y completitud de perfil", () => {
   })
 })
 
-describe("D3 / §28 — alcance del guardián", () => {
-  const guardian = person("guardian")
-
-  it("el guardián ve los eventos del menor que puede responder", () => {
-    const events = visibleEvents(state, guardian.id, "p2")
+describe("V1.1 — alcance propio, sin representación delegada", () => {
+  it("cada jugadora ve los eventos de su propio equipo", () => {
+    const events = visibleEvents(state, "p2")
     expect(events.length).toBeGreaterThan(0)
     expect(
       events.every((e) => e.clubWide || e.targetTeams.includes("sexta")),
@@ -379,27 +327,17 @@ describe("D3 / §28 — alcance del guardián", () => {
     expect(events.some((e) => e.targetTeams.includes("septima"))).toBe(false)
   })
 
-  it("cambiar de menor cambia el alcance de forma transversal", () => {
-    const first = visibleEvents(state, guardian.id, "p2")
-    const second = visibleEvents(state, guardian.id, "p8")
-    expect(
-      second.every((e) => e.clubWide || e.targetTeams.includes("septima")),
-    ).toBe(true)
-    expect(first.map((e) => e.id)).not.toEqual(second.map((e) => e.id))
-    expect(scopeTeamIds(state, guardian.id, "p2")).toEqual(["sexta"])
-    expect(scopeTeamIds(state, guardian.id, "p8")).toEqual(["septima"])
+  it("el alcance sale de asignaciones propias, no de un menor seleccionado", () => {
+    expect(scopeTeamIds(state, "p2")).toEqual(["sexta"])
+    expect(scopeTeamIds(state, "p8")).toEqual(["septima"])
   })
 
-  it("sólo puede responder por el menor con delegación", () => {
-    const authority = getAuthority(state, guardian, "p2")
-    expect(authority.canRespondForChild("p2")).toBe(true)
-    expect(authority.canRespondForChild("p8")).toBe(false)
-  })
-
-  it("no recibe roles deportivos ni acceso de chat automático", () => {
-    const authority = getAuthority(state, guardian, "p2")
-    expect(authority.roles).toHaveLength(0)
-    expect(authority.canChat).toBe(false)
+  it("cada jugadora responde sólo su propia disponibilidad", () => {
+    const player = getAuthority(state, person("p2"))
+    expect(player.canRespondOwn).toBe(true)
+    const raw = player as unknown as Record<string, unknown>
+    expect(raw.canRespondForChild).toBeUndefined()
+    expect(raw.guardianChildren).toBeUndefined()
   })
 })
 
@@ -445,18 +383,27 @@ describe("§15 — una sola fuente de autoridad", () => {
   })
 })
 
-describe("§44 — conflictos de convocatoria en lenguaje usuario", () => {
-  it("detecta a quien no puede jugar y devuelve su id", () => {
+describe("§44 — conflictos de convocatoria en lenguaje usuario (V1.1)", () => {
+  it("sólo sobreviven NO_LONGER_EVENT_TARGET y NO_LONGER_TEAM_AFFILIATED", () => {
     const match = state.events.find((e) => e.id === "match-cuba")!
-    const conflicts = selectionConflicts(state, match)
-    expect(conflicts).toContain("p4")
+    const withStranger = {
+      ...match,
+      published: [...(match.published ?? []), "p8"],
+    }
+    const conflicts = selectionConflicts(state, withStranger)
+    expect(conflicts).toContain("p8")
+    const codes = conflictCodesFor(state, withStranger, "p8")
+    expect(codes.length).toBeGreaterThan(0)
+    expect(
+      codes.every((code) =>
+        ["NO_LONGER_EVENT_TARGET", "NO_LONGER_TEAM_AFFILIATED"].includes(code),
+      ),
+    ).toBe(true)
   })
 
-  it("el motivo no expone el código interno", () => {
+  it("sin cambios de destino no hay conflictos", () => {
     const match = state.events.find((e) => e.id === "match-cuba")!
-    expect(selectionConflicts(state, match).length).toBeGreaterThan(0)
-    // el copy vive en CONFLICT_TEXT, no en el dominio
-    expect(typeof selectionConflicts(state, match)[0]).toBe("string")
+    expect(selectionConflicts(state, match)).toHaveLength(0)
   })
 })
 

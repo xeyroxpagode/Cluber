@@ -19,14 +19,10 @@ import {
 import {
   activeRoleAssignments,
   activeTeamAssignments,
-  eventsInScopeOfPerson,
-  guardiansOf,
   profileCompleteness,
   roleScopeLabel,
   selectionConflicts,
   visibleEvents,
-  CONFLICT_TEXT,
-  conflictCodesFor,
 } from "../mock/derive"
 import {
   dateLabel,
@@ -71,10 +67,9 @@ interface AttentionItem {
 }
 
 function buildAttention(): AttentionItem[] {
-  const { state, actor, authority, childId } = useProduct()
+  const { state, actor, authority } = useProduct()
   const today = todayIso()
-  const subject = childId ?? actor.id
-  const scoped = visibleEvents(state, actor.id, childId).filter(
+  const scoped = visibleEvents(state, actor.id).filter(
     (event) => event.state !== "CANCELLED" && event.state !== "COMPLETED",
   )
   const items: AttentionItem[] = []
@@ -127,32 +122,12 @@ function buildAttention(): AttentionItem[] {
       })
   }
 
-  if (authority.canManageEligibility) {
-    const blocked = state.eligibilityConstraints.filter(
-      (constraint) => constraint.state === "BLOCKED" && !constraint.validUntil,
-    )
-    if (blocked.length > 0)
-      items.push({
-        id: "blocked",
-        reason: `${blocked.length} ${
-          blocked.length === 1 ? "restricción vigente" : "restricciones vigentes"
-        } sin resolver.`,
-        consequence:
-          "Las personas afectadas no pueden jugar hasta que se levante el bloqueo.",
-        action: { label: "Revisar elegibilidad", to: "/management/people" },
-        urgency: "now",
-      })
-  }
-
-  // Reconfirmación pendiente de quien mira (sólo si puede responder).
-  const canRespond =
-    authority.canRespondOwn ||
-    (childId !== null && authority.canRespondForChild(childId))
-  const subjectEvents = canRespond
+  // Reconfirmación pendiente (sólo si puede responder su propia disponibilidad).
+  const subjectEvents = authority.canRespondOwn
     ? scoped.filter((event) => event.state === "SCHEDULED")
     : []
   const stale = subjectEvents.filter(
-    (event) => eventAvailabilityView(event, subject) === "NEEDS_RECONFIRMATION",
+    (event) => eventAvailabilityView(event, actor.id) === "NEEDS_RECONFIRMATION",
   )
   if (stale.length > 0)
     items.push({
@@ -170,7 +145,7 @@ function buildAttention(): AttentionItem[] {
     })
 
   const unanswered = subjectEvents.filter(
-    (event) => eventAvailabilityView(event, subject) === "NO_RESPONSE" && event.date >= today,
+    (event) => eventAvailabilityView(event, actor.id) === "NO_RESPONSE" && event.date >= today,
   )
   if (unanswered.length > 0)
     items.push({
@@ -344,10 +319,9 @@ function go(path: string) {
 }
 
 export function Home() {
-  const { state, authority, actor, childId } = useProduct()
+  const { state, actor } = useProduct()
   const today = todayIso()
-  const scoped = visibleEvents(state, actor.id, childId)
-  const subject = childId ?? actor.id
+  const scoped = visibleEvents(state, actor.id)
 
   const todayEvents = scoped
     .filter((event) => event.date === today && event.state !== "CANCELLED")
@@ -381,14 +355,8 @@ export function Home() {
     <div className="gei-stack-page mx-auto max-w-5xl">
       <PageContextHeader
         context="Inicio"
-        title={authority.guardianChildren.length > 0 && childId
-          ? (state.people.find((p) => p.id === childId)?.name ?? actor.name)
-          : `Hola, ${actor.firstName}`}
-        lead={
-          authority.guardianChildren.length > 0 && childId
-            ? "Información y eventos del menor que estás mirando."
-            : "Lo que pasa hoy y lo que viene."
-        }
+        title={`Hola, ${actor.firstName}`}
+        lead="Lo que pasa hoy y lo que viene."
       />
 
       <AttentionSection />
@@ -509,7 +477,7 @@ export function Home() {
 
       <p className="gei-meta sr-only" aria-live="polite">
         Tu disponibilidad pendiente:{" "}
-        {subject ? String(scoped.filter((e) => eventAvailabilityView(e, subject) === "NO_RESPONSE").length) : "0"}
+        {String(scoped.filter((e) => eventAvailabilityView(e, actor.id) === "NO_RESPONSE").length)}
       </p>
     </div>
   )
@@ -547,7 +515,7 @@ function monthMatrix(anchor: string) {
 }
 
 export function Calendar() {
-  const { state, authority, actor, childId } = useProduct()
+  const { state, authority, actor } = useProduct()
   const query = useQueryState()
   useRouter()
   const today = todayIso()
@@ -558,8 +526,8 @@ export function Calendar() {
   const selected = query.get("event")
 
   const scoped = useMemo(
-    () => visibleEvents(state, actor.id, childId),
-    [state, actor.id, childId],
+    () => visibleEvents(state, actor.id),
+    [state, actor.id],
   )
   const filtered = scoped.filter((event) => {
     if (teamFilter && !event.targetTeams.includes(teamFilter)) return false
@@ -785,7 +753,7 @@ export function Calendar() {
                 {venueName(state, selectedEvent)}
               </p>
               {selectedEvent.state === "SCHEDULED" && (
-                <VasControl event={selectedEvent} personId={childId ?? actor.id} />
+                <VasControl event={selectedEvent} personId={actor.id} />
               )}
               <Button variant="secondary" onClick={() => query.set({ event: "" })}>
                 Dejar de ver este evento
@@ -831,8 +799,8 @@ export function Calendar() {
    ═══════════════════════════════════════════════════════════════ */
 
 export function Teams() {
-  const { state, authority, actor, childId } = useProduct()
-  const scoped = visibleEvents(state, actor.id, childId)
+  const { state, authority, actor } = useProduct()
+  const scoped = visibleEvents(state, actor.id)
   const teams = state.teams.filter((team) => team.state === "ACTIVE")
 
   return (
@@ -880,12 +848,11 @@ export function Teams() {
 
 export function TeamDetail() {
   const { teamId = "" } = useParams()
-  const { state, authority, actor, childId } = useProduct()
+  const { state, authority, actor } = useProduct()
   const query = useQueryState()
   const tab = query.get("tab", "eventos")
   useRouter()
   const today = todayIso()
-  const subject = childId ?? actor.id
 
   const team = state.teams.find((item) => item.id === teamId)
   if (!team || !authority.canOpen("teams"))
@@ -904,7 +871,7 @@ export function TeamDetail() {
       (assignment) => assignment.teamId === teamId,
     ),
   )
-  const scoped = visibleEvents(state, actor.id, childId)
+  const scoped = visibleEvents(state, actor.id)
   const events = scoped
     .filter((event) => event.targetTeams.includes(teamId))
     .sort((a, b) =>
@@ -1012,7 +979,7 @@ detail={roles
                     <Surface className="grid gap-3">
                       <EventLine event={event} />
                       {event.state === "SCHEDULED" && (
-                        <VasControl event={event} personId={subject} />
+                        <VasControl event={event} personId={actor.id} />
                       )}
                     </Surface>
                   </li>
@@ -1093,12 +1060,6 @@ export function PersonDetail() {
 
   const roles = activeRoleAssignments(state, person.id)
   const teams = activeTeamAssignments(state, person.id)
-  const relations = guardiansOf(state, person.id)
-  const eligibility = state.eligibilityConstraints.filter(
-    (constraint) =>
-      constraint.personId === person.id &&
-      (!constraint.validUntil || constraint.validUntil > todayIso()),
-  )
 
   return (
     <div className="gei-stack-page mx-auto max-w-3xl">
@@ -1160,62 +1121,6 @@ export function PersonDetail() {
           </ul>
         </DetailSection>
       )}
-
-      {relations.length > 0 && (
-        <DetailSection title="Personas que pueden actuar por esta persona">
-          <ul className="grid gap-1">
-            {relations.map((relation) => {
-              const guardian = state.people.find(
-                (item) => item.id === relation.guardianId,
-              )
-              return (
-                <li key={relation.id}>
-                  <RowStatic
-                    title={guardian?.name ?? "—"}
-                    detail={`${relation.relation} · puede ver información: ${
-                      relation.canViewChildInfo ? "sí" : "no"
-                    } · puede responder ¿Vas?: ${
-                      relation.canRespondAvailability ? "sí" : "no"
-                    }`}
-                  />
-                </li>
-              )
-            })}
-          </ul>
-        </DetailSection>
-      )}
-
-      {authority.canViewEligibilityStatus(person) && (
-        <DetailSection title="Habilitación para jugar">
-          {eligibility.length === 0 ? (
-            <p className="gei-meta">Sin restricciones vigentes: puede jugar.</p>
-          ) : (
-            <ul className="grid gap-1">
-              {eligibility.map((constraint) => (
-                <li key={constraint.id}>
-                  <RowStatic
-                    title={
-                      constraint.state === "BLOCKED"
-                        ? "No habilitada para jugar"
-                        : "Trámite pendiente"
-                    }
-                    detail={
-                      authority.canViewEligibilityReason
-                        ? constraint.note ?? "Sin detalle"
-                        : "Pedí el detalle a la Subcomisión."
-                    }
-                    trailing={
-                      <StateBadge
-                        value={constraint.state === "BLOCKED" ? "BLOCKED" : "PENDING"}
-                      />
-                    }
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
-        </DetailSection>
-      )}
     </div>
   )
 }
@@ -1225,12 +1130,12 @@ export function PersonDetail() {
    ═══════════════════════════════════════════════════════════════ */
 
 export function SearchPage() {
-  const { state, authority, actor, childId } = useProduct()
+  const { state, actor } = useProduct()
   const query = useQueryState()
   const term = query.get("q")
   const [draft, setDraft] = useState(term)
   const needle = term.trim().toLowerCase()
-  const scoped = visibleEvents(state, actor.id, childId)
+  const scoped = visibleEvents(state, actor.id)
 
   const people = needle
     ? state.people.filter(
@@ -1320,11 +1225,6 @@ export function SearchPage() {
                     key={person.id}
                     to={`/people/${person.id}`}
                     title={person.name}
-                    detail={
-                      authority.canViewEligibilityStatus(person)
-                        ? undefined
-                        : undefined
-                    }
                     leading={<Avatar name={person.name} size="sm" />}
                   />
                 ))}

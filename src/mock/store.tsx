@@ -10,16 +10,9 @@ import {
 import { createSeed } from "./seed"
 import type {
   Announcement,
-  Competition,
-  CompetitionEntry,
-  EligibilityConstraint,
   Event,
-  GuardianRelationship,
   Membership,
-  NewCompetitionEntry,
   Notice,
-  CompetitionEntryLine,
-  CompetitionEntryTeam,
   NotificationType,
   Person,
   Response,
@@ -71,11 +64,10 @@ interface ProductApi {
   state: State
   actor: Person
   authority: Authority
-  childId: string | null
-  setChildId: (id: string | null) => void
   authenticated: boolean
   hasAccess: boolean
-  login: (username: string) => boolean
+  /** Login V1.1: Person.email + password. Nunca username. */
+  login: (email: string, password: string) => boolean
   logout: () => void
   toast: (message: string) => void
   toastMessage: string
@@ -164,31 +156,13 @@ interface ProductApi {
   ) => { ok: boolean; error?: string }
   issueSetupToken: (personId: string) => string
   activateAccount: (code: string) => { ok: boolean; error?: string }
-  createGuardianRelationship: (data: {
-    guardianId: string
-    childId: string
-    relation: string
-    canViewChildInfo: boolean
-    canRespondAvailability: boolean
-  }) => void
-  endGuardianRelationship: (id: string, reason: string) => void
-  createConstraint: (data: Omit<EligibilityConstraint, "id" | "createdAt" | "createdBy">) => void
-  endConstraint: (id: string, reason: string) => void
-  /* Competencias */
+  /* Competencias · simple V1.1: crear, editar, archivar, consultar */
   createCompetition: (data: { name: string; organizer: string }) => string
-  addCompetitionEntry: (
+  updateCompetition: (
     competitionId: string,
-    entry: NewCompetitionEntry,
+    data: { name?: string; organizer?: string },
   ) => { ok: boolean; error?: string }
-  setCompetitionState: (
-    competitionId: string,
-    state: Competition["state"],
-  ) => { ok: boolean; error?: string }
-  setEntryState: (
-    competitionId: string,
-    entryId: string,
-    state: CompetitionEntry["state"],
-  ) => { ok: boolean; error?: string }
+  archiveCompetition: (competitionId: string, reason: string) => { ok: boolean; error?: string }
   /* Estructura */
   setStructureArchived: (
     id: string,
@@ -202,7 +176,8 @@ interface ProductApi {
   createJornada: (data: {
     name: string
     seasonId: string
-    competitionId: string
+    /** Referencia directa opcional a Competition (V1.1). */
+    competitionId: string | null
     eventIds: string[]
   }) => { ok: boolean; id?: string; error?: string }
   /* Comunicación */
@@ -237,7 +212,6 @@ const DEMO_ACTORS: Record<string, string> = {
   coach: "coach",
   player: "p2",
   captain: "p0",
-  guardian: "guardian",
 }
 
 export function MockAppProvider({ children }: { children: ReactNode }) {
@@ -247,20 +221,18 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
     const demo = new URLSearchParams(window.location.search).get("demo")
     return DEMO_ACTORS[demo ?? ""] ?? "coach"
   })
-  const [childId, setChildId] = useState<string | null>(null)
   const [toastMessage, setToast] = useState("")
   const toastTimer = useRef<number | undefined>(undefined)
   const conflictOnce = useRef(false)
 
   const actor = state.people.find((person) => person.id === actorId) ?? state.people[0]
   const authority = useMemo(
-    () => getAuthority(state, actor, childId),
-    [state, actor, childId],
+    () => getAuthority(state, actor),
+    [state, actor],
   )
   const hasAccess =
     actor.account === "ACTIVE" &&
-    (activeRoleAssignments(state, actor.id).length > 0 ||
-      authority.guardianChildren.length > 0)
+    activeRoleAssignments(state, actor.id).length > 0
 
   const toast = useCallback((message: string) => {
     setToast(message)
@@ -1076,84 +1048,6 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
     return { ok: true }
   }
 
-  const createGuardianRelationship: ProductApi["createGuardianRelationship"] = (
-    data,
-  ) => {
-    update(
-      (draft) => {
-        draft.guardianRelationships.push({
-          id: `gr-${uid().slice(0, 6)}`,
-          ...data,
-          validFrom: todayIso(),
-          validUntil: null,
-        })
-      },
-      {
-        action: "Crear relación de representación",
-        resource: data.childId,
-        before: null,
-        after: `${data.relation} · ve info: ${data.canViewChildInfo ? "sí" : "no"} · responde: ${data.canRespondAvailability ? "sí" : "no"}`,
-        source: "Administración del club",
-      },
-    )
-  }
-
-  const endGuardianRelationship: ProductApi["endGuardianRelationship"] = (
-    id,
-    reason,
-  ) => {
-    update(
-      (draft) => {
-        const item = draft.guardianRelationships.find((r) => r.id === id)
-        if (item) item.validUntil = addDays(todayIso(), 1)
-      },
-      {
-        action: "Finalizar relación de representación",
-        resource: id,
-        before: "Vigente",
-        after: "Finalizada",
-        source: reason,
-      },
-    )
-  }
-
-  const createConstraint: ProductApi["createConstraint"] = (data) => {
-    update(
-      (draft) => {
-        draft.eligibilityConstraints.push({
-          ...data,
-          id: `ec-${uid().slice(0, 6)}`,
-          createdAt: nowIso(),
-          createdBy: actor.name,
-        })
-      },
-      {
-        action: data.state === "BLOCKED" ? "Bloquear habilitación" : "Pedir habilitación",
-        resource: data.personId,
-        before: null,
-        after: `${data.scope} · ${data.source} · ${data.reason}`,
-        source: data.note ?? "Administración",
-        route: `/management/people/${data.personId}`,
-      },
-    )
-  }
-
-  const endConstraint: ProductApi["endConstraint"] = (id, reason) => {
-    update(
-      (draft) => {
-        const item = draft.eligibilityConstraints.find((c) => c.id === id)
-        if (item) item.validUntil = addDays(todayIso(), 1)
-      },
-      {
-        action: "Levantar restricción de habilitación",
-        resource: id,
-        before: "Vigente",
-        after: "Sin efecto",
-        source: reason,
-      },
-    )
-  }
-
   const createCompetition: ProductApi["createCompetition"] = (data) => {
     const id = `comp-${uid().slice(0, 6)}`
     update(
@@ -1162,92 +1056,48 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
           id,
           name: data.name,
           organizer: data.organizer,
-          state: "DRAFT",
-          entries: [],
+          archivedAt: null,
         })
       },
       {
         action: "Crear competencia",
         resource: data.name,
         before: null,
-        after: "Borrador",
+        after: data.organizer,
         source: "Administración",
       },
     )
     return id
   }
 
-  const addCompetitionEntry: ProductApi["addCompetitionEntry"] = (
+  const updateCompetition: ProductApi["updateCompetition"] = (
     competitionId,
-    input,
+    data,
   ) => {
-    const competition = state.competitions.find((item) => item.id === competitionId)
-    if (!competition) return { ok: false, error: "No encontramos la competencia." }
-    if (competition.state === "CLOSED")
-      return {
-        ok: false,
-        error: "La competencia está cerrada: no admite inscripciones nuevas.",
-      }
-    if (
-      competition.entries.some((item) =>
-        item.scope === input.scope
-          ? item.scope === "TEAM"
-            ? (item as CompetitionEntryTeam).teamId ===
-              (input as CompetitionEntryTeam).teamId
-            : (item as CompetitionEntryLine).divisionId ===
-                (input as CompetitionEntryLine).divisionId &&
-              (item as CompetitionEntryLine).lineId ===
-                (input as CompetitionEntryLine).lineId &&
-              (item as CompetitionEntryLine).seasonId ===
-                (input as CompetitionEntryLine).seasonId
-          : false,
-      )
+    const competition = state.competitions.find(
+      (item) => item.id === competitionId,
     )
-      return { ok: false, error: "Esa inscripción ya existe en la competencia." }
-    update(
-      (draft) => {
-        const target = draft.competitions.find((item) => item.id === competitionId)!
-        target.entries.push({
-          ...(input as CompetitionEntry),
-          id: `entry-${uid().slice(0, 6)}`,
-        })
-      },
-      {
-        action: "Añadir inscripción",
-        resource: competition.name,
-        before: `${competition.entries.length} inscripciones`,
-        after: `${competition.entries.length + 1} inscripciones`,
-        source: input.scope === "TEAM" ? "Equipo" : "Línea",
-      },
-    )
-    return { ok: true }
-  }
-
-  const setCompetitionState: ProductApi["setCompetitionState"] = (
-    competitionId,
-    next,
-  ) => {
-    const competition = state.competitions.find((item) => item.id === competitionId)
-    if (!competition) return { ok: false, error: "No encontramos la competencia." }
-    if (
-      next === "CLOSED" &&
-      competition.entries.some((entry) => entry.state === "ACTIVE")
-    )
+    if (!competition)
+      return { ok: false, error: "No encontramos la competencia." }
+    if (competition.archivedAt)
       return {
         ok: false,
         error:
-          "No se puede cerrar: quedan inscripciones activas. Finalizalas primero.",
+          "La competencia está archivada: se puede consultar pero no editar.",
       }
     update(
       (draft) => {
-        const target = draft.competitions.find((item) => item.id === competitionId)!
-        target.state = next
+        const target = draft.competitions.find(
+          (item) => item.id === competitionId,
+        )!
+        if (data.name !== undefined) target.name = data.name
+        if (data.organizer !== undefined) target.organizer = data.organizer
       },
       {
-        action: "Cambiar estado de la competencia",
+        action: "Editar competencia",
         resource: competition.name,
-        before: competition.state,
-        after: next,
+        before: `${competition.name} · ${competition.organizer}`,
+        after: `${data.name ?? competition.name} · ${data.organizer ?? competition.organizer}`,
         source: "Administración",
         route: `/management/competitions/${competitionId}`,
       },
@@ -1255,27 +1105,29 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
     return { ok: true }
   }
 
-  const setEntryState: ProductApi["setEntryState"] = (
+  const archiveCompetition: ProductApi["archiveCompetition"] = (
     competitionId,
-    entryId,
-    next,
+    reason,
   ) => {
-    const competition = state.competitions.find((item) => item.id === competitionId)
-    const entry = competition?.entries.find((item) => item.id === entryId)
-    if (!competition || !entry) return { ok: false, error: "No encontramos la inscripción." }
+    const competition = state.competitions.find(
+      (item) => item.id === competitionId,
+    )
+    if (!competition)
+      return { ok: false, error: "No encontramos la competencia." }
+    if (competition.archivedAt) return { ok: true }
     update(
       (draft) => {
-        const target = draft.competitions
-          .find((item) => item.id === competitionId)!
-          .entries.find((item) => item.id === entryId)!
-        target.state = next
+        const target = draft.competitions.find(
+          (item) => item.id === competitionId,
+        )!
+        target.archivedAt = nowIso()
       },
       {
-        action: "Cambiar estado de la inscripción",
+        action: "Archivar competencia",
         resource: competition.name,
-        before: entry.state,
-        after: next,
-        source: "Administración",
+        before: "Activa",
+        after: "Archivada",
+        source: reason,
         route: `/management/competitions/${competitionId}`,
       },
     )
@@ -1365,11 +1217,13 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
 
   const createJornada: ProductApi["createJornada"] = (data) => {
     const season = state.structure.find((item) => item.id === data.seasonId)
-    const competition = state.competitions.find(
-      (item) => item.id === data.competitionId,
-    )
     if (!season) return { ok: false, error: "Elegí una temporada." }
-    if (!competition) return { ok: false, error: "Elegí una competencia." }
+    if (data.competitionId) {
+      const competition = state.competitions.find(
+        (item) => item.id === data.competitionId,
+      )
+      if (!competition) return { ok: false, error: "Elegí una competencia válida." }
+    }
     if (data.eventIds.length === 0)
       return { ok: false, error: "Elegí al menos un partido para la jornada." }
     if (data.eventIds.length > 100)
@@ -1401,7 +1255,7 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
           id,
           name: data.name.trim() || `Fecha de ${season.name}`,
           seasonId: data.seasonId,
-          competitionId: data.competitionId,
+          competitionId: data.competitionId ?? null,
           events: [...data.eventIds],
           at: todayIso(),
           venueId: null,
@@ -1415,7 +1269,9 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
         resource: data.name.trim() || `Fecha de ${season.name}`,
         before: null,
         after: `${data.eventIds.length} partidos`,
-        source: competition.name,
+        source:
+          state.competitions.find((item) => item.id === data.competitionId)?.name ??
+          "Sin competencia",
         route: `/jornadas/${id}`,
       },
     )
@@ -1730,11 +1586,16 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
     })
   }
 
-  const login = (username: string) => {
+  /** Login V1.1: Person.email (único, case-insensitive) + password. */
+  const login = (email: string, password: string) => {
+    const needle = email.trim().toLowerCase()
+    if (!needle || !password) return false
     const person = state.people.find(
-      (item) => item.username === username || item.id === username,
+      (item) => item.email.trim().toLowerCase() === needle,
     )
     if (!person || person.account !== "ACTIVE") return false
+    // Simulación honesta de credencial: cualquier contraseña no vacía
+    // activa la cuenta demo. No existe backend real en el prototipo.
     setActorId(person.id)
     setAuthenticated(true)
     return true
@@ -1744,8 +1605,6 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
     state,
     actor,
     authority,
-    childId,
-    setChildId,
     authenticated,
     hasAccess,
     login,
@@ -1772,14 +1631,9 @@ export function MockAppProvider({ children }: { children: ReactNode }) {
     setAccountState,
     issueSetupToken,
     activateAccount,
-    createGuardianRelationship,
-    endGuardianRelationship,
-    createConstraint,
-    endConstraint,
     createCompetition,
-    addCompetitionEntry,
-    setCompetitionState,
-    setEntryState,
+    updateCompetition,
+    archiveCompetition,
     setStructureArchived,
     updateJornada,
     createJornada,
@@ -1815,16 +1669,5 @@ export function useMembership(personId: string): Membership | null {
     state.memberships.find(
       (item) => item.personId === personId && !item.validUntil,
     ) ?? null
-  )
-}
-
-export function useActiveGuardianRelations(guardianId: string): GuardianRelationship[] {
-  const { state } = useProduct()
-  const today = todayIso()
-  return state.guardianRelationships.filter(
-    (item) =>
-      item.guardianId === guardianId &&
-      item.validFrom <= today &&
-      (!item.validUntil || item.validUntil > today),
   )
 }

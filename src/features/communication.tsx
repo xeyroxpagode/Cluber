@@ -76,10 +76,9 @@ function conversationTitle(
    ═══════════════════════════════════════════════════════════════ */
 
 export function CommunicationHome() {
-  const { state, authority, actor, childId } = useProduct()
+  const { state, authority, actor } = useProduct()
   const query = useQueryState()
   const tab = query.get("tab", "conversaciones")
-  void childId
   useRouter()
 
   if (!authority.canOpen("communication"))
@@ -283,12 +282,11 @@ export function CommunicationHome() {
    ═══════════════════════════════════════════════════════════════ */
 
 export function NewConversation() {
-  const { state, authority, actor, childId } = useProduct()
+  const { state, authority, actor } = useProduct()
   const [params] = useSearchParams()
   const query = useQueryState()
   const [term, setTerm] = useState("")
   void params
-  void childId
 
   if (!authority.canChat)
     return (

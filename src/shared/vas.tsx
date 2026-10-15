@@ -37,9 +37,7 @@ export function VasControl({
   const { respondAvailability, toast, authority } = useProduct()
   const view = eventAvailabilityView(event, personId)
   const canRespond =
-    personId === authority.person.id
-      ? authority.canRespondOwn
-      : authority.canRespondForChild(personId)
+    personId === authority.person.id ? authority.canRespondOwn : false
 
   if (event.state !== "SCHEDULED")
     return (
@@ -55,8 +53,8 @@ export function VasControl({
       <p className="gei-meta">
         {readOnlyReason ??
           (personId === authority.person.id
-            ? "Vos no jugás este evento, así que no respondés disponibilidad. La lista de responses es la que podés ver."
-            : "La delegación de este menor no incluye responder disponibilidad.")}
+            ? "Vos no jugás este evento, así que no respondés disponibilidad. La lista de respuestas es la que podés ver."
+            : "No podés responder por otra persona.")}
       </p>
     )
 
@@ -102,13 +100,10 @@ export function VasControl({
 }
 
 export function VasCompact({ event }: { event: Event }) {
-  const { childId, authority } = useProduct()
-  const personId = childId ?? authority.person.id
+  const { authority } = useProduct()
+  const personId = authority.person.id
   const view = eventAvailabilityView(event, personId)
-  const canRespond =
-    authority.person.id === personId
-      ? authority.canRespondOwn
-      : authority.canRespondForChild(personId)
+  const canRespond = authority.canRespondOwn
 
   return (
     <div className="flex flex-wrap items-center gap-2">

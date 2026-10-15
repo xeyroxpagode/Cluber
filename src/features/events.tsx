@@ -17,7 +17,6 @@ import {
 import {
   dateLabel,
   dateTimeLabel,
-  entryLabel,
   eventAvailabilityView,
   eventName,
   eventTargetsText,
@@ -55,6 +54,7 @@ import {
   Tag,
   TextArea,
   TextField,
+  TextLink,
   cx,
 } from "../shared/ui"
 import { stateText } from "../shared/states"
@@ -89,7 +89,7 @@ const FIELD_LABEL: Record<string, string> = {
   targetPersonIds: "Personas destino",
   clubWide: "Destino",
   opponent: "Rival",
-  competitionEntryId: "Inscripción",
+  competitionId: "Competencia",
   meeting: "Hora de encuentro",
   departure: "Hora de salida",
   point: "Punto de encuentro",
@@ -279,7 +279,7 @@ const BUCKETS: Array<{
 export function EventDetail() {
   const { eventId = "" } = useParams()
   const navigate = useNavigate()
-  const { state, authority, actor, childId } = useProduct()
+  const { state, authority, actor } = useProduct()
   const [sheet, setSheet] = useState<null | "history" | "lifecycle">(null)
   const [pending, setPending] = useState<null | Event["state"]>(null)
   const [lifecycleError, setLifecycleError] = useState("")
@@ -299,20 +299,16 @@ export function EventDetail() {
   const series = seriesOf(state, event)
   const coach = authority.isCoachOfTeam(event.targetTeams[0] ?? "")
   const official = authority.isClubWide
-  const subject = childId ?? actor.id
   const canOperate = coach || official
   const isTerminal = (TERMINAL as readonly string[]).includes(event.state)
   const eventId_ = event.id
   const selectionConflictsList = event.published
     ? conflictSummary(event, state)
     : []
-  const meInvited = event.published?.includes(subject) ?? false
-  const canRespondHere =
-    subject === actor.id
-      ? authority.canRespondOwn
-      : authority.canRespondForChild(subject)
-  const view = eventAvailabilityView(event, subject)
-  const myTeams = activeTeamAssignments(state, subject).map((a) => a.teamId)
+  const meInvited = event.published?.includes(actor.id) ?? false
+  const canRespondHere = authority.canRespondOwn
+  const view = eventAvailabilityView(event, actor.id)
+  const myTeams = activeTeamAssignments(state, actor.id).map((a) => a.teamId)
 
   const counts = useMemo(() => {
     const values = Object.values(event.availability)
@@ -493,7 +489,7 @@ export function EventDetail() {
 
           {canRespondHere && event.state === "SCHEDULED" && (
             <Surface>
-              <VasControl event={event} personId={subject} />
+              <VasControl event={event} personId={actor.id} />
             </Surface>
           )}
 
@@ -501,9 +497,7 @@ export function EventDetail() {
             <Surface className="grid gap-1">
               <p className="gei-body-strong">¿Vas?</p>
               <p className="gei-meta">
-                {subject === actor.id
-                  ? "Vos no jugás este evento, así que no respondés disponibilidad. Abajo está lo que dijo cada jugadora."
-                  : "La delegación de este menor no incluye responder disponibilidad."}
+                Vos no jugás este evento, así que no respondés disponibilidad. Abajo está lo que dijo cada jugadora.
               </p>
             </Surface>
           )}
@@ -550,7 +544,6 @@ export function EventDetail() {
                         ? "Cerrada. Las correcciones quedan registradas."
                         : Object.keys(event.attendance).length > 0
                           ? `${Object.keys(event.attendance).length} de ${
-                              activeTeamAssignments(state, subject).length ||
                               myTeams.length
                             } registradas`
                           : "Todavía no se registró asistencia"
@@ -578,23 +571,11 @@ export function EventDetail() {
               <ul className="grid gap-1">
                 {event.competitionId && (
                   <RowStatic
-                    title="Inscripción en competencia"
+                    title="Competencia"
                     detail={
-                      event.competitionEntryId
-                        ? entryLabel(
-                            state,
-                            state.competitions
-                              .flatMap((competition) => competition.entries)
-                              .find((entry) => entry.id === event.competitionEntryId) ??
-                                ({
-                                  id: "",
-                                  scope: "TEAM",
-                                  teamId: "",
-                                  state: "PENDING",
-                                  reference: "",
-                                } as never),
-                          )
-                        : "El evento no tiene inscripción asignada"
+                      state.competitions.find(
+                        (competition) => competition.id === event.competitionId,
+                      )?.name ?? "Competencia sin datos"
                     }
                   />
                 )}
@@ -643,7 +624,7 @@ export function EventDetail() {
                   <span className="gei-body-strong tabular-nums">
                     {Math.max(
                       0,
-                      activeTeamAssignments(state, subject)
+                      activeTeamAssignments(state, actor.id)
                         .filter((assignment) =>
                           event.targetTeams.includes(assignment.teamId),
                         ).length -
@@ -1222,7 +1203,6 @@ export function EventForm() {
             coordinationRevision: 1,
             version: 1,
             competitionId: type === "MATCH" ? "ahba" : null,
-            competitionEntryId: null,
             meeting: form.meeting,
             departure: form.departure,
             point: form.point,
@@ -1703,6 +1683,10 @@ function JornadaDetail({ jornadaId }: { jornadaId: string }) {
   const events = jornada.events
     .map((id) => state.events.find((event) => event.id === id))
     .filter((event): event is Event => !!event)
+  const season = state.structure.find((item) => item.id === jornada.seasonId)
+  const competition = jornada.competitionId
+    ? state.competitions.find((item) => item.id === jornada.competitionId)
+    : undefined
   const canManage = authority.coachTeamIds.some((teamId) =>
     events.some((event) => event.targetTeams.includes(teamId)),
   )
@@ -1738,6 +1722,26 @@ function JornadaDetail({ jornadaId }: { jornadaId: string }) {
           <span className="text-ink-strong">{error}</span>
         </Banner>
       )}
+
+      <DetailSection title="Contexto">
+        <dl className="grid">
+          <RowStatic
+            title="Temporada"
+            detail={season ? `Temporada ${season.name}` : "Sin temporada"}
+          />
+          {competition && (
+            <RowStatic
+              title="Competencia"
+              detail={competition.name}
+              trailing={
+                <TextLink to={`/management/competitions/${competition.id}`}>
+                  Ver
+                </TextLink>
+              }
+            />
+          )}
+        </dl>
+      </DetailSection>
 
       <DetailSection
         title="Partidos de la jornada"
@@ -1883,9 +1887,7 @@ function JornadaCreate() {
   const seasons = state.structure.filter((item) => item.type === "SEASON")
   const [name, setName] = useState("")
   const [seasonId, setSeasonId] = useState(seasons[0]?.id ?? "")
-  const [competitionId, setCompetitionId] = useState(
-    state.competitions[0]?.id ?? "",
-  )
+  const [competitionId, setCompetitionId] = useState("")
   const [selected, setSelected] = useState<string[]>([])
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [pending, setPending] = useState(false)
@@ -1923,7 +1925,6 @@ function JornadaCreate() {
           event_.preventDefault()
           const found: Record<string, string> = {}
           if (!seasonId) found.seasonId = "Elegí la temporada."
-          if (!competitionId) found.competitionId = "Elegí la competencia."
           if (selected.length === 0) found.events = "Elegí al menos un partido."
           setErrors(found)
           if (Object.keys(found).length > 0) {
@@ -1940,7 +1941,7 @@ function JornadaCreate() {
           const result = createJornada({
             name,
             seasonId,
-            competitionId,
+            competitionId: competitionId || null,
             eventIds: selected,
           })
           setPending(false)
@@ -1983,16 +1984,18 @@ function JornadaCreate() {
           <Select
             id="jn-competitionId"
             label="Competencia"
-            required
             value={competitionId}
-            error={errors.competitionId}
+            hint="Opcional: contexto deportivo de la jornada."
             onChange={(event_) => setCompetitionId(event_.target.value)}
           >
-            {state.competitions.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
+            <option value="">Sin competencia</option>
+            {state.competitions
+              .filter((item) => !item.archivedAt)
+              .map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
           </Select>
         </Surface>
 

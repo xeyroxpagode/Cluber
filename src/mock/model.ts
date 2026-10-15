@@ -1,9 +1,13 @@
 /**
- * GEI Hockey · Modelo de dominio del simulador local.
+ * GEI Hockey · Modelo de dominio del simulador local (V1.1).
  *
  * Regla de Stage 6 §16: `Person` NO es fuente de UI.
- * Identidad, pertenencia, roles y elegibilidad se derivan de
- * Membership / TeamAssignment / RoleAssignment / EligibilityConstraint.
+ * Identidad, pertenencia y roles se derivan de
+ * Membership / TeamAssignment / RoleAssignment.
+ *
+ * Scope Reconciliation V1.1: Guardian, Eligibility y CompetitionEntry
+ * no tienen semántica activa. Competition es simple: crear, editar,
+ * archivar y consultar, sin máquina de estados dedicada.
  */
 
 export type Role = "COACH" | "PLAYER" | "CAPTAIN" | "ADMIN" | "SUBCOMMITTEE"
@@ -106,41 +110,6 @@ export interface TeamAssignment {
   validUntil: string | null
 }
 
-export interface GuardianRelationship {
-  id: string
-  guardianId: string
-  childId: string
-  relation: string
-  canViewChildInfo: boolean
-  canRespondAvailability: boolean
-  validFrom: string
-  validUntil: string | null
-}
-
-export type ConstraintScope = "CLUB" | "COMPETITION" | "ENTRY" | "EVENT"
-export type ConstraintSource = "INTERNAL" | "AHBA" | "OTHER"
-export type ConstraintReason =
-  | "ADMIN"
-  | "DISCIPLINE"
-  | "FEDERATION"
-  | "MEDICAL_CLEARANCE"
-  | "OTHER"
-
-export interface EligibilityConstraint {
-  id: string
-  personId: string
-  state: "PENDING" | "BLOCKED"
-  scope: ConstraintScope
-  scopeRefId: string | null
-  source: ConstraintSource
-  reason: ConstraintReason
-  note?: string
-  validFrom: string
-  validUntil: string | null
-  createdAt: string
-  createdBy: string
-}
-
 export type SeriesStatus = "ACTIVE" | "ENDED"
 
 export interface EventSeries {
@@ -218,8 +187,8 @@ export interface Event {
   coordinationRevision: number
   /** Concurrencia optimista: incrementa en cada escritura. */
   version: number
+  /** Referencia directa opcional a Competition (V1.1). */
   competitionId: string | null
-  competitionEntryId: string | null
   meeting: string
   departure: string
   point: string
@@ -355,44 +324,21 @@ export interface Notice {
   readBy: string[]
 }
 
-export interface CompetitionEntryTeam {
-  id: string
-  scope: "TEAM"
-  teamId: string
-  state: "PENDING" | "ACTIVE" | "ENDED"
-  reference: string
-}
-
-export interface CompetitionEntryLine {
-  id: string
-  scope: "LINE"
-  divisionId: string
-  lineId: string
-  seasonId: string
-  state: "PENDING" | "ACTIVE" | "ENDED"
-  reference: string
-}
-
-export type CompetitionEntry = CompetitionEntryTeam | CompetitionEntryLine
-
-/** Payload de alta de inscripción: el mismo modelo, sin id. */
-export type NewCompetitionEntry =
-  | Omit<CompetitionEntryTeam, "id">
-  | Omit<CompetitionEntryLine, "id">
-
+/** Competition simple V1.1: contexto deportivo sin lifecycle dedicado. */
 export interface Competition {
   id: string
   name: string
   organizer: string
-  state: "DRAFT" | "ACTIVE" | "CLOSED"
-  entries: CompetitionEntry[]
+  /** Archivada = lectura histórica. Sin restore en V1. */
+  archivedAt: string | null
 }
 
 export interface Jornada {
   id: string
   name: string
   seasonId: string
-  competitionId: string
+  /** Referencia directa opcional a Competition (V1.1). */
+  competitionId: string | null
   events: string[]
   at: string
   venueId: string | null
@@ -425,10 +371,8 @@ export interface State {
   jornadas: Jornada[]
   audit: AuditEntry[]
   venues: Venue[]
-  eligibilityConstraints: EligibilityConstraint[]
   memberships: Membership[]
   teamAssignments: TeamAssignment[]
-  guardianRelationships: GuardianRelationship[]
   eventSeries: EventSeries[]
   eventOccurrenceOverrides: EventOccurrenceOverride[]
 }
@@ -453,9 +397,7 @@ export const labels: Record<string, string> = {
   PENDING: "Pendiente",
   OPEN: "Abierta",
   CLOSED: "Cerrada",
-  ENDED: "Finalizada",
   FINAL: "Final",
-  ELIGIBLE: "Habilitada",
   MAYBE: "Tal vez",
   PRESENT: "Presente",
   ABSENT: "Ausente",
@@ -574,48 +516,12 @@ export function structureName(state: State, id: string | null | undefined) {
   return state.structure.find((item) => item.id === id)?.name ?? ""
 }
 
-/** "Sexta A" · nombre de equipo concreto derivado de estructura. */
+/** Origen de un Team concreto derivado de estructura. */
 export function teamName(state: State, teamId: string | null | undefined) {
   if (!teamId) return ""
   const team = state.teams.find((item) => item.id === teamId)
   if (!team) return ""
   return `${structureName(state, team.divisionId)} ${structureName(state, team.lineId)}`.trim()
-}
-
-/** "Línea A · Sexta · Temporada 2026" · nunca sólo "Línea A" (D4). */
-export function lineEntryLabel(
-  state: State,
-  entry: CompetitionEntryLine,
-): string {
-  return `Línea ${structureName(state, entry.lineId)} · ${structureName(
-    state,
-    entry.divisionId,
-  )} · Temporada ${structureName(state, entry.seasonId)}`
-}
-
-export function teamEntryLabel(state: State, entry: CompetitionEntryTeam): string {
-  return `Equipo · ${teamName(state, entry.teamId)}`
-}
-
-export function entryLabel(state: State, entry: CompetitionEntry): string {
-  return entry.scope === "TEAM"
-    ? teamEntryLabel(state, entry)
-    : lineEntryLabel(state, entry)
-}
-
-/** Origen de un CompetitionEntry LINE → Team concreto. */
-export function entryResolvesToTeam(
-  state: State,
-  entry: CompetitionEntry,
-): string | null {
-  if (entry.scope === "TEAM") return entry.teamId
-  const team = state.teams.find(
-    (item) =>
-      item.divisionId === entry.divisionId &&
-      item.lineId === entry.lineId &&
-      item.seasonId === entry.seasonId,
-  )
-  return team?.id ?? null
 }
 
 /** Texto de destino de un evento, derivado. */

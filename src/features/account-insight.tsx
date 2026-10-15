@@ -22,11 +22,9 @@ import {
   type Event,
 } from "../mock/model"
 import {
-  activeGuardianRelations,
   activeMemberships,
   activeRoleAssignments,
   activeTeamAssignments,
-  guardiansOf,
   membershipOf,
   profileCompleteness,
   roleScopeLabel,
@@ -97,12 +95,12 @@ export function MorePage() {
     {
       to: "/management/competitions",
       label: "Competencias",
-      detail: "Inscripciones por equipo y por línea",
+      detail: "Contexto deportivo: crear, editar, archivar y consultar",
       show: authority.canOpen("competitions"),
     },
   ]
   const pending = state.jornadas.filter((jornada) =>
-    visibleEvents(state, actor.id, null).some((event) =>
+    visibleEvents(state, actor.id).some((event) =>
       jornada.events.includes(event.id),
     ),
   )
@@ -154,29 +152,22 @@ export function ProfilePage() {
   const {
     state,
     actor,
-    authority,
     changePassword,
     endOtherSession,
     updateOwnContact,
     logout,
-    childId,
   } = useProduct()
   const [passwordOpen, setPasswordOpen] = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
-  const [childSheet, setChildSheet] = useState(false)
   const query = useQueryState()
 
   const memberships = activeMemberships(state, actor.id)
-  const membership = membershipOf(state, actor.id)
   const teams = activeTeamAssignments(state, actor.id)
   const roles = activeRoleAssignments(state, actor.id)
   const completeness = profileCompleteness(actor)
-  const relations = activeGuardianRelations(state, actor.id)
-  const myGuardians = guardiansOf(state, actor.id)
   const currentSession = actor.sessions.find((session) => session.current)
   const otherSessions = actor.sessions.filter((session) => !session.current)
-  const attentionSection = query.get("section")
-  void attentionSection
+  void query
 
   return (
     <div className="gei-stack-page mx-auto max-w-3xl">
@@ -201,50 +192,6 @@ export function ProfilePage() {
             </ul>
           </div>
         </Banner>
-      )}
-
-      {relations.length > 0 && (
-        <Surface className="grid gap-3">
-          <SectionHeader
-            title="A quién estás mirando"
-            meta={
-              relations.length > 1 ? `${relations.length} menores` : undefined
-            }
-          />
-          <ul className="grid gap-1">
-            {relations.map((relation) => {
-              const child = state.people.find(
-                (person) => person.id === relation.childId,
-              )
-              const active = childId === relation.childId
-              return (
-                <li key={relation.id}>
-                  <button
-                    type="button"
-                    onClick={() => setChildSheet(true)}
-                    className={cx(
-                      "gei-target flex w-full items-center gap-3 rounded-control px-3 text-left transition-colors",
-                      active ? "bg-selected-soft" : "hover:bg-control",
-                    )}
-                  >
-                    <Avatar name={child?.name ?? "—"} size="sm" />
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-body font-semibold text-ink">
-                        {child?.name ?? "—"}
-                      </span>
-                      <span className="gei-meta block">
-                        {relation.relation} · ve información:{" "}
-                        {relation.canViewChildInfo ? "sí" : "no"} · responde ¿Vas?:{" "}
-                        {relation.canRespondAvailability ? "sí" : "no"}
-                      </span>
-                    </span>
-                    {active && <Tag tone="selected">Mirando</Tag>}
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
-        </Surface>
       )}
 
       <DetailSection title="Identidad">
@@ -299,11 +246,7 @@ export function ProfilePage() {
 
       <DetailSection title="Roles y alcance">
         {roles.length === 0 ? (
-          <p className="gei-meta">
-            {relations.length > 0
-              ? "No tenés roles deportivos. Entrás al club para ver la información de los menores a tu cargo."
-              : "No tenés roles deportivos vigentes."}
-          </p>
+          <p className="gei-meta">No tenés roles deportivos vigentes.</p>
         ) : (
           <ul className="grid">
             {roles.map((role) => (
@@ -320,30 +263,6 @@ export function ProfilePage() {
           </ul>
         )}
       </DetailSection>
-
-      {myGuardians.length > 0 && (
-        <DetailSection title="Personas que pueden actuar por mí">
-          <ul className="grid">
-            {myGuardians.map((relation) => {
-              const guardian = state.people.find(
-                (person) => person.id === relation.guardianId,
-              )
-              return (
-                <li key={relation.id}>
-                  <RowStatic
-                    title={guardian?.name ?? "—"}
-                    detail={`${relation.relation} · puede ver tu información: ${
-                      relation.canViewChildInfo ? "sí" : "no"
-                    } · puede responder tu disponibilidad: ${
-                      relation.canRespondAvailability ? "sí" : "no"
-                    }`}
-                  />
-                </li>
-              )
-            })}
-          </ul>
-        </DetailSection>
-      )}
 
       <DetailSection
         title="Contacto"
@@ -464,36 +383,6 @@ export function ProfilePage() {
           }}
         />
       )}
-
-      {childSheet && (
-        <Sheet
-          title="Personas a cargo"
-          description="Elegí con qué menor querés trabajar."
-          onClose={() => setChildSheet(false)}
-        >
-          <ul className="grid gap-1">
-            {relations.map((relation) => {
-              const child = state.people.find(
-                (person) => person.id === relation.childId,
-              )
-              return (
-                <li key={relation.id}>
-                  <RowStatic
-                    title={child?.name ?? "—"}
-                    detail={`${relation.relation} · responde ¿Vas?: ${
-                      relation.canRespondAvailability ? "sí" : "no"
-                    }`}
-                  />
-                </li>
-              )
-            })}
-          </ul>
-          <p className="gei-meta mt-3">
-            Cambiar de menor se gestiona desde administración. Esta vista es sólo
-            de consulta.
-          </p>
-        </Sheet>
-      )}
     </div>
   )
 }
@@ -611,6 +500,7 @@ function ContactDialog({
           required
           value={form.email}
           error={errors.email}
+          hint="Es tu correo de acceso: la próxima vez entrás con este."
           onChange={(event) =>
             setForm((current) => ({ ...current, email: event.target.value }))
           }
@@ -627,7 +517,8 @@ function ContactDialog({
 export function LoginPage() {
   const { login } = useProduct()
   const navigate = useNavigate()
-  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   return (
     <main className="mx-auto grid min-h-dvh max-w-md content-center gap-5 px-4">
@@ -643,19 +534,31 @@ export function LoginPage() {
       <form
         onSubmit={(event) => {
           event.preventDefault()
-          if (login(username.trim())) navigate("/home")
-          else setError("No encontramos esa cuenta activa.")
+          if (login(email.trim(), password)) navigate("/home")
+          else setError("No encontramos esa cuenta activa con ese correo y contraseña.")
         }}
         className="grid gap-4"
       >
         <TextField
-          label="Nombre de usuario"
+          label="Correo electrónico"
+          type="email"
           required
-          value={username}
+          value={email}
           error={error}
-          placeholder="vgerg"
+          placeholder="nombre@ejemplo.com"
+          hint="Es el correo que el club registró para vos."
           onChange={(event) => {
-            setUsername(event.target.value)
+            setEmail(event.target.value)
+            setError("")
+          }}
+        />
+        <TextField
+          label="Contraseña"
+          type="password"
+          required
+          value={password}
+          onChange={(event) => {
+            setPassword(event.target.value)
             setError("")
           }}
         />
@@ -687,7 +590,7 @@ export function ActivatePage() {
       {ok ? (
         <Banner tone="success" title="Cuenta activada">
           <span className="text-ink-strong">
-            Ya podés entrar con tu nombre de usuario.
+            Ya podés entrar con tu correo electrónico.
           </span>
         </Banner>
       ) : (
@@ -736,7 +639,7 @@ export function NoAccessPage() {
       <PageContextHeader
         context="Sin acceso"
         title="Todavía no tenés acceso al sistema"
-        lead="Tu cuenta está activa pero el club todavía no te asignó un rol ni una relación de representación."
+        lead="Tu cuenta está activa pero el club todavía no te asignó un rol."
       />
       <KeyValue
         items={[
@@ -777,11 +680,11 @@ function periodStart(period: string): string {
 }
 
 function useFilteredEvents() {
-  const { state, actor, childId } = useProduct()
+  const { state, actor } = useProduct()
   const query = useQueryState()
   const team = query.get("team")
   const period = query.get("period")
-  const scoped = visibleEvents(state, actor.id, childId)
+  const scoped = visibleEvents(state, actor.id)
   const from = periodStart(period)
   const events = scoped.filter((event) => {
     if (team && !event.targetTeams.includes(team)) return false
