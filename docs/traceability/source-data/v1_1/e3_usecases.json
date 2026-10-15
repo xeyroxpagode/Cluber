@@ -1,0 +1,629 @@
+{
+  "version": "1.1",
+  "counts": {
+    "historical": 103,
+    "active": 88,
+    "superseded": 13,
+    "deferred": 2
+  },
+  "usecases": [
+    {
+      "id": "UC-IAM-01",
+      "name": "Iniciar sesión con email",
+      "domain": "IAM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-IAM-02",
+      "name": "Deshabilitar una cuenta",
+      "domain": "IAM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-IAM-03",
+      "name": "Enviar verificación de cuenta por email",
+      "domain": "IAM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-IAM-04",
+      "name": "Verificar email y activar cuenta",
+      "domain": "IAM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-IAM-05",
+      "name": "Recuperar y restablecer contraseña por email",
+      "domain": "IAM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-IAM-06",
+      "name": "Cambiar mi contraseña",
+      "domain": "IAM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-IAM-07",
+      "name": "Consultar mis sesiones activas",
+      "domain": "IAM",
+      "disposition": "SUPERSEDED"
+    },
+    {
+      "id": "UC-IAM-08",
+      "name": "Cerrar una sesión remota",
+      "domain": "IAM",
+      "disposition": "SUPERSEDED"
+    },
+    {
+      "id": "UC-IAM-09",
+      "name": "Reautenticar para una gestión sensible",
+      "domain": "IAM",
+      "disposition": "SUPERSEDED"
+    },
+    {
+      "id": "UC-IAM-10",
+      "name": "Retomar el trabajo tras una interrupción de sesión",
+      "domain": "IAM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PPL-01",
+      "name": "Registrar una persona",
+      "domain": "PPL",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PPL-02",
+      "name": "Completar el perfil de una jugadora",
+      "domain": "PPL",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PPL-03",
+      "name": "Vincular una cuenta a una persona",
+      "domain": "PPL",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PPL-04",
+      "name": "Registrar una membresía al club",
+      "domain": "PPL",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PPL-05",
+      "name": "Finalizar una membresía al club",
+      "domain": "PPL",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PPL-06",
+      "name": "Incorporar una jugadora a un equipo",
+      "domain": "PPL",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PPL-07",
+      "name": "Cambiar de equipo a una jugadora",
+      "domain": "PPL",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PPL-08",
+      "name": "Retirar a una jugadora del equipo",
+      "domain": "PPL",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PPL-09",
+      "name": "Asignar un rol con alcance",
+      "domain": "PPL",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PPL-10",
+      "name": "Finalizar un rol asignado",
+      "domain": "PPL",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PPL-11",
+      "name": "Registrar una relación de representación",
+      "domain": "PPL",
+      "disposition": "SUPERSEDED"
+    },
+    {
+      "id": "UC-PPL-12",
+      "name": "Finalizar una relación de representación",
+      "domain": "PPL",
+      "disposition": "SUPERSEDED"
+    },
+    {
+      "id": "UC-PPL-13",
+      "name": "Consultar la información del menor delegado",
+      "domain": "PPL",
+      "disposition": "SUPERSEDED"
+    },
+    {
+      "id": "UC-PPL-14",
+      "name": "Consultar quién actúa por mi cuenta",
+      "domain": "PPL",
+      "disposition": "SUPERSEDED"
+    },
+    {
+      "id": "UC-PPL-15",
+      "name": "Conocer qué falta en mi perfil y cómo completarlo",
+      "domain": "PPL",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PPL-16",
+      "name": "Consultar mi perfil",
+      "domain": "PPL",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PPL-17",
+      "name": "Editar mi contacto",
+      "domain": "PPL",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-01",
+      "name": "Registrar una temporada",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-02",
+      "name": "Actualizar los datos de una temporada",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-03",
+      "name": "Registrar una división",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-04",
+      "name": "Actualizar una división",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-05",
+      "name": "Archivar una división",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-06",
+      "name": "Registrar una línea",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-07",
+      "name": "Actualizar una línea",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-08",
+      "name": "Archivar una línea",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-09",
+      "name": "Registrar un equipo",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-10",
+      "name": "Actualizar un equipo",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-11",
+      "name": "Activar un equipo",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-12",
+      "name": "Archivar un equipo",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-13",
+      "name": "Registrar una sede",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-14",
+      "name": "Corregir los datos de una sede",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-STR-15",
+      "name": "Archivar una sede",
+      "domain": "STR",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-01",
+      "name": "Crear un entrenamiento",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-02",
+      "name": "Crear un partido",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-03",
+      "name": "Crear un evento del club",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-04",
+      "name": "Editar un evento",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-05",
+      "name": "Posponer un evento",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-06",
+      "name": "Reanudar un evento pospuesto",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-07",
+      "name": "Cancelar un evento",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-08",
+      "name": "Restaurar un evento cancelado",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-09",
+      "name": "Completar un evento",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-10",
+      "name": "Abandonar un evento",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-11",
+      "name": "Revisar el impacto de un cambio material",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-12",
+      "name": "Resolver un conflicto de edición concurrente",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-13",
+      "name": "Crear una serie de eventos",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-14",
+      "name": "Finalizar una serie de eventos",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-15",
+      "name": "Programar una jornada con Competition directa",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-16",
+      "name": "Actualizar la logística de un evento",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-17",
+      "name": "Consultar el calendario",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-18",
+      "name": "Revisar lo que requiere mi atención",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-EVT-19",
+      "name": "Consultar un evento",
+      "domain": "EVT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PRT-01",
+      "name": "Responder mi propia disponibilidad",
+      "domain": "PRT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PRT-02",
+      "name": "Preparar la convocatoria de un partido",
+      "domain": "PRT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PRT-03",
+      "name": "Publicar la convocatoria de un partido",
+      "domain": "PRT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PRT-04",
+      "name": "Revisar los conflictos de una convocatoria",
+      "domain": "PRT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PRT-05",
+      "name": "Registrar la asistencia de un evento",
+      "domain": "PRT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PRT-06",
+      "name": "Cerrar la asistencia de un evento",
+      "domain": "PRT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PRT-07",
+      "name": "Corregir la asistencia de un evento",
+      "domain": "PRT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PRT-08",
+      "name": "Registrar el resultado de un partido",
+      "domain": "PRT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PRT-09",
+      "name": "Finalizar el resultado de un partido",
+      "domain": "PRT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PRT-10",
+      "name": "Corregir el resultado de un partido",
+      "domain": "PRT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PRT-11",
+      "name": "Consultar las estadísticas de un partido",
+      "domain": "PRT",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-PRT-12",
+      "name": "Registrar una restricción de habilitación",
+      "domain": "PRT",
+      "disposition": "SUPERSEDED"
+    },
+    {
+      "id": "UC-PRT-13",
+      "name": "Consultar el estado de habilitación de una jugadora",
+      "domain": "PRT",
+      "disposition": "SUPERSEDED"
+    },
+    {
+      "id": "UC-COM-01",
+      "name": "Redactar un comunicado",
+      "domain": "COM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-COM-02",
+      "name": "Publicar un comunicado",
+      "domain": "COM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-COM-03",
+      "name": "Corregir un comunicado publicado",
+      "domain": "COM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-COM-04",
+      "name": "Archivar un comunicado",
+      "domain": "COM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-COM-05",
+      "name": "Consultar un comunicado",
+      "domain": "COM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-COM-06",
+      "name": "Abrir una conversación directa",
+      "domain": "COM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-COM-07",
+      "name": "Crear una conversación de grupo",
+      "domain": "COM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-COM-08",
+      "name": "Abrir la conversación canónica del equipo o del evento",
+      "domain": "COM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-COM-09",
+      "name": "Enviar un mensaje",
+      "domain": "COM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-COM-10",
+      "name": "Editar un mensaje propio",
+      "domain": "COM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-COM-11",
+      "name": "Eliminar un mensaje propio",
+      "domain": "COM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-COM-12",
+      "name": "Archivar una conversación de grupo",
+      "domain": "COM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-COM-13",
+      "name": "Consultar mis notificaciones",
+      "domain": "COM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-COM-14",
+      "name": "Marcar una notificación como leída",
+      "domain": "COM",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-CMP-01",
+      "name": "Crear una competencia",
+      "domain": "CMP",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-CMP-02",
+      "name": "Editar una competencia",
+      "domain": "CMP",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-CMP-03",
+      "name": "Archivar una competencia",
+      "domain": "CMP",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-CMP-04",
+      "name": "Inscribir un equipo en una competencia",
+      "domain": "CMP",
+      "disposition": "SUPERSEDED"
+    },
+    {
+      "id": "UC-CMP-05",
+      "name": "Inscribir una línea en una competencia",
+      "domain": "CMP",
+      "disposition": "SUPERSEDED"
+    },
+    {
+      "id": "UC-CMP-06",
+      "name": "Activar una inscripción en una competencia",
+      "domain": "CMP",
+      "disposition": "SUPERSEDED"
+    },
+    {
+      "id": "UC-CMP-07",
+      "name": "Finalizar una inscripción en una competencia",
+      "domain": "CMP",
+      "disposition": "SUPERSEDED"
+    },
+    {
+      "id": "UC-CMP-08",
+      "name": "Registrar una referencia externa",
+      "domain": "CMP",
+      "disposition": "DEFER"
+    },
+    {
+      "id": "UC-CMP-09",
+      "name": "Consultar una referencia externa",
+      "domain": "CMP",
+      "disposition": "DEFER"
+    },
+    {
+      "id": "UC-INS-01",
+      "name": "Buscar en el club",
+      "domain": "INS",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-INS-02",
+      "name": "Consultar el informe de asistencia",
+      "domain": "INS",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-INS-03",
+      "name": "Consultar el informe de rendimiento",
+      "domain": "INS",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-INS-04",
+      "name": "Consultar el historial de un objeto",
+      "domain": "INS",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-INS-05",
+      "name": "Consultar la auditoría administrativa",
+      "domain": "INS",
+      "disposition": "ACTIVE"
+    },
+    {
+      "id": "UC-CMP-10",
+      "name": "Consultar una competencia",
+      "domain": "CMP",
+      "disposition": "ACTIVE"
+    }
+  ]
+}
