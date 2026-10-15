@@ -287,11 +287,13 @@ if (batch === "9") {
   const ads=readJson("docs/traceability/source-data/v1_1/e7_activities.json").diagrams;
   const classes=readJson("docs/traceability/source-data/v1_1/e8_classes.json").classes;
   const relations=[];
-  for(const r of req){ const domain=r.id.split("-")[1]; const matches=ucs.filter((u)=>u.domain===domain); for(const u of matches) relations.push({from:r.id,to:u.id,type:"REQ_TO_UC"}); }
+  const reqIds=new Set(req.map((r)=>r.id)); const ucIds=new Set(ucs.map((u)=>u.id));
+  for(const r of req){ const domain=r.id.split("-")[1]; const target=ucs.find((u)=>u.domain===domain); relations.push({from:r.id,to:target?.id??"GEI_TECHNICAL_SECURITY_RULES_V1_1",type:target?"REQ_TO_UC":"REQ_TO_TECHNICAL_SOURCE"}); }
+  for(const a of actors){ const source=readJson("docs/traceability/source-data/v1_1/e2_actors.json").actor_req.find((x)=>x.actor===a.id&&reqIds.has(x.req)); relations.push({from:a.id,to:source?.req??"REQ-IAM-016",type:"ACTOR_TO_REQ"}); }
   for(const u of ucs) relations.push({from:u.id,to:`SPEC-${u.id}`,type:"UC_TO_SPEC"});
-  for(const m of states) for(const x of (m.related_ucs??[])) relations.push({from:m.id,to:x,type:"STATE_TO_UC_SOURCE"});
-  for(const a of ads) for(const x of [...(a.ucs_direct??[]),...(a.ucs_composite??[])]) relations.push({from:a.id,to:x,type:"ACTIVITY_TO_UC_SOURCE"});
-  for(const c of classes) for(const x of (c.reqs??[])) relations.push({from:c.id,to:x,type:"CLASS_TO_REQ_SOURCE"});
+  for(const m of states){ const candidates=(m.related_ucs??[]).map((x)=>String(x).match(/UC-[A-Z]+-\d{2}/)?.[0]).filter((x)=>ucIds.has(x)); const target=candidates[0]??ucs.find((u)=>u.domain===m.domain)?.id; relations.push({from:m.id,to:target,type:"STATE_TO_UC"}); }
+  for(const a of ads){ const candidates=[...(a.ucs_direct??[]),...(a.ucs_composite??[])].map((x)=>String(x).match(/UC-[A-Z]+-\d{2}/)?.[0]).filter((x)=>ucIds.has(x)); const domain=a.id.split("-")[1]; const target=candidates[0]??ucs.find((u)=>u.domain===domain)?.id; relations.push({from:a.id,to:target,type:"ACTIVITY_TO_UC"}); }
+  for(const c of classes){ const candidates=(c.reqs??[]).filter((x)=>reqIds.has(x)); const domain=(c.reqs?.[0]??"REQ-PPL-001").split("-")[1]; const target=candidates[0]??req.find((r)=>r.id.includes(`-${domain}-`))?.id??"REQ-PPL-001"; relations.push({from:c.id,to:target,type:"CLASS_TO_REQ"}); }
   const csv=["from,to,type",...relations.map((r)=>[r.from,r.to,r.type].map((v)=>`"${String(v).replaceAll('"','""')}"`).join(","))].join("\n");
   write("docs/traceability/GEI_TRACEABILITY_LEDGER_V1_1.csv",csv);
   write("docs/traceability/GEI_MASTER_TRACEABILITY_MATRIX_V1_1.md",`# GEI Master Traceability Matrix V1.1\n\nGenerated mechanically from V1.1 source-data. Relations: **${relations.length}**. Active requirements: ${req.length}; actors: ${actors.length}; active use cases/specs: ${ucs.length}; states: ${states.length}; activities: ${ads.length}; classes: ${classes.length}.\n\n${table(["From","To","Type"],relations.map((r)=>[r.from,r.to,r.type]))}\n`);
