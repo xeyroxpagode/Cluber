@@ -11,4 +11,4 @@
 
 ## Gate 11
 
-PASS for documentary authorities and source diagrams. Export regeneration is not claimed because no Draw.io export executable is available in the environment; publication exports remain a documented tooling gap.
+FAIL overall. Documentary authorities and V1.1 source diagrams passed their mechanical checks, but the final publication gate cannot pass because no Draw.io export executable is available to regenerate and verify the affected PNG/PDF exports. The legacy use-case-spec validator also reports a pre-existing 452/454 acceptance-accounting mismatch, and the workbook validator cannot parse the current XLSX with its repository helper. These failures are recorded rather than concealed.

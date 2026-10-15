@@ -15,7 +15,7 @@
 | docs/uml/use-cases/source-v1_1/UCD-PPL-01__GEI_Person_Profile_Membership.drawio | SEMANTIC_EDIT |
 | docs/uml/use-cases/source-v1_1/UCD-PPL-02__GEI_Team_Roles_Representation.drawio | SEMANTIC_EDIT |
 | docs/uml/use-cases/source-v1_1/UCD-PRT-01__GEI_Availability_Selection_Attendance.drawio | SEMANTIC_EDIT |
-| docs/uml/use-cases/source-v1_1/UCD-PRT-02__GEI_Match_Result_Eligibility.drawio | SEMANTIC_EDIT |
+| docs/uml/use-cases/source-v1_1/UCD-PRT-02__GEI_Match_Result_Selection.drawio | SEMANTIC_EDIT |
 | docs/uml/use-cases/source-v1_1/UCD-STR-01__GEI_Season_Division_Line.drawio | UNCHANGED |
 | docs/uml/use-cases/source-v1_1/UCD-STR-02__GEI_Team_Venue.drawio | UNCHANGED |
 | docs/uml/states/source-v1_1/SM-ACCOUNT-01__Account_Lifecycle.drawio | UNCHANGED |

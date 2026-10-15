@@ -252,7 +252,8 @@ if (batch === "8") {
         .replaceAll("username","profile username")
         .replaceAll("código de activación","verificación por email")
         .replaceAll("código","token de email");
-      const p=`docs/uml/${dstRel}/${name}`; write(p,next); active.push(p);
+      const outputName=name==="UCD-PRT-02__GEI_Match_Result_Eligibility.drawio"?"UCD-PRT-02__GEI_Match_Result_Selection.drawio":name;
+      const p=`docs/uml/${dstRel}/${outputName}`; write(p,next); active.push(p);
     }
   }
   const simpleDiagram=(id,title,lines)=>`<?xml version="1.0" encoding="UTF-8"?>
