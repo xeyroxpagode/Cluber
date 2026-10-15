@@ -1,0 +1,698 @@
+{
+  "version": "1.1",
+  "counts": {
+    "actors": 7,
+    "actor_req_relations": 163
+  },
+  "actors": [
+    {
+      "id": "ACT-UNAUTHENTICATED",
+      "name": "Persona no autenticada",
+      "description": "Persona externa que interactúa con GEI sin sesión; puede autenticarse o consumir un código de un solo uso; sin fuente de autoridad de dominio."
+    },
+    {
+      "id": "ACT-AUTHENTICATED",
+      "name": "Persona autenticada",
+      "description": "Actor abstracto no instanciable: capacidad común de toda persona con Account ACTIVE y sesión vigente; no concede acceso a la aplicación por sí solo."
+    },
+    {
+      "id": "ACT-PLAYER",
+      "name": "Jugadora",
+      "description": "Persona con RoleAssignment PLAYER vigente sobre un equipo dentro de Membership vigente; responde su propia disponibilidad."
+    },
+    {
+      "id": "ACT-CAPTAIN",
+      "name": "Capitana",
+      "description": "Persona con RoleAssignment CAPTAIN vigente; actor independiente con autoridad propia sobre la logística de su equipo (scope TEAM)."
+    },
+    {
+      "id": "ACT-COACH",
+      "name": "Entrenador/a",
+      "description": "Persona con RoleAssignment COACH vigente (scope TEAM o EVENT); autoridad deportiva sobre eventos, convocatoria, asistencia y resultado."
+    },
+    {
+      "id": "ACT-SUBCOMMITTEE",
+      "name": "Subcomisión de hockey",
+      "description": "Persona con RoleAssignment SUBCOMMITTEE vigente (scope CLUB); autoridad oficial: comunicados, competencias."
+    },
+    {
+      "id": "ACT-ADMIN",
+      "name": "Administración del club",
+      "description": "Persona con RoleAssignment ADMIN vigente (scope CLUB); autoridad administrativa sobre identidad, cuentas, estructura y auditoría; sin autoridad deportiva."
+    }
+  ],
+  "actor_req": [
+    {
+      "actor": "ACT-UNAUTHENTICATED",
+      "req": "REQ-IAM-001"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-IAM-001"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-IAM-002"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-IAM-003"
+    },
+    {
+      "actor": "ACT-UNAUTHENTICATED",
+      "req": "REQ-IAM-003"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-IAM-004"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-IAM-005"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-IAM-009"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-IAM-009"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-IAM-010"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-IAM-012"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-IAM-013"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-IAM-014"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-IAM-020"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-001"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-002"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-PPL-002"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-003"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-004"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-005"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-006"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-007"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-PPL-007"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-008"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-PPL-010"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-PPL-013"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-013"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-014"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PPL-015"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-PPL-016"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-001"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-002"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-003"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-004"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-005"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-006"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-008"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-STR-009"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-009"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-STR-010"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-012"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-STR-012"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-STR-012"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-STR-013"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-002"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-002"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-003"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-003"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-004"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-004"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-007"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-007"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-EVT-008"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-009"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-009"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-010"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-010"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-011"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-011"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-EVT-011"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-012"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-012"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-013"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-013"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-EVT-013"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-014"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-014"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-015"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-015"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-016"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-016"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-EVT-017"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-017"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-017"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-018"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-018"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-EVT-019"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-EVT-019"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-019"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-EVT-020"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-EVT-021"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-EVT-022"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-EVT-023"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-EVT-024"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-EVT-024"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-PRT-001"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-PRT-001"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-PRT-004"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-005"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-006"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-007"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-008"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-009"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-011"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-012"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-013"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-014"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-016"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-PRT-017"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-PRT-017"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-PRT-017"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-COM-001"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-COM-002"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-COM-004"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-005"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-006"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-COM-006"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-COM-006"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-COM-006"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-007"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-COM-007"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-COM-007"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-COM-007"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-008"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-COM-008"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-COM-008"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-COM-008"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-009"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-COM-009"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-COM-009"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-COM-009"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-010"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-013"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-014"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-COM-015"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-COM-016"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-COM-016"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-COM-018"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-CMP-001"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-CMP-001"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-CMP-002"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-CMP-002"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-CMP-003"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-CMP-003"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-CMP-004"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-CMP-004"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-CMP-005"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-CMP-005"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-CMP-006"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-CMP-006"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-CMP-008"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-CMP-008"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-CMP-008"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-INS-001"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-INS-002"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-INS-003"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-INS-004"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-INS-004"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-INS-004"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-INS-004"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-INS-004"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-INS-005"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-INS-005"
+    },
+    {
+      "actor": "ACT-PLAYER",
+      "req": "REQ-INS-005"
+    },
+    {
+      "actor": "ACT-CAPTAIN",
+      "req": "REQ-INS-005"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-INS-005"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-INS-006"
+    },
+    {
+      "actor": "ACT-COACH",
+      "req": "REQ-INS-007"
+    },
+    {
+      "actor": "ACT-SUBCOMMITTEE",
+      "req": "REQ-INS-007"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-INS-008"
+    },
+    {
+      "actor": "ACT-ADMIN",
+      "req": "REQ-INS-009"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-INS-011"
+    },
+    {
+      "actor": "ACT-AUTHENTICATED",
+      "req": "REQ-SYS-012"
+    }
+  ]
+}
