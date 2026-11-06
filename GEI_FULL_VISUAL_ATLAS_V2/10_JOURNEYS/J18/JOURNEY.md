@@ -1,0 +1,32 @@
+# JOURNEY J18 — Event → Series Edit Scope
+
+**Actor:** COACH
+**Inicio:** Event
+**Fin:** Series Edit Scope
+**Pasos:** 2
+**Rutas alternativas:** -
+
+## Superficies cubiertas
+
+| # | Surface ID | Dominio | Ruta | Estado | Actor | 390×844 | 1440×900 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `CAL_EVENT_FORM_008_EDIT_SERIES` | 04_CALENDAR_PARTICIPATION | `/events/training-serie-1/edit` | SCHEDULED · serie de 4 ocurrencias | COACH | CAPTURED | CAPTURED |
+| 2 | `CAL_EVENT_FORM_009_SCOPE_DIALOG` | 04_CALENDAR_PARTICIPATION | `/events/training-serie-1/edit` | SCHEDULED · diálogo de alcance abierto | COACH | CAPTURED | CAPTURED |
+
+## Capturas
+
+### 1. `CAL_EVENT_FORM_008_EDIT_SERIES`
+
+- **390×844:** CAPTURED — `04_CALENDAR_PARTICIPATION/Event/Series/CAL_EVENT_FORM_008_EDIT_SERIES/CAL_EVENT_FORM_008_EDIT_SERIES__COACH__390x844.png`
+- **1440×900:** CAPTURED — `04_CALENDAR_PARTICIPATION/Event/Series/CAL_EVENT_FORM_008_EDIT_SERIES/CAL_EVENT_FORM_008_EDIT_SERIES__COACH__1440x900.png`
+
+### 2. `CAL_EVENT_FORM_009_SCOPE_DIALOG`
+
+- **390×844:** CAPTURED — `04_CALENDAR_PARTICIPATION/Event/Series/CAL_EVENT_FORM_009_SCOPE_DIALOG/CAL_EVENT_FORM_009_SCOPE_DIALOG__COACH__390x844.png`
+- **1440×900:** CAPTURED — `04_CALENDAR_PARTICIPATION/Event/Series/CAL_EVENT_FORM_009_SCOPE_DIALOG/CAL_EVENT_FORM_009_SCOPE_DIALOG__COACH__1440x900.png`
+
+## Índice del atlas
+
+- 11_INDEXES/MASTER_JOURNEY_INDEX.md
+- 11_INDEXES/MASTER_SURFACE_INDEX.md
+- 11_INDEXES/ROUTE_SURFACE_MATRIX.md

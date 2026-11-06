@@ -1,0 +1,60 @@
+[
+  {
+    "viewport": "390",
+    "file": "GEI_FULL_VISUAL_ATLAS_V2\\01_GLOBAL\\Shell\\GBL_SHELL_003_BYPASS_LINK_FOCUSED\\GBL_SHELL_003_BYPASS_LINK_FOCUSED__COACH__390x844.png",
+    "state": {
+      "present": true,
+      "activeIsEl": true,
+      "matchesFocus": true,
+      "position": "fixed",
+      "width": "126.062px",
+      "height": "37.6875px",
+      "overflow": "visible",
+      "clipPath": "none",
+      "background": "rgb(16, 23, 37)",
+      "color": "rgb(255, 255, 255)",
+      "zIndex": "50",
+      "left": "16px",
+      "top": "16px",
+      "rect": {
+        "x": 16,
+        "y": 16,
+        "w": 126,
+        "h": 38
+      },
+      "visible": true
+    },
+    "new_sha256": "def17d08cccd742d0c0bc91647d83b540f40dc899115224c7c7eb190b6d6ccf3",
+    "reference_unfocused_home_sha256": "5f6a14f2a9d615e01d8f0dc6bc3cd7b311e6f39a1758ad246770157940b45f60",
+    "distinct_from_unfocused": true
+  },
+  {
+    "viewport": "1440",
+    "file": "GEI_FULL_VISUAL_ATLAS_V2\\01_GLOBAL\\Shell\\GBL_SHELL_003_BYPASS_LINK_FOCUSED\\GBL_SHELL_003_BYPASS_LINK_FOCUSED__COACH__1440x900.png",
+    "state": {
+      "present": true,
+      "activeIsEl": true,
+      "matchesFocus": true,
+      "position": "fixed",
+      "width": "126.062px",
+      "height": "37.6875px",
+      "overflow": "visible",
+      "clipPath": "none",
+      "background": "rgb(16, 23, 37)",
+      "color": "rgb(255, 255, 255)",
+      "zIndex": "50",
+      "left": "16px",
+      "top": "16px",
+      "rect": {
+        "x": 16,
+        "y": 16,
+        "w": 126,
+        "h": 38
+      },
+      "visible": true
+    },
+    "new_sha256": "16b6f3ee9c5b94c783d07a6714dbabd5902449e13676926d1da63021f28f5a67",
+    "reference_unfocused_home_sha256": "148a63159982c43d03480aeb9c4aac9c66f0a5ba45ef6dbe32abb6ffd4aa4dc3",
+    "distinct_from_unfocused": true
+  }
+]

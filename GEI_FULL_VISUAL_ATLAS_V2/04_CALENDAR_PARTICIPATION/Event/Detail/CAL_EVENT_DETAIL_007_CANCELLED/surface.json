@@ -1,0 +1,48 @@
+{
+  "id": "CAL_EVENT_DETAIL_007_CANCELLED",
+  "domain": "04_CALENDAR_PARTICIPATION",
+  "subdomain": "Event/Detail",
+  "route": "/events/training-cancelado",
+  "actor": "COACH",
+  "state": "CANCELLED",
+  "journeys": [
+    "J05"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "CAL_EVENT_DETAIL_007_CANCELLED__COACH__390x844.png",
+    "CAL_EVENT_DETAIL_007_CANCELLED__COACH__1440x900.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": true,
+    "1440x900": true
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (02_Calendario)",
+  "source_files": [
+    "src/features/event_detail.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "CAPTURED",
+      "file": "CAL_EVENT_DETAIL_007_CANCELLED__COACH__390x844.png",
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 1
+    },
+    "1440x900": {
+      "status": "CAPTURED",
+      "file": "CAL_EVENT_DETAIL_007_CANCELLED__COACH__1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "deviceScaleFactor": 1
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}

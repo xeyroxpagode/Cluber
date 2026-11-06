@@ -1,0 +1,13 @@
+#0001 frame_0000.jpg duration=0.2750s
+#0002 frame_0001.jpg duration=0.0132s
+#0003 frame_0002.jpg duration=0.0142s
+#0004 frame_0003.jpg duration=0.0146s
+#0005 frame_0004.jpg duration=0.0159s
+#0006 frame_0005.jpg duration=0.0169s
+#0007 frame_0006.jpg duration=0.0175s
+#0008 frame_0007.jpg duration=0.0172s
+#0009 frame_0008.jpg duration=0.0149s
+#0010 frame_0009.jpg duration=0.0168s
+#0011 frame_0010.jpg duration=0.0175s
+#0012 frame_0011.jpg duration=0.0164s
+#0013 frame_0012.jpg duration=1.2000s

@@ -1,0 +1,16 @@
+{
+  "motionId": "MOTION_TAB_COMMUNICATION_390",
+  "route": "/communication",
+  "actor": "coach",
+  "viewport": "390",
+  "frames": 12,
+  "measuredDurationMs": 442,
+  "observedDurationMs": 1200,
+  "fps": 30,
+  "action": [
+    {
+      "clickText": "Comunicados"
+    }
+  ],
+  "source": "src/shared/ui.tsx · TabBar — cambio de pestaña con transition-colors duration-micro (120 ms) en el color del texto y del borde inferior."
+}

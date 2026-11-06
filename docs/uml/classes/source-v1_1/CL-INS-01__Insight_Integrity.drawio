@@ -1,8 +1,78 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="GEI-V1.1" modified="2026-10-14T00:00:00.000Z" agent="GEI-v1.1-scope-reconciliation" version="24.7.17" type="device">
-  <diagram id="CL-INS-01" name="CL-INS-01"><mxGraphModel page="1" pageWidth="1169" pageHeight="827"><root>
-    <mxCell id="0"/><mxCell id="1" parent="0"/>
-    <mxCell id="title" value="Insight and Integrity V1.1" style="text;html=1;align=center;fontSize=18;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="190" y="30" width="790" height="40" as="geometry"/></mxCell>
-    <mxCell id="contract" value="Search and reports filter results through field-level authority&#xA;History derives from authoritative domain facts&#xA;AuditEntry is append-only and redacts sensitive fields&#xA;Person.email remains private except to self and explicitly authorized operations&#xA;Administrative authority does not grant private-message access" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=16;fontSize=13;fillColor=#FFFFFF;strokeColor=#263238;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="190" y="100" width="790" height="610" as="geometry"/></mxCell>
-  </root></mxGraphModel></diagram>
+<?xml version='1.0' encoding='UTF-8'?>
+<mxfile host="app.diagrams.net" modified="2026-10-15T01:30:00.000Z" agent="GEI Diagrams" version="24.7.17" type="device">
+  <diagram id="GEI-Clases" name="Clases">
+    <mxGraphModel dx="1700" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1589" pageHeight="800" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="gei-rel-0" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.35;rounded=0;edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=18;" parent="1" value="" edge="1" source="class-Person" target="class-AuditEntry">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gei-rel-0-inicio" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-0" value="1" vertex="1">
+          <mxGeometry x="-0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-0-fin" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-0" value="0..*" vertex="1">
+          <mxGeometry x="0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="class-AuditEntry" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Registro de cambios" vertex="1">
+          <mxGeometry x="135" y="370" width="305" height="102" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-AuditEntry-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-AuditEntry" value="acción: Texto&#10;fecha: Fecha y hora" vertex="1">
+          <mxGeometry x="0" y="45" width="297" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Person" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Persona" vertex="1">
+          <mxGeometry x="157" y="100" width="260" height="154" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Person-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-Person" value="nombre: Texto&#10;apellido: Texto&#10;correo: Texto" vertex="1">
+          <mxGeometry x="0" y="45" width="252" height="66" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Person-sep" style="line;strokeColor=#AAAAAA;strokeWidth=1;" parent="class-Person" value="" vertex="1">
+          <mxGeometry x="0" y="113" width="260" height="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Person-ops" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=3;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-Person" value="actualizar datos()" vertex="1">
+          <mxGeometry x="0" y="117" width="252" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-AttendanceReport" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Informe de asistencia" vertex="1">
+          <mxGeometry x="461" y="120" width="305" height="114" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-AttendanceReport-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-AttendanceReport" value="período: Fechas" vertex="1">
+          <mxGeometry x="0" y="45" width="297" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-AttendanceReport-sep" style="line;strokeColor=#AAAAAA;strokeWidth=1;" parent="class-AttendanceReport" value="" vertex="1">
+          <mxGeometry x="0" y="73" width="305" height="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-AttendanceReport-ops" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=3;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-AttendanceReport" value="consultar()" vertex="1">
+          <mxGeometry x="0" y="77" width="297" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-PerformanceReport" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Informe de rendimiento" vertex="1">
+          <mxGeometry x="810" y="120" width="305" height="114" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-PerformanceReport-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-PerformanceReport" value="período: Fechas" vertex="1">
+          <mxGeometry x="0" y="45" width="297" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-PerformanceReport-sep" style="line;strokeColor=#AAAAAA;strokeWidth=1;" parent="class-PerformanceReport" value="" vertex="1">
+          <mxGeometry x="0" y="73" width="305" height="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-PerformanceReport-ops" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=3;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-PerformanceReport" value="consultar()" vertex="1">
+          <mxGeometry x="0" y="77" width="297" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Search" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Búsqueda" vertex="1">
+          <mxGeometry x="1159" y="120" width="260" height="114" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Search-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-Search" value="criterio: Texto" vertex="1">
+          <mxGeometry x="0" y="45" width="252" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Search-sep" style="line;strokeColor=#AAAAAA;strokeWidth=1;" parent="class-Search" value="" vertex="1">
+          <mxGeometry x="0" y="73" width="260" height="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Search-ops" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=3;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-Search" value="buscar()" vertex="1">
+          <mxGeometry x="0" y="77" width="252" height="26" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
 </mxfile>

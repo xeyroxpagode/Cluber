@@ -1,0 +1,48 @@
+{
+  "id": "PRT_ATTENDANCE_007_NO_AUTHORITY",
+  "domain": "04_CALENDAR_PARTICIPATION",
+  "subdomain": "Attendance",
+  "route": "/events/match-lomas/attendance",
+  "actor": "PLAYER",
+  "state": "SIN ALCANCE",
+  "journeys": [
+    "J12"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__390x844.png",
+    "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__1440x900.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": true,
+    "1440x900": true
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (03_Participacion)",
+  "source_files": [
+    "src/features/attendance.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "CAPTURED",
+      "file": "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__390x844.png",
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 1
+    },
+    "1440x900": {
+      "status": "CAPTURED",
+      "file": "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "deviceScaleFactor": 1
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}

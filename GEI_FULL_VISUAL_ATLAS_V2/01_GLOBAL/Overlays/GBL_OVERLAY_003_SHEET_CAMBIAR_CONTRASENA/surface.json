@@ -1,0 +1,48 @@
+{
+  "id": "GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA",
+  "domain": "01_GLOBAL",
+  "subdomain": "Overlays",
+  "route": "/more/profile",
+  "actor": "COACH",
+  "state": "Panel abierto, sin valores escritos",
+  "journeys": [
+    "J29"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA__COACH__390x844.png",
+    "GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA__COACH__1440x900.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": true,
+    "1440x900": true
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (00_Global)",
+  "source_files": [
+    "src/features/overlays.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "CAPTURED",
+      "file": "GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA__COACH__390x844.png",
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 1
+    },
+    "1440x900": {
+      "status": "CAPTURED",
+      "file": "GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA__COACH__1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "deviceScaleFactor": 1
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}

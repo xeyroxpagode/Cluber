@@ -1,0 +1,26 @@
+# JOURNEY J12A — Attendance → Correction
+
+**Actor:** COACH
+**Inicio:** Attendance
+**Fin:** Correction
+**Pasos:** 1
+**Rutas alternativas:** J12
+
+## Superficies cubiertas
+
+| # | Surface ID | Dominio | Ruta | Estado | Actor | 390×844 | 1440×900 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `PRT_ATTENDANCE_005_CORRECTION_DIALOG` | 04_CALENDAR_PARTICIPATION | `/events/match-lomas/attendance` | CORRECCIÓN CONFIRMADA | COACH | CAPTURED | CAPTURED |
+
+## Capturas
+
+### 1. `PRT_ATTENDANCE_005_CORRECTION_DIALOG`
+
+- **390×844:** CAPTURED — `04_CALENDAR_PARTICIPATION/Attendance/PRT_ATTENDANCE_005_CORRECTION_DIALOG/PRT_ATTENDANCE_005_CORRECTION_DIALOG__COACH__390x844.png`
+- **1440×900:** CAPTURED — `04_CALENDAR_PARTICIPATION/Attendance/PRT_ATTENDANCE_005_CORRECTION_DIALOG/PRT_ATTENDANCE_005_CORRECTION_DIALOG__COACH__1440x900.png`
+
+## Índice del atlas
+
+- 11_INDEXES/MASTER_JOURNEY_INDEX.md
+- 11_INDEXES/MASTER_SURFACE_INDEX.md
+- 11_INDEXES/ROUTE_SURFACE_MATRIX.md

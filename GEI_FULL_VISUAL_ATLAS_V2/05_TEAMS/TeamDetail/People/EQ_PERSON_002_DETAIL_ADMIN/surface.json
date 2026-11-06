@@ -1,0 +1,48 @@
+{
+  "id": "EQ_PERSON_002_DETAIL_ADMIN",
+  "domain": "05_TEAMS",
+  "subdomain": "TeamDetail/People",
+  "route": "/people/p2",
+  "actor": "ADMIN",
+  "state": "ACCOUNT ACTIVE · PII completa",
+  "journeys": [
+    "J06"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "EQ_PERSON_002_DETAIL_ADMIN__ADMIN__390x844.png",
+    "EQ_PERSON_002_DETAIL_ADMIN__ADMIN__1440x900.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": true,
+    "1440x900": true
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (04_Equipos)",
+  "source_files": [
+    "src/features/teamdetail_people.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "CAPTURED",
+      "file": "EQ_PERSON_002_DETAIL_ADMIN__ADMIN__390x844.png",
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 1
+    },
+    "1440x900": {
+      "status": "CAPTURED",
+      "file": "EQ_PERSON_002_DETAIL_ADMIN__ADMIN__1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "deviceScaleFactor": 1
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}

@@ -1,0 +1,32 @@
+# JOURNEY J32 — Create Person → Person
+
+**Actor:** ADMIN
+**Inicio:** Create Person
+**Fin:** Person
+**Pasos:** 2
+**Rutas alternativas:** -
+
+## Superficies cubiertas
+
+| # | Surface ID | Dominio | Ruta | Estado | Actor | 390×844 | 1440×900 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `MGT_PEOPLE_005_NEW_FORM` | 08_MANAGEMENT | `/management/people/new` | FORMULARIO VACÍO | ADMIN | CAPTURED | CAPTURED |
+| 2 | `MGT_PEOPLE_006_NEW_VALIDATION` | 08_MANAGEMENT | `/management/people/new` | VALIDATION FAILED | ADMIN | CAPTURED | CAPTURED |
+
+## Capturas
+
+### 1. `MGT_PEOPLE_005_NEW_FORM`
+
+- **390×844:** CAPTURED — `08_MANAGEMENT/People/MGT_PEOPLE_005_NEW_FORM/MGT_PEOPLE_005_NEW_FORM__ADMIN__390x844.png`
+- **1440×900:** CAPTURED — `08_MANAGEMENT/People/MGT_PEOPLE_005_NEW_FORM/MGT_PEOPLE_005_NEW_FORM__ADMIN__1440x900.png`
+
+### 2. `MGT_PEOPLE_006_NEW_VALIDATION`
+
+- **390×844:** CAPTURED — `08_MANAGEMENT/People/MGT_PEOPLE_006_NEW_VALIDATION/MGT_PEOPLE_006_NEW_VALIDATION__ADMIN__390x844.png`
+- **1440×900:** CAPTURED — `08_MANAGEMENT/People/MGT_PEOPLE_006_NEW_VALIDATION/MGT_PEOPLE_006_NEW_VALIDATION__ADMIN__1440x900.png`
+
+## Índice del atlas
+
+- 11_INDEXES/MASTER_JOURNEY_INDEX.md
+- 11_INDEXES/MASTER_SURFACE_INDEX.md
+- 11_INDEXES/ROUTE_SURFACE_MATRIX.md

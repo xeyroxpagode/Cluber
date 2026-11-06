@@ -1,0 +1,22 @@
+{
+  "motionId": "MOTION_VAS_ANSWER_390",
+  "route": "/events/match-cuba",
+  "actor": "player",
+  "viewport": "390",
+  "frames": 15,
+  "measuredDurationMs": 2850,
+  "observedDurationMs": 1800,
+  "fps": 30,
+  "action": [
+    {
+      "scroll": 400
+    },
+    {
+      "clickText": "Tal vez"
+    },
+    {
+      "wait": 900
+    }
+  ],
+  "source": "src/shared/vas.tsx · VasControl → respondAvailability → toast — la opción activa cambia de color (transition-colors duration-micro) y aparece el toast de confirmación."
+}

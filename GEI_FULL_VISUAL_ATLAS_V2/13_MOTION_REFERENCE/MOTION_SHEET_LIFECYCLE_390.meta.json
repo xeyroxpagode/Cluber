@@ -1,0 +1,19 @@
+{
+  "motionId": "MOTION_SHEET_LIFECYCLE_390",
+  "route": "/events/match-cuba",
+  "actor": "coach",
+  "viewport": "390",
+  "frames": 3,
+  "measuredDurationMs": 291,
+  "observedDurationMs": 1600,
+  "fps": 30,
+  "action": [
+    {
+      "clickText": "Acciones"
+    },
+    {
+      "clickText": "Postergar"
+    }
+  ],
+  "source": "src/features/events.tsx · LifecycleActions + src/shared/ui.tsx · Sheet — dos pasos: apertura del menú y montaje del panel lateral."
+}

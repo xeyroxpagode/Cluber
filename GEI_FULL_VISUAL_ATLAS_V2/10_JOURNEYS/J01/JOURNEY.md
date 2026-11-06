@@ -1,0 +1,32 @@
+# JOURNEY J01 — Login → Home
+
+**Actor:** COACH
+**Inicio:** Login
+**Fin:** Home
+**Pasos:** 1
+**Rutas alternativas:** -
+
+## Superficies cubiertas
+
+| # | Surface ID | Dominio | Ruta | Estado | Actor | 390×844 | 1440×900 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `AUTH_LOGIN_001_DEFAULT` | 02_AUTH | `/login` | FORMULARIO VACÍO | COACH | CAPTURED | CAPTURED |
+| 2 | `AUTH_LOGIN_002_ERROR` | 02_AUTH | `/login` | CREDENCIALES RECHAZADAS | COACH | CAPTURED | CAPTURED |
+
+## Capturas
+
+### 1. `AUTH_LOGIN_001_DEFAULT`
+
+- **390×844:** CAPTURED — `02_AUTH/Login/AUTH_LOGIN_001_DEFAULT/AUTH_LOGIN_001_DEFAULT__COACH__390x844.png`
+- **1440×900:** CAPTURED — `02_AUTH/Login/AUTH_LOGIN_001_DEFAULT/AUTH_LOGIN_001_DEFAULT__COACH__1440x900.png`
+
+### 2. `AUTH_LOGIN_002_ERROR`
+
+- **390×844:** CAPTURED — `02_AUTH/Login/AUTH_LOGIN_002_ERROR/AUTH_LOGIN_002_ERROR__COACH__390x844.png`
+- **1440×900:** CAPTURED — `02_AUTH/Login/AUTH_LOGIN_002_ERROR/AUTH_LOGIN_002_ERROR__COACH__1440x900.png`
+
+## Índice del atlas
+
+- 11_INDEXES/MASTER_JOURNEY_INDEX.md
+- 11_INDEXES/MASTER_SURFACE_INDEX.md
+- 11_INDEXES/ROUTE_SURFACE_MATRIX.md

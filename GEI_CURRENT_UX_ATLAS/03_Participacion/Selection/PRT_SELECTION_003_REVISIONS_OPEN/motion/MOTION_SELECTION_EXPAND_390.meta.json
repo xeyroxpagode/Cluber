@@ -1,0 +1,16 @@
+{
+  "motionId": "MOTION_SELECTION_EXPAND_390",
+  "route": "/events/match-cuba/selection",
+  "actor": "coach",
+  "viewport": "390",
+  "frames": 2,
+  "measuredDurationMs": 278,
+  "observedDurationMs": 1200,
+  "fps": 30,
+  "action": [
+    {
+      "clickText": "Ver 1"
+    }
+  ],
+  "source": "src/features/participation.tsx · SelectionPage — botón expansor con aria-expanded; el contenido se monta/desmonta sin transición."
+}

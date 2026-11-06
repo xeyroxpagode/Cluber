@@ -1,0 +1,48 @@
+{
+  "id": "PRT_AVAILABILITY_002_PLAYER_SELF",
+  "domain": "04_CALENDAR_PARTICIPATION",
+  "subdomain": "Availability",
+  "route": "/events/match-cuba/availability",
+  "actor": "PLAYER",
+  "state": "SCHEDULED · p2 sin responder",
+  "journeys": [
+    "J04"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "PRT_AVAILABILITY_002_PLAYER_SELF__PLAYER__390x844.png",
+    "PRT_AVAILABILITY_002_PLAYER_SELF__PLAYER__1440x900.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": true,
+    "1440x900": true
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (03_Participacion)",
+  "source_files": [
+    "src/features/availability.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "CAPTURED",
+      "file": "PRT_AVAILABILITY_002_PLAYER_SELF__PLAYER__390x844.png",
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 1
+    },
+    "1440x900": {
+      "status": "CAPTURED",
+      "file": "PRT_AVAILABILITY_002_PLAYER_SELF__PLAYER__1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "deviceScaleFactor": 1
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}

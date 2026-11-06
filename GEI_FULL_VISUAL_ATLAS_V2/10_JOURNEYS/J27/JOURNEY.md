@@ -1,0 +1,26 @@
+# JOURNEY J27 — Announcement → Archive
+
+**Actor:** SUBCOMMITTEE
+**Inicio:** Announcement
+**Fin:** Archive
+**Pasos:** 1
+**Rutas alternativas:** -
+
+## Superficies cubiertas
+
+| # | Surface ID | Dominio | Ruta | Estado | Actor | 390×844 | 1440×900 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM` | 06_COMMUNICATION | `/announcements/a1` | ARCHIVADO CONFIRMADO | SUBCOMMITTEE | CAPTURED | CAPTURED |
+
+## Capturas
+
+### 1. `COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM`
+
+- **390×844:** CAPTURED — `06_COMMUNICATION/Announcements/COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM/COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM__SUBCOMMITTEE__390x844.png`
+- **1440×900:** CAPTURED — `06_COMMUNICATION/Announcements/COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM/COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM__SUBCOMMITTEE__1440x900.png`
+
+## Índice del atlas
+
+- 11_INDEXES/MASTER_JOURNEY_INDEX.md
+- 11_INDEXES/MASTER_SURFACE_INDEX.md
+- 11_INDEXES/ROUTE_SURFACE_MATRIX.md

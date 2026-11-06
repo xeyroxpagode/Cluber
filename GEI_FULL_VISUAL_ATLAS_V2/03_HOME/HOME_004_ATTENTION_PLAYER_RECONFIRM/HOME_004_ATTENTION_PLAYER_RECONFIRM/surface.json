@@ -1,0 +1,48 @@
+{
+  "id": "HOME_004_ATTENTION_PLAYER_RECONFIRM",
+  "domain": "03_HOME",
+  "subdomain": "HOME_004_ATTENTION_PLAYER_RECONFIRM",
+  "route": "/home",
+  "actor": "CAPTAIN",
+  "state": "CAPTAIN · NEEDS_RECONFIRMATION + NO_RESPONSE",
+  "journeys": [
+    "J09"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "HOME_004_ATTENTION_PLAYER_RECONFIRM__CAPTAIN__390x844.png",
+    "HOME_004_ATTENTION_PLAYER_RECONFIRM__CAPTAIN__1440x900.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": true,
+    "1440x900": true
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (01_Home)",
+  "source_files": [
+    "src/features/home_004_attention_player_reconfirm.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "CAPTURED",
+      "file": "HOME_004_ATTENTION_PLAYER_RECONFIRM__CAPTAIN__390x844.png",
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 1
+    },
+    "1440x900": {
+      "status": "CAPTURED",
+      "file": "HOME_004_ATTENTION_PLAYER_RECONFIRM__CAPTAIN__1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "deviceScaleFactor": 1
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}

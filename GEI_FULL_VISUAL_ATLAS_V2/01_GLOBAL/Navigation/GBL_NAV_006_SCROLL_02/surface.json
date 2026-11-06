@@ -1,0 +1,48 @@
+{
+  "id": "GBL_NAV_006_SCROLL_02",
+  "domain": "01_GLOBAL",
+  "subdomain": "Navigation",
+  "route": "/home",
+  "actor": "ADMIN",
+  "state": "AUTHENTICATED · página desplazada 900 px",
+  "journeys": [
+    "J04"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "GBL_NAV_006_SCROLL_02__ADMIN__1440x900.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": false,
+    "1440x900": true
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (00_Global)",
+  "source_files": [
+    "src/features/navigation.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "N/A",
+      "statement": "N/A — CURRENT does not render this surface at this viewport",
+      "file": null,
+      "reason": "La superficie documenta el scroll propio de la columna de destinos de escritorio (overflow-y:auto con altura limitada, src/app/Shell.tsx:185). A 390 px no existe esa columna, por lo que la superficie no existe.",
+      "current_behavior": "Runtime verificado a 390×844: sidebar display=none, scrollHeight=0, clientHeight=0. El scroll del documento sí existe en mobile, pero es una composición distinta (no la barra lateral) y ya está documentada por las superficies de scroll de HOME.",
+      "alternate_surface_or_route": "HOME_006_SCROLL_02 — scroll de /home en 1440×900."
+    },
+    "1440x900": {
+      "status": "CAPTURED",
+      "file": "GBL_NAV_006_SCROLL_02__ADMIN__1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "deviceScaleFactor": 1
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}

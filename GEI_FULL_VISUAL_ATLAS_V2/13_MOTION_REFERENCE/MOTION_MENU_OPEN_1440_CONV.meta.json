@@ -1,0 +1,16 @@
+{
+  "motionId": "MOTION_MENU_OPEN_1440_CONV",
+  "route": "/announcements/a1",
+  "actor": "subcommittee",
+  "viewport": "1440",
+  "frames": 2,
+  "measuredDurationMs": 271,
+  "observedDurationMs": 1200,
+  "fps": 30,
+  "action": [
+    {
+      "clickText": "Acciones"
+    }
+  ],
+  "source": "src/shared/ui.tsx · Menu — el mismo primitive en el encabezado del comunicado; el panel se posiciona con right-0 respecto del botón."
+}

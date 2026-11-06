@@ -1,0 +1,16 @@
+{
+  "motionId": "MOTION_MENU_OPEN_390",
+  "route": "/events/match-cuba",
+  "actor": "coach",
+  "viewport": "390",
+  "frames": 2,
+  "measuredDurationMs": 270,
+  "observedDurationMs": 1200,
+  "fps": 30,
+  "action": [
+    {
+      "clickText": "Acciones"
+    }
+  ],
+  "source": "src/shared/ui.tsx · Menu — el panel se monta/desmonta; no hay transición CSS declarada (SOURCE-CONFIRMED)."
+}

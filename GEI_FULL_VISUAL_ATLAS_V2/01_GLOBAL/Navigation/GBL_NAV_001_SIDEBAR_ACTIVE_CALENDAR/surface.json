@@ -1,0 +1,48 @@
+{
+  "id": "GBL_NAV_001_SIDEBAR_ACTIVE_CALENDAR",
+  "domain": "01_GLOBAL",
+  "subdomain": "Navigation",
+  "route": "/calendar",
+  "actor": "COACH",
+  "state": "AUTHENTICATED · ruta /calendar",
+  "journeys": [
+    "J04"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "GBL_NAV_001_SIDEBAR_ACTIVE_CALENDAR__COACH__1440x900.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": false,
+    "1440x900": true
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (00_Global)",
+  "source_files": [
+    "src/features/navigation.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "N/A",
+      "statement": "N/A — CURRENT does not render this surface at this viewport",
+      "file": null,
+      "reason": "La barra lateral de destinos no se renderiza por debajo del breakpoint lg (1024 px). El <nav aria-label=\"Destinos\"> de escritorio lleva las clases `hidden ... lg:flex` (src/app/Shell.tsx:183-185), de modo que su computed display es `none` a 390 px.",
+      "current_behavior": "Runtime verificado en Chrome headless a 390×844: sidebar display=none, visibleBox=false. La misma función la cumple el BottomNav fijo (`flex ... lg:hidden`, src/app/Shell.tsx:230-232), que presenta los mismos 5 destinos con icono + label micro y marca Calendario como activo.",
+      "alternate_surface_or_route": "GBL_NAV_002_BOTTOMNAV_ACTIVE_CALENDAR — misma ruta /calendar, actor COACH, viewport 390×844."
+    },
+    "1440x900": {
+      "status": "CAPTURED",
+      "file": "GBL_NAV_001_SIDEBAR_ACTIVE_CALENDAR__COACH__1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "deviceScaleFactor": 1
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}

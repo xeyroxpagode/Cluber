@@ -1,0 +1,1978 @@
+[
+  {
+    "id": "GBL_NAV_001_SIDEBAR_ACTIVE_CALENDAR",
+    "route": "/calendar",
+    "actor": "coach",
+    "probeViewport": "390",
+    "expect": "sidebar",
+    "claim": "La barra lateral de destinos no se renderiza en 390px; la cumple el BottomNav fijo.",
+    "runtime": {
+      "viewport": {
+        "w": 390,
+        "h": 844,
+        "dpr": 1
+      },
+      "sidebar": {
+        "present": true,
+        "display": "none",
+        "position": "sticky",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "visibleBox": false,
+        "scrollHeight": 0,
+        "clientHeight": 0,
+        "ownScroller": true,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "page",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Comunicación2",
+            "ariaCurrent": "",
+            "badgeText": "Comunicación2",
+            "hasUnreadDot": true
+          },
+          {
+            "text": "Más1",
+            "ariaCurrent": "",
+            "badgeText": "Más1",
+            "hasUnreadDot": true
+          }
+        ]
+      },
+      "bottomnav": {
+        "present": true,
+        "display": "flex",
+        "position": "fixed",
+        "rect": {
+          "x": 0,
+          "y": 788.16,
+          "w": 390,
+          "h": 55.84
+        },
+        "visibleBox": true,
+        "scrollHeight": 55,
+        "clientHeight": 55,
+        "ownScroller": false,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "page",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Comunicación",
+            "ariaCurrent": "",
+            "badgeText": "Comunicación",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Más",
+            "ariaCurrent": "",
+            "badgeText": "Más",
+            "hasUnreadDot": false
+          }
+        ]
+      },
+      "header": {
+        "present": true,
+        "text": "GEI Calendario TB",
+        "brand": {
+          "present": true,
+          "display": "flex",
+          "visibleBox": true
+        },
+        "microHockey": true,
+        "searchTextLink": true,
+        "searchIconLink": true,
+        "kbd": [
+          "⌘K"
+        ],
+        "topbarParts": [
+          {
+            "tag": "div",
+            "cls": "flex h-16 items-center gap-3 px-4 sm:px-6",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 390,
+              "h": 64
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex items-center gap-2 lg:hidden",
+            "aria": "GEI Hockey · Inicio",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 16,
+              "y": 14,
+              "w": 36,
+              "h": 36
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "hidden min-w-0 flex-1 lg:block",
+            "aria": "",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "min-w-0 flex-1 lg:hidden",
+            "aria": "",
+            "display": "block",
+            "visibleBox": true,
+            "rect": {
+              "x": 64,
+              "y": 21.16,
+              "w": 162,
+              "h": 21.69
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "flex items-center gap-1",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 238,
+              "y": 10,
+              "w": 136,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "gei-target-sm hidden items-center gap-2 rounded-control px-2.5 text-meta text-ink-muted transition-colors hover:bg-control hover:text-ink sm:inline-flex",
+            "aria": "",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink sm:hidden",
+            "aria": "Buscar",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 238,
+              "y": 10,
+              "w": 44,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "relative flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink",
+            "aria": "Avisos, 1 sin leer",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 286,
+              "y": 10,
+              "w": 44,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "ml-1 flex items-center rounded-control p-0.5 transition-colors hover:bg-control",
+            "aria": "Mi perfil",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 338,
+              "y": 14,
+              "w": 36,
+              "h": 36
+            }
+          }
+        ]
+      },
+      "main": {
+        "present": true,
+        "paddingBottom": "112px",
+        "scrollHeight": 1745
+      },
+      "docScrollY": 0,
+      "bodyScrollHeight": 1745
+    }
+  },
+  {
+    "id": "GBL_NAV_004_SIDEBAR_BADGES_COACH",
+    "route": "/home",
+    "actor": "coach",
+    "probeViewport": "390",
+    "expect": "sidebar",
+    "claim": "Los contadores de no-leidos de la barra lateral no existen en 390px; el BottomNav no lleva contadores.",
+    "runtime": {
+      "viewport": {
+        "w": 390,
+        "h": 844,
+        "dpr": 1
+      },
+      "sidebar": {
+        "present": true,
+        "display": "none",
+        "position": "sticky",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "visibleBox": false,
+        "scrollHeight": 0,
+        "clientHeight": 0,
+        "ownScroller": true,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "page",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Comunicación2",
+            "ariaCurrent": "",
+            "badgeText": "Comunicación2",
+            "hasUnreadDot": true
+          },
+          {
+            "text": "Más1",
+            "ariaCurrent": "",
+            "badgeText": "Más1",
+            "hasUnreadDot": true
+          }
+        ]
+      },
+      "bottomnav": {
+        "present": true,
+        "display": "flex",
+        "position": "fixed",
+        "rect": {
+          "x": 0,
+          "y": 788.16,
+          "w": 390,
+          "h": 55.84
+        },
+        "visibleBox": true,
+        "scrollHeight": 55,
+        "clientHeight": 55,
+        "ownScroller": false,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "page",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Comunicación",
+            "ariaCurrent": "",
+            "badgeText": "Comunicación",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Más",
+            "ariaCurrent": "",
+            "badgeText": "Más",
+            "hasUnreadDot": false
+          }
+        ]
+      },
+      "header": {
+        "present": true,
+        "text": "GEI Inicio TB",
+        "brand": {
+          "present": true,
+          "display": "flex",
+          "visibleBox": true
+        },
+        "microHockey": true,
+        "searchTextLink": true,
+        "searchIconLink": true,
+        "kbd": [
+          "⌘K"
+        ],
+        "topbarParts": [
+          {
+            "tag": "div",
+            "cls": "flex h-16 items-center gap-3 px-4 sm:px-6",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 390,
+              "h": 64
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex items-center gap-2 lg:hidden",
+            "aria": "GEI Hockey · Inicio",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 16,
+              "y": 14,
+              "w": 36,
+              "h": 36
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "hidden min-w-0 flex-1 lg:block",
+            "aria": "",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "min-w-0 flex-1 lg:hidden",
+            "aria": "",
+            "display": "block",
+            "visibleBox": true,
+            "rect": {
+              "x": 64,
+              "y": 21.16,
+              "w": 162,
+              "h": 21.69
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "flex items-center gap-1",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 238,
+              "y": 10,
+              "w": 136,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "gei-target-sm hidden items-center gap-2 rounded-control px-2.5 text-meta text-ink-muted transition-colors hover:bg-control hover:text-ink sm:inline-flex",
+            "aria": "",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink sm:hidden",
+            "aria": "Buscar",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 238,
+              "y": 10,
+              "w": 44,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "relative flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink",
+            "aria": "Avisos, 1 sin leer",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 286,
+              "y": 10,
+              "w": 44,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "ml-1 flex items-center rounded-control p-0.5 transition-colors hover:bg-control",
+            "aria": "Mi perfil",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 338,
+              "y": 14,
+              "w": 36,
+              "h": 36
+            }
+          }
+        ]
+      },
+      "main": {
+        "present": true,
+        "paddingBottom": "112px",
+        "scrollHeight": 1307
+      },
+      "docScrollY": 0,
+      "bodyScrollHeight": 1307
+    }
+  },
+  {
+    "id": "GBL_NAV_005_SIDEBAR_BADGES_ADMIN",
+    "route": "/home",
+    "actor": "admin",
+    "probeViewport": "390",
+    "expect": "sidebar",
+    "claim": "La barra lateral de destinos no se renderiza en 390px.",
+    "runtime": {
+      "viewport": {
+        "w": 390,
+        "h": 844,
+        "dpr": 1
+      },
+      "sidebar": {
+        "present": true,
+        "display": "none",
+        "position": "sticky",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "visibleBox": false,
+        "scrollHeight": 0,
+        "clientHeight": 0,
+        "ownScroller": true,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "page",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Más",
+            "ariaCurrent": "",
+            "badgeText": "Más",
+            "hasUnreadDot": false
+          }
+        ]
+      },
+      "bottomnav": {
+        "present": true,
+        "display": "flex",
+        "position": "fixed",
+        "rect": {
+          "x": 0,
+          "y": 788.16,
+          "w": 390,
+          "h": 55.84
+        },
+        "visibleBox": true,
+        "scrollHeight": 55,
+        "clientHeight": 55,
+        "ownScroller": false,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "page",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Más",
+            "ariaCurrent": "",
+            "badgeText": "Más",
+            "hasUnreadDot": false
+          }
+        ]
+      },
+      "header": {
+        "present": true,
+        "text": "GEI Inicio MC",
+        "brand": {
+          "present": true,
+          "display": "flex",
+          "visibleBox": true
+        },
+        "microHockey": true,
+        "searchTextLink": true,
+        "searchIconLink": true,
+        "kbd": [
+          "⌘K"
+        ],
+        "topbarParts": [
+          {
+            "tag": "div",
+            "cls": "flex h-16 items-center gap-3 px-4 sm:px-6",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 390,
+              "h": 64
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex items-center gap-2 lg:hidden",
+            "aria": "GEI Hockey · Inicio",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 16,
+              "y": 14,
+              "w": 36,
+              "h": 36
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "hidden min-w-0 flex-1 lg:block",
+            "aria": "",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "min-w-0 flex-1 lg:hidden",
+            "aria": "",
+            "display": "block",
+            "visibleBox": true,
+            "rect": {
+              "x": 64,
+              "y": 21.16,
+              "w": 162,
+              "h": 21.69
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "flex items-center gap-1",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 238,
+              "y": 10,
+              "w": 136,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "gei-target-sm hidden items-center gap-2 rounded-control px-2.5 text-meta text-ink-muted transition-colors hover:bg-control hover:text-ink sm:inline-flex",
+            "aria": "",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink sm:hidden",
+            "aria": "Buscar",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 238,
+              "y": 10,
+              "w": 44,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "relative flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink",
+            "aria": "Avisos, todo leído",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 286,
+              "y": 10,
+              "w": 44,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "ml-1 flex items-center rounded-control p-0.5 transition-colors hover:bg-control",
+            "aria": "Mi perfil",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 338,
+              "y": 14,
+              "w": 36,
+              "h": 36
+            }
+          }
+        ]
+      },
+      "main": {
+        "present": true,
+        "paddingBottom": "112px",
+        "scrollHeight": 1357
+      },
+      "docScrollY": 0,
+      "bodyScrollHeight": 1357
+    }
+  },
+  {
+    "id": "GBL_NAV_006_SCROLL_02",
+    "route": "/home",
+    "actor": "admin",
+    "probeViewport": "390",
+    "expect": "sidebar",
+    "claim": "No existe columna lateral en 390px, por lo que no existe la superficie de scroll propio de la barra lateral.",
+    "runtime": {
+      "viewport": {
+        "w": 390,
+        "h": 844,
+        "dpr": 1
+      },
+      "sidebar": {
+        "present": true,
+        "display": "none",
+        "position": "sticky",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "visibleBox": false,
+        "scrollHeight": 0,
+        "clientHeight": 0,
+        "ownScroller": true,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "page",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Más",
+            "ariaCurrent": "",
+            "badgeText": "Más",
+            "hasUnreadDot": false
+          }
+        ]
+      },
+      "bottomnav": {
+        "present": true,
+        "display": "flex",
+        "position": "fixed",
+        "rect": {
+          "x": 0,
+          "y": 788.16,
+          "w": 390,
+          "h": 55.84
+        },
+        "visibleBox": true,
+        "scrollHeight": 55,
+        "clientHeight": 55,
+        "ownScroller": false,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "page",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Más",
+            "ariaCurrent": "",
+            "badgeText": "Más",
+            "hasUnreadDot": false
+          }
+        ]
+      },
+      "header": {
+        "present": true,
+        "text": "GEI Inicio MC",
+        "brand": {
+          "present": true,
+          "display": "flex",
+          "visibleBox": true
+        },
+        "microHockey": true,
+        "searchTextLink": true,
+        "searchIconLink": true,
+        "kbd": [
+          "⌘K"
+        ],
+        "topbarParts": [
+          {
+            "tag": "div",
+            "cls": "flex h-16 items-center gap-3 px-4 sm:px-6",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 390,
+              "h": 64
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex items-center gap-2 lg:hidden",
+            "aria": "GEI Hockey · Inicio",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 16,
+              "y": 14,
+              "w": 36,
+              "h": 36
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "hidden min-w-0 flex-1 lg:block",
+            "aria": "",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "min-w-0 flex-1 lg:hidden",
+            "aria": "",
+            "display": "block",
+            "visibleBox": true,
+            "rect": {
+              "x": 64,
+              "y": 21.16,
+              "w": 162,
+              "h": 21.69
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "flex items-center gap-1",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 238,
+              "y": 10,
+              "w": 136,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "gei-target-sm hidden items-center gap-2 rounded-control px-2.5 text-meta text-ink-muted transition-colors hover:bg-control hover:text-ink sm:inline-flex",
+            "aria": "",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink sm:hidden",
+            "aria": "Buscar",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 238,
+              "y": 10,
+              "w": 44,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "relative flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink",
+            "aria": "Avisos, todo leído",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 286,
+              "y": 10,
+              "w": 44,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "ml-1 flex items-center rounded-control p-0.5 transition-colors hover:bg-control",
+            "aria": "Mi perfil",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 338,
+              "y": 14,
+              "w": 36,
+              "h": 36
+            }
+          }
+        ]
+      },
+      "main": {
+        "present": true,
+        "paddingBottom": "112px",
+        "scrollHeight": 1357
+      },
+      "docScrollY": 0,
+      "bodyScrollHeight": 1357
+    }
+  },
+  {
+    "id": "GBL_NAV_002_BOTTOMNAV_ACTIVE_CALENDAR",
+    "route": "/calendar",
+    "actor": "coach",
+    "probeViewport": "1440",
+    "expect": "bottomnav",
+    "claim": "El BottomNav fijo no se renderiza en 1440px; la cumplen la barra lateral.",
+    "runtime": {
+      "viewport": {
+        "w": 1440,
+        "h": 900,
+        "dpr": 1
+      },
+      "sidebar": {
+        "present": true,
+        "display": "flex",
+        "position": "sticky",
+        "rect": {
+          "x": 0,
+          "y": 65,
+          "w": 224,
+          "h": 836
+        },
+        "visibleBox": true,
+        "scrollHeight": 836,
+        "clientHeight": 836,
+        "ownScroller": true,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "page",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Comunicación 2",
+            "ariaCurrent": "",
+            "badgeText": "Comunicación 2",
+            "hasUnreadDot": true
+          },
+          {
+            "text": "Más 1",
+            "ariaCurrent": "",
+            "badgeText": "Más 1",
+            "hasUnreadDot": true
+          }
+        ]
+      },
+      "bottomnav": {
+        "present": true,
+        "display": "none",
+        "position": "fixed",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "visibleBox": false,
+        "scrollHeight": 0,
+        "clientHeight": 0,
+        "ownScroller": false,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "page",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Comunicación",
+            "ariaCurrent": "",
+            "badgeText": "Comunicación",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Más",
+            "ariaCurrent": "",
+            "badgeText": "Más",
+            "hasUnreadDot": false
+          }
+        ]
+      },
+      "header": {
+        "present": true,
+        "text": "Hockey Calendario Buscar ⌘K TB",
+        "brand": {
+          "present": true,
+          "display": "none",
+          "visibleBox": false
+        },
+        "microHockey": true,
+        "searchTextLink": true,
+        "searchIconLink": true,
+        "kbd": [
+          "⌘K"
+        ],
+        "topbarParts": [
+          {
+            "tag": "div",
+            "cls": "flex h-16 items-center gap-3 px-4 sm:px-6",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 1440,
+              "h": 64
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex items-center gap-2 lg:hidden",
+            "aria": "GEI Hockey · Inicio",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "hidden min-w-0 flex-1 lg:block",
+            "aria": "",
+            "display": "block",
+            "visibleBox": true,
+            "rect": {
+              "x": 24,
+              "y": 13.73,
+              "w": 1152.38,
+              "h": 36.53
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "min-w-0 flex-1 lg:hidden",
+            "aria": "",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "flex items-center gap-1",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 1188.38,
+              "y": 10,
+              "w": 227.63,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "gei-target-sm hidden items-center gap-2 rounded-control px-2.5 text-meta text-ink-muted transition-colors hover:bg-control hover:text-ink sm:inline-flex",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 1188.38,
+              "y": 14,
+              "w": 135.63,
+              "h": 36
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink sm:hidden",
+            "aria": "Buscar",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "relative flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink",
+            "aria": "Avisos, 1 sin leer",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 1328,
+              "y": 10,
+              "w": 44,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "ml-1 flex items-center rounded-control p-0.5 transition-colors hover:bg-control",
+            "aria": "Mi perfil",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 1380,
+              "y": 14,
+              "w": 36,
+              "h": 36
+            }
+          }
+        ]
+      },
+      "main": {
+        "present": true,
+        "paddingBottom": "64px",
+        "scrollHeight": 1043
+      },
+      "docScrollY": 0,
+      "bodyScrollHeight": 1043
+    }
+  },
+  {
+    "id": "GBL_NAV_003_BOTTOMNAV_ACTIVE_COMMUNICATION",
+    "route": "/communication",
+    "actor": "coach",
+    "probeViewport": "1440",
+    "expect": "bottomnav",
+    "claim": "El BottomNav fijo no se renderiza en 1440px; el contador vive en la barra lateral.",
+    "runtime": {
+      "viewport": {
+        "w": 1440,
+        "h": 900,
+        "dpr": 1
+      },
+      "sidebar": {
+        "present": true,
+        "display": "flex",
+        "position": "sticky",
+        "rect": {
+          "x": 0,
+          "y": 65,
+          "w": 224,
+          "h": 836
+        },
+        "visibleBox": true,
+        "scrollHeight": 836,
+        "clientHeight": 836,
+        "ownScroller": true,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Comunicación 2",
+            "ariaCurrent": "page",
+            "badgeText": "Comunicación 2",
+            "hasUnreadDot": true
+          },
+          {
+            "text": "Más 1",
+            "ariaCurrent": "",
+            "badgeText": "Más 1",
+            "hasUnreadDot": true
+          }
+        ]
+      },
+      "bottomnav": {
+        "present": true,
+        "display": "none",
+        "position": "fixed",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "visibleBox": false,
+        "scrollHeight": 0,
+        "clientHeight": 0,
+        "ownScroller": false,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Comunicación",
+            "ariaCurrent": "page",
+            "badgeText": "Comunicación",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Más",
+            "ariaCurrent": "",
+            "badgeText": "Más",
+            "hasUnreadDot": false
+          }
+        ]
+      },
+      "header": {
+        "present": true,
+        "text": "Hockey Comunicación Buscar ⌘K TB",
+        "brand": {
+          "present": true,
+          "display": "none",
+          "visibleBox": false
+        },
+        "microHockey": true,
+        "searchTextLink": true,
+        "searchIconLink": true,
+        "kbd": [
+          "⌘K"
+        ],
+        "topbarParts": [
+          {
+            "tag": "div",
+            "cls": "flex h-16 items-center gap-3 px-4 sm:px-6",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 1440,
+              "h": 64
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex items-center gap-2 lg:hidden",
+            "aria": "GEI Hockey · Inicio",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "hidden min-w-0 flex-1 lg:block",
+            "aria": "",
+            "display": "block",
+            "visibleBox": true,
+            "rect": {
+              "x": 24,
+              "y": 13.73,
+              "w": 1152.38,
+              "h": 36.53
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "min-w-0 flex-1 lg:hidden",
+            "aria": "",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "flex items-center gap-1",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 1188.38,
+              "y": 10,
+              "w": 227.63,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "gei-target-sm hidden items-center gap-2 rounded-control px-2.5 text-meta text-ink-muted transition-colors hover:bg-control hover:text-ink sm:inline-flex",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 1188.38,
+              "y": 14,
+              "w": 135.63,
+              "h": 36
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink sm:hidden",
+            "aria": "Buscar",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "relative flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink",
+            "aria": "Avisos, 1 sin leer",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 1328,
+              "y": 10,
+              "w": 44,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "ml-1 flex items-center rounded-control p-0.5 transition-colors hover:bg-control",
+            "aria": "Mi perfil",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 1380,
+              "y": 14,
+              "w": 36,
+              "h": 36
+            }
+          }
+        ]
+      },
+      "main": {
+        "present": true,
+        "paddingBottom": "64px",
+        "scrollHeight": 901
+      },
+      "docScrollY": 0,
+      "bodyScrollHeight": 901
+    }
+  },
+  {
+    "id": "GBL_SHELL_001_TOPBAR_MOBILE",
+    "route": "/home",
+    "actor": "coach",
+    "probeViewport": "1440",
+    "expect": "topbarMobile",
+    "claim": "La composicion de topbar movil (marca GEI, contexto en una linea, buscar como icono) no existe en 1440px.",
+    "runtime": {
+      "viewport": {
+        "w": 1440,
+        "h": 900,
+        "dpr": 1
+      },
+      "sidebar": {
+        "present": true,
+        "display": "flex",
+        "position": "sticky",
+        "rect": {
+          "x": 0,
+          "y": 65,
+          "w": 224,
+          "h": 836
+        },
+        "visibleBox": true,
+        "scrollHeight": 836,
+        "clientHeight": 836,
+        "ownScroller": true,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "page",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Comunicación 2",
+            "ariaCurrent": "",
+            "badgeText": "Comunicación 2",
+            "hasUnreadDot": true
+          },
+          {
+            "text": "Más 1",
+            "ariaCurrent": "",
+            "badgeText": "Más 1",
+            "hasUnreadDot": true
+          }
+        ]
+      },
+      "bottomnav": {
+        "present": true,
+        "display": "none",
+        "position": "fixed",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "visibleBox": false,
+        "scrollHeight": 0,
+        "clientHeight": 0,
+        "ownScroller": false,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "page",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Comunicación",
+            "ariaCurrent": "",
+            "badgeText": "Comunicación",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Más",
+            "ariaCurrent": "",
+            "badgeText": "Más",
+            "hasUnreadDot": false
+          }
+        ]
+      },
+      "header": {
+        "present": true,
+        "text": "Hockey Inicio Buscar ⌘K TB",
+        "brand": {
+          "present": true,
+          "display": "none",
+          "visibleBox": false
+        },
+        "microHockey": true,
+        "searchTextLink": true,
+        "searchIconLink": true,
+        "kbd": [
+          "⌘K"
+        ],
+        "topbarParts": [
+          {
+            "tag": "div",
+            "cls": "flex h-16 items-center gap-3 px-4 sm:px-6",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 1440,
+              "h": 64
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex items-center gap-2 lg:hidden",
+            "aria": "GEI Hockey · Inicio",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "hidden min-w-0 flex-1 lg:block",
+            "aria": "",
+            "display": "block",
+            "visibleBox": true,
+            "rect": {
+              "x": 24,
+              "y": 13.73,
+              "w": 1152.38,
+              "h": 36.53
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "min-w-0 flex-1 lg:hidden",
+            "aria": "",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "flex items-center gap-1",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 1188.38,
+              "y": 10,
+              "w": 227.63,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "gei-target-sm hidden items-center gap-2 rounded-control px-2.5 text-meta text-ink-muted transition-colors hover:bg-control hover:text-ink sm:inline-flex",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 1188.38,
+              "y": 14,
+              "w": 135.63,
+              "h": 36
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink sm:hidden",
+            "aria": "Buscar",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "relative flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink",
+            "aria": "Avisos, 1 sin leer",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 1328,
+              "y": 10,
+              "w": 44,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "ml-1 flex items-center rounded-control p-0.5 transition-colors hover:bg-control",
+            "aria": "Mi perfil",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 1380,
+              "y": 14,
+              "w": 36,
+              "h": 36
+            }
+          }
+        ]
+      },
+      "main": {
+        "present": true,
+        "paddingBottom": "64px",
+        "scrollHeight": 1225
+      },
+      "docScrollY": 0,
+      "bodyScrollHeight": 1225
+    }
+  },
+  {
+    "id": "GBL_SHELL_002_TOPBAR_DESKTOP",
+    "route": "/home",
+    "actor": "coach",
+    "probeViewport": "390",
+    "expect": "topbarDesktop",
+    "claim": "La composicion de topbar escritorio (sin marca GEI, micro Hockey, buscar con atajo) no existe en 390px.",
+    "runtime": {
+      "viewport": {
+        "w": 390,
+        "h": 844,
+        "dpr": 1
+      },
+      "sidebar": {
+        "present": true,
+        "display": "none",
+        "position": "sticky",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        "visibleBox": false,
+        "scrollHeight": 0,
+        "clientHeight": 0,
+        "ownScroller": true,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "page",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Comunicación2",
+            "ariaCurrent": "",
+            "badgeText": "Comunicación2",
+            "hasUnreadDot": true
+          },
+          {
+            "text": "Más1",
+            "ariaCurrent": "",
+            "badgeText": "Más1",
+            "hasUnreadDot": true
+          }
+        ]
+      },
+      "bottomnav": {
+        "present": true,
+        "display": "flex",
+        "position": "fixed",
+        "rect": {
+          "x": 0,
+          "y": 788.16,
+          "w": 390,
+          "h": 55.84
+        },
+        "visibleBox": true,
+        "scrollHeight": 55,
+        "clientHeight": 55,
+        "ownScroller": false,
+        "links": [
+          {
+            "text": "Inicio",
+            "ariaCurrent": "page",
+            "badgeText": "Inicio",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Calendario",
+            "ariaCurrent": "",
+            "badgeText": "Calendario",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Equipos",
+            "ariaCurrent": "",
+            "badgeText": "Equipos",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Comunicación",
+            "ariaCurrent": "",
+            "badgeText": "Comunicación",
+            "hasUnreadDot": false
+          },
+          {
+            "text": "Más",
+            "ariaCurrent": "",
+            "badgeText": "Más",
+            "hasUnreadDot": false
+          }
+        ]
+      },
+      "header": {
+        "present": true,
+        "text": "GEI Inicio TB",
+        "brand": {
+          "present": true,
+          "display": "flex",
+          "visibleBox": true
+        },
+        "microHockey": true,
+        "searchTextLink": true,
+        "searchIconLink": true,
+        "kbd": [
+          "⌘K"
+        ],
+        "topbarParts": [
+          {
+            "tag": "div",
+            "cls": "flex h-16 items-center gap-3 px-4 sm:px-6",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 390,
+              "h": 64
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex items-center gap-2 lg:hidden",
+            "aria": "GEI Hockey · Inicio",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 16,
+              "y": 14,
+              "w": 36,
+              "h": 36
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "hidden min-w-0 flex-1 lg:block",
+            "aria": "",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "min-w-0 flex-1 lg:hidden",
+            "aria": "",
+            "display": "block",
+            "visibleBox": true,
+            "rect": {
+              "x": 64,
+              "y": 21.16,
+              "w": 162,
+              "h": 21.69
+            }
+          },
+          {
+            "tag": "div",
+            "cls": "flex items-center gap-1",
+            "aria": "",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 238,
+              "y": 10,
+              "w": 136,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "gei-target-sm hidden items-center gap-2 rounded-control px-2.5 text-meta text-ink-muted transition-colors hover:bg-control hover:text-ink sm:inline-flex",
+            "aria": "",
+            "display": "none",
+            "visibleBox": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink sm:hidden",
+            "aria": "Buscar",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 238,
+              "y": 10,
+              "w": 44,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "relative flex size-11 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-control hover:text-ink",
+            "aria": "Avisos, 1 sin leer",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 286,
+              "y": 10,
+              "w": 44,
+              "h": 44
+            }
+          },
+          {
+            "tag": "a",
+            "cls": "ml-1 flex items-center rounded-control p-0.5 transition-colors hover:bg-control",
+            "aria": "Mi perfil",
+            "display": "flex",
+            "visibleBox": true,
+            "rect": {
+              "x": 338,
+              "y": 14,
+              "w": 36,
+              "h": 36
+            }
+          }
+        ]
+      },
+      "main": {
+        "present": true,
+        "paddingBottom": "112px",
+        "scrollHeight": 1307
+      },
+      "docScrollY": 0,
+      "bodyScrollHeight": 1307
+    }
+  }
+]

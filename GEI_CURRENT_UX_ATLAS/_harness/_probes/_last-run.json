@@ -1,0 +1,17 @@
+{
+  "base": "http://localhost:8443",
+  "results": [
+    {
+      "id": "EQ_TEAM_DETAIL_008_NOT_FOUND",
+      "viewport": "390",
+      "file": "04_Equipos\\TeamDetail\\EQ_TEAM_DETAIL_008_NOT_FOUND\\EQ_TEAM_DETAIL_008_NOT_FOUND_390.png",
+      "badSteps": []
+    },
+    {
+      "id": "EQ_TEAM_DETAIL_008_NOT_FOUND",
+      "viewport": "1440",
+      "file": "04_Equipos\\TeamDetail\\EQ_TEAM_DETAIL_008_NOT_FOUND\\EQ_TEAM_DETAIL_008_NOT_FOUND_1440.png",
+      "badSteps": []
+    }
+  ]
+}

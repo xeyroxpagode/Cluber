@@ -1,0 +1,32 @@
+# JOURNEY J38 — Team Admin → Team
+
+**Actor:** ADMIN
+**Inicio:** Team Admin
+**Fin:** Team
+**Pasos:** 2
+**Rutas alternativas:** -
+
+## Superficies cubiertas
+
+| # | Surface ID | Dominio | Ruta | Estado | Actor | 390×844 | 1440×900 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `MGT_TEAM_001_ADMIN_DETAIL` | 08_MANAGEMENT | `/management/teams/sexta` | EQUIPO ACTIVO · 8 personas | ADMIN | CAPTURED | CAPTURED |
+| 2 | `MGT_TEAM_002_NOT_FOUND` | 08_MANAGEMENT | `/management/teams/zzz` | ID DE EQUIPO DESCONOCIDO | ADMIN | CAPTURED | CAPTURED |
+
+## Capturas
+
+### 1. `MGT_TEAM_001_ADMIN_DETAIL`
+
+- **390×844:** CAPTURED — `08_MANAGEMENT/Teams/MGT_TEAM_001_ADMIN_DETAIL/MGT_TEAM_001_ADMIN_DETAIL__ADMIN__390x844.png`
+- **1440×900:** CAPTURED — `08_MANAGEMENT/Teams/MGT_TEAM_001_ADMIN_DETAIL/MGT_TEAM_001_ADMIN_DETAIL__ADMIN__1440x900.png`
+
+### 2. `MGT_TEAM_002_NOT_FOUND`
+
+- **390×844:** CAPTURED — `08_MANAGEMENT/Teams/MGT_TEAM_002_NOT_FOUND/MGT_TEAM_002_NOT_FOUND__ADMIN__390x844.png`
+- **1440×900:** CAPTURED — `08_MANAGEMENT/Teams/MGT_TEAM_002_NOT_FOUND/MGT_TEAM_002_NOT_FOUND__ADMIN__1440x900.png`
+
+## Índice del atlas
+
+- 11_INDEXES/MASTER_JOURNEY_INDEX.md
+- 11_INDEXES/MASTER_SURFACE_INDEX.md
+- 11_INDEXES/ROUTE_SURFACE_MATRIX.md

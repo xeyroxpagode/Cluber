@@ -1,0 +1,4119 @@
+[
+  {
+    "group_hash": "03b5806528a1fca3f659a0ae045f6b1c",
+    "members": [
+      {
+        "surface_id": "EQ_PERSON_001_DETAIL_COACH",
+        "file": "EQ_PERSON_001_DETAIL_COACH__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "ACCOUNT ACTIVE · PLAYER de Sexta A",
+        "route": "/people/p2",
+        "domain": "05_TEAMS",
+        "sha256": "128072f92f09069418fb3ce8fb85e6e60e267e2aaafa6778417b9b9c8c89b3ae"
+      },
+      {
+        "surface_id": "XD_SEARCH_001_TO_PERSON",
+        "file": "XD_SEARCH_001_TO_PERSON__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "RESULTADO DE BÚSQUEDA → FICHA DE PERSONA",
+        "route": "/search?q=Lucía",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "128072f92f09069418fb3ce8fb85e6e60e267e2aaafa6778417b9b9c8c89b3ae"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "EQ_PERSON_001_DETAIL_COACH",
+        "b": "XD_SEARCH_001_TO_PERSON",
+        "a_file": "EQ_PERSON_001_DETAIL_COACH__COACH__1440x900.png",
+        "b_file": "XD_SEARCH_001_TO_PERSON__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Cross-domain: XD_SEARCH_001_TO_PERSON es el MISMO destino /people/p2 alcanzado desde el origen Buscar. El dominio 09_CROSS_DOMAIN existe para documentar patrones compartidos, por lo que la composicion destino coincide por diseno."
+  },
+  {
+    "group_hash": "0b3ce6c701595740cd350933a1e0104d",
+    "members": [
+      {
+        "surface_id": "EQ_TEAM_DETAIL_001_EVENTOS",
+        "file": "EQ_TEAM_DETAIL_001_EVENTOS__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "SCHEDULED · 6 eventos próximos · 1 resultado final",
+        "route": "/teams/sexta",
+        "domain": "05_TEAMS",
+        "sha256": "657b62c3a45d7d424f24d4ce312f05d42d33db97fd6c095d874d8175b6743e0b"
+      },
+      {
+        "surface_id": "XD_SEARCH_002_TO_TEAM",
+        "file": "XD_SEARCH_002_TO_TEAM__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "RESULTADO DE BÚSQUEDA → DETALLE DE EQUIPO",
+        "route": "/search?q=Sexta",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "657b62c3a45d7d424f24d4ce312f05d42d33db97fd6c095d874d8175b6743e0b"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "EQ_TEAM_DETAIL_001_EVENTOS",
+        "b": "XD_SEARCH_002_TO_TEAM",
+        "a_file": "EQ_TEAM_DETAIL_001_EVENTOS__COACH__1440x900.png",
+        "b_file": "XD_SEARCH_002_TO_TEAM__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Cross-domain: XD_SEARCH_002_TO_TEAM es el MISMO destino /teams/sexta alcanzado desde el origen Buscar. Composicion destino identica por diseno."
+  },
+  {
+    "group_hash": "13dfe2552f8ec4ef632d4f5ae1dd937d",
+    "members": [
+      {
+        "surface_id": "COM_ANNOUNCEMENT_006_NOT_REACHED",
+        "file": "COM_ANNOUNCEMENT_006_NOT_REACHED__PLAYER__1440x900.png",
+        "actor": "PLAYER",
+        "state": "FUERA DE LA AUDIENCIA",
+        "route": "/announcements/a3",
+        "domain": "06_COMMUNICATION",
+        "sha256": "b4d5267a5695b99e2d91c5da0ea99dbdb331de010871944b0175fb617e19018b"
+      },
+      {
+        "surface_id": "COM_CONVERSATION_001_DEFAULT",
+        "file": "COM_CONVERSATION_001_DEFAULT__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "ID DE PARÁMETRO NO RESUELTO",
+        "route": "/conversations/c-team-sexta",
+        "domain": "06_COMMUNICATION",
+        "sha256": "49d34fc4aea6c9f7661bd6a3215a88dde3d753debad82b40276df605b69dcd0f"
+      },
+      {
+        "surface_id": "COM_CONVERSATION_002_EVENT_KIND",
+        "file": "COM_CONVERSATION_002_EVENT_KIND__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "ID DE PARÁMETRO NO RESUELTO",
+        "route": "/conversations/c-event-cuba",
+        "domain": "06_COMMUNICATION",
+        "sha256": "49d34fc4aea6c9f7661bd6a3215a88dde3d753debad82b40276df605b69dcd0f"
+      },
+      {
+        "surface_id": "XD_EVENT_001_TO_CONVERSATION",
+        "file": "XD_EVENT_001_TO_CONVERSATION__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "CONVERSACIÓN NO RESUELTA",
+        "route": "/events/match-cuba",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "49d34fc4aea6c9f7661bd6a3215a88dde3d753debad82b40276df605b69dcd0f"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "COM_ANNOUNCEMENT_006_NOT_REACHED",
+        "b": "COM_CONVERSATION_001_DEFAULT",
+        "a_file": "COM_ANNOUNCEMENT_006_NOT_REACHED__PLAYER__1440x900.png",
+        "b_file": "COM_CONVERSATION_001_DEFAULT__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.3343,
+        "differing_pixel_count": 4333,
+        "diff_bbox": [
+          24,
+          28,
+          1406,
+          299
+        ],
+        "diff_bbox_area_pct": 28.8983,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "COM_ANNOUNCEMENT_006_NOT_REACHED",
+        "b": "COM_CONVERSATION_002_EVENT_KIND",
+        "a_file": "COM_ANNOUNCEMENT_006_NOT_REACHED__PLAYER__1440x900.png",
+        "b_file": "COM_CONVERSATION_002_EVENT_KIND__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.3343,
+        "differing_pixel_count": 4333,
+        "diff_bbox": [
+          24,
+          28,
+          1406,
+          299
+        ],
+        "diff_bbox_area_pct": 28.8983,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "COM_ANNOUNCEMENT_006_NOT_REACHED",
+        "b": "XD_EVENT_001_TO_CONVERSATION",
+        "a_file": "COM_ANNOUNCEMENT_006_NOT_REACHED__PLAYER__1440x900.png",
+        "b_file": "XD_EVENT_001_TO_CONVERSATION__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.3343,
+        "differing_pixel_count": 4333,
+        "diff_bbox": [
+          24,
+          28,
+          1406,
+          299
+        ],
+        "diff_bbox_area_pct": 28.8983,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "COM_CONVERSATION_001_DEFAULT",
+        "b": "COM_CONVERSATION_002_EVENT_KIND",
+        "a_file": "COM_CONVERSATION_001_DEFAULT__COACH__1440x900.png",
+        "b_file": "COM_CONVERSATION_002_EVENT_KIND__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "COM_CONVERSATION_001_DEFAULT",
+        "b": "XD_EVENT_001_TO_CONVERSATION",
+        "a_file": "COM_CONVERSATION_001_DEFAULT__COACH__1440x900.png",
+        "b_file": "XD_EVENT_001_TO_CONVERSATION__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "COM_CONVERSATION_002_EVENT_KIND",
+        "b": "XD_EVENT_001_TO_CONVERSATION",
+        "a_file": "COM_CONVERSATION_002_EVENT_KIND__COACH__1440x900.png",
+        "b_file": "XD_EVENT_001_TO_CONVERSATION__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Mezcla de patrons: COM_ANNOUNCEMENT_006_NOT_REACHED usa el Empty compartido de 'no alcanzado'; las superficies de conversacion usan el Empty compartido de 'no encontrada' por el defecto :id/conversationId. Composicion comun (contenedor + icono + titulo + detalle), textos distintos."
+  },
+  {
+    "group_hash": "2239fef9a9ddcaa8e728d3860be90b36",
+    "members": [
+      {
+        "surface_id": "PRT_ATTENDANCE_001_OPEN",
+        "file": "PRT_ATTENDANCE_001_OPEN__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "attendanceOpened=true · sin cerrar · 5 de 8 registradas",
+        "route": "/events/match-lomas/attendance",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "c74a3cc03a852014aacef8e20d85f58a4988e3b589d959e827324904e25cbfec"
+      },
+      {
+        "surface_id": "XD_REPORT_001_TO_ATTENDANCE",
+        "file": "XD_REPORT_001_TO_ATTENDANCE__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "INFORME → PLANILLA",
+        "route": "/reports/attendance",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "c74a3cc03a852014aacef8e20d85f58a4988e3b589d959e827324904e25cbfec"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "PRT_ATTENDANCE_001_OPEN",
+        "b": "XD_REPORT_001_TO_ATTENDANCE",
+        "a_file": "PRT_ATTENDANCE_001_OPEN__COACH__1440x900.png",
+        "b_file": "XD_REPORT_001_TO_ATTENDANCE__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Cross-domain: XD_REPORT_001_TO_ATTENDANCE es el MISMO destino /events/match-lomas/attendance alcanzado desde el origen Informes. Composicion destino identica por diseno."
+  },
+  {
+    "group_hash": "2caae7af5366378f8cbe204556d1ed57",
+    "members": [
+      {
+        "surface_id": "CAL_EVENT_DETAIL_001_SCHEDULED_COACH",
+        "file": "CAL_EVENT_DETAIL_001_SCHEDULED_COACH__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "SCHEDULED ·ublished 8 personas · coordinationRevision 3",
+        "route": "/events/match-cuba",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "d644e6abcada0673495784293c87404deaccd41954d3f43e6394abc9e2055a1c"
+      },
+      {
+        "surface_id": "XD_SEARCH_003_TO_EVENT",
+        "file": "XD_SEARCH_003_TO_EVENT__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "RESULTADO DE BÚSQUEDA → DETALLE DE EVENTO",
+        "route": "/search?q=CUBA",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "d644e6abcada0673495784293c87404deaccd41954d3f43e6394abc9e2055a1c"
+      },
+      {
+        "surface_id": "XD_TEAM_001_TO_EVENT",
+        "file": "XD_TEAM_001_TO_EVENT__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "EQUIPO → EVENTO",
+        "route": "/teams/sexta",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "d644e6abcada0673495784293c87404deaccd41954d3f43e6394abc9e2055a1c"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "CAL_EVENT_DETAIL_001_SCHEDULED_COACH",
+        "b": "XD_SEARCH_003_TO_EVENT",
+        "a_file": "CAL_EVENT_DETAIL_001_SCHEDULED_COACH__COACH__390x844.png",
+        "b_file": "XD_SEARCH_003_TO_EVENT__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "CAL_EVENT_DETAIL_001_SCHEDULED_COACH",
+        "b": "XD_TEAM_001_TO_EVENT",
+        "a_file": "CAL_EVENT_DETAIL_001_SCHEDULED_COACH__COACH__390x844.png",
+        "b_file": "XD_TEAM_001_TO_EVENT__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "XD_SEARCH_003_TO_EVENT",
+        "b": "XD_TEAM_001_TO_EVENT",
+        "a_file": "XD_SEARCH_003_TO_EVENT__COACH__390x844.png",
+        "b_file": "XD_TEAM_001_TO_EVENT__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Cross-domain: XD_SEARCH_003_TO_EVENT y XD_TEAM_001_TO_EVENT son el MISMO destino /events/match-cuba alcanzado desde los origenes Buscar y Equipo. Composicion destino identica por diseno."
+  },
+  {
+    "group_hash": "325e2a6645e0170448d95680a3a61b8b",
+    "members": [
+      {
+        "surface_id": "COM_ANNOUNCEMENT_001_DETAIL",
+        "file": "COM_ANNOUNCEMENT_001_DETAIL__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "PUBLISHED · 0 correcciones",
+        "route": "/announcements/a1",
+        "domain": "06_COMMUNICATION",
+        "sha256": "8455d842b889f604a971888501fbb788dadff433e68e3f1ae738331ce3cbb472"
+      },
+      {
+        "surface_id": "XD_NOTIF_001_TO_EVENT",
+        "file": "XD_NOTIF_001_TO_EVENT__PLAYER__1440x900.png",
+        "actor": "PLAYER",
+        "state": "AVISO NO LEÍDO → COMUNICADO",
+        "route": "/notifications",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "e12f2fa84ead4990b8201e7988933eab45cb11fa41000d36b3cb2f67c226ff2f"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "COM_ANNOUNCEMENT_001_DETAIL",
+        "b": "XD_NOTIF_001_TO_EVENT",
+        "a_file": "COM_ANNOUNCEMENT_001_DETAIL__COACH__1440x900.png",
+        "b_file": "XD_NOTIF_001_TO_EVENT__PLAYER__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.0061,
+        "differing_pixel_count": 79,
+        "diff_bbox": [
+          1391,
+          28,
+          1406,
+          36
+        ],
+        "diff_bbox_area_pct": 0.0093,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Cross-domain: XD_NOTIF_001_TO_EVENT es el MISMO destino /announcements/a1 alcanzado desde el origen Notificaciones. Composicion destino identica por diseno."
+  },
+  {
+    "group_hash": "331af5ac1930f99f3f9474b3974df4ba",
+    "members": [
+      {
+        "surface_id": "HOME_006_SCROLL_02",
+        "file": "HOME_006_SCROLL_02__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "COACH · scroll 760 px",
+        "route": "/home",
+        "domain": "03_HOME",
+        "sha256": "d39f6c52529836d0abaae8a9f30253cdd055e2d4587fd3e81caa289c440cfd5e"
+      },
+      {
+        "surface_id": "HOME_007_COMMS_SECTION",
+        "file": "HOME_007_COMMS_SECTION__PLAYER__1440x900.png",
+        "actor": "PLAYER",
+        "state": "PLAYER · 1 mensaje sin leer · 1 aviso sin leer",
+        "route": "/home",
+        "domain": "03_HOME",
+        "sha256": "23dcc6908335499e6782c01ebedb56c5afbac722aab4e7ad2b55161fa9f48015"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "HOME_006_SCROLL_02",
+        "b": "HOME_007_COMMS_SECTION",
+        "a_file": "HOME_006_SCROLL_02__COACH__1440x900.png",
+        "b_file": "HOME_007_COMMS_SECTION__PLAYER__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 2.2577,
+        "differing_pixel_count": 29260,
+        "diff_bbox": [
+          24,
+          28,
+          1406,
+          823
+        ],
+        "diff_bbox_area_pct": 84.7755,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Misma pantalla /home: scroll a la seccion de comunicaciones vs actor PLAYER con la seccion de comunicaciones visible. Estados de scroll/actor distintos."
+  },
+  {
+    "group_hash": "342aaede651d29c33348e9e39e35d7de",
+    "members": [
+      {
+        "surface_id": "GBL_SHELL_001_TOPBAR_MOBILE",
+        "file": "GBL_SHELL_001_TOPBAR_MOBILE__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "AUTHENTICATED · sin avisos sin leer",
+        "route": "/home",
+        "domain": "01_GLOBAL",
+        "sha256": "5f6a14f2a9d615e01d8f0dc6bc3cd7b311e6f39a1758ad246770157940b45f60"
+      },
+      {
+        "surface_id": "HOME_001_DEFAULT_COACH",
+        "file": "HOME_001_DEFAULT_COACH__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "COACH · sin pendientes propios",
+        "route": "/home",
+        "domain": "03_HOME",
+        "sha256": "5f6a14f2a9d615e01d8f0dc6bc3cd7b311e6f39a1758ad246770157940b45f60"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "GBL_SHELL_001_TOPBAR_MOBILE",
+        "b": "HOME_001_DEFAULT_COACH",
+        "a_file": "GBL_SHELL_001_TOPBAR_MOBILE__COACH__390x844.png",
+        "b_file": "HOME_001_DEFAULT_COACH__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Misma ruta /home en 390: GBL_SHELL_001 documenta la composicion movil de la barra superior y HOME_001 el contenido de inicio. Superficie de cromo vs superficie de contenido."
+  },
+  {
+    "group_hash": "3b8bddf4c97db4f4581222d612393e3a",
+    "members": [
+      {
+        "surface_id": "PRT_MATCH_RECORD_004_FINALIZE_CONFIRM",
+        "file": "PRT_MATCH_RECORD_004_FINALIZE_CONFIRM__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "FINALIZACIÓN CONFIRMADA",
+        "route": "/events/match-lomas/match-record",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "fa214a7dc7ee471716fa7e2f13229ccacdb0ccf9497274dbef7221dcde87cf7d"
+      },
+      {
+        "surface_id": "MGT_PERSON_009_CODE_MODAL",
+        "file": "MGT_PERSON_009_CODE_MODAL__ADMIN__1440x900.png",
+        "actor": "ADMIN",
+        "state": "CÓDIGO EMITIDO",
+        "route": "/management/people/p16?section=cuenta",
+        "domain": "08_MANAGEMENT",
+        "sha256": "eb3bcbd998a9b92293abd52498f085b85a30804816dce95389f0acccf1922f41"
+      },
+      {
+        "surface_id": "MGT_PERSON_011_MEMBERSHIP_START_CONFIRM",
+        "file": "MGT_PERSON_011_MEMBERSHIP_START_CONFIRM__ADMIN__1440x900.png",
+        "actor": "ADMIN",
+        "state": "INICIO DE PERTENENCIA CONFIRMADO",
+        "route": "/management/people/p16",
+        "domain": "08_MANAGEMENT",
+        "sha256": "575451d615d79acdd4cc6880e2b0f2e17104988225fe84fee8766c5b2fd55fee"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "PRT_MATCH_RECORD_004_FINALIZE_CONFIRM",
+        "b": "MGT_PERSON_009_CODE_MODAL",
+        "a_file": "PRT_MATCH_RECORD_004_FINALIZE_CONFIRM__COACH__1440x900.png",
+        "b_file": "MGT_PERSON_009_CODE_MODAL__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 37.2842,
+        "differing_pixel_count": 483203,
+        "diff_bbox": [
+          8,
+          15,
+          1411,
+          900
+        ],
+        "diff_bbox_area_pct": 95.8067,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_004_FINALIZE_CONFIRM",
+        "b": "MGT_PERSON_011_MEMBERSHIP_START_CONFIRM",
+        "a_file": "PRT_MATCH_RECORD_004_FINALIZE_CONFIRM__COACH__1440x900.png",
+        "b_file": "MGT_PERSON_011_MEMBERSHIP_START_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 33.4841,
+        "differing_pixel_count": 433954,
+        "diff_bbox": [
+          8,
+          15,
+          1411,
+          900
+        ],
+        "diff_bbox_area_pct": 95.8067,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "MGT_PERSON_009_CODE_MODAL",
+        "b": "MGT_PERSON_011_MEMBERSHIP_START_CONFIRM",
+        "a_file": "MGT_PERSON_009_CODE_MODAL__ADMIN__1440x900.png",
+        "b_file": "MGT_PERSON_011_MEMBERSHIP_START_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 25.8034,
+        "differing_pixel_count": 334412,
+        "diff_bbox": [
+          8,
+          89,
+          1285,
+          900
+        ],
+        "diff_bbox_area_pct": 79.911,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "ConfirmDialog compartido (src/shared/ui.tsx:1053-1130) con textos distintos: codigo de persona, iniciar pertenencia y finalizar resultado. Falso positivo del hash perceptual de 16x16 en gris."
+  },
+  {
+    "group_hash": "489398bcc383656eec6b6ee76ae6bdec",
+    "members": [
+      {
+        "surface_id": "PRT_ATTENDANCE_007_NO_AUTHORITY",
+        "file": "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "actor": "PLAYER",
+        "state": "SIN ALCANCE",
+        "route": "/events/match-lomas/attendance",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "71f71c80d5701e99bf32c80341f542cfc92649f58d60e5626f271055f6f55d00"
+      },
+      {
+        "surface_id": "CAL_EVENT_FORM_010_NO_AUTHORITY",
+        "file": "CAL_EVENT_FORM_010_NO_AUTHORITY__PLAYER__390x844.png",
+        "actor": "PLAYER",
+        "state": "SIN ALCANCE DE EDICIÓN",
+        "route": "/events/match-septima-quinta/edit",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "54f901c323fcf89f194328be2f6a06a6b52985691ba947f9288b915caca0c246"
+      },
+      {
+        "surface_id": "PRT_MATCH_RECORD_006_NOT_A_MATCH",
+        "file": "PRT_MATCH_RECORD_006_NOT_A_MATCH__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "TIPO DE EVENTO NO MATCH",
+        "route": "/events/club-familias/match-record",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "7232642b439cb5a8438731d775ddc1441b0f2628c34f601570392d5969e4f6c3"
+      },
+      {
+        "surface_id": "PRT_MATCH_RECORD_007_NO_AUTHORITY",
+        "file": "PRT_MATCH_RECORD_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "actor": "PLAYER",
+        "state": "SIN ALCANCE",
+        "route": "/events/match-sic/match-record",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "ea9bc407ddfb8ee17cab281d042e6ad62e6f89c0c82c70964c61c41591720142"
+      },
+      {
+        "surface_id": "EQ_PERSON_004_NOT_FOUND",
+        "file": "EQ_PERSON_004_NOT_FOUND__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "ID DE PERSONA DESCONOCIDO",
+        "route": "/people/no-existe",
+        "domain": "05_TEAMS",
+        "sha256": "084c095196957b0c7d18286e200373dc431987c7584da370a021b2d7e8c0fd86"
+      },
+      {
+        "surface_id": "MGT_AUDIT_003_DENIED_COACH",
+        "file": "MGT_AUDIT_003_DENIED_COACH__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "SIN ACCESO",
+        "route": "/audit",
+        "domain": "08_MANAGEMENT",
+        "sha256": "cd7f4a29825f263024479c890048c304460e2c2e865aea2da0588c561379a96c"
+      },
+      {
+        "surface_id": "MGT_PEOPLE_007_DENIED_COACH",
+        "file": "MGT_PEOPLE_007_DENIED_COACH__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "SIN ACCESO",
+        "route": "/management/people",
+        "domain": "08_MANAGEMENT",
+        "sha256": "9a6902dbac75faa68ad86dcfb6c53c6a902c1225bcb01c1ed570d081d1d979aa"
+      },
+      {
+        "surface_id": "MGT_STRUCTURE_007_DENIED_COACH",
+        "file": "MGT_STRUCTURE_007_DENIED_COACH__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "SIN ACCESO",
+        "route": "/management/structure",
+        "domain": "08_MANAGEMENT",
+        "sha256": "ee6f463ae82e16da6021fdf5cc5bb3e4c1dd58baa2aba20d0762d7d7d20ca8d6"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "PRT_ATTENDANCE_007_NO_AUTHORITY",
+        "b": "CAL_EVENT_FORM_010_NO_AUTHORITY",
+        "a_file": "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "CAL_EVENT_FORM_010_NO_AUTHORITY__PLAYER__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 3.6384,
+        "differing_pixel_count": 11976,
+        "diff_bbox": [
+          16,
+          161,
+          374,
+          249
+        ],
+        "diff_bbox_area_pct": 9.571,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_ATTENDANCE_007_NO_AUTHORITY",
+        "b": "PRT_MATCH_RECORD_006_NOT_A_MATCH",
+        "a_file": "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "PRT_MATCH_RECORD_006_NOT_A_MATCH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 1.2502,
+        "differing_pixel_count": 4115,
+        "diff_bbox": [
+          64,
+          28,
+          364,
+          198
+        ],
+        "diff_bbox_area_pct": 15.494,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_ATTENDANCE_007_NO_AUTHORITY",
+        "b": "PRT_MATCH_RECORD_007_NO_AUTHORITY",
+        "a_file": "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "PRT_MATCH_RECORD_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 1.2553,
+        "differing_pixel_count": 4132,
+        "diff_bbox": [
+          64,
+          161,
+          327,
+          198
+        ],
+        "diff_bbox_area_pct": 2.9563,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_ATTENDANCE_007_NO_AUTHORITY",
+        "b": "EQ_PERSON_004_NOT_FOUND",
+        "a_file": "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "EQ_PERSON_004_NOT_FOUND__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 3.6988,
+        "differing_pixel_count": 12175,
+        "diff_bbox": [
+          16,
+          26,
+          374,
+          835
+        ],
+        "diff_bbox_area_pct": 87.9882,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_ATTENDANCE_007_NO_AUTHORITY",
+        "b": "MGT_AUDIT_003_DENIED_COACH",
+        "a_file": "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "MGT_AUDIT_003_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 3.7228,
+        "differing_pixel_count": 12254,
+        "diff_bbox": [
+          16,
+          26,
+          374,
+          833
+        ],
+        "diff_bbox_area_pct": 87.7707,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_ATTENDANCE_007_NO_AUTHORITY",
+        "b": "MGT_PEOPLE_007_DENIED_COACH",
+        "a_file": "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "MGT_PEOPLE_007_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 1.7241,
+        "differing_pixel_count": 5675,
+        "diff_bbox": [
+          46,
+          26,
+          364,
+          833
+        ],
+        "diff_bbox_area_pct": 77.9639,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_ATTENDANCE_007_NO_AUTHORITY",
+        "b": "MGT_STRUCTURE_007_DENIED_COACH",
+        "a_file": "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "MGT_STRUCTURE_007_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 1.6342,
+        "differing_pixel_count": 5379,
+        "diff_bbox": [
+          64,
+          27,
+          364,
+          833
+        ],
+        "diff_bbox_area_pct": 73.4597,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "CAL_EVENT_FORM_010_NO_AUTHORITY",
+        "b": "PRT_MATCH_RECORD_006_NOT_A_MATCH",
+        "a_file": "CAL_EVENT_FORM_010_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "PRT_MATCH_RECORD_006_NOT_A_MATCH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 3.56,
+        "differing_pixel_count": 11718,
+        "diff_bbox": [
+          16,
+          28,
+          374,
+          249
+        ],
+        "diff_bbox_area_pct": 24.0363,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "CAL_EVENT_FORM_010_NO_AUTHORITY",
+        "b": "PRT_MATCH_RECORD_007_NO_AUTHORITY",
+        "a_file": "CAL_EVENT_FORM_010_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "PRT_MATCH_RECORD_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 3.6444,
+        "differing_pixel_count": 11996,
+        "diff_bbox": [
+          16,
+          161,
+          374,
+          249
+        ],
+        "diff_bbox_area_pct": 9.571,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "CAL_EVENT_FORM_010_NO_AUTHORITY",
+        "b": "EQ_PERSON_004_NOT_FOUND",
+        "a_file": "CAL_EVENT_FORM_010_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "EQ_PERSON_004_NOT_FOUND__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 2.0042,
+        "differing_pixel_count": 6597,
+        "diff_bbox": [
+          50,
+          26,
+          364,
+          835
+        ],
+        "diff_bbox_area_pct": 77.174,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "CAL_EVENT_FORM_010_NO_AUTHORITY",
+        "b": "MGT_AUDIT_003_DENIED_COACH",
+        "a_file": "CAL_EVENT_FORM_010_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "MGT_AUDIT_003_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 2.0267,
+        "differing_pixel_count": 6671,
+        "diff_bbox": [
+          47,
+          26,
+          364,
+          833
+        ],
+        "diff_bbox_area_pct": 77.7187,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "CAL_EVENT_FORM_010_NO_AUTHORITY",
+        "b": "MGT_PEOPLE_007_DENIED_COACH",
+        "a_file": "CAL_EVENT_FORM_010_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "MGT_PEOPLE_007_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 4.0376,
+        "differing_pixel_count": 13290,
+        "diff_bbox": [
+          16,
+          26,
+          374,
+          833
+        ],
+        "diff_bbox_area_pct": 87.7707,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "CAL_EVENT_FORM_010_NO_AUTHORITY",
+        "b": "MGT_STRUCTURE_007_DENIED_COACH",
+        "a_file": "CAL_EVENT_FORM_010_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "MGT_STRUCTURE_007_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 3.9555,
+        "differing_pixel_count": 13020,
+        "diff_bbox": [
+          16,
+          27,
+          374,
+          833
+        ],
+        "diff_bbox_area_pct": 87.6619,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_006_NOT_A_MATCH",
+        "b": "PRT_MATCH_RECORD_007_NO_AUTHORITY",
+        "a_file": "PRT_MATCH_RECORD_006_NOT_A_MATCH__COACH__390x844.png",
+        "b_file": "PRT_MATCH_RECORD_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 1.2438,
+        "differing_pixel_count": 4094,
+        "diff_bbox": [
+          66,
+          28,
+          364,
+          198
+        ],
+        "diff_bbox_area_pct": 15.3907,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_006_NOT_A_MATCH",
+        "b": "EQ_PERSON_004_NOT_FOUND",
+        "a_file": "PRT_MATCH_RECORD_006_NOT_A_MATCH__COACH__390x844.png",
+        "b_file": "EQ_PERSON_004_NOT_FOUND__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 3.563,
+        "differing_pixel_count": 11728,
+        "diff_bbox": [
+          16,
+          26,
+          374,
+          835
+        ],
+        "diff_bbox_area_pct": 87.9882,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_006_NOT_A_MATCH",
+        "b": "MGT_AUDIT_003_DENIED_COACH",
+        "a_file": "PRT_MATCH_RECORD_006_NOT_A_MATCH__COACH__390x844.png",
+        "b_file": "MGT_AUDIT_003_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 3.6104,
+        "differing_pixel_count": 11884,
+        "diff_bbox": [
+          16,
+          26,
+          374,
+          833
+        ],
+        "diff_bbox_area_pct": 87.7707,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_006_NOT_A_MATCH",
+        "b": "MGT_PEOPLE_007_DENIED_COACH",
+        "a_file": "PRT_MATCH_RECORD_006_NOT_A_MATCH__COACH__390x844.png",
+        "b_file": "MGT_PEOPLE_007_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 1.6296,
+        "differing_pixel_count": 5364,
+        "diff_bbox": [
+          46,
+          26,
+          362,
+          833
+        ],
+        "diff_bbox_area_pct": 77.4736,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_006_NOT_A_MATCH",
+        "b": "MGT_STRUCTURE_007_DENIED_COACH",
+        "a_file": "PRT_MATCH_RECORD_006_NOT_A_MATCH__COACH__390x844.png",
+        "b_file": "MGT_STRUCTURE_007_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 1.495,
+        "differing_pixel_count": 4921,
+        "diff_bbox": [
+          72,
+          27,
+          362,
+          833
+        ],
+        "diff_bbox_area_pct": 71.0111,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_007_NO_AUTHORITY",
+        "b": "EQ_PERSON_004_NOT_FOUND",
+        "a_file": "PRT_MATCH_RECORD_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "EQ_PERSON_004_NOT_FOUND__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 3.738,
+        "differing_pixel_count": 12304,
+        "diff_bbox": [
+          16,
+          26,
+          374,
+          835
+        ],
+        "diff_bbox_area_pct": 87.9882,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_007_NO_AUTHORITY",
+        "b": "MGT_AUDIT_003_DENIED_COACH",
+        "a_file": "PRT_MATCH_RECORD_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "MGT_AUDIT_003_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 3.745,
+        "differing_pixel_count": 12327,
+        "diff_bbox": [
+          16,
+          26,
+          374,
+          833
+        ],
+        "diff_bbox_area_pct": 87.7707,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_007_NO_AUTHORITY",
+        "b": "MGT_PEOPLE_007_DENIED_COACH",
+        "a_file": "PRT_MATCH_RECORD_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "MGT_PEOPLE_007_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 1.7116,
+        "differing_pixel_count": 5634,
+        "diff_bbox": [
+          46,
+          26,
+          364,
+          833
+        ],
+        "diff_bbox_area_pct": 77.9639,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_007_NO_AUTHORITY",
+        "b": "MGT_STRUCTURE_007_DENIED_COACH",
+        "a_file": "PRT_MATCH_RECORD_007_NO_AUTHORITY__PLAYER__390x844.png",
+        "b_file": "MGT_STRUCTURE_007_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 1.629,
+        "differing_pixel_count": 5362,
+        "diff_bbox": [
+          66,
+          27,
+          364,
+          833
+        ],
+        "diff_bbox_area_pct": 72.97,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "EQ_PERSON_004_NOT_FOUND",
+        "b": "MGT_AUDIT_003_DENIED_COACH",
+        "a_file": "EQ_PERSON_004_NOT_FOUND__COACH__390x844.png",
+        "b_file": "MGT_AUDIT_003_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 1.6108,
+        "differing_pixel_count": 5302,
+        "diff_bbox": [
+          47,
+          26,
+          362,
+          835
+        ],
+        "diff_bbox_area_pct": 77.4198,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "EQ_PERSON_004_NOT_FOUND",
+        "b": "MGT_PEOPLE_007_DENIED_COACH",
+        "a_file": "EQ_PERSON_004_NOT_FOUND__COACH__390x844.png",
+        "b_file": "MGT_PEOPLE_007_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 3.4463,
+        "differing_pixel_count": 11344,
+        "diff_bbox": [
+          16,
+          29,
+          374,
+          835
+        ],
+        "diff_bbox_area_pct": 87.6619,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "EQ_PERSON_004_NOT_FOUND",
+        "b": "MGT_STRUCTURE_007_DENIED_COACH",
+        "a_file": "EQ_PERSON_004_NOT_FOUND__COACH__390x844.png",
+        "b_file": "MGT_STRUCTURE_007_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 3.5515,
+        "differing_pixel_count": 11690,
+        "diff_bbox": [
+          16,
+          26,
+          374,
+          835
+        ],
+        "diff_bbox_area_pct": 87.9882,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "MGT_AUDIT_003_DENIED_COACH",
+        "b": "MGT_PEOPLE_007_DENIED_COACH",
+        "a_file": "MGT_AUDIT_003_DENIED_COACH__COACH__390x844.png",
+        "b_file": "MGT_PEOPLE_007_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 3.4947,
+        "differing_pixel_count": 11503,
+        "diff_bbox": [
+          16,
+          26,
+          374,
+          249
+        ],
+        "diff_bbox_area_pct": 24.2539,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "MGT_AUDIT_003_DENIED_COACH",
+        "b": "MGT_STRUCTURE_007_DENIED_COACH",
+        "a_file": "MGT_AUDIT_003_DENIED_COACH__COACH__390x844.png",
+        "b_file": "MGT_STRUCTURE_007_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 3.4287,
+        "differing_pixel_count": 11286,
+        "diff_bbox": [
+          16,
+          26,
+          374,
+          249
+        ],
+        "diff_bbox_area_pct": 24.2539,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "MGT_PEOPLE_007_DENIED_COACH",
+        "b": "MGT_STRUCTURE_007_DENIED_COACH",
+        "a_file": "MGT_PEOPLE_007_DENIED_COACH__COACH__390x844.png",
+        "b_file": "MGT_STRUCTURE_007_DENIED_COACH__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 1.423,
+        "differing_pixel_count": 4684,
+        "diff_bbox": [
+          46,
+          26,
+          345,
+          198
+        ],
+        "diff_bbox_area_pct": 15.624,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Las ocho usan el Empty compartido (src/shared/ui.tsx:865-888) con titulos y detalles distintos. Falso positivo del hash perceptual de 16x16 en gris."
+  },
+  {
+    "group_hash": "4a7d67267f843402f90616b8e791749d",
+    "members": [
+      {
+        "surface_id": "PRT_ATTENDANCE_005_CORRECTION_DIALOG",
+        "file": "PRT_ATTENDANCE_005_CORRECTION_DIALOG__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "CORRECCIÓN CONFIRMADA",
+        "route": "/events/match-lomas/attendance",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "22ac5cca4f81b9cb17b36d0f8d9b42d0c52f91ff5fd46bb84282a62584256eae"
+      },
+      {
+        "surface_id": "CAL_EVENT_FORM_009_SCOPE_DIALOG",
+        "file": "CAL_EVENT_FORM_009_SCOPE_DIALOG__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "SCHEDULED · diálogo de alcance abierto",
+        "route": "/events/training-serie-1/edit",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "8db750be2112971d217230d8a34ed21a377e8e45a5ff971f2a9695e8f434cd1c"
+      },
+      {
+        "surface_id": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM",
+        "file": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "CORRECCIÓN CONFIRMADA",
+        "route": "/events/match-sic/match-record",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "b90d382880cd12a23642d2b8d1ee57eeed69cde402be28b0b38695e9980f95b1"
+      },
+      {
+        "surface_id": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM",
+        "file": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM__SUBCOMMITTEE__1440x900.png",
+        "actor": "SUBCOMMITTEE",
+        "state": "ARCHIVADO CONFIRMADO",
+        "route": "/announcements/a1",
+        "domain": "06_COMMUNICATION",
+        "sha256": "a303a82b0ea79ae64d20e91206603de3fd1f15aaa13b31819766065c07fea06f"
+      },
+      {
+        "surface_id": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM",
+        "file": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM__ADMIN__1440x900.png",
+        "actor": "ADMIN",
+        "state": "ARCHIVADO CONFIRMADO",
+        "route": "/management/competitions/ahba",
+        "domain": "08_MANAGEMENT",
+        "sha256": "39856b4477db3de1f992418e61db5f89e22a1b72b33468ba6f4599082534696e"
+      },
+      {
+        "surface_id": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM",
+        "file": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM__ADMIN__1440x900.png",
+        "actor": "ADMIN",
+        "state": "FIN DE PERTENENCIA CONFIRMADO",
+        "route": "/management/people/p2?section=pertenencia",
+        "domain": "08_MANAGEMENT",
+        "sha256": "e8672bc5dc458a200bb307c2348a5c39b73654575ae43104872b5d5eaecc608f"
+      },
+      {
+        "surface_id": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM",
+        "file": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM__ADMIN__1440x900.png",
+        "actor": "ADMIN",
+        "state": "DESHABILITACIÓN CONFIRMADA",
+        "route": "/management/people/p2?section=cuenta",
+        "domain": "08_MANAGEMENT",
+        "sha256": "3568c856fab057b7515fe7b131708e3ef69d5e419e6328f9eb3392f2a2707102"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "PRT_ATTENDANCE_005_CORRECTION_DIALOG",
+        "b": "CAL_EVENT_FORM_009_SCOPE_DIALOG",
+        "a_file": "PRT_ATTENDANCE_005_CORRECTION_DIALOG__COACH__1440x900.png",
+        "b_file": "CAL_EVENT_FORM_009_SCOPE_DIALOG__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 39.7175,
+        "differing_pixel_count": 514739,
+        "diff_bbox": [
+          8,
+          28,
+          1285,
+          900
+        ],
+        "diff_bbox_area_pct": 85.9216,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "PRT_ATTENDANCE_005_CORRECTION_DIALOG",
+        "b": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM",
+        "a_file": "PRT_ATTENDANCE_005_CORRECTION_DIALOG__COACH__1440x900.png",
+        "b_file": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 35.5431,
+        "differing_pixel_count": 460638,
+        "diff_bbox": [
+          8,
+          15,
+          1285,
+          882
+        ],
+        "diff_bbox_area_pct": 85.4289,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "PRT_ATTENDANCE_005_CORRECTION_DIALOG",
+        "b": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM",
+        "a_file": "PRT_ATTENDANCE_005_CORRECTION_DIALOG__COACH__1440x900.png",
+        "b_file": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM__SUBCOMMITTEE__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 34.9704,
+        "differing_pixel_count": 453217,
+        "diff_bbox": [
+          8,
+          15,
+          1410,
+          882
+        ],
+        "diff_bbox_area_pct": 93.7912,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "PRT_ATTENDANCE_005_CORRECTION_DIALOG",
+        "b": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM",
+        "a_file": "PRT_ATTENDANCE_005_CORRECTION_DIALOG__COACH__1440x900.png",
+        "b_file": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 35.404,
+        "differing_pixel_count": 458836,
+        "diff_bbox": [
+          8,
+          15,
+          1411,
+          882
+        ],
+        "diff_bbox_area_pct": 93.8581,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "PRT_ATTENDANCE_005_CORRECTION_DIALOG",
+        "b": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM",
+        "a_file": "PRT_ATTENDANCE_005_CORRECTION_DIALOG__COACH__1440x900.png",
+        "b_file": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 34.5183,
+        "differing_pixel_count": 447357,
+        "diff_bbox": [
+          8,
+          15,
+          1411,
+          882
+        ],
+        "diff_bbox_area_pct": 93.8581,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "PRT_ATTENDANCE_005_CORRECTION_DIALOG",
+        "b": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM",
+        "a_file": "PRT_ATTENDANCE_005_CORRECTION_DIALOG__COACH__1440x900.png",
+        "b_file": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 31.6905,
+        "differing_pixel_count": 410709,
+        "diff_bbox": [
+          8,
+          15,
+          1411,
+          882
+        ],
+        "diff_bbox_area_pct": 93.8581,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "CAL_EVENT_FORM_009_SCOPE_DIALOG",
+        "b": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM",
+        "a_file": "CAL_EVENT_FORM_009_SCOPE_DIALOG__COACH__1440x900.png",
+        "b_file": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 33.7767,
+        "differing_pixel_count": 437746,
+        "diff_bbox": [
+          404,
+          15,
+          1221,
+          900
+        ],
+        "diff_bbox_area_pct": 55.7905,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "CAL_EVENT_FORM_009_SCOPE_DIALOG",
+        "b": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM",
+        "a_file": "CAL_EVENT_FORM_009_SCOPE_DIALOG__COACH__1440x900.png",
+        "b_file": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM__SUBCOMMITTEE__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 39.6189,
+        "differing_pixel_count": 513461,
+        "diff_bbox": [
+          8,
+          15,
+          1410,
+          900
+        ],
+        "diff_bbox_area_pct": 95.7384,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "CAL_EVENT_FORM_009_SCOPE_DIALOG",
+        "b": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM",
+        "a_file": "CAL_EVENT_FORM_009_SCOPE_DIALOG__COACH__1440x900.png",
+        "b_file": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 42.6826,
+        "differing_pixel_count": 553166,
+        "diff_bbox": [
+          8,
+          15,
+          1411,
+          900
+        ],
+        "diff_bbox_area_pct": 95.8067,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "CAL_EVENT_FORM_009_SCOPE_DIALOG",
+        "b": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM",
+        "a_file": "CAL_EVENT_FORM_009_SCOPE_DIALOG__COACH__1440x900.png",
+        "b_file": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 42.1637,
+        "differing_pixel_count": 546442,
+        "diff_bbox": [
+          8,
+          15,
+          1411,
+          900
+        ],
+        "diff_bbox_area_pct": 95.8067,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "CAL_EVENT_FORM_009_SCOPE_DIALOG",
+        "b": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM",
+        "a_file": "CAL_EVENT_FORM_009_SCOPE_DIALOG__COACH__1440x900.png",
+        "b_file": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 39.5174,
+        "differing_pixel_count": 512145,
+        "diff_bbox": [
+          8,
+          15,
+          1411,
+          900
+        ],
+        "diff_bbox_area_pct": 95.8067,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM",
+        "b": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM",
+        "a_file": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM__COACH__1440x900.png",
+        "b_file": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM__SUBCOMMITTEE__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 25.4712,
+        "differing_pixel_count": 330107,
+        "diff_bbox": [
+          8,
+          15,
+          1410,
+          841
+        ],
+        "diff_bbox_area_pct": 89.3559,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM",
+        "b": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM",
+        "a_file": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM__COACH__1440x900.png",
+        "b_file": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 28.1924,
+        "differing_pixel_count": 365373,
+        "diff_bbox": [
+          8,
+          15,
+          1411,
+          841
+        ],
+        "diff_bbox_area_pct": 89.4196,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM",
+        "b": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM",
+        "a_file": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM__COACH__1440x900.png",
+        "b_file": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 31.8655,
+        "differing_pixel_count": 412977,
+        "diff_bbox": [
+          8,
+          15,
+          1411,
+          841
+        ],
+        "diff_bbox_area_pct": 89.4196,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM",
+        "b": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM",
+        "a_file": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM__COACH__1440x900.png",
+        "b_file": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 24.4791,
+        "differing_pixel_count": 317249,
+        "diff_bbox": [
+          8,
+          15,
+          1411,
+          841
+        ],
+        "diff_bbox_area_pct": 89.4196,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM",
+        "b": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM",
+        "a_file": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM__SUBCOMMITTEE__1440x900.png",
+        "b_file": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 10.2498,
+        "differing_pixel_count": 132837,
+        "diff_bbox": [
+          8,
+          24,
+          1411,
+          841
+        ],
+        "diff_bbox_area_pct": 88.4453,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM",
+        "b": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM",
+        "a_file": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM__SUBCOMMITTEE__1440x900.png",
+        "b_file": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 22.6592,
+        "differing_pixel_count": 293663,
+        "diff_bbox": [
+          8,
+          24,
+          1411,
+          765
+        ],
+        "diff_bbox_area_pct": 80.2178,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM",
+        "b": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM",
+        "a_file": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM__SUBCOMMITTEE__1440x900.png",
+        "b_file": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 28.5448,
+        "differing_pixel_count": 369940,
+        "diff_bbox": [
+          8,
+          24,
+          1411,
+          841
+        ],
+        "diff_bbox_area_pct": 88.4453,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM",
+        "b": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM",
+        "a_file": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM__ADMIN__1440x900.png",
+        "b_file": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 24.1411,
+        "differing_pixel_count": 312869,
+        "diff_bbox": [
+          8,
+          29,
+          1285,
+          841
+        ],
+        "diff_bbox_area_pct": 80.0096,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM",
+        "b": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM",
+        "a_file": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM__ADMIN__1440x900.png",
+        "b_file": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 27.1386,
+        "differing_pixel_count": 351716,
+        "diff_bbox": [
+          19,
+          29,
+          1285,
+          841
+        ],
+        "diff_bbox_area_pct": 79.3204,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM",
+        "b": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM",
+        "a_file": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM__ADMIN__1440x900.png",
+        "b_file": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 28.8196,
+        "differing_pixel_count": 373502,
+        "diff_bbox": [
+          8,
+          47,
+          1285,
+          841
+        ],
+        "diff_bbox_area_pct": 78.236,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Siete dialogos sobre el mismo fondo oscurecido (src/shared/ui.tsx:967-972): seis ConfirmDialog (src/shared/ui.tsx:1053-1130) con titulo, consecuencia, boton y tono distintos, y un ScopeDialog (src/shared/patterns.tsx:321-360) con estructura propia. Falso positivo del hash perceptual de 16x16 en gris."
+  },
+  {
+    "group_hash": "4b9a6f2e1929b0e6182a25996c5abc06",
+    "members": [
+      {
+        "surface_id": "PRT_ATTENDANCE_007_NO_AUTHORITY",
+        "file": "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__1440x900.png",
+        "actor": "PLAYER",
+        "state": "SIN ALCANCE",
+        "route": "/events/match-lomas/attendance",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "3858e8c4e0ae9f378eec3447b1d1e54b2896348eae5a1620efc0aedb3e30313c"
+      },
+      {
+        "surface_id": "PRT_MATCH_RECORD_006_NOT_A_MATCH",
+        "file": "PRT_MATCH_RECORD_006_NOT_A_MATCH__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "TIPO DE EVENTO NO MATCH",
+        "route": "/events/club-familias/match-record",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "3830f2350595290ab822cb2d72de41ffcc525fca407e36ec14d29bc1acfb54fc"
+      },
+      {
+        "surface_id": "PRT_MATCH_RECORD_007_NO_AUTHORITY",
+        "file": "PRT_MATCH_RECORD_007_NO_AUTHORITY__PLAYER__1440x900.png",
+        "actor": "PLAYER",
+        "state": "SIN ALCANCE",
+        "route": "/events/match-sic/match-record",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "d902a97f55b899ee0b8be9fa884767d8e7bba719ef6c3ec1b80c198485a2ea58"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "PRT_ATTENDANCE_007_NO_AUTHORITY",
+        "b": "PRT_MATCH_RECORD_006_NOT_A_MATCH",
+        "a_file": "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__1440x900.png",
+        "b_file": "PRT_MATCH_RECORD_006_NOT_A_MATCH__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.3258,
+        "differing_pixel_count": 4223,
+        "diff_bbox": [
+          180,
+          28,
+          1406,
+          299
+        ],
+        "diff_bbox_area_pct": 25.6363,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "PRT_ATTENDANCE_007_NO_AUTHORITY",
+        "b": "PRT_MATCH_RECORD_007_NO_AUTHORITY",
+        "a_file": "PRT_ATTENDANCE_007_NO_AUTHORITY__PLAYER__1440x900.png",
+        "b_file": "PRT_MATCH_RECORD_007_NO_AUTHORITY__PLAYER__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.3188,
+        "differing_pixel_count": 4132,
+        "diff_bbox": [
+          701,
+          161,
+          964,
+          198
+        ],
+        "diff_bbox_area_pct": 0.7508,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_006_NOT_A_MATCH",
+        "b": "PRT_MATCH_RECORD_007_NO_AUTHORITY",
+        "a_file": "PRT_MATCH_RECORD_006_NOT_A_MATCH__COACH__1440x900.png",
+        "b_file": "PRT_MATCH_RECORD_007_NO_AUTHORITY__PLAYER__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.3242,
+        "differing_pixel_count": 4202,
+        "diff_bbox": [
+          180,
+          28,
+          1406,
+          299
+        ],
+        "diff_bbox_area_pct": 25.6363,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Los tres usan el Empty compartido (src/shared/ui.tsx:865-888) con titulos distintos: no tomás la asistencia, este evento no tiene resultado, no cargás el resultado. Falso positivo del hash perceptual de 16x16 en gris."
+  },
+  {
+    "group_hash": "4e774b7c333db197eb23af1e89d1dff7",
+    "members": [
+      {
+        "surface_id": "COM_ANNOUNCEMENT_001_DETAIL",
+        "file": "COM_ANNOUNCEMENT_001_DETAIL__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "PUBLISHED · 0 correcciones",
+        "route": "/announcements/a1",
+        "domain": "06_COMMUNICATION",
+        "sha256": "3ec8388388fa57e0e7dea90f375e71d11579e9a4d52c3782b639529b75ff5da3"
+      },
+      {
+        "surface_id": "XD_NOTIF_001_TO_EVENT",
+        "file": "XD_NOTIF_001_TO_EVENT__PLAYER__390x844.png",
+        "actor": "PLAYER",
+        "state": "AVISO NO LEÍDO → COMUNICADO",
+        "route": "/notifications",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "6320f151559cf49318b3a1205f1f3b8d28999a6f258145c32b4b3ce801ae7de5"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "COM_ANNOUNCEMENT_001_DETAIL",
+        "b": "XD_NOTIF_001_TO_EVENT",
+        "a_file": "COM_ANNOUNCEMENT_001_DETAIL__COACH__390x844.png",
+        "b_file": "XD_NOTIF_001_TO_EVENT__PLAYER__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.024,
+        "differing_pixel_count": 79,
+        "diff_bbox": [
+          349,
+          28,
+          364,
+          36
+        ],
+        "diff_bbox_area_pct": 0.0365,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Cross-domain: XD_NOTIF_001_TO_EVENT es el MISMO destino /announcements/a1 alcanzado desde el origen Notificaciones. Composicion destino identica por diseno."
+  },
+  {
+    "group_hash": "4ed02043cffd13d14a35f77a1878f837",
+    "members": [
+      {
+        "surface_id": "MGT_PERSON_003_EQUIPOS",
+        "file": "MGT_PERSON_003_EQUIPOS__ADMIN__1440x900.png",
+        "actor": "ADMIN",
+        "state": "1 EQUIPO VIGENTE",
+        "route": "/management/people/p2?section=equipos",
+        "domain": "08_MANAGEMENT",
+        "sha256": "c63d343085d269fb05ae56124b9513df2505ec4494466817c4d693ce91652a32"
+      },
+      {
+        "surface_id": "MGT_PERSON_004_ROLES",
+        "file": "MGT_PERSON_004_ROLES__ADMIN__1440x900.png",
+        "actor": "ADMIN",
+        "state": "1 ROL VIGENTE",
+        "route": "/management/people/p2?section=roles",
+        "domain": "08_MANAGEMENT",
+        "sha256": "fdb733bc65f9a379ae5a20a1940943a0c456abce98755515f9481d027d85c53a"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "MGT_PERSON_003_EQUIPOS",
+        "b": "MGT_PERSON_004_ROLES",
+        "a_file": "MGT_PERSON_003_EQUIPOS__ADMIN__1440x900.png",
+        "b_file": "MGT_PERSON_004_ROLES__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.3919,
+        "differing_pixel_count": 5079,
+        "diff_bbox": [
+          387,
+          218,
+          778,
+          375
+        ],
+        "diff_bbox_area_pct": 4.7367,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Misma pantalla de persona con secciones Equipos y Roles distintas."
+  },
+  {
+    "group_hash": "6a39f9a6ab54ac83666837d4f67c00e4",
+    "members": [
+      {
+        "surface_id": "GBL_NAV_005_SIDEBAR_BADGES_ADMIN",
+        "file": "GBL_NAV_005_SIDEBAR_BADGES_ADMIN__ADMIN__1440x900.png",
+        "actor": "ADMIN",
+        "state": "AUTHENTICATED · sin conversaciones habilitadas",
+        "route": "/home",
+        "domain": "01_GLOBAL",
+        "sha256": "3078dc8e3d4bc365314dcc8cdf5a769a99337976d3238d66e4c2b632da6205f6"
+      },
+      {
+        "surface_id": "HOME_002_DEFAULT_ADMIN",
+        "file": "HOME_002_DEFAULT_ADMIN__ADMIN__1440x900.png",
+        "actor": "ADMIN",
+        "state": "ADMIN · 2 items de atención",
+        "route": "/home",
+        "domain": "03_HOME",
+        "sha256": "3078dc8e3d4bc365314dcc8cdf5a769a99337976d3238d66e4c2b632da6205f6"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "GBL_NAV_005_SIDEBAR_BADGES_ADMIN",
+        "b": "HOME_002_DEFAULT_ADMIN",
+        "a_file": "GBL_NAV_005_SIDEBAR_BADGES_ADMIN__ADMIN__1440x900.png",
+        "b_file": "HOME_002_DEFAULT_ADMIN__ADMIN__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Misma ruta /home en 1440 con actor ADMIN: GBL_NAV_005 documenta los contadores de la barra lateral y HOME_002 el contenido de inicio. Superficie de cromo vs superficie de contenido."
+  },
+  {
+    "group_hash": "78fddfbf7a543cf4b8377be290012eda",
+    "members": [
+      {
+        "surface_id": "MORE_001_COACH",
+        "file": "MORE_001_COACH__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "COACH · 4 accesos visibles",
+        "route": "/more",
+        "domain": "07_MORE",
+        "sha256": "8c53baaeb62310de8196ca9bf7e2e160bf689400eab11b001afdad6e43248072"
+      },
+      {
+        "surface_id": "MORE_005_JORNADAS",
+        "file": "MORE_005_JORNADAS__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "COACH · 1 jornada",
+        "route": "/more",
+        "domain": "07_MORE",
+        "sha256": "4c6105357182ed94ffd638f93ec63dbe8471a6034e2e0262bacaf9a3ac5d0078"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "MORE_001_COACH",
+        "b": "MORE_005_JORNADAS",
+        "a_file": "MORE_001_COACH__COACH__1440x900.png",
+        "b_file": "MORE_005_JORNADAS__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.891,
+        "differing_pixel_count": 11548,
+        "diff_bbox": [
+          12,
+          88,
+          1199,
+          480
+        ],
+        "diff_bbox_area_pct": 35.9031,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Misma pantalla /more: estado por defecto vs seccion de jornadas. Composicion visible coincidente."
+  },
+  {
+    "group_hash": "796df9d6cef1111974fb8672cca911ca",
+    "members": [
+      {
+        "surface_id": "EQ_PERSON_001_DETAIL_COACH",
+        "file": "EQ_PERSON_001_DETAIL_COACH__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "ACCOUNT ACTIVE · PLAYER de Sexta A",
+        "route": "/people/p2",
+        "domain": "05_TEAMS",
+        "sha256": "dee49af08247a475e7da052b19e22c58889bf8409d50b1f4434b6a8f6ff6e89d"
+      },
+      {
+        "surface_id": "XD_SEARCH_001_TO_PERSON",
+        "file": "XD_SEARCH_001_TO_PERSON__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "RESULTADO DE BÚSQUEDA → FICHA DE PERSONA",
+        "route": "/search?q=Lucía",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "dee49af08247a475e7da052b19e22c58889bf8409d50b1f4434b6a8f6ff6e89d"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "EQ_PERSON_001_DETAIL_COACH",
+        "b": "XD_SEARCH_001_TO_PERSON",
+        "a_file": "EQ_PERSON_001_DETAIL_COACH__COACH__390x844.png",
+        "b_file": "XD_SEARCH_001_TO_PERSON__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Cross-domain: XD_SEARCH_001_TO_PERSON es el MISMO destino /people/p2 alcanzado desde el origen Buscar. El dominio 09_CROSS_DOMAIN existe para documentar patrones compartidos, por lo que la composicion destino coincide por diseno."
+  },
+  {
+    "group_hash": "8016896893ed4b79f5280f8be901ba46",
+    "members": [
+      {
+        "surface_id": "MGT_COMPETITIONS_007_DENIED_COACH",
+        "file": "MGT_COMPETITIONS_007_DENIED_COACH__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "SIN ACCESO",
+        "route": "/management/competitions",
+        "domain": "08_MANAGEMENT",
+        "sha256": "6abb9006dcef63d4f7903efd854fda18d47897894cdc0e0a30102bf02c596b88"
+      },
+      {
+        "surface_id": "MGT_HOME_003_DENIED_COACH",
+        "file": "MGT_HOME_003_DENIED_COACH__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "SIN ACCESO",
+        "route": "/management",
+        "domain": "08_MANAGEMENT",
+        "sha256": "2d6d5fa79813efe08cb5936ed7059f95efec98fd5a36704609bf3d7a7a3105d1"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "MGT_COMPETITIONS_007_DENIED_COACH",
+        "b": "MGT_HOME_003_DENIED_COACH",
+        "a_file": "MGT_COMPETITIONS_007_DENIED_COACH__COACH__1440x900.png",
+        "b_file": "MGT_HOME_003_DENIED_COACH__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.3812,
+        "differing_pixel_count": 4940,
+        "diff_bbox": [
+          24,
+          34,
+          972,
+          198
+        ],
+        "diff_bbox_area_pct": 11.9963,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Ambos usan el Empty compartido (src/shared/ui.tsx:865-888) con titulos distintos: las competencias no estan en tu alcance / la administracion es de administracion. Falso positivo del hash perceptual de 16x16 en gris."
+  },
+  {
+    "group_hash": "83cf4105ec0cfe77279cbb395fe8150a",
+    "members": [
+      {
+        "surface_id": "MGT_COMPETITIONS_001_LIST",
+        "file": "MGT_COMPETITIONS_001_LIST__ADMIN__1440x900.png",
+        "actor": "ADMIN",
+        "state": "2 COMPETENCIAS ACTIVAS · 0 archivadas",
+        "route": "/management/competitions",
+        "domain": "08_MANAGEMENT",
+        "sha256": "0228e6726a73ba24e8e72df98108998592620d33112ddeace6a59484c32236de"
+      },
+      {
+        "surface_id": "MGT_COMPETITIONS_006_SUBCOMMITTEE",
+        "file": "MGT_COMPETITIONS_006_SUBCOMMITTEE__SUBCOMMITTEE__1440x900.png",
+        "actor": "SUBCOMMITTEE",
+        "state": "SUBCOMMITTEE · 2 competencias visibles",
+        "route": "/management/competitions",
+        "domain": "08_MANAGEMENT",
+        "sha256": "f84be597b27bc5a4b24fd0b6f66cb33fc4f90c859ac0fc1a2d5f13a9d0f77e5a"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "MGT_COMPETITIONS_001_LIST",
+        "b": "MGT_COMPETITIONS_006_SUBCOMMITTEE",
+        "a_file": "MGT_COMPETITIONS_001_LIST__ADMIN__1440x900.png",
+        "b_file": "MGT_COMPETITIONS_006_SUBCOMMITTEE__SUBCOMMITTEE__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.0113,
+        "differing_pixel_count": 147,
+        "diff_bbox": [
+          1389,
+          27,
+          1407,
+          37
+        ],
+        "diff_bbox_area_pct": 0.0139,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Misma pantalla de lista de competencias para ADMIN y SUBCOMMITTEE; las filas visibles coinciden para ese actor."
+  },
+  {
+    "group_hash": "8b7ff1f96d227139269ac5593093e97a",
+    "members": [
+      {
+        "surface_id": "GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA",
+        "file": "GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "Panel abierto, sin valores escritos",
+        "route": "/more/profile",
+        "domain": "01_GLOBAL",
+        "sha256": "371eba04fea3cf996ffab370840dc36e348544412d43f83b667935f67b8bb637"
+      },
+      {
+        "surface_id": "MOR_PROFILE_004_CONTACT_SHEET",
+        "file": "MOR_PROFILE_004_CONTACT_SHEET__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "Panel abierto, sin cambios",
+        "route": "/more/profile",
+        "domain": "07_MORE",
+        "sha256": "c6a96d5a18cf0a49435e47226ccb13d89366a768595b87a1ae115026dc7e6c35"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA",
+        "b": "MOR_PROFILE_004_CONTACT_SHEET",
+        "a_file": "GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA__COACH__1440x900.png",
+        "b_file": "MOR_PROFILE_004_CONTACT_SHEET__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 12.4906,
+        "differing_pixel_count": 161878,
+        "diff_bbox": [
+          438,
+          0,
+          1440,
+          900
+        ],
+        "diff_bbox_area_pct": 69.5833,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Ambas son bottom sheets sobre la pantalla de perfil: uno de cromo global (cambiar contrasena) y uno de producto (contacto). Mismo patron visual de sheet con contenido distinto."
+  },
+  {
+    "group_hash": "95bdfb9f084b2ff20ed7095d5606a0ae",
+    "members": [
+      {
+        "surface_id": "PRT_ATTENDANCE_005_CORRECTION_DIALOG",
+        "file": "PRT_ATTENDANCE_005_CORRECTION_DIALOG__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "CORRECCIÓN CONFIRMADA",
+        "route": "/events/match-lomas/attendance",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "68772a9a25cbeeca6057b9565b8eb2a89b128aeded7062aa5fe70d32ccfb04d2"
+      },
+      {
+        "surface_id": "CAL_EVENT_FORM_009_SCOPE_DIALOG",
+        "file": "CAL_EVENT_FORM_009_SCOPE_DIALOG__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "SCHEDULED · diálogo de alcance abierto",
+        "route": "/events/training-serie-1/edit",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "a9849b14eb5aaffa13a904ed997f72bed94d8a779817137138d8361a89c13efd"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "PRT_ATTENDANCE_005_CORRECTION_DIALOG",
+        "b": "CAL_EVENT_FORM_009_SCOPE_DIALOG",
+        "a_file": "PRT_ATTENDANCE_005_CORRECTION_DIALOG__COACH__390x844.png",
+        "b_file": "CAL_EVENT_FORM_009_SCOPE_DIALOG__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 52.5428,
+        "differing_pixel_count": 172950,
+        "diff_bbox": [
+          0,
+          0,
+          390,
+          828
+        ],
+        "diff_bbox_area_pct": 98.1043,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "ScopeDialog (src/shared/patterns.tsx:321-360) y ConfirmDialog de correccion de asistencia (src/features/participation.tsx:769-800) comparten la base Modal sobre fondo oscurecido, con textos y footer distintos. Falso positivo del hash perceptual de 16x16 en gris."
+  },
+  {
+    "group_hash": "a64581d62ea572e9e57cef693404c501",
+    "members": [
+      {
+        "surface_id": "MGT_AUDIT_003_DENIED_COACH",
+        "file": "MGT_AUDIT_003_DENIED_COACH__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "SIN ACCESO",
+        "route": "/audit",
+        "domain": "08_MANAGEMENT",
+        "sha256": "99d28d7c61cafeb0d00c2bc8636acf9b1833eb5376a34a17ab154a51afeee34d"
+      },
+      {
+        "surface_id": "MGT_PEOPLE_007_DENIED_COACH",
+        "file": "MGT_PEOPLE_007_DENIED_COACH__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "SIN ACCESO",
+        "route": "/management/people",
+        "domain": "08_MANAGEMENT",
+        "sha256": "bfda8b7648ce8594c78b2b7406c5e8818a68dbdb63ed7d0eac07910f2dbc96af"
+      },
+      {
+        "surface_id": "MGT_STRUCTURE_007_DENIED_COACH",
+        "file": "MGT_STRUCTURE_007_DENIED_COACH__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "SIN ACCESO",
+        "route": "/management/structure",
+        "domain": "08_MANAGEMENT",
+        "sha256": "0f91ac1ba91ebdea8d48dd7d226975de7640adb89a63e041b5d5782de9fd0c10"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "MGT_AUDIT_003_DENIED_COACH",
+        "b": "MGT_PEOPLE_007_DENIED_COACH",
+        "a_file": "MGT_AUDIT_003_DENIED_COACH__COACH__1440x900.png",
+        "b_file": "MGT_PEOPLE_007_DENIED_COACH__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.3827,
+        "differing_pixel_count": 4960,
+        "diff_bbox": [
+          26,
+          34,
+          994,
+          198
+        ],
+        "diff_bbox_area_pct": 12.2494,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "MGT_AUDIT_003_DENIED_COACH",
+        "b": "MGT_STRUCTURE_007_DENIED_COACH",
+        "a_file": "MGT_AUDIT_003_DENIED_COACH__COACH__1440x900.png",
+        "b_file": "MGT_STRUCTURE_007_DENIED_COACH__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.3701,
+        "differing_pixel_count": 4797,
+        "diff_bbox": [
+          26,
+          34,
+          994,
+          198
+        ],
+        "diff_bbox_area_pct": 12.2494,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "MGT_PEOPLE_007_DENIED_COACH",
+        "b": "MGT_STRUCTURE_007_DENIED_COACH",
+        "a_file": "MGT_PEOPLE_007_DENIED_COACH__COACH__1440x900.png",
+        "b_file": "MGT_STRUCTURE_007_DENIED_COACH__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.3614,
+        "differing_pixel_count": 4684,
+        "diff_bbox": [
+          26,
+          34,
+          982,
+          198
+        ],
+        "diff_bbox_area_pct": 12.0975,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Las tres usan el Empty compartido (src/shared/ui.tsx:865-888) con titulos distintos: el historial es de administracion, las personas las administra el club, la estructura la administra el club. Falso positivo del hash perceptual de 16x16 en gris."
+  },
+  {
+    "group_hash": "aa42f415c73eec45862bb35d2c34d5bc",
+    "members": [
+      {
+        "surface_id": "COM_CONVERSATION_001_DEFAULT",
+        "file": "COM_CONVERSATION_001_DEFAULT__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "ID DE PARÁMETRO NO RESUELTO",
+        "route": "/conversations/c-team-sexta",
+        "domain": "06_COMMUNICATION",
+        "sha256": "238de75d34c3ea9d111cf1ec6b2289eeef5a43f384ed0d42c6fc0ac72ca32383"
+      },
+      {
+        "surface_id": "COM_CONVERSATION_002_EVENT_KIND",
+        "file": "COM_CONVERSATION_002_EVENT_KIND__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "ID DE PARÁMETRO NO RESUELTO",
+        "route": "/conversations/c-event-cuba",
+        "domain": "06_COMMUNICATION",
+        "sha256": "238de75d34c3ea9d111cf1ec6b2289eeef5a43f384ed0d42c6fc0ac72ca32383"
+      },
+      {
+        "surface_id": "XD_EVENT_001_TO_CONVERSATION",
+        "file": "XD_EVENT_001_TO_CONVERSATION__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "CONVERSACIÓN NO RESUELTA",
+        "route": "/events/match-cuba",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "238de75d34c3ea9d111cf1ec6b2289eeef5a43f384ed0d42c6fc0ac72ca32383"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "COM_CONVERSATION_001_DEFAULT",
+        "b": "COM_CONVERSATION_002_EVENT_KIND",
+        "a_file": "COM_CONVERSATION_001_DEFAULT__COACH__390x844.png",
+        "b_file": "COM_CONVERSATION_002_EVENT_KIND__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "COM_CONVERSATION_001_DEFAULT",
+        "b": "XD_EVENT_001_TO_CONVERSATION",
+        "a_file": "COM_CONVERSATION_001_DEFAULT__COACH__390x844.png",
+        "b_file": "XD_EVENT_001_TO_CONVERSATION__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "COM_CONVERSATION_002_EVENT_KIND",
+        "b": "XD_EVENT_001_TO_CONVERSATION",
+        "a_file": "COM_CONVERSATION_002_EVENT_KIND__COACH__390x844.png",
+        "b_file": "XD_EVENT_001_TO_CONVERSATION__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Cross-domain mas defecto CURRENT: las tres superficies apuntan al destino conversacion, pero el router declara /conversations/:id (src/app/App.tsx:76) mientras el componente lee useParams().conversationId (src/features/communication.tsx:363-365). conversationId queda undefined, la conversacion nunca se resuelve y las tres renderizan el Empty 'Esa conversacion ya no existe' (src/features/communication.tsx:383-391). Estados semanticos distintos (team / event / notificacion) con composicion CURRENT identica."
+  },
+  {
+    "group_hash": "afc7ffa5435ed5f406e09a134d9ce9a7",
+    "members": [
+      {
+        "surface_id": "CAL_EVENT_DETAIL_001_SCHEDULED_COACH",
+        "file": "CAL_EVENT_DETAIL_001_SCHEDULED_COACH__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "SCHEDULED ·ublished 8 personas · coordinationRevision 3",
+        "route": "/events/match-cuba",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "685d2ef379a72e307170e9f09056e0a17b7a73141ac8a1da4c172a2e27c35ac6"
+      },
+      {
+        "surface_id": "XD_SEARCH_003_TO_EVENT",
+        "file": "XD_SEARCH_003_TO_EVENT__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "RESULTADO DE BÚSQUEDA → DETALLE DE EVENTO",
+        "route": "/search?q=CUBA",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "685d2ef379a72e307170e9f09056e0a17b7a73141ac8a1da4c172a2e27c35ac6"
+      },
+      {
+        "surface_id": "XD_TEAM_001_TO_EVENT",
+        "file": "XD_TEAM_001_TO_EVENT__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "EQUIPO → EVENTO",
+        "route": "/teams/sexta",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "685d2ef379a72e307170e9f09056e0a17b7a73141ac8a1da4c172a2e27c35ac6"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "CAL_EVENT_DETAIL_001_SCHEDULED_COACH",
+        "b": "XD_SEARCH_003_TO_EVENT",
+        "a_file": "CAL_EVENT_DETAIL_001_SCHEDULED_COACH__COACH__1440x900.png",
+        "b_file": "XD_SEARCH_003_TO_EVENT__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "CAL_EVENT_DETAIL_001_SCHEDULED_COACH",
+        "b": "XD_TEAM_001_TO_EVENT",
+        "a_file": "CAL_EVENT_DETAIL_001_SCHEDULED_COACH__COACH__1440x900.png",
+        "b_file": "XD_TEAM_001_TO_EVENT__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "XD_SEARCH_003_TO_EVENT",
+        "b": "XD_TEAM_001_TO_EVENT",
+        "a_file": "XD_SEARCH_003_TO_EVENT__COACH__1440x900.png",
+        "b_file": "XD_TEAM_001_TO_EVENT__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Cross-domain: XD_SEARCH_003_TO_EVENT y XD_TEAM_001_TO_EVENT son el MISMO destino /events/match-cuba alcanzado desde los origenes Buscar y Equipo. Composicion destino identica por diseno."
+  },
+  {
+    "group_hash": "b083931762de2029cb30b7e216198fbb",
+    "members": [
+      {
+        "surface_id": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO",
+        "file": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "SCHEDULED · modal abierto",
+        "route": "/events/match-cuba",
+        "domain": "01_GLOBAL",
+        "sha256": "849d538760b33e4c4f10cb193c75bad31d2aaaee2d88eb3acf50e5a11813d26c"
+      },
+      {
+        "surface_id": "CAL_EVENT_DETAIL_004_HISTORY_MODAL",
+        "file": "CAL_EVENT_DETAIL_004_HISTORY_MODAL__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "SCHEDULED · modal abierto",
+        "route": "/events/match-cuba",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "849d538760b33e4c4f10cb193c75bad31d2aaaee2d88eb3acf50e5a11813d26c"
+      },
+      {
+        "surface_id": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM",
+        "file": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "DIRTY · confirmación abierta",
+        "route": "/events/match-cuba/edit",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "f871cfd5e931f83e6d14d9b735169ad9199e4bb88864f19b2f89ff0ca0339d52"
+      },
+      {
+        "surface_id": "CAL_JORNADA_004_IMPACT_MODAL",
+        "file": "CAL_JORNADA_004_IMPACT_MODAL__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "GUARDADO · modal de impacto abierto",
+        "route": "/jornadas/j1",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "4632823ebd6d091baa1cf2bd80c9e751093bf50b49a6ae99f9ab5808d5d2a60e"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO",
+        "b": "CAL_EVENT_DETAIL_004_HISTORY_MODAL",
+        "a_file": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO__COACH__1440x900.png",
+        "b_file": "CAL_EVENT_DETAIL_004_HISTORY_MODAL__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO",
+        "b": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM",
+        "a_file": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO__COACH__1440x900.png",
+        "b_file": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 35.4709,
+        "differing_pixel_count": 459703,
+        "diff_bbox": [
+          8,
+          51,
+          1220,
+          900
+        ],
+        "diff_bbox_area_pct": 79.3972,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO",
+        "b": "CAL_JORNADA_004_IMPACT_MODAL",
+        "a_file": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO__COACH__1440x900.png",
+        "b_file": "CAL_JORNADA_004_IMPACT_MODAL__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 30.4445,
+        "differing_pixel_count": 394561,
+        "diff_bbox": [
+          19,
+          0,
+          1221,
+          841
+        ],
+        "diff_bbox_area_pct": 78.0002,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "CAL_EVENT_DETAIL_004_HISTORY_MODAL",
+        "b": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM",
+        "a_file": "CAL_EVENT_DETAIL_004_HISTORY_MODAL__COACH__1440x900.png",
+        "b_file": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 35.4709,
+        "differing_pixel_count": 459703,
+        "diff_bbox": [
+          8,
+          51,
+          1220,
+          900
+        ],
+        "diff_bbox_area_pct": 79.3972,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "CAL_EVENT_DETAIL_004_HISTORY_MODAL",
+        "b": "CAL_JORNADA_004_IMPACT_MODAL",
+        "a_file": "CAL_EVENT_DETAIL_004_HISTORY_MODAL__COACH__1440x900.png",
+        "b_file": "CAL_JORNADA_004_IMPACT_MODAL__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 30.4445,
+        "differing_pixel_count": 394561,
+        "diff_bbox": [
+          19,
+          0,
+          1221,
+          841
+        ],
+        "diff_bbox_area_pct": 78.0002,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM",
+        "b": "CAL_JORNADA_004_IMPACT_MODAL",
+        "a_file": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM__COACH__1440x900.png",
+        "b_file": "CAL_JORNADA_004_IMPACT_MODAL__COACH__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 30.3025,
+        "differing_pixel_count": 392720,
+        "diff_bbox": [
+          8,
+          0,
+          1221,
+          900
+        ],
+        "diff_bbox_area_pct": 84.2361,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Todos son dialogos modales sobre el mismo fondo oscurecido (src/shared/ui.tsx:967-972). Cada uno tiene cuerpo, titulo y accion distintos: historial de evento, descartar cambios de edicion, impacto de jornada y catalogo de overlay. Falso positivo del hash perceptual de 16x16 en gris."
+  },
+  {
+    "group_hash": "b23634fca36f82689d7721e49120533f",
+    "members": [
+      {
+        "surface_id": "MGT_COMPETITIONS_001_LIST",
+        "file": "MGT_COMPETITIONS_001_LIST__ADMIN__390x844.png",
+        "actor": "ADMIN",
+        "state": "2 COMPETENCIAS ACTIVAS · 0 archivadas",
+        "route": "/management/competitions",
+        "domain": "08_MANAGEMENT",
+        "sha256": "34370f14e25e22711ef6a4cc90934eb479d67f436ca392f2001eff9a716ea09d"
+      },
+      {
+        "surface_id": "MGT_COMPETITIONS_006_SUBCOMMITTEE",
+        "file": "MGT_COMPETITIONS_006_SUBCOMMITTEE__SUBCOMMITTEE__390x844.png",
+        "actor": "SUBCOMMITTEE",
+        "state": "SUBCOMMITTEE · 2 competencias visibles",
+        "route": "/management/competitions",
+        "domain": "08_MANAGEMENT",
+        "sha256": "41f73c244126fc7526d2e8148b868d7c477897e2438d32eee2488dfcaab94c4c"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "MGT_COMPETITIONS_001_LIST",
+        "b": "MGT_COMPETITIONS_006_SUBCOMMITTEE",
+        "a_file": "MGT_COMPETITIONS_001_LIST__ADMIN__390x844.png",
+        "b_file": "MGT_COMPETITIONS_006_SUBCOMMITTEE__SUBCOMMITTEE__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.0447,
+        "differing_pixel_count": 147,
+        "diff_bbox": [
+          347,
+          27,
+          365,
+          37
+        ],
+        "diff_bbox_area_pct": 0.0547,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Misma pantalla de lista de competencias para ADMIN y SUBCOMMITTEE; las filas visibles coinciden para ese actor."
+  },
+  {
+    "group_hash": "b5667f193510fdfaa5c18be665e847a0",
+    "members": [
+      {
+        "surface_id": "PRT_ATTENDANCE_001_OPEN",
+        "file": "PRT_ATTENDANCE_001_OPEN__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "attendanceOpened=true · sin cerrar · 5 de 8 registradas",
+        "route": "/events/match-lomas/attendance",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "4da5dec283e62288149cec75c891bc0616078703236f315b77eedcba6d9a6b37"
+      },
+      {
+        "surface_id": "XD_REPORT_001_TO_ATTENDANCE",
+        "file": "XD_REPORT_001_TO_ATTENDANCE__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "INFORME → PLANILLA",
+        "route": "/reports/attendance",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "4da5dec283e62288149cec75c891bc0616078703236f315b77eedcba6d9a6b37"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "PRT_ATTENDANCE_001_OPEN",
+        "b": "XD_REPORT_001_TO_ATTENDANCE",
+        "a_file": "PRT_ATTENDANCE_001_OPEN__COACH__390x844.png",
+        "b_file": "XD_REPORT_001_TO_ATTENDANCE__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Cross-domain: XD_REPORT_001_TO_ATTENDANCE es el MISMO destino /events/match-lomas/attendance alcanzado desde el origen Informes. Composicion destino identica por diseno."
+  },
+  {
+    "group_hash": "bab85953b93150bb5b19aa873f1032f9",
+    "members": [
+      {
+        "surface_id": "CAL_EVENT_DETAIL_005_IN_PROGRESS",
+        "file": "CAL_EVENT_DETAIL_005_IN_PROGRESS__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "IN_PROGRESS · asistencia abierta con 5 registros · record DRAFT 1–1",
+        "route": "/events/match-lomas",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "063cff984b4681ce51c1e61a22c283c6844a2ce315ea6dac7881764ebf7df7ac"
+      },
+      {
+        "surface_id": "XD_HOME_001_TO_EVENT",
+        "file": "XD_HOME_001_TO_EVENT__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "INICIO → EVENTO",
+        "route": "/home",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "063cff984b4681ce51c1e61a22c283c6844a2ce315ea6dac7881764ebf7df7ac"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "CAL_EVENT_DETAIL_005_IN_PROGRESS",
+        "b": "XD_HOME_001_TO_EVENT",
+        "a_file": "CAL_EVENT_DETAIL_005_IN_PROGRESS__COACH__1440x900.png",
+        "b_file": "XD_HOME_001_TO_EVENT__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Cross-domain: XD_HOME_001_TO_EVENT es el MISMO destino /events/match-lomas alcanzado desde el origen Home. Composicion destino identica por diseno."
+  },
+  {
+    "group_hash": "bde7bb7ea4964972cb5b12be65d924d9",
+    "members": [
+      {
+        "surface_id": "CAL_JORNADA_003_READ_ONLY",
+        "file": "CAL_JORNADA_003_READ_ONLY__PLAYER__1440x900.png",
+        "actor": "PLAYER",
+        "state": "LECTURA",
+        "route": "/jornadas/j1",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "57f3f9a0b45279b5bd0ee9d54cb82cb10637940e3ba0024c00332b3b84d492f1"
+      },
+      {
+        "surface_id": "XD_COMPETITION_001_TO_JORNADA",
+        "file": "XD_COMPETITION_001_TO_JORNADA__ADMIN__1440x900.png",
+        "actor": "ADMIN",
+        "state": "COMPETENCIA → JORNADA",
+        "route": "/management/competitions/ahba",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "79de937c0bdde67af1a0bcad84c9d28396043ec533f77d6614b81a049b14c750"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "CAL_JORNADA_003_READ_ONLY",
+        "b": "XD_COMPETITION_001_TO_JORNADA",
+        "a_file": "CAL_JORNADA_003_READ_ONLY__PLAYER__1440x900.png",
+        "b_file": "XD_COMPETITION_001_TO_JORNADA__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.1285,
+        "differing_pixel_count": 1665,
+        "diff_bbox": [
+          24,
+          20,
+          1407,
+          301
+        ],
+        "diff_bbox_area_pct": 29.9863,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Cross-domain: XD_COMPETITION_001_TO_JORNADA es el MISMO destino /jornadas/j1 alcanzado desde el origen Competencias. La vista de solo-lectura del PLAYER y el acceso del ADMIN coinciden en la composicion visible."
+  },
+  {
+    "group_hash": "bf1e9d88dc6f9b41949863eb8091e1c5",
+    "members": [
+      {
+        "surface_id": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM",
+        "file": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "CORRECCIÓN CONFIRMADA",
+        "route": "/events/match-sic/match-record",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "ae8ff393636c661df6bef5cdc99d98d02a5ab6315bf7031d462e0264ac135850"
+      },
+      {
+        "surface_id": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM",
+        "file": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM__SUBCOMMITTEE__390x844.png",
+        "actor": "SUBCOMMITTEE",
+        "state": "ARCHIVADO CONFIRMADO",
+        "route": "/announcements/a1",
+        "domain": "06_COMMUNICATION",
+        "sha256": "c7855a6f944b27565b35f873f69bde1f56aeb504b73bd88b9841d11d016cde86"
+      },
+      {
+        "surface_id": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM",
+        "file": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM__ADMIN__390x844.png",
+        "actor": "ADMIN",
+        "state": "ARCHIVADO CONFIRMADO",
+        "route": "/management/competitions/ahba",
+        "domain": "08_MANAGEMENT",
+        "sha256": "93298e259c4d6ac24b8c9b235eeb79e1c2dbab968605d6c7197e851db872de3f"
+      },
+      {
+        "surface_id": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM",
+        "file": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM__ADMIN__390x844.png",
+        "actor": "ADMIN",
+        "state": "FIN DE PERTENENCIA CONFIRMADO",
+        "route": "/management/people/p2?section=pertenencia",
+        "domain": "08_MANAGEMENT",
+        "sha256": "4fd0de903affc6effa5d1447ad1d1b31b58fbdef668cb22fa27f21acf4e31a4f"
+      },
+      {
+        "surface_id": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM",
+        "file": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM__ADMIN__390x844.png",
+        "actor": "ADMIN",
+        "state": "DESHABILITACIÓN CONFIRMADA",
+        "route": "/management/people/p2?section=cuenta",
+        "domain": "08_MANAGEMENT",
+        "sha256": "896f19c93d1864123a19df46f05f75bb080074893f752b4b441fb0b561087cc8"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM",
+        "b": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM",
+        "a_file": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM__COACH__390x844.png",
+        "b_file": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM__SUBCOMMITTEE__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 40.7887,
+        "differing_pixel_count": 134260,
+        "diff_bbox": [
+          11,
+          0,
+          378,
+          828
+        ],
+        "diff_bbox_area_pct": 92.3186,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM",
+        "b": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM",
+        "a_file": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM__COACH__390x844.png",
+        "b_file": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM__ADMIN__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 39.8074,
+        "differing_pixel_count": 131030,
+        "diff_bbox": [
+          12,
+          0,
+          378,
+          828
+        ],
+        "diff_bbox_area_pct": 92.0671,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM",
+        "b": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM",
+        "a_file": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM__COACH__390x844.png",
+        "b_file": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM__ADMIN__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 44.6181,
+        "differing_pixel_count": 146865,
+        "diff_bbox": [
+          0,
+          0,
+          390,
+          828
+        ],
+        "diff_bbox_area_pct": 98.1043,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM",
+        "b": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM",
+        "a_file": "PRT_MATCH_RECORD_005_CORRECT_CONFIRM__COACH__390x844.png",
+        "b_file": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM__ADMIN__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 33.2039,
+        "differing_pixel_count": 109294,
+        "diff_bbox": [
+          11,
+          0,
+          390,
+          828
+        ],
+        "diff_bbox_area_pct": 95.3372,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM",
+        "b": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM",
+        "a_file": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM__SUBCOMMITTEE__390x844.png",
+        "b_file": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM__ADMIN__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 20.7656,
+        "differing_pixel_count": 68352,
+        "diff_bbox": [
+          11,
+          0,
+          378,
+          828
+        ],
+        "diff_bbox_area_pct": 92.3186,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM",
+        "b": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM",
+        "a_file": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM__SUBCOMMITTEE__390x844.png",
+        "b_file": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM__ADMIN__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 27.874,
+        "differing_pixel_count": 91750,
+        "diff_bbox": [
+          0,
+          22,
+          390,
+          828
+        ],
+        "diff_bbox_area_pct": 95.4976,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM",
+        "b": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM",
+        "a_file": "COM_ANNOUNCEMENT_004_ARCHIVE_CONFIRM__SUBCOMMITTEE__390x844.png",
+        "b_file": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM__ADMIN__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 35.1291,
+        "differing_pixel_count": 115631,
+        "diff_bbox": [
+          11,
+          0,
+          390,
+          828
+        ],
+        "diff_bbox_area_pct": 95.3372,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM",
+        "b": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM",
+        "a_file": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM__ADMIN__390x844.png",
+        "b_file": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM__ADMIN__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 26.7542,
+        "differing_pixel_count": 88064,
+        "diff_bbox": [
+          0,
+          0,
+          390,
+          828
+        ],
+        "diff_bbox_area_pct": 98.1043,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM",
+        "b": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM",
+        "a_file": "MGT_COMPETITIONS_005_ARCHIVE_CONFIRM__ADMIN__390x844.png",
+        "b_file": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM__ADMIN__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 35.1817,
+        "differing_pixel_count": 115804,
+        "diff_bbox": [
+          11,
+          0,
+          390,
+          828
+        ],
+        "diff_bbox_area_pct": 95.3372,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM",
+        "b": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM",
+        "a_file": "MGT_PERSON_012_MEMBERSHIP_END_CONFIRM__ADMIN__390x844.png",
+        "b_file": "MGT_PERSON_013_DISABLE_ACCOUNT_CONFIRM__ADMIN__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 37.8023,
+        "differing_pixel_count": 124430,
+        "diff_bbox": [
+          0,
+          0,
+          390,
+          828
+        ],
+        "diff_bbox_area_pct": 98.1043,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Los cinco reutilizan ConfirmDialog (src/shared/ui.tsx:1053-1130) sobre el mismo fondo oscurecido, con titulo, consecuencia, boton y tono distintos. Falso positivo del hash perceptual de 16x16 en gris."
+  },
+  {
+    "group_hash": "bf71bce483802cabdab9f1644d9c4f1e",
+    "members": [
+      {
+        "surface_id": "GBL_NAV_002_BOTTOMNAV_ACTIVE_CALENDAR",
+        "file": "GBL_NAV_002_BOTTOMNAV_ACTIVE_CALENDAR__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "AUTHENTICATED · ruta /calendar",
+        "route": "/calendar",
+        "domain": "01_GLOBAL",
+        "sha256": "1aa667ed35aafecc2b8cb5e7de432fb6b95cfb196c558b16670ad159776123a8"
+      },
+      {
+        "surface_id": "CAL_CALENDAR_001_AGENDA",
+        "file": "CAL_CALENDAR_001_AGENDA__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "SCHEDULED · sin evento seleccionado · sin filtros",
+        "route": "/calendar?view=agenda",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "1aa667ed35aafecc2b8cb5e7de432fb6b95cfb196c558b16670ad159776123a8"
+      },
+      {
+        "surface_id": "CAL_CALENDAR_004_AGENDA_EVENT_SELECTED",
+        "file": "CAL_CALENDAR_004_AGENDA_EVENT_SELECTED__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "SCHEDULED · seleccionado",
+        "route": "/calendar?view=agenda&event=match-cuba",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "1aa667ed35aafecc2b8cb5e7de432fb6b95cfb196c558b16670ad159776123a8"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "GBL_NAV_002_BOTTOMNAV_ACTIVE_CALENDAR",
+        "b": "CAL_CALENDAR_001_AGENDA",
+        "a_file": "GBL_NAV_002_BOTTOMNAV_ACTIVE_CALENDAR__COACH__390x844.png",
+        "b_file": "CAL_CALENDAR_001_AGENDA__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "GBL_NAV_002_BOTTOMNAV_ACTIVE_CALENDAR",
+        "b": "CAL_CALENDAR_004_AGENDA_EVENT_SELECTED",
+        "a_file": "GBL_NAV_002_BOTTOMNAV_ACTIVE_CALENDAR__COACH__390x844.png",
+        "b_file": "CAL_CALENDAR_004_AGENDA_EVENT_SELECTED__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "CAL_CALENDAR_001_AGENDA",
+        "b": "CAL_CALENDAR_004_AGENDA_EVENT_SELECTED",
+        "a_file": "CAL_CALENDAR_001_AGENDA__COACH__390x844.png",
+        "b_file": "CAL_CALENDAR_004_AGENDA_EVENT_SELECTED__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "En 390 la vista por defecto de /calendar ES Agenda (src/features/overview.tsx:525). CAL_CALENDAR_001 y CAL_CALENDAR_004 comparten la misma composicion visible porque en la vista Agenda la fila no se resalta (src/features/overview.tsx:624-630 -> src/shared/ui.tsx:134-156) y el panel contextual con el evento seleccionado queda apilado DEBAJO del pliegue en 390 (src/features/overview.tsx:700-735); a 1440 las dos capturas SI difieren. Estados semanticos distintos (sin evento seleccionado / evento seleccionado) con misma composicion visible a 390."
+  },
+  {
+    "group_hash": "bf767541821f0dcaa6e46c7fac0ffeac",
+    "members": [
+      {
+        "surface_id": "PRT_MATCH_RECORD_004_FINALIZE_CONFIRM",
+        "file": "PRT_MATCH_RECORD_004_FINALIZE_CONFIRM__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "FINALIZACIÓN CONFIRMADA",
+        "route": "/events/match-lomas/match-record",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "1576bb340dd2bbfed8208f52b27f793e61677361de665805066b5324ff78a15e"
+      },
+      {
+        "surface_id": "MGT_PERSON_011_MEMBERSHIP_START_CONFIRM",
+        "file": "MGT_PERSON_011_MEMBERSHIP_START_CONFIRM__ADMIN__390x844.png",
+        "actor": "ADMIN",
+        "state": "INICIO DE PERTENENCIA CONFIRMADO",
+        "route": "/management/people/p16",
+        "domain": "08_MANAGEMENT",
+        "sha256": "711bafd9c02d6edecfc9aac2bafbe2fadaa365856eb540e1c657d632c8a10e8a"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "PRT_MATCH_RECORD_004_FINALIZE_CONFIRM",
+        "b": "MGT_PERSON_011_MEMBERSHIP_START_CONFIRM",
+        "a_file": "PRT_MATCH_RECORD_004_FINALIZE_CONFIRM__COACH__390x844.png",
+        "b_file": "MGT_PERSON_011_MEMBERSHIP_START_CONFIRM__ADMIN__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 44.7381,
+        "differing_pixel_count": 147260,
+        "diff_bbox": [
+          11,
+          15,
+          390,
+          830
+        ],
+        "diff_bbox_area_pct": 93.8404,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "ConfirmDialog compartido (src/shared/ui.tsx:1053-1130) con textos distintos: finalizar resultado e iniciar pertenencia. Falso positivo del hash perceptual de 16x16 en gris."
+  },
+  {
+    "group_hash": "c0442c7c91f504929e9062a4bb5b2216",
+    "members": [
+      {
+        "surface_id": "EQ_TEAM_DETAIL_004_OUT_OF_SCOPE",
+        "file": "EQ_TEAM_DETAIL_004_OUT_OF_SCOPE__PLAYER__1440x900.png",
+        "actor": "PLAYER",
+        "state": "FUERA DE ALCANCE",
+        "route": "/teams/quinta",
+        "domain": "05_TEAMS",
+        "sha256": "49d89ecccbefb81ea468a64ee7f28e5fcc4db7fff09463667a9e873f9e786e60"
+      },
+      {
+        "surface_id": "EQ_TEAM_DETAIL_005_QUERY_ONLY",
+        "file": "EQ_TEAM_DETAIL_005_QUERY_ONLY__PLAYER__1440x900.png",
+        "actor": "PLAYER",
+        "state": "VISIBLE PERO NO GESTIONADO",
+        "route": "/teams/septima",
+        "domain": "05_TEAMS",
+        "sha256": "484fa38bf09cc3a5b0e8145481456f9543e2d40a38a63e9526766960d40fa0cb"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "EQ_TEAM_DETAIL_004_OUT_OF_SCOPE",
+        "b": "EQ_TEAM_DETAIL_005_QUERY_ONLY",
+        "a_file": "EQ_TEAM_DETAIL_004_OUT_OF_SCOPE__PLAYER__1440x900.png",
+        "b_file": "EQ_TEAM_DETAIL_005_QUERY_ONLY__PLAYER__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.2305,
+        "differing_pixel_count": 2987,
+        "diff_bbox": [
+          320,
+          141,
+          623,
+          277
+        ],
+        "diff_bbox_area_pct": 3.1796,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Misma pantalla de detalle de equipo para PLAYER con alcance distinto (fuera de alcance vs solo consulta). Composicion visible coincidente."
+  },
+  {
+    "group_hash": "c5bedeb2b7ccae3d8fb7b6f3f848d676",
+    "members": [
+      {
+        "surface_id": "EQ_TEAM_DETAIL_001_EVENTOS",
+        "file": "EQ_TEAM_DETAIL_001_EVENTOS__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "SCHEDULED · 6 eventos próximos · 1 resultado final",
+        "route": "/teams/sexta",
+        "domain": "05_TEAMS",
+        "sha256": "d589e76ee876069f1f382142e596d8a64b603df7e697b8bee4cd84b55c3d5cf2"
+      },
+      {
+        "surface_id": "XD_SEARCH_002_TO_TEAM",
+        "file": "XD_SEARCH_002_TO_TEAM__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "RESULTADO DE BÚSQUEDA → DETALLE DE EQUIPO",
+        "route": "/search?q=Sexta",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "d589e76ee876069f1f382142e596d8a64b603df7e697b8bee4cd84b55c3d5cf2"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "EQ_TEAM_DETAIL_001_EVENTOS",
+        "b": "XD_SEARCH_002_TO_TEAM",
+        "a_file": "EQ_TEAM_DETAIL_001_EVENTOS__COACH__390x844.png",
+        "b_file": "XD_SEARCH_002_TO_TEAM__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Cross-domain: XD_SEARCH_002_TO_TEAM es el MISMO destino /teams/sexta alcanzado desde el origen Buscar. Composicion destino identica por diseno."
+  },
+  {
+    "group_hash": "c8509ecd55e6635f7942c41bd1492637",
+    "members": [
+      {
+        "surface_id": "CAL_CALENDAR_002_MONTH",
+        "file": "CAL_CALENDAR_002_MONTH__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "vista mes · sin selección",
+        "route": "/calendar?view=month",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "8bd2490be5921c929b936545566536893eb9945769a0aa0cc641b22418d590e5"
+      },
+      {
+        "surface_id": "CAL_CALENDAR_003_MONTH_EVENT_SELECTED",
+        "file": "CAL_CALENDAR_003_MONTH_EVENT_SELECTED__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "SCHEDULED · seleccionado",
+        "route": "/calendar?view=month&event=match-cuba",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "8bd2490be5921c929b936545566536893eb9945769a0aa0cc641b22418d590e5"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "CAL_CALENDAR_002_MONTH",
+        "b": "CAL_CALENDAR_003_MONTH_EVENT_SELECTED",
+        "a_file": "CAL_CALENDAR_002_MONTH__COACH__390x844.png",
+        "b_file": "CAL_CALENDAR_003_MONTH_EVENT_SELECTED__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "En 390 el chip seleccionado existe en el DOM (src/features/overview.tsx:596-603) pero queda en y=947, por debajo del pliegue de 844 px, y su outline no se pinta (outline-style:none en runtime). El panel contextual con el detalle queda apilado debajo de la matriz (src/features/overview.tsx:700-735). El estado semantico 'evento seleccionado' no produce diferencia visible en el viewport de 390; a 1440 las capturas SI difieren."
+  },
+  {
+    "group_hash": "cb44a85bcba04f31ea019b4e79810b8c",
+    "members": [
+      {
+        "surface_id": "COM_COMM_003_COMUNICADOS_SUBCOMMITTEE",
+        "file": "COM_COMM_003_COMUNICADOS_SUBCOMMITTEE__SUBCOMMITTEE__1440x900.png",
+        "actor": "SUBCOMMITTEE",
+        "state": "SIN ROL DE CHAT",
+        "route": "/communication?tab=comunicados",
+        "domain": "06_COMMUNICATION",
+        "sha256": "d627da76cabf8115e2651df2f02aee31dc064e72179faa28eea6a220146d66e8"
+      },
+      {
+        "surface_id": "COM_COMM_004_NO_CHAT_ADMIN",
+        "file": "COM_COMM_004_NO_CHAT_ADMIN__ADMIN__1440x900.png",
+        "actor": "ADMIN",
+        "state": "SIN ROL DE CHAT",
+        "route": "/communication",
+        "domain": "06_COMMUNICATION",
+        "sha256": "b89868f1ad41237c3669acc3562a08838202d8fd84fc15b13b4b1a04c86a1b12"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "COM_COMM_003_COMUNICADOS_SUBCOMMITTEE",
+        "b": "COM_COMM_004_NO_CHAT_ADMIN",
+        "a_file": "COM_COMM_003_COMUNICADOS_SUBCOMMITTEE__SUBCOMMITTEE__1440x900.png",
+        "b_file": "COM_COMM_004_NO_CHAT_ADMIN__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.0113,
+        "differing_pixel_count": 147,
+        "diff_bbox": [
+          1389,
+          27,
+          1407,
+          37
+        ],
+        "diff_bbox_area_pct": 0.0139,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Misma pantalla /communication: pestana de comunicados para SUBCOMMITTEE vs pantalla sin chat para ADMIN. Composicion visible coincidente."
+  },
+  {
+    "group_hash": "d10d421bb0b7097cf1df8b39fd99ad5a",
+    "members": [
+      {
+        "surface_id": "CAL_EVENT_DETAIL_005_IN_PROGRESS",
+        "file": "CAL_EVENT_DETAIL_005_IN_PROGRESS__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "IN_PROGRESS · asistencia abierta con 5 registros · record DRAFT 1–1",
+        "route": "/events/match-lomas",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "5fdd0142f5809d4d0b11f0e98b893f6e4ffcbccb2cd9e19f0d8b84b20992cca6"
+      },
+      {
+        "surface_id": "XD_HOME_001_TO_EVENT",
+        "file": "XD_HOME_001_TO_EVENT__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "INICIO → EVENTO",
+        "route": "/home",
+        "domain": "09_CROSS_DOMAIN",
+        "sha256": "5fdd0142f5809d4d0b11f0e98b893f6e4ffcbccb2cd9e19f0d8b84b20992cca6"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "CAL_EVENT_DETAIL_005_IN_PROGRESS",
+        "b": "XD_HOME_001_TO_EVENT",
+        "a_file": "CAL_EVENT_DETAIL_005_IN_PROGRESS__COACH__390x844.png",
+        "b_file": "XD_HOME_001_TO_EVENT__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Cross-domain: XD_HOME_001_TO_EVENT es el MISMO destino /events/match-lomas alcanzado desde el origen Home. Composicion destino identica por diseno."
+  },
+  {
+    "group_hash": "d292a6fceb134176ddbe176fecea734b",
+    "members": [
+      {
+        "surface_id": "EQ_TEAM_DETAIL_004_OUT_OF_SCOPE",
+        "file": "EQ_TEAM_DETAIL_004_OUT_OF_SCOPE__PLAYER__390x844.png",
+        "actor": "PLAYER",
+        "state": "FUERA DE ALCANCE",
+        "route": "/teams/quinta",
+        "domain": "05_TEAMS",
+        "sha256": "dfdab98a187dab797c6f74d15172e01609b95b38bad1477306c511b0f74978a0"
+      },
+      {
+        "surface_id": "EQ_TEAM_DETAIL_005_QUERY_ONLY",
+        "file": "EQ_TEAM_DETAIL_005_QUERY_ONLY__PLAYER__390x844.png",
+        "actor": "PLAYER",
+        "state": "VISIBLE PERO NO GESTIONADO",
+        "route": "/teams/septima",
+        "domain": "05_TEAMS",
+        "sha256": "88b95d2b121b9df6bcad651e7e9fbe969b159badda0ba5d359530ed1650c5c74"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "EQ_TEAM_DETAIL_004_OUT_OF_SCOPE",
+        "b": "EQ_TEAM_DETAIL_005_QUERY_ONLY",
+        "a_file": "EQ_TEAM_DETAIL_004_OUT_OF_SCOPE__PLAYER__390x844.png",
+        "b_file": "EQ_TEAM_DETAIL_005_QUERY_ONLY__PLAYER__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.9075,
+        "differing_pixel_count": 2987,
+        "diff_bbox": [
+          16,
+          141,
+          319,
+          311
+        ],
+        "diff_bbox_area_pct": 15.6489,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Misma pantalla de detalle de equipo para PLAYER con alcance distinto (fuera de alcance vs solo consulta). Composicion visible coincidente."
+  },
+  {
+    "group_hash": "d4e95ddffc120da5847907c5d6af46a6",
+    "members": [
+      {
+        "surface_id": "MORE_001_COACH",
+        "file": "MORE_001_COACH__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "COACH · 4 accesos visibles",
+        "route": "/more",
+        "domain": "07_MORE",
+        "sha256": "6a6aa3a276a3569142e1fd7e2ad94b7aed13a361421a44b523010c0e3be78686"
+      },
+      {
+        "surface_id": "MORE_004_PLAYER",
+        "file": "MORE_004_PLAYER__PLAYER__390x844.png",
+        "actor": "PLAYER",
+        "state": "PLAYER · 2 accesos visibles",
+        "route": "/more",
+        "domain": "07_MORE",
+        "sha256": "bfabcbd7f9d7454c52c299e6476c30564d920e781ab8d2a7b1b52d9f17c8c063"
+      },
+      {
+        "surface_id": "MORE_005_JORNADAS",
+        "file": "MORE_005_JORNADAS__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "COACH · 1 jornada",
+        "route": "/more",
+        "domain": "07_MORE",
+        "sha256": "6a6aa3a276a3569142e1fd7e2ad94b7aed13a361421a44b523010c0e3be78686"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "MORE_001_COACH",
+        "b": "MORE_004_PLAYER",
+        "a_file": "MORE_001_COACH__COACH__390x844.png",
+        "b_file": "MORE_004_PLAYER__PLAYER__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.024,
+        "differing_pixel_count": 79,
+        "diff_bbox": [
+          349,
+          28,
+          364,
+          36
+        ],
+        "diff_bbox_area_pct": 0.0365,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "MORE_001_COACH",
+        "b": "MORE_005_JORNADAS",
+        "a_file": "MORE_001_COACH__COACH__390x844.png",
+        "b_file": "MORE_005_JORNADAS__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "MORE_004_PLAYER",
+        "b": "MORE_005_JORNADAS",
+        "a_file": "MORE_004_PLAYER__PLAYER__390x844.png",
+        "b_file": "MORE_005_JORNADAS__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.024,
+        "differing_pixel_count": 79,
+        "diff_bbox": [
+          349,
+          28,
+          364,
+          36
+        ],
+        "diff_bbox_area_pct": 0.0365,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Misma pantalla /more en estado por defecto para COACH, PLAYER y la seccion de jornadas. Secciones distintas con composicion visible coincidente."
+  },
+  {
+    "group_hash": "d7016027df40d4280e9a1744fb911ceb",
+    "members": [
+      {
+        "surface_id": "GBL_NAV_001_SIDEBAR_ACTIVE_CALENDAR",
+        "file": "GBL_NAV_001_SIDEBAR_ACTIVE_CALENDAR__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "AUTHENTICATED · ruta /calendar",
+        "route": "/calendar",
+        "domain": "01_GLOBAL",
+        "sha256": "1e2dcf3c24d67c5f9d4b994367e85af285869384c12f37b43af555d3ab68ba8c"
+      },
+      {
+        "surface_id": "CAL_CALENDAR_002_MONTH",
+        "file": "CAL_CALENDAR_002_MONTH__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "vista mes · sin selección",
+        "route": "/calendar?view=month",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "1e2dcf3c24d67c5f9d4b994367e85af285869384c12f37b43af555d3ab68ba8c"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "GBL_NAV_001_SIDEBAR_ACTIVE_CALENDAR",
+        "b": "CAL_CALENDAR_002_MONTH",
+        "a_file": "GBL_NAV_001_SIDEBAR_ACTIVE_CALENDAR__COACH__1440x900.png",
+        "b_file": "CAL_CALENDAR_002_MONTH__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "GBL_NAV_001 documenta el cromo de la barra lateral sobre la ruta /calendar; CAL_CALENDAR_002 documenta la vista Mes. En 1440 la vista por defecto de /calendar ES Mes (window.innerWidth >= 1024, src/features/overview.tsx:525), de modo que ambas capturas son la misma pagina. Superficie de cromo vs superficie de contenido."
+  },
+  {
+    "group_hash": "da29b68d74a2a574095f8d50d4ff8421",
+    "members": [
+      {
+        "surface_id": "COM_COMM_003_COMUNICADOS_SUBCOMMITTEE",
+        "file": "COM_COMM_003_COMUNICADOS_SUBCOMMITTEE__SUBCOMMITTEE__390x844.png",
+        "actor": "SUBCOMMITTEE",
+        "state": "SIN ROL DE CHAT",
+        "route": "/communication?tab=comunicados",
+        "domain": "06_COMMUNICATION",
+        "sha256": "56425b2bc1c9a2e5796d34368a0c717581165ed9f8897e5b2a65515018925ac5"
+      },
+      {
+        "surface_id": "COM_COMM_004_NO_CHAT_ADMIN",
+        "file": "COM_COMM_004_NO_CHAT_ADMIN__ADMIN__390x844.png",
+        "actor": "ADMIN",
+        "state": "SIN ROL DE CHAT",
+        "route": "/communication",
+        "domain": "06_COMMUNICATION",
+        "sha256": "8c318b2b7d9dce3a5f0b73a4b3a99ae8b06c29fd42cfdbb6813585676c24a207"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "COM_COMM_003_COMUNICADOS_SUBCOMMITTEE",
+        "b": "COM_COMM_004_NO_CHAT_ADMIN",
+        "a_file": "COM_COMM_003_COMUNICADOS_SUBCOMMITTEE__SUBCOMMITTEE__390x844.png",
+        "b_file": "COM_COMM_004_NO_CHAT_ADMIN__ADMIN__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.0447,
+        "differing_pixel_count": 147,
+        "diff_bbox": [
+          347,
+          27,
+          365,
+          37
+        ],
+        "diff_bbox_area_pct": 0.0547,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Misma pantalla /communication: pestana de comunicados para SUBCOMMITTEE vs pantalla sin chat para ADMIN. Composicion visible coincidente."
+  },
+  {
+    "group_hash": "dc05cc85bd16ead79369391594b36fdf",
+    "members": [
+      {
+        "surface_id": "CAL_EVENT_DETAIL_011_OFFICIAL_COORDINATION",
+        "file": "CAL_EVENT_DETAIL_011_OFFICIAL_COORDINATION__SUBCOMMITTEE__390x844.png",
+        "actor": "SUBCOMMITTEE",
+        "state": "SCHEDULED · actor club-wide sin rol de entrenador",
+        "route": "/events/match-cuba",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "fd4b3c58b2e4bfc05253cebd9a9f10c188985af80f33926cf0011856f38fe222"
+      },
+      {
+        "surface_id": "CAL_EVENT_DETAIL_014_PLAYER_NOT_INVITED",
+        "file": "CAL_EVENT_DETAIL_014_PLAYER_NOT_INVITED__SUBCOMMITTEE__390x844.png",
+        "actor": "SUBCOMMITTEE",
+        "state": "SCHEDULED · sin convocatoria y sin respuesta propia",
+        "route": "/events/match-cuba",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "fd4b3c58b2e4bfc05253cebd9a9f10c188985af80f33926cf0011856f38fe222"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "CAL_EVENT_DETAIL_011_OFFICIAL_COORDINATION",
+        "b": "CAL_EVENT_DETAIL_014_PLAYER_NOT_INVITED",
+        "a_file": "CAL_EVENT_DETAIL_011_OFFICIAL_COORDINATION__SUBCOMMITTEE__390x844.png",
+        "b_file": "CAL_EVENT_DETAIL_014_PLAYER_NOT_INVITED__SUBCOMMITTEE__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "CURRENT no tiene rama visual de 'no invitado': la unica condicion de convocatoria es meInvited (src/features/events.tsx:308), y para SUBCOMMITTEE es false en ambos casos (no esta en event.published, src/mock/seed.ts:170-174), con canRespondOwn false (src/mock/authority.ts:116-122). Ambos estados renderizan el mismo detalle (src/features/events.tsx:481-503 y 568-590). Estados semanticos distintos con composicion CURRENT identica."
+  },
+  {
+    "group_hash": "df0ab3692ff035979265cb85e7634f3b",
+    "members": [
+      {
+        "surface_id": "CAL_EVENT_DETAIL_011_OFFICIAL_COORDINATION",
+        "file": "CAL_EVENT_DETAIL_011_OFFICIAL_COORDINATION__SUBCOMMITTEE__1440x900.png",
+        "actor": "SUBCOMMITTEE",
+        "state": "SCHEDULED · actor club-wide sin rol de entrenador",
+        "route": "/events/match-cuba",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "ea45fbcc022b936ffb07dc57034aee3d2adee34740ddd56fcc7ec0a1f53c609e"
+      },
+      {
+        "surface_id": "CAL_EVENT_DETAIL_014_PLAYER_NOT_INVITED",
+        "file": "CAL_EVENT_DETAIL_014_PLAYER_NOT_INVITED__SUBCOMMITTEE__1440x900.png",
+        "actor": "SUBCOMMITTEE",
+        "state": "SCHEDULED · sin convocatoria y sin respuesta propia",
+        "route": "/events/match-cuba",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "ea45fbcc022b936ffb07dc57034aee3d2adee34740ddd56fcc7ec0a1f53c609e"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "CAL_EVENT_DETAIL_011_OFFICIAL_COORDINATION",
+        "b": "CAL_EVENT_DETAIL_014_PLAYER_NOT_INVITED",
+        "a_file": "CAL_EVENT_DETAIL_011_OFFICIAL_COORDINATION__SUBCOMMITTEE__1440x900.png",
+        "b_file": "CAL_EVENT_DETAIL_014_PLAYER_NOT_INVITED__SUBCOMMITTEE__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "CURRENT no tiene rama visual de 'no invitado': la unica condicion de convocatoria es meInvited (src/features/events.tsx:308), y para SUBCOMMITTEE es false en ambos casos (no esta en event.published, src/mock/seed.ts:170-174), con canRespondOwn false (src/mock/authority.ts:116-122). Ambos estados renderizan el mismo detalle (src/features/events.tsx:481-503 y 568-590). Estados semanticos distintos con composicion CURRENT identica."
+  },
+  {
+    "group_hash": "e4773a844d64f2e4cee6049496b9a5be",
+    "members": [
+      {
+        "surface_id": "MGT_COMPETITIONS_003_CREATE_MODAL",
+        "file": "MGT_COMPETITIONS_003_CREATE_MODAL__ADMIN__1440x900.png",
+        "actor": "ADMIN",
+        "state": "Panel abierto, sin valores",
+        "route": "/management/competitions",
+        "domain": "08_MANAGEMENT",
+        "sha256": "bb8ab039924a9520e278c87d1d4a409fbbb7758a5654f6999ce09c9e8b29639d"
+      },
+      {
+        "surface_id": "MGT_COMPETITIONS_004_EDIT_MODAL",
+        "file": "MGT_COMPETITIONS_004_EDIT_MODAL__ADMIN__1440x900.png",
+        "actor": "ADMIN",
+        "state": "Panel abierto con valores",
+        "route": "/management/competitions/ahba",
+        "domain": "08_MANAGEMENT",
+        "sha256": "42448cf04cde09f1e937be0b88ed9e1d98c04521cb842f1d0277fc91de61dc6e"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "MGT_COMPETITIONS_003_CREATE_MODAL",
+        "b": "MGT_COMPETITIONS_004_EDIT_MODAL",
+        "a_file": "MGT_COMPETITIONS_003_CREATE_MODAL__ADMIN__1440x900.png",
+        "b_file": "MGT_COMPETITIONS_004_EDIT_MODAL__ADMIN__1440x900.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 8.5572,
+        "differing_pixel_count": 110901,
+        "diff_bbox": [
+          379,
+          87,
+          1285,
+          844
+        ],
+        "diff_bbox_area_pct": 52.9199,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Mismo modal de competencia (src/features/management.tsx) en vacio y pre-cargado. La diferencia real son los valores de los campos, dentro de la caja del modal."
+  },
+  {
+    "group_hash": "ee4d954475e5a83b69f33192410d74f6",
+    "members": [
+      {
+        "surface_id": "GBL_NAV_004_SIDEBAR_BADGES_COACH",
+        "file": "GBL_NAV_004_SIDEBAR_BADGES_COACH__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "AUTHENTICATED · 2 mensajes sin leer · 1 aviso sin leer",
+        "route": "/home",
+        "domain": "01_GLOBAL",
+        "sha256": "148a63159982c43d03480aeb9c4aac9c66f0a5ba45ef6dbe32abb6ffd4aa4dc3"
+      },
+      {
+        "surface_id": "GBL_SHELL_002_TOPBAR_DESKTOP",
+        "file": "GBL_SHELL_002_TOPBAR_DESKTOP__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "AUTHENTICATED",
+        "route": "/home",
+        "domain": "01_GLOBAL",
+        "sha256": "148a63159982c43d03480aeb9c4aac9c66f0a5ba45ef6dbe32abb6ffd4aa4dc3"
+      },
+      {
+        "surface_id": "HOME_001_DEFAULT_COACH",
+        "file": "HOME_001_DEFAULT_COACH__COACH__1440x900.png",
+        "actor": "COACH",
+        "state": "COACH · sin pendientes propios",
+        "route": "/home",
+        "domain": "03_HOME",
+        "sha256": "148a63159982c43d03480aeb9c4aac9c66f0a5ba45ef6dbe32abb6ffd4aa4dc3"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "GBL_NAV_004_SIDEBAR_BADGES_COACH",
+        "b": "GBL_SHELL_002_TOPBAR_DESKTOP",
+        "a_file": "GBL_NAV_004_SIDEBAR_BADGES_COACH__COACH__1440x900.png",
+        "b_file": "GBL_SHELL_002_TOPBAR_DESKTOP__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "GBL_NAV_004_SIDEBAR_BADGES_COACH",
+        "b": "HOME_001_DEFAULT_COACH",
+        "a_file": "GBL_NAV_004_SIDEBAR_BADGES_COACH__COACH__1440x900.png",
+        "b_file": "HOME_001_DEFAULT_COACH__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "a": "GBL_SHELL_002_TOPBAR_DESKTOP",
+        "b": "HOME_001_DEFAULT_COACH",
+        "a_file": "GBL_SHELL_002_TOPBAR_DESKTOP__COACH__1440x900.png",
+        "b_file": "HOME_001_DEFAULT_COACH__COACH__1440x900.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Las tres superficies comparten la ruta /home en 1440: GBL_NAV_004 documenta los contadores de la barra lateral, GBL_SHELL_002 la composicion de la barra superior y HOME_001 el contenido de inicio. El cromo forma parte de la pagina, por lo que la composicion visible coincide. Superficies de cromo vs superficie de contenido."
+  },
+  {
+    "group_hash": "f7b3c24c134407752e929807074d05e6",
+    "members": [
+      {
+        "surface_id": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO",
+        "file": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "SCHEDULED · modal abierto",
+        "route": "/events/match-cuba",
+        "domain": "01_GLOBAL",
+        "sha256": "e15474595c1823df3e80a379e0e2f34ace7cf228ca0481b6105a9787ccaac2b8"
+      },
+      {
+        "surface_id": "CAL_EVENT_DETAIL_004_HISTORY_MODAL",
+        "file": "CAL_EVENT_DETAIL_004_HISTORY_MODAL__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "SCHEDULED · modal abierto",
+        "route": "/events/match-cuba",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "e15474595c1823df3e80a379e0e2f34ace7cf228ca0481b6105a9787ccaac2b8"
+      },
+      {
+        "surface_id": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM",
+        "file": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "DIRTY · confirmación abierta",
+        "route": "/events/match-cuba/edit",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "b24671105b9ec277fd95693bf61f0a5904485f074cc590a702d0dafe9d12079f"
+      },
+      {
+        "surface_id": "CAL_JORNADA_004_IMPACT_MODAL",
+        "file": "CAL_JORNADA_004_IMPACT_MODAL__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "GUARDADO · modal de impacto abierto",
+        "route": "/jornadas/j1",
+        "domain": "04_CALENDAR_PARTICIPATION",
+        "sha256": "cca51ffda3a6b81168c32c088f9b13a4b857c59e5b842e8be87c92ad73e12c5f"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO",
+        "b": "CAL_EVENT_DETAIL_004_HISTORY_MODAL",
+        "a_file": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO__COACH__390x844.png",
+        "b_file": "CAL_EVENT_DETAIL_004_HISTORY_MODAL__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO",
+        "b": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM",
+        "a_file": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO__COACH__390x844.png",
+        "b_file": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 60.6693,
+        "differing_pixel_count": 199699,
+        "diff_bbox": [
+          0,
+          0,
+          390,
+          828
+        ],
+        "diff_bbox_area_pct": 98.1043,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO",
+        "b": "CAL_JORNADA_004_IMPACT_MODAL",
+        "a_file": "GBL_OVERLAY_002_MODAL_HISTORIAL_EVENTO__COACH__390x844.png",
+        "b_file": "CAL_JORNADA_004_IMPACT_MODAL__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 60.3123,
+        "differing_pixel_count": 198524,
+        "diff_bbox": [
+          0,
+          0,
+          390,
+          813
+        ],
+        "diff_bbox_area_pct": 96.327,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "CAL_EVENT_DETAIL_004_HISTORY_MODAL",
+        "b": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM",
+        "a_file": "CAL_EVENT_DETAIL_004_HISTORY_MODAL__COACH__390x844.png",
+        "b_file": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 60.6693,
+        "differing_pixel_count": 199699,
+        "diff_bbox": [
+          0,
+          0,
+          390,
+          828
+        ],
+        "diff_bbox_area_pct": 98.1043,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "CAL_EVENT_DETAIL_004_HISTORY_MODAL",
+        "b": "CAL_JORNADA_004_IMPACT_MODAL",
+        "a_file": "CAL_EVENT_DETAIL_004_HISTORY_MODAL__COACH__390x844.png",
+        "b_file": "CAL_JORNADA_004_IMPACT_MODAL__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 60.3123,
+        "differing_pixel_count": 198524,
+        "diff_bbox": [
+          0,
+          0,
+          390,
+          813
+        ],
+        "diff_bbox_area_pct": 96.327,
+        "size": [
+          390,
+          844
+        ]
+      },
+      {
+        "a": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM",
+        "b": "CAL_JORNADA_004_IMPACT_MODAL",
+        "a_file": "CAL_EVENT_FORM_007_EDIT_DISCARD_CONFIRM__COACH__390x844.png",
+        "b_file": "CAL_JORNADA_004_IMPACT_MODAL__COACH__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 55.1018,
+        "differing_pixel_count": 181373,
+        "diff_bbox": [
+          0,
+          0,
+          390,
+          828
+        ],
+        "diff_bbox_area_pct": 98.1043,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Todos son dialogos modales sobre el mismo fondo oscurecido (src/shared/ui.tsx:967-972). Cada uno tiene cuerpo, titulo y accion distintos: historial de evento, descartar cambios de edicion, impacto de jornada y catalogo de overlay. Falso positivo del hash perceptual de 16x16 en gris."
+  },
+  {
+    "group_hash": "fd721316d9dd8da22d2930b17d5b3c77",
+    "members": [
+      {
+        "surface_id": "GBL_NAV_003_BOTTOMNAV_ACTIVE_COMMUNICATION",
+        "file": "GBL_NAV_003_BOTTOMNAV_ACTIVE_COMMUNICATION__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "AUTHENTICATED · 2 mensajes sin leer en el equipo",
+        "route": "/communication",
+        "domain": "01_GLOBAL",
+        "sha256": "3b273d4e7b208ebad69834656c37df777962bbf4b7334ebab22bb057c247141d"
+      },
+      {
+        "surface_id": "COM_COMM_001_CONVERSACIONES",
+        "file": "COM_COMM_001_CONVERSACIONES__COACH__390x844.png",
+        "actor": "COACH",
+        "state": "3 conversaciones activas · 2 mensajes sin leer",
+        "route": "/communication",
+        "domain": "06_COMMUNICATION",
+        "sha256": "3b273d4e7b208ebad69834656c37df777962bbf4b7334ebab22bb057c247141d"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "GBL_NAV_003_BOTTOMNAV_ACTIVE_COMMUNICATION",
+        "b": "COM_COMM_001_CONVERSACIONES",
+        "a_file": "GBL_NAV_003_BOTTOMNAV_ACTIVE_COMMUNICATION__COACH__390x844.png",
+        "b_file": "COM_COMM_001_CONVERSACIONES__COACH__390x844.png",
+        "identical_bytes": true,
+        "identical_pixels_pct": 0.0,
+        "differing_pixel_count": 0,
+        "diff_bbox": null,
+        "diff_bbox_area_pct": 0.0,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "GBL_NAV_003 documenta el cromo de la bottom nav sobre la ruta /communication; COM_COMM_001 documenta la lista de conversaciones. Misma ruta y misma pagina: superficie de cromo vs superficie de contenido."
+  },
+  {
+    "group_hash": "fe30e797e2784727ff28bb4710a8ebf7",
+    "members": [
+      {
+        "surface_id": "EQ_TEAMS_002_LIST_PLAYER",
+        "file": "EQ_TEAMS_002_LIST_PLAYER__PLAYER__390x844.png",
+        "actor": "PLAYER",
+        "state": "PLAYER · alcance en sexta",
+        "route": "/teams",
+        "domain": "05_TEAMS",
+        "sha256": "7b3a6459f36d66623c62ab721c2055e1f30575228b48e6617c76055f03c5b2f7"
+      },
+      {
+        "surface_id": "EQ_TEAMS_004_LIST_CAPTAIN",
+        "file": "EQ_TEAMS_004_LIST_CAPTAIN__CAPTAIN__390x844.png",
+        "actor": "CAPTAIN",
+        "state": "CAPTAIN · alcance en sexta",
+        "route": "/teams",
+        "domain": "05_TEAMS",
+        "sha256": "53d0739a1e8c542b90dfe870a1b57df132aeaaafb36558c34492710e99b18abc"
+      }
+    ],
+    "pairs": [
+      {
+        "a": "EQ_TEAMS_002_LIST_PLAYER",
+        "b": "EQ_TEAMS_004_LIST_CAPTAIN",
+        "a_file": "EQ_TEAMS_002_LIST_PLAYER__PLAYER__390x844.png",
+        "b_file": "EQ_TEAMS_004_LIST_CAPTAIN__CAPTAIN__390x844.png",
+        "identical_bytes": false,
+        "identical_pixels_pct": 0.0322,
+        "differing_pixel_count": 106,
+        "diff_bbox": [
+          348,
+          28,
+          364,
+          36
+        ],
+        "diff_bbox_area_pct": 0.0389,
+        "size": [
+          390,
+          844
+        ]
+      }
+    ],
+    "classification": "EXPECTED VISUAL DUPLICATE",
+    "reason": "Misma pantalla /teams para PLAYER y CAPTAIN; el conjunto de equipos visibles coincide para esos actores."
+  }
+]

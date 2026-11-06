@@ -1,0 +1,48 @@
+{
+  "id": "COM_CONVERSATION_004_NO_AUTHORITY",
+  "domain": "06_COMMUNICATION",
+  "subdomain": "Conversations",
+  "route": "/conversations/c-team-sexta",
+  "actor": "ADMIN",
+  "state": "ID DE PARÁMETRO NO RESUELTO",
+  "journeys": [
+    "J07"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "COM_CONVERSATION_004_NO_AUTHORITY__ADMIN__390x844.png",
+    "COM_CONVERSATION_004_NO_AUTHORITY__ADMIN__1440x900.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": true,
+    "1440x900": true
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (05_Comunicacion)",
+  "source_files": [
+    "src/features/conversations.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "CAPTURED",
+      "file": "COM_CONVERSATION_004_NO_AUTHORITY__ADMIN__390x844.png",
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 1
+    },
+    "1440x900": {
+      "status": "CAPTURED",
+      "file": "COM_CONVERSATION_004_NO_AUTHORITY__ADMIN__1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "deviceScaleFactor": 1
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}

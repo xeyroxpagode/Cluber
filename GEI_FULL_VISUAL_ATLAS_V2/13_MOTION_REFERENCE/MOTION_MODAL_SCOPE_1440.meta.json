@@ -1,0 +1,22 @@
+{
+  "motionId": "MOTION_MODAL_SCOPE_1440",
+  "route": "/events/training-serie-1/edit",
+  "actor": "coach",
+  "viewport": "1440",
+  "frames": 3,
+  "measuredDurationMs": 327,
+  "observedDurationMs": 1800,
+  "fps": 30,
+  "action": [
+    {
+      "type": {
+        "selector": "#field-time",
+        "text": "18:30"
+      }
+    },
+    {
+      "clickText": "Guardar cambios"
+    }
+  ],
+  "source": "src/shared/patterns.tsx · ScopeDialog + Modal — el diálogo de alcance aparece tras validar y detectar que el evento pertenece a una serie."
+}

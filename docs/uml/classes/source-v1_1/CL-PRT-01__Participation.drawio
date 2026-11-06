@@ -1,8 +1,275 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="GEI-V1.1" modified="2026-10-14T00:00:00.000Z" agent="GEI-v1.1-scope-reconciliation" version="24.7.17" type="device">
-  <diagram id="CL-PRT-01" name="CL-PRT-01"><mxGraphModel page="1" pageWidth="1169" pageHeight="827"><root>
-    <mxCell id="0"/><mxCell id="1" parent="0"/>
-    <mxCell id="title" value="Participation V1.1" style="text;html=1;align=center;fontSize=18;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="190" y="30" width="790" height="40" as="geometry"/></mxCell>
-    <mxCell id="contract" value="Player 1 — 0..* Availability; the Player answers only her own response&#xA;Match 1 — 1 Selection — 1..* SelectionRevision — 0..* SelectionEntry&#xA;Published SelectionRevision is immutable; republication creates a new revision&#xA;Surviving conflicts: NO_LONGER_EVENT_TARGET and NO_LONGER_TEAM_AFFILIATED&#xA;Event 1 — 0..1 AttendanceSheet — 0..* AttendanceEntry&#xA;Match 1 — 0..1 MatchRecord — 0..* PlayerMatchStats" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=16;fontSize=13;fillColor=#FFFFFF;strokeColor=#263238;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="190" y="100" width="790" height="610" as="geometry"/></mxCell>
-  </root></mxGraphModel></diagram>
+<?xml version='1.0' encoding='UTF-8'?>
+<mxfile host="app.diagrams.net" modified="2026-10-15T01:30:00.000Z" agent="GEI Diagrams" version="24.7.17" type="device">
+  <diagram id="GEI-Clases" name="Clases">
+    <mxGraphModel dx="1700" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1722" pageHeight="1178" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="gei-rel-0" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.35;rounded=0;edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=18;" parent="1" value="" edge="1" source="class-Person" target="class-Availability">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gei-rel-0-inicio" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-0" value="1" vertex="1">
+          <mxGeometry x="-0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-0-fin" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-0" value="0..*" vertex="1">
+          <mxGeometry x="0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-1" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.35;rounded=0;edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=18;" parent="1" value="" edge="1" source="class-Event" target="class-Availability">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gei-rel-1-inicio" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-1" value="1" vertex="1">
+          <mxGeometry x="-0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-1-fin" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-1" value="0..*" vertex="1">
+          <mxGeometry x="0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-2" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.35;rounded=0;edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=18;" parent="1" value="" edge="1" source="class-Event" target="class-Selection">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gei-rel-2-inicio" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-2" value="1" vertex="1">
+          <mxGeometry x="-0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-2-fin" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-2" value="0..1" vertex="1">
+          <mxGeometry x="0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-3" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.35;rounded=0;edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=18;" parent="1" value="" edge="1" source="class-Selection" target="class-SelectionRevision">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gei-rel-3-inicio" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-3" value="1" vertex="1">
+          <mxGeometry x="-0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-3-fin" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-3" value="0..*" vertex="1">
+          <mxGeometry x="0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-4" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.35;rounded=0;edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=18;" parent="1" value="" edge="1" source="class-SelectionRevision" target="class-SelectionEntry">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gei-rel-4-inicio" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-4" value="1" vertex="1">
+          <mxGeometry x="-0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-4-fin" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-4" value="0..*" vertex="1">
+          <mxGeometry x="0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-5" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.35;rounded=0;edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=18;" parent="1" value="" edge="1" source="class-Person" target="class-SelectionEntry">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gei-rel-5-inicio" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-5" value="1" vertex="1">
+          <mxGeometry x="-0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-5-fin" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-5" value="0..*" vertex="1">
+          <mxGeometry x="0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-6" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.35;rounded=0;edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=18;" parent="1" value="" edge="1" source="class-Event" target="class-AttendanceSheet">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gei-rel-6-inicio" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-6" value="1" vertex="1">
+          <mxGeometry x="-0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-6-fin" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-6" value="0..1" vertex="1">
+          <mxGeometry x="0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-7" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.35;rounded=0;edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=18;" parent="1" value="" edge="1" source="class-AttendanceSheet" target="class-AttendanceEntry">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gei-rel-7-inicio" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-7" value="1" vertex="1">
+          <mxGeometry x="-0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-7-fin" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-7" value="0..*" vertex="1">
+          <mxGeometry x="0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-8" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.35;rounded=0;edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=18;" parent="1" value="" edge="1" source="class-Person" target="class-AttendanceEntry">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gei-rel-8-inicio" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-8" value="1" vertex="1">
+          <mxGeometry x="-0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-8-fin" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-8" value="0..*" vertex="1">
+          <mxGeometry x="0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-9" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.35;rounded=0;edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=18;" parent="1" value="" edge="1" source="class-Event" target="class-MatchRecord">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gei-rel-9-inicio" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-9" value="1" vertex="1">
+          <mxGeometry x="-0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-9-fin" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-9" value="0..1" vertex="1">
+          <mxGeometry x="0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-10" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.35;rounded=0;edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=18;" parent="1" value="" edge="1" source="class-MatchRecord" target="class-PlayerMatchStats">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gei-rel-10-inicio" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-10" value="1" vertex="1">
+          <mxGeometry x="-0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-10-fin" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-10" value="0..*" vertex="1">
+          <mxGeometry x="0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-11" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.35;rounded=0;edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=18;" parent="1" value="" edge="1" source="class-Person" target="class-PlayerMatchStats">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gei-rel-11-inicio" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-11" value="1" vertex="1">
+          <mxGeometry x="-0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gei-rel-11-fin" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#555555;labelBackgroundColor=#FFFFFF;fillColor=#FFFFFF;strokeColor=none;" parent="gei-rel-11" value="0..*" vertex="1">
+          <mxGeometry x="0.86" y="-16" width="40" height="20" as="geometry" relative="1">
+            <mxPoint x="0" y="0" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="class-Person" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Persona" vertex="1">
+          <mxGeometry x="599" y="400" width="260" height="154" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Person-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-Person" value="nombre: Texto&#10;apellido: Texto&#10;correo: Texto" vertex="1">
+          <mxGeometry x="0" y="45" width="252" height="66" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Person-sep" style="line;strokeColor=#AAAAAA;strokeWidth=1;" parent="class-Person" value="" vertex="1">
+          <mxGeometry x="0" y="113" width="260" height="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Person-ops" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=3;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-Person" value="actualizar datos()" vertex="1">
+          <mxGeometry x="0" y="117" width="252" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Event" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Evento" vertex="1">
+          <mxGeometry x="663" y="100" width="260" height="174" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Event-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-Event" value="tipo: Tipo&#10;fecha y hora: Fecha y hora&#10;estado: Estado" vertex="1">
+          <mxGeometry x="0" y="45" width="252" height="66" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Event-sep" style="line;strokeColor=#AAAAAA;strokeWidth=1;" parent="class-Event" value="" vertex="1">
+          <mxGeometry x="0" y="113" width="260" height="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Event-ops" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=3;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-Event" value="modificar()&#10;cancelar()" vertex="1">
+          <mxGeometry x="0" y="117" width="252" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Availability" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Disponibilidad" vertex="1">
+          <mxGeometry x="484" y="690" width="279" height="114" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Availability-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-Availability" value="respuesta: Sí / Tal vez / No" vertex="1">
+          <mxGeometry x="0" y="45" width="271" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Availability-sep" style="line;strokeColor=#AAAAAA;strokeWidth=1;" parent="class-Availability" value="" vertex="1">
+          <mxGeometry x="0" y="73" width="279" height="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Availability-ops" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=3;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-Availability" value="responder()" vertex="1">
+          <mxGeometry x="0" y="77" width="271" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Selection" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Convocatoria" vertex="1">
+          <mxGeometry x="1261" y="420" width="263" height="114" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Selection-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-Selection" value="partido: Partido" vertex="1">
+          <mxGeometry x="0" y="45" width="255" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Selection-sep" style="line;strokeColor=#AAAAAA;strokeWidth=1;" parent="class-Selection" value="" vertex="1">
+          <mxGeometry x="0" y="73" width="263" height="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-Selection-ops" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=3;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-Selection" value="preparar()" vertex="1">
+          <mxGeometry x="0" y="77" width="255" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-SelectionRevision" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Versión de convocatoria" vertex="1">
+          <mxGeometry x="1247" y="690" width="305" height="114" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-SelectionRevision-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-SelectionRevision" value="estado: Borrador / Publicada" vertex="1">
+          <mxGeometry x="0" y="45" width="297" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-SelectionRevision-sep" style="line;strokeColor=#AAAAAA;strokeWidth=1;" parent="class-SelectionRevision" value="" vertex="1">
+          <mxGeometry x="0" y="73" width="305" height="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-SelectionRevision-ops" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=3;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-SelectionRevision" value="publicar()" vertex="1">
+          <mxGeometry x="0" y="77" width="297" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-SelectionEntry" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Jugadora convocada" vertex="1">
+          <mxGeometry x="963" y="931" width="305" height="102" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-SelectionEntry-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-SelectionEntry" value="jugadora: Persona&#10;situación: Texto" vertex="1">
+          <mxGeometry x="0" y="45" width="297" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-AttendanceSheet" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Planilla de asistencia" vertex="1">
+          <mxGeometry x="903" y="410" width="305" height="134" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-AttendanceSheet-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-AttendanceSheet" value="evento: Evento&#10;cierre: Fecha y hora (opcional)" vertex="1">
+          <mxGeometry x="0" y="45" width="297" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-AttendanceSheet-sep" style="line;strokeColor=#AAAAAA;strokeWidth=1;" parent="class-AttendanceSheet" value="" vertex="1">
+          <mxGeometry x="0" y="93" width="305" height="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-AttendanceSheet-ops" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=3;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-AttendanceSheet" value="cerrar()" vertex="1">
+          <mxGeometry x="0" y="97" width="297" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-AttendanceEntry" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Registro de asistencia" vertex="1">
+          <mxGeometry x="898" y="680" width="305" height="134" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-AttendanceEntry-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-AttendanceEntry" value="jugadora: Persona&#10;asistencia: Estado" vertex="1">
+          <mxGeometry x="0" y="45" width="297" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-AttendanceEntry-sep" style="line;strokeColor=#AAAAAA;strokeWidth=1;" parent="class-AttendanceEntry" value="" vertex="1">
+          <mxGeometry x="0" y="93" width="305" height="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-AttendanceEntry-ops" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=3;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-AttendanceEntry" value="corregir()" vertex="1">
+          <mxGeometry x="0" y="97" width="297" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-MatchRecord" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Resultado del partido" vertex="1">
+          <mxGeometry x="150" y="390" width="305" height="174" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-MatchRecord-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-MatchRecord" value="partido: Partido&#10;resultado: Texto&#10;estado: Estado" vertex="1">
+          <mxGeometry x="0" y="45" width="297" height="66" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-MatchRecord-sep" style="line;strokeColor=#AAAAAA;strokeWidth=1;" parent="class-MatchRecord" value="" vertex="1">
+          <mxGeometry x="0" y="113" width="305" height="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-MatchRecord-ops" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=3;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-MatchRecord" value="finalizar()&#10;corregir()" vertex="1">
+          <mxGeometry x="0" y="117" width="297" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-PlayerMatchStats" style="swimlane;html=1;startSize=42;horizontal=1;collapsible=0;container=0;rounded=0;strokeColor=#333333;strokeWidth=1.25;fillColor=#FFFFFF;swimlaneFillColor=#FFFFFF;fontSize=17;fontStyle=1;fontColor=#171717;align=center;verticalAlign=middle;" parent="1" value="Estadísticas de jugadora" vertex="1">
+          <mxGeometry x="135" y="696" width="305" height="102" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-PlayerMatchStats-attrs" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;fontSize=13;fontColor=#292929;fillColor=none;strokeColor=none;" parent="class-PlayerMatchStats" value="jugadora: Persona&#10;goles: Número" vertex="1">
+          <mxGeometry x="0" y="45" width="297" height="46" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
 </mxfile>

@@ -1,35 +1,58 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="GEI-E4" modified="2026-10-05T00:00:00.000Z" agent="GEI-E4-use-case-diagram-authoring" version="24.7.17" type="device">
-  <diagram id="UCD-CMP-01" name="UCD-CMP-01">
-    <mxGraphModel dx="1169" dy="827" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+<?xml version='1.0' encoding='UTF-8'?>
+<mxfile host="app.diagrams.net" modified="2026-10-15T01:30:00.000Z" agent="GEI Diagrams" version="24.7.17" type="device">
+  <diagram id="GEI-Casosdeuso" name="Casos de uso">
+    <mxGraphModel dx="1700" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1170" pageHeight="800" background="#FFFFFF" math="0" shadow="0">
       <root>
-        <mxCell id="0" />
-        <mxCell id="1" parent="0" />
-        <mxCell id="title" value="UCD-CMP-01 · Ciclo de vida de la competencia y referencia externa" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Helvetica;fontSize=15;fontStyle=1;fontColor=#1A1A1A;" vertex="1" parent="1"><mxGeometry x="24" y="10" width="800" height="26" as="geometry"/></mxCell>
-        <mxCell id="boundary" value="GEI Hockey Management System — GEI · CMP — Competencia y referencia externa" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A1A1A;strokeWidth=2;verticalAlign=top;align=left;spacingLeft=10;spacingTop=8;fontFamily=Helvetica;fontSize=12;fontStyle=1;fontColor=#1A1A1A;container=0;" vertex="1" parent="1"><mxGeometry x="250" y="56" width="282" height="632" as="geometry"/></mxCell>
-        <mxCell id="uc1" value="UC-CMP-01&lt;br&gt;Registrar una&lt;br&gt;competencia" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A1A1A;strokeWidth=1.5;fontFamily=Helvetica;fontSize=11;fontColor=#1A1A1A;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="296" y="110" width="190" height="96" as="geometry"/></mxCell>
-        <mxCell id="uc2" value="UC-CMP-02&lt;br&gt;Activar una&lt;br&gt;competencia" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A1A1A;strokeWidth=1.5;fontFamily=Helvetica;fontSize=11;fontColor=#1A1A1A;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="296" y="222" width="190" height="96" as="geometry"/></mxCell>
-        <mxCell id="uc3" value="UC-CMP-03&lt;br&gt;Cerrar una&lt;br&gt;competencia" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A1A1A;strokeWidth=1.5;fontFamily=Helvetica;fontSize=11;fontColor=#1A1A1A;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="296" y="334" width="190" height="96" as="geometry"/></mxCell>
-        <mxCell id="uc4" value="UC-CMP-08&lt;br&gt;Registrar una&lt;br&gt;referencia&lt;br&gt;externa" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A1A1A;strokeWidth=1.5;fontFamily=Helvetica;fontSize=11;fontColor=#1A1A1A;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="296" y="446" width="190" height="96" as="geometry"/></mxCell>
-        <mxCell id="uc5" value="UC-CMP-09&lt;br&gt;Consultar una&lt;br&gt;referencia&lt;br&gt;externa" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A1A1A;strokeWidth=1.5;fontFamily=Helvetica;fontSize=11;fontColor=#1A1A1A;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="296" y="558" width="190" height="96" as="geometry"/></mxCell>
-        <mxCell id="actor6" value="" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;align=center;labelBackgroundColor=#FFFFFF;fontFamily=Helvetica;fontSize=11;fontColor=#1A1A1A;strokeColor=#1A1A1A;fillColor=#1A1A1A;resizable=0;" vertex="1" parent="1"><mxGeometry x="90" y="362" width="40" height="40" as="geometry"/></mxCell>
-        <mxCell id="al7" value="Subcomisión de hockey&lt;br&gt;ACT-SUBCOMMITTEE" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;fontFamily=Helvetica;fontSize=11;fontColor=#1A1A1A;whiteSpace=wrap;" vertex="1" parent="1"><mxGeometry x="66" y="402" width="170" height="28" as="geometry"/></mxCell>
-        <mxCell id="actor8" value="" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;align=center;labelBackgroundColor=#FFFFFF;fontFamily=Helvetica;fontSize=11;fontColor=#1A1A1A;strokeColor=#1A1A1A;fillColor=#1A1A1A;resizable=0;" vertex="1" parent="1"><mxGeometry x="90" y="450" width="40" height="40" as="geometry"/></mxCell>
-        <mxCell id="al9" value="Administración del club&lt;br&gt;ACT-ADMIN" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;fontFamily=Helvetica;fontSize=11;fontColor=#1A1A1A;whiteSpace=wrap;" vertex="1" parent="1"><mxGeometry x="66" y="490" width="170" height="28" as="geometry"/></mxCell>
-        <mxCell id="actor10" value="" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;align=center;labelBackgroundColor=#FFFFFF;fontFamily=Helvetica;fontSize=11;fontColor=#1A1A1A;strokeColor=#1A1A1A;fillColor=#1A1A1A;resizable=0;" vertex="1" parent="1"><mxGeometry x="90" y="586" width="40" height="40" as="geometry"/></mxCell>
-        <mxCell id="al11" value="Entrenador/a&lt;br&gt;ACT-COACH" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;fontFamily=Helvetica;fontSize=11;fontColor=#1A1A1A;whiteSpace=wrap;" vertex="1" parent="1"><mxGeometry x="66" y="626" width="170" height="28" as="geometry"/></mxCell>
-        <mxCell id="note12" value="Gestión sensible: reautenticación&lt;br&gt;[REAUTHENTICATION_REQUIRED]." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C8C8C;strokeWidth=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;fontFamily=Helvetica;fontSize=11;fontColor=#3A3A3A;" vertex="1" parent="1"><mxGeometry x="856" y="8" width="292" height="40" as="geometry"/></mxCell>
-        <mxCell id="e13" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#1A1A1A;strokeWidth=1.1;exitX=1;exitY=0.16666666666666666;exitDx=0;exitDy=0;entryX=0;entryY=0.6666666666666666;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor8" target="uc1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="240" y="470" /><mxPoint x="240" y="105" /><mxPoint x="268" y="105" /><mxPoint x="296" y="158" /></Array></mxGeometry></mxCell>
-        <mxCell id="e14" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#1A1A1A;strokeWidth=1.1;exitX=1;exitY=0.16666666666666666;exitDx=0;exitDy=0;entryX=0;entryY=0.3333333333333333;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor6" target="uc1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="245" y="382" /><mxPoint x="245" y="103" /><mxPoint x="268" y="103" /><mxPoint x="296" y="158" /></Array></mxGeometry></mxCell>
-        <mxCell id="e15" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#1A1A1A;strokeWidth=1.1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;entryX=0;entryY=0.6666666666666666;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor8" target="uc2"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="250" y="470" /><mxPoint x="250" y="110" /><mxPoint x="268" y="110" /><mxPoint x="296" y="270" /></Array></mxGeometry></mxCell>
-        <mxCell id="e16" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#1A1A1A;strokeWidth=1.1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;entryX=0;entryY=0.3333333333333333;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor6" target="uc2"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="255" y="382" /><mxPoint x="255" y="115" /><mxPoint x="268" y="115" /><mxPoint x="296" y="270" /></Array></mxGeometry></mxCell>
-        <mxCell id="e17" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#1A1A1A;strokeWidth=1.1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.6666666666666666;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor8" target="uc3"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="260" y="470" /><mxPoint x="260" y="218" /><mxPoint x="268" y="218" /><mxPoint x="296" y="382" /></Array></mxGeometry></mxCell>
-        <mxCell id="e18" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#1A1A1A;strokeWidth=1.1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3333333333333333;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor6" target="uc3"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="265" y="382" /><mxPoint x="265" y="223" /><mxPoint x="268" y="223" /><mxPoint x="296" y="382" /></Array></mxGeometry></mxCell>
-        <mxCell id="e19" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#1A1A1A;strokeWidth=1.1;exitX=1;exitY=0.6666666666666666;exitDx=0;exitDy=0;entryX=0;entryY=0.6666666666666666;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor8" target="uc4"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="270" y="470" /><mxPoint x="270" y="330" /><mxPoint x="268" y="330" /><mxPoint x="296" y="494" /></Array></mxGeometry></mxCell>
-        <mxCell id="e20" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#1A1A1A;strokeWidth=1.1;exitX=1;exitY=0.6666666666666666;exitDx=0;exitDy=0;entryX=0;entryY=0.3333333333333333;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor6" target="uc4"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="275" y="382" /><mxPoint x="275" y="329" /><mxPoint x="268" y="329" /><mxPoint x="296" y="494" /></Array></mxGeometry></mxCell>
-        <mxCell id="e21" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#1A1A1A;strokeWidth=1.1;exitX=1;exitY=0.8333333333333334;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor8" target="uc5"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="280" y="470" /><mxPoint x="280" y="442" /><mxPoint x="268" y="442" /><mxPoint x="296" y="606" /></Array></mxGeometry></mxCell>
-        <mxCell id="e22" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#1A1A1A;strokeWidth=1.1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor10" target="uc5"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="285" y="606" /><mxPoint x="285" y="441" /><mxPoint x="268" y="441" /><mxPoint x="296" y="606" /></Array></mxGeometry></mxCell>
-        <mxCell id="e23" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#1A1A1A;strokeWidth=1.1;exitX=1;exitY=0.8333333333333334;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor6" target="uc5"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="290" y="382" /><mxPoint x="290" y="541" /><mxPoint x="268" y="541" /><mxPoint x="296" y="606" /></Array></mxGeometry></mxCell>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="boundary" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#444444;strokeWidth=1.2;fontStyle=1;fontSize=17;fontColor=#222222;align=left;verticalAlign=top;spacingLeft=20;spacingTop=13;" parent="1" value="Sistema de gestión de hockey" vertex="1">
+          <mxGeometry x="310" y="45" width="455" height="610" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-UC-CMP-01" style="ellipse;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#404040;strokeWidth=1.25;fontColor=#161616;fontSize=15;align=center;verticalAlign=middle;spacing=10;" parent="1" value="Crear una competencia" vertex="1">
+          <mxGeometry x="385" y="110" width="320" height="62" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-UC-CMP-02" style="ellipse;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#404040;strokeWidth=1.25;fontColor=#161616;fontSize=15;align=center;verticalAlign=middle;spacing=10;" parent="1" value="Modificar competencia" vertex="1">
+          <mxGeometry x="385" y="188" width="320" height="62" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-UC-CMP-03" style="ellipse;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#404040;strokeWidth=1.25;fontColor=#161616;fontSize=15;align=center;verticalAlign=middle;spacing=10;" parent="1" value="Archivar competencia" vertex="1">
+          <mxGeometry x="385" y="266" width="320" height="62" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-UC-CMP-10" style="ellipse;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#404040;strokeWidth=1.25;fontColor=#161616;fontSize=15;align=center;verticalAlign=middle;spacing=10;" parent="1" value="Ver competencia" vertex="1">
+          <mxGeometry x="385" y="344" width="320" height="62" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor-1" style="shape=umlActor;html=1;strokeColor=#303030;strokeWidth=1.3;fillColor=#FFFFFF;" parent="1" value="" vertex="1">
+          <mxGeometry x="90" y="230" width="42" height="66" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor-1-name" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=top;fontSize=14;fontColor=#222222;fillColor=none;strokeColor=none;" parent="1" value="Administración del club" vertex="1">
+          <mxGeometry x="39" y="297" width="145" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor-2" style="shape=umlActor;html=1;strokeColor=#303030;strokeWidth=1.3;fillColor=#FFFFFF;" parent="1" value="" vertex="1">
+          <mxGeometry x="935" y="191" width="42" height="66" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor-2-name" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=top;fontSize=14;fontColor=#222222;fillColor=none;strokeColor=none;" parent="1" value="Subcomisión de hockey" vertex="1">
+          <mxGeometry x="884" y="258" width="145" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="association-0" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.15;rounded=0;edgeStyle=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" value="" edge="1" source="actor-1" target="uc-UC-CMP-01">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="association-1" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.15;rounded=0;edgeStyle=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" value="" edge="1" source="actor-1" target="uc-UC-CMP-02">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="association-2" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.15;rounded=0;edgeStyle=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" value="" edge="1" source="actor-1" target="uc-UC-CMP-03">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="association-3" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.15;rounded=0;edgeStyle=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" value="" edge="1" source="actor-1" target="uc-UC-CMP-10">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="association-4" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.15;rounded=0;edgeStyle=none;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" parent="1" value="" edge="1" source="actor-2" target="uc-UC-CMP-01">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="association-5" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.15;rounded=0;edgeStyle=none;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" parent="1" value="" edge="1" source="actor-2" target="uc-UC-CMP-02">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="association-6" style="endArrow=none;startArrow=none;html=1;strokeColor=#666666;strokeWidth=1.15;rounded=0;edgeStyle=none;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" parent="1" value="" edge="1" source="actor-2" target="uc-UC-CMP-03">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

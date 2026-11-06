@@ -1,0 +1,16 @@
+{
+  "motionId": "MOTION_TEAM_TAB_390",
+  "route": "/teams/sexta",
+  "actor": "coach",
+  "viewport": "390",
+  "frames": 13,
+  "measuredDurationMs": 450,
+  "observedDurationMs": 1200,
+  "fps": 30,
+  "action": [
+    {
+      "clickText": "Personas"
+    }
+  ],
+  "source": "src/features/overview.tsx · TeamDetail — pestañas propias (no el primitive TabBar) con transition-colors; el cambio de sección se escribe en la URL (?tab=)."
+}

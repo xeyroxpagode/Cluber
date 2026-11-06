@@ -1,0 +1,48 @@
+{
+  "id": "MORE_002_ADMIN",
+  "domain": "07_MORE",
+  "subdomain": "Root",
+  "route": "/more",
+  "actor": "ADMIN",
+  "state": "ADMIN · 6 accesos visibles",
+  "journeys": [
+    "J28"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "MORE_002_ADMIN__ADMIN__390x844.png",
+    "MORE_002_ADMIN__ADMIN__1440x900.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": true,
+    "1440x900": true
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (06_Mas)",
+  "source_files": [
+    "src/features/root.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "CAPTURED",
+      "file": "MORE_002_ADMIN__ADMIN__390x844.png",
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 1
+    },
+    "1440x900": {
+      "status": "CAPTURED",
+      "file": "MORE_002_ADMIN__ADMIN__1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "deviceScaleFactor": 1
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}

@@ -1,0 +1,48 @@
+{
+  "id": "GBL_NAV_004_SIDEBAR_BADGES_COACH",
+  "domain": "01_GLOBAL",
+  "subdomain": "Navigation",
+  "route": "/home",
+  "actor": "COACH",
+  "state": "AUTHENTICATED · 2 mensajes sin leer · 1 aviso sin leer",
+  "journeys": [
+    "J04"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "GBL_NAV_004_SIDEBAR_BADGES_COACH__COACH__1440x900.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": false,
+    "1440x900": true
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (00_Global)",
+  "source_files": [
+    "src/features/navigation.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "N/A",
+      "statement": "N/A — CURRENT does not render this surface at this viewport",
+      "file": null,
+      "reason": "Los contadores de no-leídos se renderizan exclusivamente dentro de la barra lateral (`hidden ... lg:flex`, src/app/Shell.tsx:183-185); el bloque de badges pertenece a ese nav (src/app/Shell.tsx:204-215) y no al BottomNav (src/app/Shell.tsx:234-250).",
+      "current_behavior": "Runtime verificado a 390×844: sidebar display=none; el BottomNav visible no contiene ningún elemento .bg-unread ni contador (unreadDot=false en los 5 destinos). El único aviso de no-leído disponible en mobile es el punto sobre la campana del topbar (src/app/Shell.tsx:153-168), que es un elemento distinto del contador de navegación.",
+      "alternate_surface_or_route": "Campana de avisos del topbar en /home (src/app/Shell.tsx:153-168) para el aviso no-leído; no existe equivalente mobile para el contador de mensajes sin leer. La variante desktop de esta misma superficie es GBL_NAV_004 a 1440×900."
+    },
+    "1440x900": {
+      "status": "CAPTURED",
+      "file": "GBL_NAV_004_SIDEBAR_BADGES_COACH__COACH__1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "deviceScaleFactor": 1
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}

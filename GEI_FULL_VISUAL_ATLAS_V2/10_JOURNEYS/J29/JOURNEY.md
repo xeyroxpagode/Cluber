@@ -1,0 +1,32 @@
+# JOURNEY J29 — Profile → Security
+
+**Actor:** COACH
+**Inicio:** Profile
+**Fin:** Security
+**Pasos:** 1
+**Rutas alternativas:** -
+
+## Superficies cubiertas
+
+| # | Surface ID | Dominio | Ruta | Estado | Actor | 390×844 | 1440×900 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA` | 01_GLOBAL | `/more/profile` | Panel abierto, sin valores escritos | COACH | CAPTURED | CAPTURED |
+| 2 | `MOR_PROFILE_005_SCROLL_02` | 07_MORE | `/more/profile` | COACH · scroll 900 px | COACH | CAPTURED | CAPTURED |
+
+## Capturas
+
+### 1. `GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA`
+
+- **390×844:** CAPTURED — `01_GLOBAL/Overlays/GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA/GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA__COACH__390x844.png`
+- **1440×900:** CAPTURED — `01_GLOBAL/Overlays/GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA/GBL_OVERLAY_003_SHEET_CAMBIAR_CONTRASENA__COACH__1440x900.png`
+
+### 2. `MOR_PROFILE_005_SCROLL_02`
+
+- **390×844:** CAPTURED — `07_MORE/Profile/MOR_PROFILE_005_SCROLL_02/MOR_PROFILE_005_SCROLL_02__COACH__390x844.png`
+- **1440×900:** CAPTURED — `07_MORE/Profile/MOR_PROFILE_005_SCROLL_02/MOR_PROFILE_005_SCROLL_02__COACH__1440x900.png`
+
+## Índice del atlas
+
+- 11_INDEXES/MASTER_JOURNEY_INDEX.md
+- 11_INDEXES/MASTER_SURFACE_INDEX.md
+- 11_INDEXES/ROUTE_SURFACE_MATRIX.md

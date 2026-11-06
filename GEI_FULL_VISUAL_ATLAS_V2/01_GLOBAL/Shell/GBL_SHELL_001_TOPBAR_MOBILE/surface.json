@@ -1,0 +1,48 @@
+{
+  "id": "GBL_SHELL_001_TOPBAR_MOBILE",
+  "domain": "01_GLOBAL",
+  "subdomain": "Shell",
+  "route": "/home",
+  "actor": "COACH",
+  "state": "AUTHENTICATED · sin avisos sin leer",
+  "journeys": [
+    "J04"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "GBL_SHELL_001_TOPBAR_MOBILE__COACH__390x844.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": true,
+    "1440x900": false
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (00_Global)",
+  "source_files": [
+    "src/features/shell.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "CAPTURED",
+      "file": "GBL_SHELL_001_TOPBAR_MOBILE__COACH__390x844.png",
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 1
+    },
+    "1440x900": {
+      "status": "N/A",
+      "statement": "N/A — CURRENT does not render this surface at this viewport",
+      "file": null,
+      "reason": "La composición «topbar móvil» (marca GEI + contexto de ruta en una línea + buscar como icono 44×44) no existe en 1440 px: la marca tiene `lg:hidden` (src/app/Shell.tsx:113-121), el bloque de contexto móvil tiene `lg:hidden` (src/app/Shell.tsx:129-133), el buscar como texto tiene `hidden ... sm:inline-flex` y el icono `sm:hidden` (src/app/Shell.tsx:135-152).",
+      "current_behavior": "Runtime verificado a 1440×900: marca GEI display=none; contexto móvil display=none; contexto de escritorio display=block; buscar como texto display=flex con atajo ⌘K; buscar como icono display=none. La barra superior sí existe, pero con otra composición.",
+      "alternate_surface_or_route": "GBL_SHELL_002_TOPBAR_DESKTOP — misma ruta /home, actor COACH, viewport 1440×900."
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}

@@ -39,6 +39,16 @@ react(),
           '**/.figma/**',
 ],
       },
+      proxy: {
+        '/internal': {
+          target: process.env.GEI_BACKEND_URL || 'http://127.0.0.1:3001',
+          changeOrigin: false,
+        },
+        '/api': {
+          target: process.env.GEI_BACKEND_URL || 'http://127.0.0.1:3001',
+          changeOrigin: false,
+        },
+      },
     },
     preview: {
       host: process.env.FIGMA_DEV_SERVER_HOST || '0.0.0.0',

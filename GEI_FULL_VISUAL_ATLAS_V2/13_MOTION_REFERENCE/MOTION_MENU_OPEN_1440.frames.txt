@@ -1,0 +1,2 @@
+#0001 frame_0000.jpg duration=0.2744s
+#0002 frame_0001.jpg duration=1.2000s

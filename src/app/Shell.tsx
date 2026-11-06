@@ -22,6 +22,7 @@ import { routeContext } from "../shared/nav-context"
 import { Avatar, Toast, cx } from "../shared/ui"
 import { relativeLabel } from "../mock/model"
 import type { Page } from "../mock/authority"
+import { RuntimeStatus } from "../shared/runtime-status"
 
 const NAV: Array<{ to: string; label: string; icon: typeof House; page: Page }> = [
   { to: "/home", label: "Inicio", icon: House, page: "home" },
@@ -133,6 +134,7 @@ export function Shell() {
           </div>
 
           <div className="flex items-center gap-1">
+            <RuntimeStatus />
             <Link
               to="/search"
               className="gei-target-sm hidden items-center gap-2 rounded-control px-2.5 text-meta text-ink-muted transition-colors hover:bg-control hover:text-ink sm:inline-flex"

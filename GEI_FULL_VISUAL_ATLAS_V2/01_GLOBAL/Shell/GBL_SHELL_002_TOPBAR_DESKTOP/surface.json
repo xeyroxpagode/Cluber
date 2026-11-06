@@ -1,0 +1,48 @@
+{
+  "id": "GBL_SHELL_002_TOPBAR_DESKTOP",
+  "domain": "01_GLOBAL",
+  "subdomain": "Shell",
+  "route": "/home",
+  "actor": "COACH",
+  "state": "AUTHENTICATED",
+  "journeys": [
+    "J04"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "GBL_SHELL_002_TOPBAR_DESKTOP__COACH__1440x900.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": false,
+    "1440x900": true
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (00_Global)",
+  "source_files": [
+    "src/features/shell.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "N/A",
+      "statement": "N/A — CURRENT does not render this surface at this viewport",
+      "file": null,
+      "reason": "La composición «topbar escritorio» (sin marca GEI, micro-etiqueta Hockey + contexto en dos líneas, buscar como texto con atajo ⌘K) no existe en 390 px: el contexto de escritorio está en `hidden ... lg:block` (src/app/Shell.tsx:123-128) y el buscar como texto en `hidden ... sm:inline-flex` (src/app/Shell.tsx:136-145).",
+      "current_behavior": "Runtime verificado a 390×844: marca GEI display=flex; contexto de escritorio display=none; contexto móvil display=block; buscar como texto display=none; buscar como icono display=flex. La barra superior sí existe, pero con la composición móvil.",
+      "alternate_surface_or_route": "GBL_SHELL_001_TOPBAR_MOBILE — misma ruta /home, actor COACH, viewport 390×844."
+    },
+    "1440x900": {
+      "status": "CAPTURED",
+      "file": "GBL_SHELL_002_TOPBAR_DESKTOP__COACH__1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "deviceScaleFactor": 1
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}

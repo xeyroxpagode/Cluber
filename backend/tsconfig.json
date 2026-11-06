@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": "..",
+    "outDir": "../dist/backend",
+    "noEmit": false,
+    "allowImportingTsExtensions": false,
+    "types": ["node"],
+    "isolatedModules": false
+  },
+  "include": ["src/**/*.ts", "../shared/contracts/**/*.ts"],
+  "exclude": ["src/**/*.test.ts"]
+}

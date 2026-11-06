@@ -1,0 +1,48 @@
+{
+  "id": "GBL_NAV_005_SIDEBAR_BADGES_ADMIN",
+  "domain": "01_GLOBAL",
+  "subdomain": "Navigation",
+  "route": "/home",
+  "actor": "ADMIN",
+  "state": "AUTHENTICATED · sin conversaciones habilitadas",
+  "journeys": [
+    "J04"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "GBL_NAV_005_SIDEBAR_BADGES_ADMIN__ADMIN__1440x900.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": false,
+    "1440x900": true
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (00_Global)",
+  "source_files": [
+    "src/features/navigation.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "N/A",
+      "statement": "N/A — CURRENT does not render this surface at this viewport",
+      "file": null,
+      "reason": "La superficie documenta la barra lateral de destinos; a 390 px esa columna no se renderiza (`hidden ... lg:flex`, src/app/Shell.tsx:183-185).",
+      "current_behavior": "Runtime verificado a 390×844: sidebar display=none. El BottomNav para ADMIN presenta los mismos 4 destinos que la sidebar (Inicio, Calendario, Equipos, Más) y omite Comunicación, porque el filtrado depende del actor vía authority.canOpen (src/app/Shell.tsx:62) y no del viewport.",
+      "alternate_surface_or_route": "BottomNav de /home con actor ADMIN en 390×844 — misma ruta, mismo actor, mismo conjunto de destinos."
+    },
+    "1440x900": {
+      "status": "CAPTURED",
+      "file": "GBL_NAV_005_SIDEBAR_BADGES_ADMIN__ADMIN__1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "deviceScaleFactor": 1
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}

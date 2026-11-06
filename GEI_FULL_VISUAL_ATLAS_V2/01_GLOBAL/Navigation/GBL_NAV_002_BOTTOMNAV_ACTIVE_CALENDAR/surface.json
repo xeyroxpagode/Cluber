@@ -1,0 +1,48 @@
+{
+  "id": "GBL_NAV_002_BOTTOMNAV_ACTIVE_CALENDAR",
+  "domain": "01_GLOBAL",
+  "subdomain": "Navigation",
+  "route": "/calendar",
+  "actor": "COACH",
+  "state": "AUTHENTICATED · ruta /calendar",
+  "journeys": [
+    "J04"
+  ],
+  "evidenceType": "SEEDED_RUNTIME",
+  "screenshots": [
+    "GBL_NAV_002_BOTTOMNAV_ACTIVE_CALENDAR__COACH__390x844.png"
+  ],
+  "scrollPositions": [
+    "top"
+  ],
+  "overlay": false,
+  "responsive": {
+    "390x844": true,
+    "1440x900": false
+  },
+  "notes": "Reorganized from GEI_CURRENT_UX_ATLAS (00_Global)",
+  "source_files": [
+    "src/features/navigation.tsx"
+  ],
+  "capture_stability": "waitStable applied",
+  "viewports": {
+    "390x844": {
+      "status": "CAPTURED",
+      "file": "GBL_NAV_002_BOTTOMNAV_ACTIVE_CALENDAR__COACH__390x844.png",
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 1
+    },
+    "1440x900": {
+      "status": "N/A",
+      "statement": "N/A — CURRENT does not render this surface at this viewport",
+      "file": null,
+      "reason": "El BottomNav fijo lleva `flex ... lg:hidden` (src/app/Shell.tsx:230-232), por lo que no se renderiza a partir de 1024 px.",
+      "current_behavior": "Runtime verificado en Chrome headless a 1440×900: bottomnav display=none, visibleBox=false. La misma función la cumple la barra lateral (`hidden ... lg:flex`, src/app/Shell.tsx:183-185), que marca Calendario como destino activo.",
+      "alternate_surface_or_route": "GBL_NAV_001_SIDEBAR_ACTIVE_CALENDAR — misma ruta /calendar, actor COACH, viewport 1440×900."
+    }
+  },
+  "coverage_complete": true,
+  "coverage_evidence": "12_QA/VIEWPORT_NA_EVIDENCE.json",
+  "journey_reconciled": true
+}
