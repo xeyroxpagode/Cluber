@@ -214,12 +214,13 @@ const DEMO_ACTORS: Record<string, string> = {
   captain: "p0",
 }
 
-export function MockAppProvider({ children }: { children: ReactNode }) {
+export function MockAppProvider({ children, demo }: { children: ReactNode; demo?: string }) {
   const [state, setState] = useState<State>(() => createSeed())
   const [authenticated, setAuthenticated] = useState(true)
   const [actorId, setActorId] = useState(() => {
-    const demo = new URLSearchParams(window.location.search).get("demo")
-    return DEMO_ACTORS[demo ?? ""] ?? "coach"
+    const fromUrl = new URLSearchParams(window.location.search).get("demo")
+    const effective = demo ?? fromUrl ?? ""
+    return DEMO_ACTORS[effective] ?? "coach"
   })
   const [toastMessage, setToast] = useState("")
   const toastTimer = useRef<number | undefined>(undefined)

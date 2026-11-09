@@ -3,6 +3,7 @@ import { MemoryRouter, Route, Routes } from "react-router"
 import { render } from "@testing-library/react"
 import { MockAppProvider } from "../mock/store"
 import type { useProduct } from "../mock/store"
+import { MockSessionProvider } from "./mock-session-provider"
 
 export type ProductApiLike = ReturnType<typeof useProduct>
 
@@ -15,7 +16,9 @@ export function Harness({
 }) {
   return (
     <MockAppProvider>
-      <MemoryRouter initialEntries={[route]}>{children}</MemoryRouter>
+      <MockSessionProvider demo="admin">
+        <MemoryRouter initialEntries={[route]}>{children}</MemoryRouter>
+      </MockSessionProvider>
     </MockAppProvider>
   )
 }
@@ -28,16 +31,17 @@ export function renderScreen(
   search = "",
   demo?: string,
 ) {
-  if (demo) {
-    window.history.replaceState({}, "", `/?demo=${demo}`)
-  }
+  const urlSearch = search || (window.location.search ?? "")
+  const resolvedDemo = demo ?? (new URLSearchParams(urlSearch.replace(/^\?/, "")).get("demo") ?? undefined)
   return render(
-    <MockAppProvider>
-      <MemoryRouter initialEntries={[`${pathname}${search}`]}>
-        <Routes>
-          <Route path={pattern} element={element} />
-        </Routes>
-      </MemoryRouter>
+    <MockAppProvider demo={resolvedDemo}>
+      <MockSessionProvider demo={resolvedDemo}>
+        <MemoryRouter initialEntries={[`${pathname}${urlSearch}`]}>
+          <Routes>
+            <Route path={pattern} element={element} />
+          </Routes>
+        </MemoryRouter>
+      </MockSessionProvider>
     </MockAppProvider>,
   )
 }

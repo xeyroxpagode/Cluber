@@ -9,7 +9,17 @@ import { IdempotencyCoordinator } from "../shared/idempotency-coordinator.js"
 import { HousekeepingWorker, OutboxWorker, OutboxWriter, type OutboxPayload } from "../shared/outbox.js"
 import { RateLimiter } from "../shared/rate-limiter.js"
 import { RealtimeHub } from "../shared/realtime-hub.js"
+import { RouteRegistry } from "../http/route-registry.js"
 import type { RuntimeServices } from "./runtime-services.js"
+import { ProductServices } from "../product-services.js"
+import { addAuthRoutes } from "../routes/auth-routes.js"
+import { addPersonRoutes } from "../routes/person-routes.js"
+import { addPersonAdminRoutes } from "../routes/person-admin-routes.js"
+import { addStructureRoutes } from "../routes/structure-routes.js"
+import { addAffiliationRoutes } from "../routes/affiliation-routes.js"
+import { addAuditRoutes } from "../routes/audit-routes.js"
+import { addSystemRoutes } from "../routes/system-routes.js"
+import { addIamAdminRoutes } from "../routes/iam-admin-routes.js"
 
 export async function buildRuntime(config: AppConfig): Promise<RuntimeServices> {
   const database = new DatabaseProvider(config)
@@ -34,6 +44,20 @@ export async function buildRuntime(config: AppConfig): Promise<RuntimeServices> 
   await database.verify()
   if (config.realtimeEnabled) await listener.start()
   const app = await buildApp({ config, database, metrics, listenerHealthy: () => !config.realtimeEnabled || listener.isHealthy() })
+
+  const productDeps = { config: config as any, database: database.db, runner, rateLimiter, idempotencyCoordinator }
+  const services = new ProductServices(productDeps)
+  const productRoutes = new RouteRegistry()
+  addAuthRoutes({ app, registry: productRoutes, services })
+  addPersonRoutes({ app, registry: productRoutes, services })
+  addPersonAdminRoutes({ app, registry: productRoutes, services })
+  addIamAdminRoutes({ app, registry: productRoutes, services })
+  addStructureRoutes({ app, registry: productRoutes, services })
+  addAffiliationRoutes({ app, registry: productRoutes, services })
+  addAuditRoutes({ app, registry: productRoutes, services })
+  addSystemRoutes({ app, registry: productRoutes, services })
+  productRoutes.register(app)
+
   let ready = true
   const workerTimer = setInterval(() => void outboxWorker.processBatch().catch((error) => app.log.error({ err: { name: error.name } }, "outbox batch failed")), 2_000)
   const housekeepingTimer = setInterval(() => void housekeeping.processBatch().catch((error) => app.log.error({ err: { name: error.name } }, "housekeeping failed")), 60_000)

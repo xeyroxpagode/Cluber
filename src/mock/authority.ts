@@ -200,7 +200,7 @@ export function getAuthority(state: State, actor: Person): Authority {
         case "structure":
           return admin
         case "people":
-          return admin
+           return admin || official
         case "competitions":
           return admin || official
         case "announcements":

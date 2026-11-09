@@ -15,6 +15,7 @@ export interface AppConfig {
   }
   readonly metricsEnabled: boolean
   readonly realtimeEnabled: boolean
+  readonly clubTimeZone: string
 }
 
 function required(env: NodeJS.ProcessEnv, key: string): string {
@@ -28,6 +29,16 @@ function parseBoolean(value: string | undefined, fallback: boolean): boolean {
   if (value === "true") return true
   if (value === "false") return false
   throw new Error(`Invalid boolean configuration: ${value}`)
+}
+
+function parseClubTimeZone(value: string | undefined): string {
+  const timeZone = value ?? "America/Argentina/Buenos_Aires"
+  try {
+    new Intl.DateTimeFormat("en-US", { timeZone }).format(new Date())
+    return timeZone
+  } catch {
+    throw new Error("CLUB_TIME_ZONE must be a valid IANA time zone")
+  }
 }
 
 function parseSecret(env: NodeJS.ProcessEnv, key: string): Buffer {
@@ -69,5 +80,6 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     }),
     metricsEnabled: parseBoolean(env.METRICS_ENABLED, false),
     realtimeEnabled: parseBoolean(env.REALTIME_ENABLED, true),
+    clubTimeZone: parseClubTimeZone(env.CLUB_TIME_ZONE),
   })
 }

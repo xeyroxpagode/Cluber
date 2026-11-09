@@ -17,12 +17,13 @@ import {
   Search,
   Users,
 } from "lucide-react"
-import { useProduct } from "../mock/store"
+import { useProduct } from "../lib/session-context"
 import { routeContext } from "../shared/nav-context"
 import { Avatar, Toast, cx } from "../shared/ui"
 import { relativeLabel } from "../mock/model"
-import type { Page } from "../mock/authority"
 import { RuntimeStatus } from "../shared/runtime-status"
+
+type Page = string
 
 const NAV: Array<{ to: string; label: string; icon: typeof House; page: Page }> = [
   { to: "/home", label: "Inicio", icon: House, page: "home" },
@@ -54,8 +55,9 @@ export function Shell() {
     authority,
     toastMessage,
     authenticated,
-    hasAccess,
+    canAccessApplication: hasAccess,
     logout,
+    loading: sessionLoading,
   } = useProduct()
   const location = useLocation()
   const navigate = useNavigate()
@@ -64,15 +66,15 @@ export function Shell() {
 
   const unread = state.notifications.filter(
     (notice) =>
-      notice.recipients.includes(actor.id) && !notice.readBy.includes(actor.id),
+      notice.recipients.includes(actor?.id ?? "") && !notice.readBy.includes(actor?.id ?? ""),
   ).length
   const unreadMessages = state.conversations
     .filter(
       (conversation) =>
         conversation.state === "ACTIVE" &&
-        conversation.participants.includes(actor.id),
+        conversation.participants.includes(actor?.id ?? ""),
     )
-    .reduce((sum, conversation) => sum + (conversation.unread[actor.id] ?? 0), 0)
+    .reduce((sum, conversation) => sum + (conversation.unread[actor?.id ?? ""] ?? 0), 0)
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
@@ -88,6 +90,13 @@ export function Shell() {
     document.addEventListener("keydown", onKey)
     return () => document.removeEventListener("keydown", onKey)
   }, [navigate])
+
+  if (sessionLoading)
+    return (
+      <main className="grid min-h-dvh place-items-center">
+        <p className="gei-meta">Cargando…</p>
+      </main>
+    )
 
   if (!authenticated) return <Navigate to="/login" replace />
   if (!hasAccess)
@@ -174,7 +183,7 @@ export function Shell() {
               className="ml-1 flex items-center rounded-control p-0.5 transition-colors hover:bg-control"
               aria-label="Mi perfil"
             >
-              <Avatar name={actor.name} size="sm" selected />
+              <Avatar name={actor?.name ?? ""} size="sm" selected />
             </Link>
           </div>
         </div>
@@ -253,7 +262,7 @@ export function Shell() {
         })}
       </nav>
 
-      <Toast message={toastMessage} />
+      <Toast message={toastMessage ?? ""} />
     </div>
   )
 }
@@ -261,12 +270,12 @@ export function Shell() {
 export function useUnreadSummary() {
   const { state, actor } = useProduct()
   const notices = state.notifications.filter((notice) =>
-    notice.recipients.includes(actor.id),
+    notice.recipients.includes(actor?.id ?? ""),
   )
   return {
-    unread: notices.filter((notice) => !notice.readBy.includes(actor.id)).length,
+    unread: notices.filter((notice) => !notice.readBy.includes(actor?.id ?? "")).length,
     newest: notices[0]
-      ? { at: relativeLabel(notices[0].at, new Date()), title: notices[0].title }
+      ? { at: relativeLabel(notices[0]!.at, new Date()), title: notices[0]!.title }
       : null,
   }
 }

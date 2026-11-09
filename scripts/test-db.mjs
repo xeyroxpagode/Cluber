@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs"
+import { readFileSync, readdirSync } from "node:fs"
 import { resolve } from "node:path"
 import pg from "pg"
 
@@ -22,7 +22,12 @@ await admin.end()
 
 const test = new pg.Client({ connectionString: testUrl, application_name: "gei-test-migrations" })
 await test.connect()
-await test.query(readFileSync(resolve(root, "supabase", "migrations", "20261103000100_m0_runtime_foundation.sql"), "utf8"))
+const migrations = readdirSync(resolve(root, "supabase", "migrations"))
+  .filter((file) => /^\d+_.+\.sql$/.test(file))
+  .sort()
+for (const migration of migrations) {
+  await test.query(readFileSync(resolve(root, "supabase", "migrations", migration), "utf8"))
+}
 await test.query(readFileSync(resolve(root, "supabase", "seed.sql"), "utf8"))
 await test.end()
-console.log("Prepared isolated PostgreSQL database gei_test from M0")
+console.log(`Prepared isolated PostgreSQL database gei_test from ${migrations.length} migration(s)`)

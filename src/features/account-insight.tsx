@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { Link, useNavigate } from "react-router"
 import {
   ArrowRight,
@@ -10,7 +10,11 @@ import {
   Users,
 } from "lucide-react"
 import { useProduct } from "../mock/store"
+import { useProduct as useRealProduct } from "../lib/session-context"
 import { todayIso } from "../mock/clock"
+import { login as apiLogin, activate as apiActivate } from "../lib/session"
+import { fetchAudit } from "../lib/api-client"
+import type { AuditEntry } from "../lib/api-client"
 import {
   dateLabel,
   dateTimeLabel,
@@ -149,66 +153,97 @@ export function MorePage() {
    ═══════════════════════════════════════════════════════════════ */
 
 export function ProfilePage() {
-  const {
-    state,
-    actor,
-    changePassword,
-    endOtherSession,
-    updateOwnContact,
-    logout,
-  } = useProduct()
+  const { changePassword, logout, me, fetchSelfIdentity, fetchSelfPhone, fetchStructure } = useRealProduct()
+  const [meData, setMeData] = useState<any | null>(null)
+  const [structure, setStructure] = useState<{ teams?: any[] } | null>(null)
+  const [identityOpen, setIdentityOpen] = useState(false)
+  const [identityDraft, setIdentityDraft] = useState({ firstName: "", lastName: "" })
+  const [identityError, setIdentityError] = useState("")
+  const [identitySaved, setIdentitySaved] = useState(false)
   const [passwordOpen, setPasswordOpen] = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
   const query = useQueryState()
 
-  const memberships = activeMemberships(state, actor.id)
-  const teams = activeTeamAssignments(state, actor.id)
-  const roles = activeRoleAssignments(state, actor.id)
-  const completeness = profileCompleteness(actor)
-  const currentSession = actor.sessions.find((session) => session.current)
-  const otherSessions = actor.sessions.filter((session) => !session.current)
+  const refresh = useCallback(async () => {
+    try {
+      const m: any = await me()
+      setMeData(m)
+    } catch {
+      setMeData(null)
+    }
+  }, [me])
+
+  useEffect(() => { refresh() }, [refresh])
+  useEffect(() => { fetchStructure().then(setStructure).catch(() => void 0) }, [fetchStructure])
+
+  const personName = `${meData?.firstName ?? ""} ${meData?.lastName ?? ""}`.trim() || meData?.username || meData?.principal?.username || "Vos"
+  const accountStatus = meData?.accountStatus ?? "ACTIVE"
+  const membershipActive = Boolean(meData?.membershipActive)
+  const membershipValidFrom = meData?.activatedAt ?? null
+  const teamIds: string[] = meData?.teams ?? []
+  const teamNameMap = new Map((structure?.teams ?? []).map((team: any) => [String(team.id), String(team.name)]))
+  const teamObjects: Array<{ id: string; name: string }> = teamIds.map((id) => ({ id: String(id), name: teamNameMap.get(String(id)) ?? "Equipo" }))
+  const ROLE_TEXT: Record<string, string> = { PLAYER: "Jugadora", CAPTAIN: "Capitana", COACH: "Entrenadora", SUBCOMMITTEE: "Subcomisión", ADMIN: "Administración" }
+  const now = new Date()
+  const roles = (meData?.roleAssignments ?? [])
+    .filter((assignment: any) => !assignment.validUntil || new Date(assignment.validUntil) > now)
+    .map((assignment: any) => {
+      const scopeLabel = assignment.scopeType === "CLUB" ? "Ámbito club" : assignment.scopeType === "TEAM" ? (teamNameMap.get(String(assignment.scopeRefId ?? "")) ?? "Equipo") : "Ámbito club"
+      return {
+        id: String(assignment.id),
+        role: String(assignment.role),
+        label: ROLE_TEXT[assignment.role] ?? String(assignment.role),
+        scopeLabel,
+        validFrom: String(assignment.validFrom),
+        validUntil: assignment.validUntil ? String(assignment.validUntil) : null,
+      }
+    })
+  const profileCompleted = meData?.profileCompleted !== false
+  const principal = meData?.principal ?? null
+  const passwordSet = (meData?.credentialVersion ?? (principal?.credentialVersion ?? null)) ?? null
+  const expiresAt = principal?.expiresAt ?? null
   void query
 
   return (
     <div className="gei-stack-page mx-auto max-w-3xl">
       <PageContextHeader
         context="Mi perfil"
-        title={actor.name}
+        title={personName}
         lead="Quién sos, qué permisos tenés y cómo entrar a tu cuenta."
-        action={<Avatar name={actor.name} size="lg" selected />}
+        action={<Avatar name={personName} size="lg" selected />}
       />
 
-      {!completeness.complete && (
+      {!profileCompleted && (
         <Banner tone="attention" title="Tu perfil necesita algunos datos para poder ser asignada correctamente">
-          <div className="grid gap-1">
-            <span className="text-ink-strong">
-              No podemos asignarte a un equipo porque faltan datos que administra
-              el club:
-            </span>
-            <ul className="list-disc pl-5">
-              {completeness.missing.map((item) => (
-                <li key={item.key}>{item.label}</li>
-              ))}
-            </ul>
-          </div>
+          <span className="text-ink-strong">
+            La administración del club todavía no cargó todos los datos de tu profile. Avisales para que lo completen.
+          </span>
         </Banner>
       )}
 
-      <DetailSection title="Identidad">
+      <DetailSection
+        title="Identidad"
+        action={<Button variant="secondary" size="sm" onClick={() => {
+          setIdentityDraft({ firstName: meData?.firstName ?? "", lastName: meData?.lastName ?? "" })
+          setIdentityError("")
+          setIdentityOpen(true)
+        }}>Editar</Button>}
+      >
         <KeyValue
           items={[
-            { label: "Nombre", value: actor.name },
-            { label: "Nombre de usuario", value: actor.username || "Sin definir" },
+            { label: "Nombre", value: personName },
+            { label: "Nombre de usuario", value: meData?.username ?? meData?.principal?.username ?? "Sin definir" },
             {
               label: "Cuenta",
-              value: <StateBadge value={actor.account} emphasis />,
+              value: <StateBadge value={accountStatus} emphasis />,
             },
           ]}
         />
+        {identitySaved && <p className="gei-meta mt-2">Datos de identidad guardados.</p>}
       </DetailSection>
 
       <DetailSection title="Pertenencia" meta="Tu vínculo con el club">
-        {memberships.length === 0 ? (
+        {!membershipActive ? (
           <Banner tone="attention" title="No tenés una pertenencia vigente">
             <span className="text-ink-strong">
               La pertenencia es el vínculo con el club. Sin ella no podés entrar a
@@ -216,23 +251,15 @@ export function ProfilePage() {
             </span>
           </Banner>
         ) : (
-          <KeyValue
-            items={memberships.map((item) => ({
-              label: "Vigencia",
-              value: periodLabel(item.validFrom, item.validUntil),
-            }))}
-          />
+          <KeyValue items={[{ label: "Vigencia", value: "Activa" }]} />
         )}
-        {teams.length > 0 ? (
+        {teamObjects.length > 0 ? (
           <div className="mt-3">
             <p className="gei-meta mb-1">Equipos vigentes</p>
             <ul className="grid gap-1">
-              {teams.map((assignment) => (
-                <li key={assignment.id}>
-                  <RowStatic
-                    title={teamName(state, assignment.teamId)}
-                    detail={periodLabel(assignment.validFrom, assignment.validUntil)}
-                  />
+              {teamObjects.map((team) => (
+                <li key={team.id}>
+                  <RowStatic title={team.name} detail="Vigente" />
                 </li>
               ))}
             </ul>
@@ -249,13 +276,13 @@ export function ProfilePage() {
           <p className="gei-meta">No tenés roles deportivos vigentes.</p>
         ) : (
           <ul className="grid">
-            {roles.map((role) => (
+            {roles.map((role: any) => (
               <li key={role.id}>
                 <RowStatic
-                  title={roleTextOf(role.role)}
-                  detail={`${roleScopeLabel(state, role)} · ${periodLabel(
-                    role.validFrom,
-                    role.validUntil,
+                  title={role.label}
+                  detail={`${role.scopeLabel} · ${periodLabel(
+                    role.validFrom.slice(0, 10),
+                    role.validUntil ? role.validUntil.slice(0, 10) : null,
                   )}`}
                 />
               </li>
@@ -274,10 +301,11 @@ export function ProfilePage() {
       >
         <KeyValue
           items={[
-            { label: "Correo", value: actor.email || "Sin correo" },
-            { label: "Teléfono", value: actor.phone || "Sin teléfono" },
+            { label: "Correo", value: meData?.email ?? "Sin correo" },
+            { label: "Teléfono", value: meData?.phone ?? "Sin teléfono" },
           ]}
         />
+        <p className="gei-meta mt-2">El club gestiona el correo de tu cuenta.</p>
       </DetailSection>
 
       <DetailSection
@@ -294,62 +322,40 @@ export function ProfilePage() {
             items={[
               {
                 label: "Credencial",
-                value: actor.passwordSet ? "Configurada" : "Sin configurar",
+                value: (passwordSet ?? 0) > 0 ? "Configurada" : "Sin configurar",
               },
               {
-                label: "Última actividad",
-                value: `${dateTimeLabel(actor.lastActivityAt)} (${relativeLabel(
-                  actor.lastActivityAt,
-                  new Date(),
-                ).toLowerCase()})`,
+                label: "Sesión",
+                value: expiresAt ? `Vigente hasta ${dateTimeLabel(expiresAt)}` : "Sesión actual",
               },
             ]}
           />
           <div>
             <p className="gei-body-strong">Sesiones activas</p>
             <ul className="mt-2 grid gap-2">
-              {currentSession && (
-                <li className="flex flex-wrap items-center gap-3 rounded-control border border-selected-line bg-selected-soft px-3 py-2.5">
-                  <div className="min-w-0 flex-1">
-                    <p className="gei-body-strong text-ink">
-                      {currentSession.device}
-                    </p>
-                    <p className="gei-meta">
-                      Esta sesión · abierta el {dateTimeLabel(currentSession.createdAt)}
-                    </p>
-                  </div>
-                  <Tag tone="selected">Actual</Tag>
-                </li>
-              )}
-              {otherSessions.map((session) => (
-                <li
-                  key={session.id}
-                  className="flex flex-wrap items-center gap-3 rounded-control border border-line bg-surface px-3 py-2.5"
-                >
-                  <div className="min-w-0 flex-1">
-                    <p className="gei-body-strong text-ink">{session.device}</p>
-                    <p className="gei-meta">
-                      Última actividad {relativeLabel(session.lastSeenAt, new Date()).toLowerCase()}
-                    </p>
-                  </div>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={() => endOtherSession(session.id)}
-                  >
-                    Cerrar sesión
-                  </Button>
-                </li>
-              ))}
-              {!currentSession && otherSessions.length === 0 && (
-                <li className="gei-meta">No hay sesiones registradas.</li>
-              )}
+              <li className="flex flex-wrap items-center gap-3 rounded-control border border-selected-line bg-selected-soft px-3 py-2.5">
+                <div className="min-w-0 flex-1">
+                  <p className="gei-body-strong text-ink">
+                    Esta sesión
+                  </p>
+                  <p className="gei-meta">
+                    {expiresAt ? `Abierta hasta ${dateTimeLabel(expiresAt)}` : "Sesión actual"} · Credencial v{passwordSet ?? 1}
+                  </p>
+                </div>
+                <Tag tone="selected">Actual</Tag>
+                <Button variant="danger" size="sm" onClick={logout}>
+                  Cerrar sesión
+                </Button>
+              </li>
             </ul>
+            <p className="gei-meta mt-2">
+              No hay otras sesiones para mostrar todavía. Cuando el club habilite el listado de sesiones, aparecerán acá.
+            </p>
           </div>
         </div>
       </DetailSection>
 
-      {!completeness.complete && (
+      {!profileCompleted && (
         <Banner tone="attention" title="Siguiente paso">
           <span className="text-ink-strong">
             Avisale a la administración del club para que complete esos datos.
@@ -368,18 +374,45 @@ export function ProfilePage() {
       {passwordOpen && (
         <PasswordDialog
           onClose={() => setPasswordOpen(false)}
-          onSubmit={(current, next) => changePassword(current, next)}
+          onSubmit={async (current, next) => {
+            const ok = await changePassword(current, next, crypto.randomUUID())
+            return ok ? { ok: true } : { ok: false, error: "No pudimos cambiar la contraseña. Revisá la actual y probá de nuevo." }
+          }}
         />
       )}
 
       {contactOpen && (
         <ContactDialog
-          phone={actor.phone}
-          email={actor.email}
+          phone={meData?.phone ?? ""}
+          email={meData?.email ?? "Sin correo"}
           onClose={() => setContactOpen(false)}
-          onSubmit={(data) => {
-            updateOwnContact(data)
+          onSubmit={async ({ phone }) => {
+            await fetchSelfPhone({ phone: phone === "" ? null : phone, idempotencyKey: crypto.randomUUID() })
             setContactOpen(false)
+            await refresh()
+          }}
+        />
+      )}
+
+      {identityOpen && (
+        <IdentityDialog
+          firstName={identityDraft.firstName}
+          lastName={identityDraft.lastName}
+          error={identityError}
+          onClose={() => setIdentityOpen(false)}
+          onSubmit={async (firstName, lastName) => {
+            setIdentityError("")
+            try {
+              await fetchSelfIdentity({ firstName, lastName, idempotencyKey: crypto.randomUUID() })
+              setIdentityOpen(false)
+              setIdentitySaved(true)
+              await refresh()
+              return { ok: true }
+            } catch (err: any) {
+              const msg = err?.message ?? "No pudimos guardar los datos."
+              setIdentityError(msg)
+              return { ok: false, error: msg }
+            }
           }}
         />
       )}
@@ -392,25 +425,30 @@ function PasswordDialog({
   onSubmit,
 }: {
   onClose: () => void
-  onSubmit: (current: string, next: string) => { ok: boolean; error?: string }
+  onSubmit: (current: string, next: string) => Promise<{ ok: boolean; error?: string }>
 }) {
   const [current, setCurrent] = useState("")
   const [next, setNext] = useState("")
   const [error, setError] = useState("")
+  const [pending, setPending] = useState(false)
   return (
     <Sheet
       title="Cambiar contraseña"
-      description="Necesita al menos 12 caracteres."
+      description="Necesita al menos 15 caracteres."
       onClose={onClose}
       footer={
         <>
-          <Button variant="quiet" onClick={onClose}>
+          <Button variant="quiet" onClick={onClose} disabled={pending}>
             Cancelar
           </Button>
           <Button
             variant="primary"
-            onClick={() => {
-              const result = onSubmit(current, next)
+            busy={pending}
+            disabled={pending}
+            onClick={async () => {
+              setPending(true)
+              const result = await onSubmit(current, next)
+              setPending(false)
               if (result.ok) onClose()
               else setError(result.error ?? "No pudimos cambiarla.")
             }}
@@ -435,7 +473,7 @@ function PasswordDialog({
           label="Contraseña nueva"
           type="password"
           value={next}
-          hint="Mínimo 12 caracteres."
+          hint="Mínimo 15 caracteres."
           error={error && current ? error : undefined}
           onChange={(event) => {
             setNext(event.target.value)
@@ -456,27 +494,29 @@ function ContactDialog({
   phone: string
   email: string
   onClose: () => void
-  onSubmit: (data: { phone: string; email: string }) => void
+  onSubmit: (data: { phone: string; email: string }) => Promise<void>
 }) {
   const [form, setForm] = useState({ phone, email })
-  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [error, setError] = useState("")
+  const [pending, setPending] = useState(false)
   return (
     <Sheet
       title="Editar contacto"
+      description="El club gestiona el correo de tu cuenta."
       onClose={onClose}
       footer={
         <>
-          <Button variant="quiet" onClick={onClose}>
+          <Button variant="quiet" onClick={onClose} disabled={pending}>
             Cancelar
           </Button>
           <Button
             variant="primary"
-            onClick={() => {
-              const found: Record<string, string> = {}
-              if (!form.phone.trim()) found.phone = "Escribí un teléfono."
-              if (!form.email.includes("@")) found.email = "Revisá el correo."
-              setErrors(found)
-              if (Object.keys(found).length === 0) onSubmit(form)
+            busy={pending}
+            disabled={pending}
+            onClick={async () => {
+              if (!form.phone.trim()) { setError("Escribí un teléfono."); return }
+              setPending(true)
+              try { await onSubmit(form) } finally { setPending(false) }
             }}
           >
             Guardar contacto
@@ -489,21 +529,80 @@ function ContactDialog({
           label="Teléfono"
           required
           value={form.phone}
-          error={errors.phone}
-          onChange={(event) =>
+          error={error || undefined}
+          hint="El club lo usa para contactarte."
+          onChange={(event) => {
             setForm((current) => ({ ...current, phone: event.target.value }))
-          }
+            setError("")
+          }}
         />
         <TextField
           label="Correo"
           type="email"
-          required
           value={form.email}
-          error={errors.email}
-          hint="Es tu correo de acceso: la próxima vez entrás con este."
-          onChange={(event) =>
-            setForm((current) => ({ ...current, email: event.target.value }))
-          }
+          disabled
+          hint="El club lo gestiona; no se puede cambiar desde acá."
+        />
+      </div>
+    </Sheet>
+  )
+}
+
+function IdentityDialog({
+  firstName,
+  lastName,
+  error,
+  onClose,
+  onSubmit,
+}: {
+  firstName: string
+  lastName: string
+  error: string
+  onClose: () => void
+  onSubmit: (firstName: string, lastName: string) => Promise<{ ok: boolean; error?: string }>
+}) {
+  const [form, setForm] = useState({ firstName, lastName })
+  const [pending, setPending] = useState(false)
+  return (
+    <Sheet
+      title="Editar identidad"
+      description="Tu nombre como figura en el club."
+      onClose={onClose}
+      footer={
+        <>
+          <Button variant="quiet" onClick={onClose} disabled={pending}>
+            Cancelar
+          </Button>
+          <Button
+            variant="primary"
+            busy={pending}
+            disabled={pending}
+            onClick={async () => {
+              const first = form.firstName.trim()
+              const last = form.lastName.trim()
+              if (!first || !last) return
+              setPending(true)
+              try { await onSubmit(first, last) } finally { setPending(false) }
+            }}
+          >
+            Guardar
+          </Button>
+        </>
+      }
+    >
+      <div className="grid gap-4">
+        <TextField
+          label="Nombre"
+          required
+          value={form.firstName}
+          error={error || undefined}
+          onChange={(event) => setForm((current) => ({ ...current, firstName: event.target.value }))}
+        />
+        <TextField
+          label="Apellido"
+          required
+          value={form.lastName}
+          onChange={(event) => setForm((current) => ({ ...current, lastName: event.target.value }))}
         />
       </div>
     </Sheet>
@@ -515,11 +614,16 @@ function ContactDialog({
    ═══════════════════════════════════════════════════════════════ */
 
 export function LoginPage() {
-  const { login } = useProduct()
   const navigate = useNavigate()
+  const { authenticated, loading } = useRealProduct()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [submitting, setSubmitting] = useState(false)
+
+  useEffect(() => {
+    if (!loading && authenticated) navigate("/home", { replace: true })
+  }, [authenticated, loading, navigate])
   return (
     <main className="mx-auto grid min-h-dvh max-w-md content-center gap-5 px-4">
       <div className="flex items-center gap-3">
@@ -532,10 +636,19 @@ export function LoginPage() {
         </div>
       </div>
       <form
-        onSubmit={(event) => {
+        onSubmit={async (event) => {
           event.preventDefault()
-          if (login(email.trim(), password)) navigate("/home")
-          else setError("No encontramos esa cuenta activa con ese correo y contraseña.")
+          setSubmitting(true)
+          setError("")
+          try {
+            const ok = await apiLogin(email.trim(), password, String(Math.random()))
+            if (ok) navigate("/home")
+            else setError("No encontramos esa cuenta activa con ese correo y contraseña.")
+          } catch {
+            setError("No se pudo completar el inicio de sesión. Intentá de nuevo.")
+          } finally {
+            setSubmitting(false)
+          }
         }}
         className="grid gap-4"
       >
@@ -562,8 +675,8 @@ export function LoginPage() {
             setError("")
           }}
         />
-        <Button type="submit" variant="primary">
-          Entrar
+        <Button type="submit" variant="primary" disabled={submitting}>
+          {submitting ? "Ingresando…" : "Entrar"}
         </Button>
       </form>
       <p className="gei-meta">
@@ -575,11 +688,14 @@ export function LoginPage() {
 }
 
 export function ActivatePage() {
-  const { state, activateAccount } = useProduct()
+  const { state } = useProduct()
   const navigate = useNavigate()
   const [code, setCode] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [confirm, setConfirm] = useState("")
   const [error, setError] = useState("")
   const [ok, setOk] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   return (
     <main className="mx-auto grid min-h-dvh max-w-md content-center gap-5 px-4">
       <PageContextHeader
@@ -595,11 +711,21 @@ export function ActivatePage() {
         </Banner>
       ) : (
         <form
-          onSubmit={(event) => {
+          onSubmit={async (event) => {
             event.preventDefault()
-            const result = activateAccount(code.trim())
-            if (result.ok) setOk(true)
-            else setError(result.error ?? "Ese código no sirve.")
+            setSubmitting(true)
+            setError("")
+            try {
+              if (newPassword !== confirm) throw new Error("Las contraseñas no coinciden.")
+              if (newPassword.length < 15) throw new Error("La contraseña debe tener entre 15 y 128 caracteres.")
+              const result = await apiActivate(code.trim(), newPassword, String(Math.random()))
+              if (result.ok) setOk(true)
+              else setError(result.errorCode ?? "Ese código no sirve o expiró.")
+            } catch (e: any) {
+              setError(e?.message ?? "No se pudo activar la cuenta.")
+            } finally {
+              setSubmitting(false)
+            }
           }}
           className="grid gap-4"
         >
@@ -614,8 +740,33 @@ export function ActivatePage() {
               setError("")
             }}
           />
-          <Button type="submit" variant="primary">
-            Activar cuenta
+          <TextField
+            label="Nueva contraseña"
+            type="password"
+            required
+            value={newPassword}
+            error={error}
+            placeholder="•••••••••••••••"
+            hint="Entre 15 y 128 caracteres."
+            onChange={(event) => {
+              setNewPassword(event.target.value)
+              setError("")
+            }}
+          />
+          <TextField
+            label="Confirmar contraseña"
+            type="password"
+            required
+            value={confirm}
+            error={error}
+            placeholder="•••••••••••••••"
+            onChange={(event) => {
+              setConfirm(event.target.value)
+              setError("")
+            }}
+          />
+          <Button type="submit" variant="primary" disabled={submitting}>
+            {submitting ? "Activando…" : "Activar cuenta"}
           </Button>
         </form>
       )}
@@ -979,11 +1130,19 @@ export function ReportDetail({ performance = false }: { performance?: boolean })
    ═══════════════════════════════════════════════════════════════ */
 
 export function AuditPage() {
-  const { state, authority } = useProduct()
+  const { authority, fetchAudit } = useRealProduct()
   const query = useQueryState()
-  const from = query.get("from")
-  const to = query.get("to")
-  const actorFilter = query.get("actor")
+  const from = (query.get("from") ?? "")
+  const to = (query.get("to") ?? "")
+  const actorFilter = (query.get("actor") ?? "")
+  const [entries, setEntries] = useState<AuditEntry[]>([])
+  const [actors, setActors] = useState<string[]>([])
+
+  useCallback(async () => {
+    const items = await fetchAudit(200)
+    setEntries(items)
+    setActors(Array.from(new Set(items.map((item) => String(item.actorPersonId ?? "")).filter(Boolean))))
+  }, [fetchAudit])()
 
   if (!authority.canViewAudit)
     return (
@@ -995,14 +1154,13 @@ export function AuditPage() {
       </div>
     )
 
-  const entries = state.audit.filter((entry) => {
-    const day = entry.at.slice(0, 10)
+  const filtered = entries.filter((entry) => {
+    const day = entry.occurredAt.slice(0, 10)
     if (from && day < from) return false
     if (to && day > to) return false
-    if (actorFilter && entry.actor !== actorFilter) return false
+    if (actorFilter && String(entry.actorPersonId ?? "") !== actorFilter) return false
     return true
   })
-  const actors = Array.from(new Set(state.audit.map((entry) => entry.actor)))
 
   return (
     <div className="gei-stack-page mx-auto max-w-4xl">
@@ -1033,17 +1191,12 @@ export function AuditPage() {
               className="min-w-48"
             >
               <option value="">Todas</option>
-              {actors.map((name) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
+              {actors.map((actorId) => (
+                <option key={actorId} value={actorId}>{actorId}</option>
               ))}
             </Select>
             {(from || to || actorFilter) && (
-              <Button
-                variant="quiet"
-                onClick={() => query.reset(["from", "to", "actor"])}
-              >
+              <Button variant="quiet" onClick={() => query.reset(["from", "to", "actor"])}>
                 Quitar filtros
               </Button>
             )}
@@ -1051,23 +1204,23 @@ export function AuditPage() {
         }
       />
 
-      {entries.length === 0 ? (
+      {filtered.length === 0 ? (
         <Empty
           title="No hay cambios en ese rango"
-          detail={`El historial tiene ${state.audit.length} movimientos en total. Ajustá las fechas para verlos.`}
+          detail={`El historial tiene ${entries.length} movimientos en total. Ajustá las fechas para verlos.`}
           icon={<ShieldCheck size={22} />}
         />
       ) : (
         <Surface flush>
           <HistoryList
-            entries={entries.map((entry) => ({
+            entries={filtered.map((entry) => ({
               action: entry.action,
-              actor: entry.actor,
-              at: dateTimeLabel(entry.at),
-              before: entry.before,
-              after: entry.after,
-              reason: entry.source,
-              to: entry.route,
+              actor: String(entry.actorPersonId ?? ""),
+              at: dateTimeLabel(entry.occurredAt),
+              before: String(entry.diff ?? ""),
+              after: "",
+              reason: entry.reason ?? "",
+              to: `${entry.targetType}:${entry.targetId ?? ""}`,
             }))}
           />
         </Surface>

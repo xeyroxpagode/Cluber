@@ -16,7 +16,7 @@ function api() {
 }
 
 describe("C08 — jornada real", () => {
-  it("rechaza una jornada sin partidos y lo explica", async () => {
+  it("rechaza una jornada sin partidos y lo explica", () => {
     const { result } = api()
     let response: { ok: boolean; id?: string; error?: string } = { ok: true }
     act(() => {
@@ -31,7 +31,7 @@ describe("C08 — jornada real", () => {
     expect(response.error).toContain("al menos un partido")
   })
 
-  it("rechaza un entrenamiento dentro de una jornada", async () => {
+  it("rechaza un entrenamiento dentro de una jornada", () => {
     const { result } = api()
     let response: { ok: boolean; id?: string; error?: string } = { ok: true }
     act(() => {
@@ -46,7 +46,7 @@ describe("C08 — jornada real", () => {
     expect(response.error).toContain("sólo agrupa partidos")
   })
 
-  it("rechaza un partido de otra temporada", async () => {
+  it("rechaza un partido de otra temporada", () => {
     const { result } = api()
     let response: { ok: boolean; id?: string; error?: string } = { ok: true }
     act(() => {
@@ -61,7 +61,7 @@ describe("C08 — jornada real", () => {
     expect(response.error).toContain("otra temporada")
   })
 
-  it("crea la jornada con los partidos elegidos y no toca el ciclo de los eventos", async () => {
+  it("crea la jornada con los partidos elegidos y no toca el ciclo de los eventos", () => {
     const { result } = api()
     const before = result.current.state.events.find((e) => e.id === "match-cuba")!
     let response: { ok: boolean; id?: string; error?: string } = { ok: false }

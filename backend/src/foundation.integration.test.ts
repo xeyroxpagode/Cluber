@@ -32,7 +32,64 @@ describe("M0 and PostgreSQL semantics", () => {
       (select count(*)::int from information_schema.tables where table_schema='app') app_tables,
       (select count(*)::int from information_schema.tables where table_schema='infra') infra_tables`)
     await admin.end()
-    expect(result.rows[0]).toEqual({ anon_app: false, authenticated_infra: false, app_tables: 0, infra_tables: 3 })
+    expect(result.rows[0]).toEqual({ anon_app: false, authenticated_infra: false, app_tables: 12, infra_tables: 5 })
+  })
+
+  it("exposes exactly the authorized T01/T02 tables and no future tables", async () => {
+    await database.verify()
+    const admin = new pg.Pool({ connectionString: config.databaseUrl })
+    const rows = await admin.query<{ table_schema: string; table_name: string }>(`
+      select table_schema, table_name
+      from information_schema.tables
+      where table_schema in ('app','infra')
+      order by table_schema, table_name
+    `)
+    await admin.end()
+    const tables = rows.rows.map((row) => `${row.table_schema}.${row.table_name}`)
+    const expectedInfra = [
+      "infra.auth_sessions",
+      "infra.email_change_challenges",
+      "infra.idempotency_records",
+      "infra.outbox_events",
+      "infra.rate_limit_windows",
+    ]
+    const expectedApp = [
+      "app.people",
+      "app.memberships",
+      "app.accounts",
+      "app.role_assignments",
+      "app.audit_entries",
+      "app.seasons",
+      "app.divisions",
+      "app.lines",
+      "app.teams",
+      "app.venues",
+      "app.competitions",
+      "app.team_assignments",
+    ]
+    for (const table of [...expectedInfra, ...expectedApp]) {
+      expect(tables).toContain(table)
+    }
+    const unexpected = tables.filter((table) => !expectedInfra.includes(table) && !expectedApp.includes(table))
+    expect(unexpected).toEqual([])
+  })
+
+  it("keeps app schema grants restricted to the runtime role", async () => {
+    await database.verify()
+    const admin = new pg.Pool({ connectionString: config.databaseUrl })
+    const result = await admin.query(`select
+      has_schema_privilege('gei_backend','app','USAGE') gei_backend_app_usage,
+      has_schema_privilege('gei_backend','infra','USAGE') gei_backend_infra_usage,
+      has_schema_privilege('anon','app','USAGE') anon_app_usage,
+      has_schema_privilege('authenticated','app','USAGE') authenticated_app_usage`,
+    )
+    await admin.end()
+    expect(result.rows[0]).toEqual({
+      gei_backend_app_usage: true,
+      gei_backend_infra_usage: true,
+      anon_app_usage: false,
+      authenticated_app_usage: false,
+    })
   })
 
   it("commits and rolls back atomically with one PostgreSQL evaluation instant", async () => {

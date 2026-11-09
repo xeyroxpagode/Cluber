@@ -15,6 +15,7 @@ export function testConfig(overrides: Partial<AppConfig> = {}): AppConfig {
     secrets: { authCodePepper: secret, emailChangeCodePepper: secret, csrfHmacSecret: secret, rateLimitKeyPepper: secret },
     metricsEnabled: false,
     realtimeEnabled: false,
+    clubTimeZone: "America/Argentina/Buenos_Aires",
     ...overrides,
   }
 }
