@@ -2,7 +2,7 @@ import type { Transaction } from "kysely"
 import type { DatabaseSchema, RoleAssignmentTable } from "../db/types.js"
 import { jsonbParam } from "../shared/jsonb.js"
 import { AppError } from "../shared/errors.js"
-import { AuditWriter, redactAuditValue } from "../audit/audit.js"
+import { AuditWriter } from "../audit/audit.js"
 import { assignmentActive } from "../authority/authority.js"
 import { randomUUID } from "node:crypto"
 
@@ -20,13 +20,6 @@ function parsePeriod(validFrom: string, validUntil?: string | null) {
   return { from, until }
 }
 
-function expectedScope(role: string): "TEAM" | "CLUB" | null {
-  if (role === "PLAYER") return null
-  if (role === "CAPTAIN" || role === "COACH") return null
-  if (role === "SUBCOMMITTEE" || role === "ADMIN") return "CLUB"
-  return null
-}
-
 export class RoleAssignmentService {
   constructor(private readonly audit = new AuditWriter()) {}
 
@@ -35,7 +28,6 @@ export class RoleAssignmentService {
     const scopeType = input.scopeType?.trim().toUpperCase()
     if (role === "PLAYER") throw new AppError("INVALID_ROLE_SCOPE", "PLAYER assignments are managed by team affiliation", "domain_validation", false, { role: ["player_managed_by_affiliation"] })
     if (!ASSIGNABLE_ROLES.has(role)) throw new AppError("INVALID_ROLE_SCOPE", "Role is not assignable", "domain_validation", false, { role: ["invalid"] })
-    if (scopeType === "EVENT") throw new AppError("EVENT_SCOPE_NOT_ASSIGNABLE_IN_T02", "EVENT scope is not assignable in T02", "domain_validation", false, { scopeType: ["event_deferred"] })
 
     const person = await tx.selectFrom("app.people").select("id").where("id", "=", personId).executeTakeFirst()
     if (!person) throw new AppError("PERSON_NOT_FOUND", "Person was not found", "not_found")
@@ -48,6 +40,11 @@ export class RoleAssignmentService {
       const team = await tx.selectFrom("app.teams").select(["id", "state"]).where("id", "=", scopeRefId).executeTakeFirst()
       if (!team) throw new AppError("TEAM_NOT_FOUND", "Team was not found", "not_found")
       if (team.state === "ARCHIVED") throw new AppError("TEAM_ARCHIVED", "Archived teams cannot receive new role assignments", "conflict")
+    } else if (scopeType === "EVENT") {
+      if (role !== "COACH") throw new AppError("EVENT_SCOPE_REQUIRES_COACH", "EVENT scope is only valid for COACH", "domain_validation", false, { scopeType: ["event_coach_only"] })
+      if (!scopeRefId) throw new AppError("INVALID_ROLE_SCOPE", "Event scope requires an event", "domain_validation", false, { scopeRefId: ["required"] })
+      const event = await tx.selectFrom("app.events").select(["id"]).where("id", "=", scopeRefId).executeTakeFirst()
+      if (!event) throw new AppError("EVENT_NOT_FOUND", "Event was not found", "not_found")
     } else if (scopeType === "CLUB") {
       if (!["SUBCOMMITTEE", "ADMIN"].includes(role) || scopeRefId !== null) throw new AppError("INVALID_ROLE_SCOPE", "CLUB scope is only valid for SUBCOMMITTEE and ADMIN", "domain_validation", false, { scopeType: ["invalid"] })
     } else {

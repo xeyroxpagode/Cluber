@@ -188,6 +188,111 @@ export interface TeamAssignmentTable {
   created_at: Date
 }
 
+export interface EventSeriesTable {
+  id: string
+  name: string
+  state: "ACTIVE" | "ENDED"
+  recurrence_rule: string
+  max_occurrences: number
+  created_at: Date
+  updated_at: Date
+}
+
+export interface EventTable {
+  id: string
+  type: "TRAINING" | "MATCH" | "CLUB_EVENT"
+  title: string
+  start_at: Date | null
+  end_at: Date | null
+  time_zone: string
+  venue_id: string | null
+  state: "DRAFT" | "SCHEDULED" | "POSTPONED" | "CANCELLED" | "IN_PROGRESS" | "COMPLETED" | "ABANDONED"
+  club_wide_target: boolean
+  series_id: string | null
+  occurrence_index: number | null
+  coordination_revision: number
+  creator_person_id: string
+  created_at: Date
+  updated_at: Date
+  version: number
+  competition_id: string | null
+  opponent: string | null
+}
+
+export interface EventLogisticsTable {
+  id: string
+  event_id: string
+  meeting_at: Date | null
+  departure_at: Date | null
+  meeting_point: string | null
+  transport_note: string | null
+  arrival_instructions: string | null
+  created_at: Date
+  updated_at: Date
+}
+
+export interface EventTargetTeamTable {
+  id: string
+  event_id: string
+  team_id: string
+  added_at: Date
+  added_by_person_id: string
+}
+
+export interface EventTargetPersonTable {
+  id: string
+  event_id: string
+  person_id: string
+  added_at: Date
+  added_by_person_id: string | null
+}
+
+export interface EventOccurrenceOverrideTable {
+  id: string
+  series_id: string
+  occurrence_index: number
+  overridden_event_id: string | null
+  custom_title: string | null
+  custom_start_at: Date | null
+  custom_end_at: Date | null
+  custom_venue_id: string | null
+  is_cancelled: boolean
+  created_at: Date
+  updated_at: Date
+}
+
+export interface JornadaTable {
+  id: string
+  season_id: string
+  competition_id: string | null
+  name: string
+  date: string
+  created_at: Date
+  updated_at: Date
+}
+
+export interface JornadaMatchTable {
+  id: string
+  jornada_id: string
+  event_id: string
+}
+
+export interface NotificationTable {
+  id: string
+  recipient_person_id: string
+  type: "EVENT_CHANGED" | "EVENT_POSTPONED" | "EVENT_RESCHEDULED" | "EVENT_CANCELLED" | "EVENT_RESTORED" | "SELECTION_PUBLISHED" | "ANNOUNCEMENT_PUBLISHED"
+  resource_type: "EVENT" | "SELECTION" | "ANNOUNCEMENT"
+  resource_id: string
+  origin_event_id: string | null
+  title: string
+  body: string
+  occurred_at: Date
+  read_at: Date | null
+  audience_resolved_at: Date
+  dedupe_key: string
+  created_at: Date
+}
+
 export interface DatabaseSchema {
   "infra.idempotency_records": IdempotencyRecordTable
   "infra.outbox_events": OutboxEventTable
@@ -206,4 +311,13 @@ export interface DatabaseSchema {
   "app.venues": VenueTable
   "app.competitions": CompetitionTable
   "app.team_assignments": TeamAssignmentTable
+  "app.event_series": EventSeriesTable
+  "app.events": EventTable
+  "app.event_logistics": EventLogisticsTable
+  "app.event_target_team": EventTargetTeamTable
+  "app.event_target_person": EventTargetPersonTable
+  "app.event_occurrence_overrides": EventOccurrenceOverrideTable
+  "app.jornadas": JornadaTable
+  "app.jornada_matches": JornadaMatchTable
+  "app.notifications": NotificationTable
 }

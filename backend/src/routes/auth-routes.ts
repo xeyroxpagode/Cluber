@@ -60,7 +60,7 @@ export function addAuthRoutes({ app, registry, services }: RouteInput): void {
       await services.principals.requirePublic(request)
       const email = String(request.body.email ?? "").trim()
       const password = String(request.body.password ?? "")
-      const idempotencyKey = String(request.body.idempotency_key ?? "")
+      const idempotencyKey = String(request.body?.idempotency_key ?? "")
 
       if (!isValidEmail(email)) throw new AppError("VALIDATION_FAILED", "Email is invalid", "domain_validation", false, { email: ["invalid"] })
       if (!idempotencyKey) throw new AppError("IDEMPOTENCY_KEY_REQUIRED", "A valid Idempotency-Key is required", "transport")
@@ -114,7 +114,7 @@ export function addAuthRoutes({ app, registry, services }: RouteInput): void {
     async handler(request: any, reply: any) {
       const setupCode = String(request.body.setupCode ?? "")
       const newPassword = String(request.body.newPassword ?? "")
-      const idempotencyKey = String(request.body.idempotency_key ?? "")
+      const idempotencyKey = String(request.body?.idempotency_key ?? "")
 
       let status = 200
       let body: any = { sessionCreated: false, redirect: "/login" }
@@ -168,7 +168,7 @@ export function addAuthRoutes({ app, registry, services }: RouteInput): void {
       cache: "no-store",
     },
     schema: {
-      body: Type.Object({ idempotency_key: Type.Optional(Type.String({ minLength: 1, maxLength: 128 })) }),
+      body: Type.Optional(Type.Object({ idempotency_key: Type.Optional(Type.String({ minLength: 1, maxLength: 128 })) })),
       response: {
         200: SilentResponse,
         401: SilentResponse,
@@ -178,7 +178,7 @@ export function addAuthRoutes({ app, registry, services }: RouteInput): void {
     },
     async handler(request: any, reply: any) {
       const principal = await services.principals.require(request, new Date())
-      const idempotencyKey = String(request.body.idempotency_key ?? "")
+      const idempotencyKey = String(request.body?.idempotency_key ?? "")
 
       let status = 200
       let body: any = { loggedOut: true }
@@ -241,7 +241,7 @@ export function addAuthRoutes({ app, registry, services }: RouteInput): void {
       const principal = await services.principals.require(request, new Date())
       const currentPassword = String(request.body.currentPassword ?? "")
       const newPassword = String(request.body.newPassword ?? "")
-      const idempotencyKey = String(request.body.idempotency_key ?? "")
+      const idempotencyKey = String(request.body?.idempotency_key ?? "")
 
       let status = 200
       let body: any = { passwordChanged: true, requiresLogin: true }
@@ -298,7 +298,7 @@ export function addAuthRoutes({ app, registry, services }: RouteInput): void {
     async handler(request: any, reply: any) {
       const principal = await services.principals.require(request, new Date())
       const newEmail = String(request.body.newEmail ?? "").trim()
-      const idempotencyKey = String(request.body.idempotency_key ?? "")
+      const idempotencyKey = String(request.body?.idempotency_key ?? "")
 
       let status = 200
       let body: any = { verificationRequired: true }
@@ -354,7 +354,7 @@ export function addAuthRoutes({ app, registry, services }: RouteInput): void {
     async handler(request: any, reply: any) {
       const principal = await services.principals.require(request, new Date())
       const emailCode = String(request.body.emailCode ?? "")
-      const idempotencyKey = String(request.body.idempotency_key ?? "")
+      const idempotencyKey = String(request.body?.idempotency_key ?? "")
 
       let status = 200
       let body: any = { emailChanged: false }

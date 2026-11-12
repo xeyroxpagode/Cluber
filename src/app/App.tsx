@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router"
 import { SessionProvider } from "../lib/session-context"
-import { MockAppProvider } from "../mock/store"
 import { Shell } from "./Shell"
 import {
   Home,
@@ -108,9 +107,7 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <SessionProvider>
-      <MockAppProvider>
-        <RouterProvider router={router} />
-      </MockAppProvider>
+      <RouterProvider router={router} />
     </SessionProvider>
   )
 }

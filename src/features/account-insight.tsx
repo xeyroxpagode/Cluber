@@ -9,31 +9,18 @@ import {
   ShieldCheck,
   Users,
 } from "lucide-react"
-import { useProduct } from "../mock/store"
+import { useProduct } from "../lib/session-context"
 import { useProduct as useRealProduct } from "../lib/session-context"
-import { todayIso } from "../mock/clock"
-import { login as apiLogin, activate as apiActivate } from "../lib/session"
+import { todayIso } from "../lib/presence"
+import { activate as apiActivate } from "../lib/session"
 import { fetchAudit } from "../lib/api-client"
 import type { AuditEntry } from "../lib/api-client"
 import {
   dateLabel,
   dateTimeLabel,
-  eventName,
-  periodLabel,
   relativeLabel,
-  roleTextOf,
-  teamName,
-  type Event,
-} from "../mock/model"
-import {
-  activeMemberships,
-  activeRoleAssignments,
-  activeTeamAssignments,
-  membershipOf,
-  profileCompleteness,
-  roleScopeLabel,
-  visibleEvents,
-} from "../mock/derive"
+} from "../lib/dates"
+import { periodLabel } from "../lib/presence"
 import {
   Avatar,
   Banner,
@@ -64,7 +51,7 @@ import { useQueryState } from "../shared/use-query-state"
    ═══════════════════════════════════════════════════════════════ */
 
 export function MorePage() {
-  const { authority, state, actor } = useProduct()
+  const { authority } = useRealProduct()
   const links: Array<{ to: string; label: string; detail: string; show: boolean }> = [
     {
       to: "/more/profile",
@@ -103,12 +90,6 @@ export function MorePage() {
       show: authority.canOpen("competitions"),
     },
   ]
-  const pending = state.jornadas.filter((jornada) =>
-    visibleEvents(state, actor.id).some((event) =>
-      jornada.events.includes(event.id),
-    ),
-  )
-
   return (
     <div className="gei-stack-page mx-auto max-w-3xl">
       <PageContextHeader
@@ -128,22 +109,6 @@ export function MorePage() {
             />
           ))}
       </div>
-      {pending.length > 0 && (
-        <DetailSection title="Jornadas">
-          <div className="grid gap-1">
-            {pending.map((jornada) => (
-              <RowLink
-                key={jornada.id}
-                to={`/jornadas/${jornada.id}`}
-                title={jornada.name}
-                detail={`${jornada.events.length} ${
-                  jornada.events.length === 1 ? "partido" : "partidos"
-                }`}
-              />
-            ))}
-          </div>
-        </DetailSection>
-      )}
     </div>
   )
 }
@@ -615,7 +580,7 @@ function IdentityDialog({
 
 export function LoginPage() {
   const navigate = useNavigate()
-  const { authenticated, loading } = useRealProduct()
+  const { authenticated, loading, login } = useRealProduct()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -641,7 +606,7 @@ export function LoginPage() {
           setSubmitting(true)
           setError("")
           try {
-            const ok = await apiLogin(email.trim(), password, String(Math.random()))
+            const ok = await login(email.trim(), password, String(Math.random()))
             if (ok) navigate("/home")
             else setError("No encontramos esa cuenta activa con ese correo y contraseña.")
           } catch {
@@ -688,7 +653,6 @@ export function LoginPage() {
 }
 
 export function ActivatePage() {
-  const { state } = useProduct()
   const navigate = useNavigate()
   const [code, setCode] = useState("")
   const [newPassword, setNewPassword] = useState("")
@@ -775,16 +739,12 @@ export function ActivatePage() {
           Ir al inicio
         </Button>
       )}
-      <p className="gei-meta">
-        Cuentas pendientes:{" "}
-        {state.people.filter((person) => person.account === "PENDING").length}.
-      </p>
     </main>
   )
 }
 
 export function NoAccessPage() {
-  const { actor, logout } = useProduct()
+  const { logout } = useRealProduct()
   return (
     <main className="mx-auto grid min-h-dvh max-w-md content-center gap-5 px-4">
       <PageContextHeader
@@ -794,11 +754,8 @@ export function NoAccessPage() {
       />
       <KeyValue
         items={[
-          { label: "Cuenta", value: actor.name },
-          {
-            label: "Estado",
-            value: <StateBadge value={actor.account} emphasis />,
-          },
+          { label: "Cuenta", value: "Activa" },
+          { label: "Estado", value: <StateBadge value="ACTIVE" emphasis /> },
         ]}
       />
       <Banner tone="neutral" title="Qué sigue">
@@ -814,320 +771,43 @@ export function NoAccessPage() {
   )
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   INFORMES — filtros en URL, cero ≠ sin dato, links al origen
-   ═══════════════════════════════════════════════════════════════ */
-
-function periodStart(period: string): string {
-  const today = todayIso()
-  if (period === "month") return `${today.slice(0, 7)}-01`
-  if (period === "quarter") {
-    const date = new Date(`${today}T12:00:00`)
-    date.setMonth(date.getMonth() - 3)
-    return date.toISOString().slice(0, 10)
-  }
-  if (period === "year") return `${today.slice(0, 4)}-01-01`
-  return ""
-}
-
-function useFilteredEvents() {
-  const { state, actor } = useProduct()
-  const query = useQueryState()
-  const team = query.get("team")
-  const period = query.get("period")
-  const scoped = visibleEvents(state, actor.id)
-  const from = periodStart(period)
-  const events = scoped.filter((event) => {
-    if (team && !event.targetTeams.includes(team)) return false
-    if (from && event.date < from) return false
-    return true
-  })
-  return { events, team, period, query }
-}
+/* ---------------------------------------------
+   INFORMES — llegan con la T06
+   --------------------------------------------- */
 
 export function ReportsPage() {
-  const { state, authority } = useProduct()
-  const { events, team, period, query } = useFilteredEvents()
-  const canSee = authority.canOpen("reports")
-
-if (!canSee)
+  const { authority } = useRealProduct()
+  if (!authority.canOpen("reports")) {
     return (
       <div className="mx-auto max-w-3xl">
-        <Empty
-          title="No tenés informes disponibles"
-          detail="Los informes muestran asistencia y rendimiento según tu alcance."
-        />
+        <Empty title="No tenés informes disponibles" detail="Los informes muestran asistencia y rendimiento según tu alcance." />
       </div>
     )
-
+  }
   return (
-    <div className="gei-stack-page mx-auto max-w-4xl">
-      <PageContextHeader
-        context="Informes"
-        title="Informes"
-        lead="Filtros guardados en la dirección: el botón atrás vuelve al mismo lugar."
-      />
-      <div className="flex flex-wrap items-end gap-2">
-        <Select
-          label="Equipo"
-          value={team}
-          onChange={(event) => query.set({ team: event.target.value })}
-          className="min-w-48"
-        >
-          <option value="">Todos los equipos</option>
-          {state.teams.map((item) => (
-            <option key={item.id} value={item.id}>
-              {teamName(state, item.id)}
-            </option>
-          ))}
-        </Select>
-        <Select
-          label="Período"
-          value={period}
-          onChange={(event) => query.set({ period: event.target.value })}
-          className="min-w-44"
-        >
-          <option value="">Todo el histórico</option>
-          <option value="year">Esta temporada</option>
-          <option value="quarter">Últimos 3 meses</option>
-          <option value="month">Este mes</option>
-        </Select>
-        {(team || period) && (
-          <Button variant="quiet" onClick={() => query.reset(["team", "period"])}>
-            Quitar filtros
-          </Button>
-        )}
-      </div>
-
-      <div className="grid gap-3">
-        <RowLink
-          to={`/reports/attendance${team ? `?team=${team}` : ""}${period ? `&period=${period}` : ""}`}
-          title="Asistencia"
-          detail="Presentes, ausentes y justificadas por evento"
-        />
-        <RowLink
-          to={`/reports/performance${team ? `?team=${team}` : ""}${period ? `&period=${period}` : ""}`}
-          title="Rendimiento"
-          detail="Resultados y datos por persona"
-        />
-      </div>
-
-      {events.length === 0 && (
-        <Empty
-          title="Sin eventos en este período"
-          detail="No es un error: simplemente no hay eventos que coincidan con el filtro."
-          action={
-            (team || period) && (
-              <Button variant="secondary" onClick={() => query.reset(["team", "period"])}>
-                Quitar filtros
-              </Button>
-            )
-          }
-        />
-      )}
+    <div className="gei-stack-page mx-auto max-w-3xl">
+      <PageContextHeader context="Informes" title="Informes" lead="Asistencia y rendimiento por equipo." />
+      <Surface className="grid gap-3">
+        <FileText size={20} aria-hidden className="text-ink-faint" />
+        <p className="gei-body-strong">Los informes llegan con la T06</p>
+        <p className="gei-meta">Los informes de asistencia y rendimiento necesitan el dato de participación (asistencia y acta), que se cierra con la T04. No se muestran porcentajes simulados: aparece contenido cuando los datos sean reales.</p>
+        <Button variant="secondary" onClick={() => window.history.back()}>Volver</Button>
+      </Surface>
     </div>
   )
 }
 
 export function ReportDetail({ performance = false }: { performance?: boolean }) {
-  const { state, authority } = useProduct()
-  const { events, team, period, query } = useFilteredEvents()
-  if (!authority.canOpen("reports"))
-    return (
-      <div className="mx-auto max-w-3xl">
-        <Empty title="No tenés acceso a los informes" detail="Pedilo a la administración." />
-      </div>
-    )
-
-  const played = events.filter((event) => event.record.state === "FINAL")
-  const withAttendance = events.filter((event) => event.attendanceOpened)
-
-  const people = useMemo(() => {
-    const ids = new Set<string>()
-    events.forEach((event) => Object.keys(event.attendance).forEach((id) => ids.add(id)))
-    return Array.from(ids)
-      .map((id) => state.people.find((person) => person.id === id))
-      .filter((person): person is NonNullable<typeof person> => !!person)
-      .sort((a, b) => a.lastName.localeCompare(b.lastName))
-  }, [events, state])
-
   return (
-    <div className="gei-stack-page mx-auto max-w-4xl">
-      <PageContextHeader
-        context={performance ? "Rendimiento" : "Asistencia"}
-        title={performance ? "Informe de rendimiento" : "Informe de asistencia"}
-        back="/reports"
-        lead={
-          events.length === 0
-            ? "No hay eventos con estos filtros."
-            : `${events.length} ${events.length === 1 ? "evento" : "eventos"} en el período.`
-        }
-        below={
-          <div className="flex flex-wrap items-end gap-2">
-            <Select
-              label="Equipo"
-              value={team}
-              onChange={(event) => query.set({ team: event.target.value })}
-              className="min-w-48"
-            >
-              <option value="">Todos los equipos</option>
-              {state.teams.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {teamName(state, item.id)}
-                </option>
-              ))}
-            </Select>
-            <Select
-              label="Período"
-              value={period}
-              onChange={(event) => query.set({ period: event.target.value })}
-              className="min-w-44"
-            >
-              <option value="">Todo el histórico</option>
-              <option value="year">Esta temporada</option>
-              <option value="quarter">Últimos 3 meses</option>
-              <option value="month">Este mes</option>
-            </Select>
-            {(team || period) && (
-              <Button variant="quiet" onClick={() => query.reset(["team", "period"])}>
-                Quitar filtros
-              </Button>
-            )}
-          </div>
-        }
-      />
-
-      {events.length === 0 ? (
-        <Empty
-          title="Nada para mostrar"
-          detail="No hay eventos que coincidan con estos filtros. No es que falten datos."
-          icon={<FileText size={22} />}
-        />
-      ) : performance ? (
-        <DetailSection title="Resultados" meta={`${played.length} finalizados`}>
-          {played.length === 0 ? (
-            <p className="gei-meta">
-              Ningún evento del período tiene resultado finalizado.
-            </p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-left">
-                <thead>
-                  <tr className="border-b border-line-strong">
-                    <th scope="col" className="gei-meta px-3 py-2">
-                      Evento
-                    </th>
-                    <th scope="col" className="gei-meta px-3 py-2">
-                      Fecha
-                    </th>
-                    <th scope="col" className="gei-meta px-3 py-2">
-                      Resultado
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {played.map((event: Event) => (
-                    <tr key={event.id} className="border-b border-line last:border-b-0">
-                      <td className="px-3 py-2.5">
-                        <Link
-                          to={`/events/${event.id}/match-record`}
-                          className="text-body font-semibold text-interactive hover:underline"
-                        >
-                          {eventName(event)}
-                        </Link>
-                      </td>
-                      <td className="px-3 py-2.5 text-meta tabular-nums">
-                        {dateLabel(event.date)}
-                      </td>
-                      <td className="px-3 py-2.5 text-body font-semibold tabular-nums">
-                        {event.record.gei}–{event.record.opponent}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-          <div className="mt-4">
-            <p className="gei-body-strong mb-2">Datos por persona</p>
-            <ul className="grid gap-1">
-              {people.map((person) => {
-                const stats = played
-                  .flatMap((event) => [event.record.stats[person.id]])
-                  .filter(Boolean)
-                const goals = stats.reduce((sum, stat) => sum + (stat?.goals ?? 0), 0)
-                const assists = stats.reduce((sum, stat) => sum + (stat?.assists ?? 0), 0)
-                const appearances = stats.filter((stat) => stat?.played).length
-                return (
-                  <li key={person.id}>
-                    <RowStatic
-                      title={person.name}
-                      meta={
-                        <span className="text-meta tabular-nums text-ink-muted">
-                          {appearances} {appearances === 1 ? "presencia" : "presencias"} ·{" "}
-                          {goals} {goals === 1 ? "gol" : "goles"} · {assists}{" "}
-                          {assists === 1 ? "asistencia" : "asistencias"}
-                        </span>
-                      }
-                    />
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        </DetailSection>
-      ) : (
-        <DetailSection title="Asistencia por evento" meta={`${withAttendance.length} con planilla`}>
-          {withAttendance.length === 0 ? (
-            <p className="gei-meta">
-              No hay planillas de asistencia abiertas en este período.
-            </p>
-          ) : (
-            <ul className="grid gap-1">
-              {withAttendance.map((event) => {
-                const values = Object.values(event.attendance)
-                const present = values.filter((value) => value === "PRESENT").length
-                const absent = values.filter((value) => value === "ABSENT").length
-                const justified = values.filter((value) => value === "JUSTIFIED").length
-                const recorded = values.length
-                const percent = recorded === 0 ? null : Math.round((present / recorded) * 100)
-                return (
-                  <li key={event.id}>
-                    <RowStatic
-                      title={eventName(event)}
-                      detail={`${dateLabel(event.date)} · ${recorded} ${
-                        recorded === 1 ? "registro" : "registros"
-                      }`}
-                      meta={
-                        <span className="text-meta tabular-nums text-ink-muted">
-                          {present} presentes · {absent} ausentes · {justified}{" "}
-                          justificadas · {percent === null ? "—" : `${percent}%`} presencia
-                        </span>
-                      }
-                      trailing={
-                        <Link
-                          to={`/events/${event.id}/attendance`}
-                          className="gei-target-sm inline-flex items-center gap-1 rounded-control px-2 text-meta font-semibold text-interactive hover:bg-selected-soft"
-                        >
-                          Ver planilla
-                          <ArrowRight size={13} aria-hidden />
-                        </Link>
-                      }
-                    />
-                  </li>
-                )
-              })}
-            </ul>
-          )}
-        </DetailSection>
-      )}
+    <div className="gei-stack-page mx-auto max-w-3xl">
+      <PageContextHeader context="Informes" title={performance ? "Rendimiento" : "Asistencia"} lead="Llega con la T06." back="/reports" />
+      <Surface className="grid gap-3">
+        <FileText size={20} aria-hidden className="text-ink-faint" />
+        <p className="gei-meta">Este informe necesita datos de participación (asistencia y acta) reales. Hasta que la T04 está completa, los informes no muestran contenido.</p>
+      </Surface>
     </div>
   )
 }
-
-/* ═══════════════════════════════════════════════════════════════
-   HISTORIAL DE CAMBIOS — before/after real, filtro por rango
-   ═══════════════════════════════════════════════════════════════ */
 
 export function AuditPage() {
   const { authority, fetchAudit } = useRealProduct()

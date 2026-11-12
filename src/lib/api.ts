@@ -39,10 +39,15 @@ export async function apiRequest<T>(
 ): Promise<T> {
   const { csrfToken, idempotencyKey, ...rest } = init
   const headers = headersWithCsrf(rest.headers ?? {}, csrfToken ?? null)
+  let reqBody = rest.body
+  if ((init.method ?? "GET").toUpperCase() !== "GET" && reqBody === undefined) {
+    reqBody = apiJson({})
+    if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json")
+  }
   if (idempotencyKey) headers.set("idempotency-key", idempotencyKey)
   headers.set("Accept", "application/json")
 
-  const res = await fetch(String(input), { ...rest, headers })
+  const res = await fetch(String(input), { ...rest, headers, body: reqBody })
   const ct = res.headers.get("content-type") ?? ""
   const isJson = ct.includes("application/json")
 

@@ -1,47 +1,39 @@
-import { useMemo, useRef, useState } from "react"
-import { Link, useNavigate, useParams } from "react-router"
+import { useEffect, useMemo, useRef, useState } from "react"
 import {
-  ArrowRight,
-  CheckCircle2,
-  History,
-  Info,
-  MapPin,
-  Megaphone,
-  Users,
+  Save,
+  CalendarPlus,
 } from "lucide-react"
+import { useFetch } from "../lib/use-fetch"
 import {
-  useProduct,
-  StaleVersionError,
-  type SeriesChangeResult,
-} from "../mock/store"
-import {
-  dateLabel,
-  dateTimeLabel,
-  eventAvailabilityView,
-  eventName,
-  eventTargetsText,
-  hasLiveSchedule,
-  relativeLabel,
-  teamName,
-  venueOf,
-  type Event,
-  type SeriesScope,
-} from "../mock/model"
-import { seriesOccurrences, seriesOf } from "../mock/series"
-import { computeImpact, type Impact } from "../mock/impact"
-import {
-  activeTeamAssignments,
-  selectionConflicts,
-  visibleEvents,
-  CONFLICT_TEXT,
-  conflictCodesFor,
-} from "../mock/derive"
+  fetchCalendarRange,
+  fetchCancelEvent,
+  fetchCreateEvent,
+  fetchCreateEventSeries,
+  fetchCreateJornada,
+  fetchEditEventMeta,
+  fetchUpdateLogistics,
+  fetchEndEventSeries,
+  fetchEventDetail,
+  fetchEventSeriesDetail,
+  fetchJornadaDetail,
+  fetchMaterialChangeEvent,
+  fetchPostponeEvent,
+  fetchRescheduleEvent,
+  fetchResolveEventConflict,
+  fetchRestoreEvent,
+  type EventDto,
+  type EventDetailDto,
+} from "../lib/t03-api"
+import { Link, useNavigate, useParams, useLocation } from "react-router"
+import { fetchStructure } from "../lib/api-client"
+import { me as fetchMe } from "../lib/session"
+import { dateLabel, dateTimeLabel, timeLabel } from "../lib/dates"
+import { zonedLocalInputToIso, utcIsoToZonedParts } from "../lib/zoned-input"
 import {
   Banner,
   Button,
   ConfirmDialog,
   Empty,
-  Expander,
   Menu,
   Modal,
   RadioGroup,
@@ -54,13 +46,10 @@ import {
   Tag,
   TextArea,
   TextField,
-  TextLink,
   cx,
 } from "../shared/ui"
-import { stateText } from "../shared/states"
 import {
   DetailSection,
-  HistoryList,
   ImpactPreview,
   PageContextHeader,
   ScopeDialog,
@@ -68,77 +57,89 @@ import {
   StateBanner,
 } from "../shared/patterns"
 import { VasControl } from "../shared/vas"
-import type { SeriesScopeOption } from "../shared/patterns"
 
-/* ═══════════════════════════════════════════════════════════════
-   UTILIDADES DE PRESENTACIÓN
-   ═══════════════════════════════════════════════════════════════ */
-
-const TYPE_LABEL: Record<Event["type"], string> = {
+const TYPE_LABEL: Record<EventDto["type"], string> = {
   MATCH: "Partido",
   TRAINING: "Entrenamiento",
   CLUB_EVENT: "Evento del club",
 }
 
+const CANONICAL_ZONES = [
+  "America/Argentina/Buenos_Aires",
+  "America/Santiago",
+  "America/Montevideo",
+  "America/Sao_Paulo",
+  "America/Lima",
+  "America/Bogota",
+  "America/Mexico_City",
+  "Europe/Madrid",
+  "UTC",
+]
+
+const TERMINAL = new Set(["CANCELLED", "COMPLETED", "ABANDONED"])
+
+function startEndFromDto(item: EventDto) {
+  const from = item.startAt ? new Date(item.startAt) : null
+  const to = item.endAt ? new Date(item.endAt) : null
+  return {
+    date: from ? from.toISOString().slice(0, 10) : "",
+    time: from ? timeLabel(from.toISOString()) : "",
+    end: to ? timeLabel(to.toISOString()) : "",
+  }
+}
+
+function localInputToIso(date: string, time: string): string | null {
+  if (!date || !time) return null
+  const d = new Date(`${date}T${time}:00`)
+  if (Number.isNaN(d.getTime())) return null
+  return d.toISOString()
+}
+
+function isoToLocalParts(iso: string | null): { date: string; time: string } | null {
+  if (!iso) return null
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return null
+  const pad = (n: number) => String(n).padStart(2, "0")
+  return { date: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`, time: `${pad(d.getHours())}:${pad(d.getMinutes())}` }
+}
+
+/* ─────────────────────────────────────────────
+   Conflict workspace — nunca destruye el borrador
+   ───────────────────────────────────────────── */
+
 const FIELD_LABEL: Record<string, string> = {
+  title: "Título",
   date: "Fecha",
   time: "Hora de inicio",
   end: "Hora de fin",
   venueId: "Sede",
   targetTeams: "Equipos destino",
   targetPersonIds: "Personas destino",
-  clubWide: "Destino",
+  clubWideTarget: "Destino",
   opponent: "Rival",
   competitionId: "Competencia",
-  meeting: "Hora de encuentro",
-  departure: "Hora de salida",
-  point: "Punto de encuentro",
-  transport: "Cómo se llega",
-  arrival: "Cómo llegar a la cancha",
-  title: "Título",
+  timeZone: "Zona horaria",
+  logistics: "Logística",
 }
 
-function conflictSummary(event: Event, state: Parameters<typeof selectionConflicts>[0]) {
-  return selectionConflicts(state, event)
-}
+interface DraftLike { [key: string]: unknown }
 
-/* ═══════════════════════════════════════════════════════════════
-   CONFLICT WORKSPACE — nunca destruye el borrador
-   ═══════════════════════════════════════════════════════════════ */
-
-interface DraftSnapshot {
-  [key: string]: unknown
-}
-
-function ConflictWorkspace({
-  baseline,
-  local,
-  latest,
-  onKeepMine,
-  onTakeLatest,
-  onClose,
-}: {
-  baseline: DraftSnapshot
-  local: DraftSnapshot
-  latest: DraftSnapshot
+function ConflictWorkspace({ baseline, local, latest, onKeepMine, onTakeLatest, onClose }: {
+  baseline: DraftLike
+  local: DraftLike
+  latest: DraftLike
   onKeepMine: () => void
   onTakeLatest: () => void
   onClose: () => void
 }) {
-  const [step, setStep] = useState<"desktop" | "compare">("desktop")
-  const keys = Array.from(
-    new Set([...Object.keys(local), ...Object.keys(latest)]),
-  ).filter((key) => FIELD_LABEL[key])
-
+  const keys = Array.from(new Set([...Object.keys(local), ...Object.keys(latest)])).filter((k) => FIELD_LABEL[k])
   const rows = keys.map((key) => ({
-    key,
-    label: FIELD_LABEL[key],
+    key, label: FIELD_LABEL[key],
     mine: String(local[key] ?? "—"),
     theirs: String(latest[key] ?? "—"),
     base: String(baseline[key] ?? "—"),
     safe: String(baseline[key] ?? "") === String(latest[key] ?? ""),
   }))
-
   return (
     <Modal
       title="Este evento cambió mientras lo editabas"
@@ -147,112 +148,34 @@ function ConflictWorkspace({
       size="lg"
       footer={
         <>
-          <Button variant="quiet" onClick={() => setStep("compare")}>
-            Revisar diferencias
-          </Button>
-          <Button variant="secondary" onClick={onTakeLatest}>
-            Actualizar con la versión actual
-          </Button>
-          <Button variant="primary" onClick={onKeepMine}>
-            Mantener mis cambios donde sea seguro
-          </Button>
+          <Button variant="secondary" onClick={onTakeLatest}>Actualizar con la versión actual</Button>
+          <Button variant="primary" onClick={onKeepMine}>Mantener mis cambios donde sea seguro</Button>
         </>
       }
     >
       <div className="grid gap-4">
         <Banner tone="attention" title="No se perdió nada de lo que escribiste">
-          <span className="text-ink-strong">
-            Abajo comparamos la versión con la que empezaste, tus cambios y la
-            versión que está ahora en el club.
-          </span>
+          <span className="text-ink-strong">Abajo comparamos la versión con la que empezaste, tus cambios y la versión actual del club.</span>
         </Banner>
-
-        <div className={cx("grid gap-3", step === "desktop" ? "lg:grid-cols-3" : "") }>
-          <VersionColumn
-            title="Con la que empezaste"
-            tone="neutral"
-            rows={rows.map((row) => ({ label: row.label, value: row.base }))}
-          />
-          <VersionColumn
-            title="Tus cambios"
-            tone="selected"
-            rows={rows.map((row) => ({
-              label: row.label,
-              value: row.mine,
-              changed: row.mine !== row.base,
-            }))}
-          />
-          <VersionColumn
-            title="La versión actual"
-            tone="attention"
-            rows={rows.map((row) => ({
-              label: row.label,
-              value: row.theirs,
-              changed: row.theirs !== row.base,
-            }))}
-          />
-        </div>
-
-        <div className="rounded-surface border border-line bg-control p-4">
-          <p className="gei-body-strong">Qué podés mantener sin riesgo</p>
-          <ul className="mt-2 grid gap-1.5">
-            {rows.filter((row) => row.safe && row.mine !== row.base).map((row) => (
-              <li key={row.key} className="gei-body text-ink-strong">
-                {row.label}: el club no lo cambió, así que tu versión se puede
-                guardar sin pisar nada.
-              </li>
-            ))}
-            {rows.filter((row) => !row.safe && row.mine !== row.base).map((row) => (
-              <li key={row.key} className="gei-body text-ink-strong">
-                {row.label}: el club cambió este campo mientras editabas. Si lo
-                mantenés, va a pisar su cambio.
-              </li>
-            ))}
-            {rows.every((row) => row.mine === row.base) && (
-              <li className="gei-meta">No habías cambiado ningún campo.</li>
-            )}
-          </ul>
+        <div className="grid gap-3 lg:grid-cols-3">
+          <VersionColumn title="Con la que empezaste" rows={rows.map((row) => ({ label: row.label, value: row.base }))} />
+          <VersionColumn title="Tus cambios" rows={rows.map((row) => ({ label: row.label, value: row.mine, changed: row.mine !== row.base }))} />
+          <VersionColumn title="La versión actual" rows={rows.map((row) => ({ label: row.label, value: row.theirs, changed: row.theirs !== row.base }))} />
         </div>
       </div>
     </Modal>
   )
 }
 
-function VersionColumn({
-  title,
-  tone,
-  rows,
-}: {
-  title: string
-  tone: "neutral" | "selected" | "attention"
-  rows: Array<{ label: string; value: string; changed?: boolean }>
-}) {
+function VersionColumn({ title, rows }: { title: string; rows: Array<{ label: string; value: string; changed?: boolean }> }) {
   return (
-    <div
-      className={cx(
-        "grid content-start gap-2 rounded-surface border p-3",
-        tone === "neutral" && "border-line bg-surface",
-        tone === "selected" && "border-selected-line bg-selected-soft",
-        tone === "attention" && "border-attention-line bg-attention-soft",
-      )}
-    >
-      <p className="text-meta font-semibold uppercase tracking-wide text-ink-muted">
-        {title}
-      </p>
+    <div className="grid content-start gap-2 rounded-surface border border-line bg-surface p-3">
+      <p className="text-meta font-semibold uppercase tracking-wide text-ink-muted">{title}</p>
       <ul className="grid gap-1.5">
         {rows.map((row) => (
           <li key={row.label} className="grid gap-0.5">
-            <span className="text-micro uppercase tracking-wide text-ink-faint">
-              {row.label}
-            </span>
-            <span
-              className={cx(
-                "text-body tabular-nums",
-                row.changed ? "font-semibold text-ink" : "text-ink-muted",
-              )}
-            >
-              {row.value}
-            </span>
+            <span className="text-micro uppercase tracking-wide text-ink-faint">{row.label}</span>
+            <span className={cx("text-body tabular-nums", row.changed ? "font-semibold text-ink" : "text-ink-muted")}>{row.value}</span>
           </li>
         ))}
       </ul>
@@ -260,529 +183,158 @@ function VersionColumn({
   )
 }
 
-/* ═══════════════════════════════════════════════════════════════
+/* ─────────────────────────────────────────────
    DETALLE DE EVENTO
-   ═══════════════════════════════════════════════════════════════ */
-
-const TERMINAL = ["CANCELLED", "COMPLETED", "ABANDONED", "POSTPONED"] as const
-
-const BUCKETS: Array<{
-  key: "YES" | "MAYBE" | "NO"
-  label: string
-  tone: "success" | "warning" | "danger"
-}> = [
-  { key: "YES", label: "Voy", tone: "success" },
-  { key: "MAYBE", label: "Tal vez", tone: "warning" },
-  { key: "NO", label: "No voy", tone: "danger" },
-]
+   ───────────────────────────────────────────── */
 
 export function EventDetail() {
   const { eventId = "" } = useParams()
   const navigate = useNavigate()
-  const { state, authority, actor } = useProduct()
-  const [sheet, setSheet] = useState<null | "history" | "lifecycle">(null)
-  const [pending, setPending] = useState<null | Event["state"]>(null)
+  const [sheet, setSheet] = useState<null | "lifecycle" | "history">(null)
   const [lifecycleError, setLifecycleError] = useState("")
+  const [pendingAction, setPendingAction] = useState<string | null>(null)
 
-  const event = state.events.find((item) => item.id === eventId)
-  if (!event)
-    return (
-      <div className="mx-auto max-w-3xl">
-        <Empty
-          title="Ese evento ya no está"
-          detail="Puede que se haya archivado o que el enlace esté incompleto."
-        />
-      </div>
-    )
+  const { data: event, loading, error, reload } = useFetch(() => fetchEventDetail(eventId), [eventId])
+  const { data: me } = useFetch(() => fetchMe(), [])
+  const isTerminal = event ? TERMINAL.has(event.state) : false
+  const canOperate = useMemo(() => {
+    if (!event || !me) return false
+    if (me.isSubcommittee) return true
+    const assignments = me.roleAssignments ?? []
+    const eventScope = assignments.some((r) => r.role === "COACH" && r.scopeType === "EVENT" && r.scopeRefId === event.id)
+    const coachTeams = assignments.filter((r) => r.role === "COACH" && r.scopeType === "TEAM").map((r) => r.scopeRefId)
+    return Boolean(eventScope || event.targets.teams.some((t) => coachTeams.includes(t.teamId)))
+  }, [event, me])
+  const canEditLogistics = useMemo(() => {
+    if (!event || !me) return false
+    if (canOperate) return true
+    const captainTeams = (me.roleAssignments ?? []).filter((r) => r.role === "CAPTAIN" && r.scopeType === "TEAM").map((r) => r.scopeRefId)
+    return event.targets.teams.some((t) => captainTeams.includes(t.teamId))
+  }, [event, me, canOperate])
 
-  const venue = venueOf(state, event)
-  const series = seriesOf(state, event)
-  const coach = authority.isCoachOfTeam(event.targetTeams[0] ?? "")
-  const official = authority.isClubWide
-  const canOperate = coach || official
-  const isTerminal = (TERMINAL as readonly string[]).includes(event.state)
-  const eventId_ = event.id
-  const selectionConflictsList = event.published
-    ? conflictSummary(event, state)
-    : []
-  const meInvited = event.published?.includes(actor.id) ?? false
-  const canRespondHere = authority.canRespondOwn
-  const view = eventAvailabilityView(event, actor.id)
-  const myTeams = activeTeamAssignments(state, actor.id).map((a) => a.teamId)
-
-  const counts = useMemo(() => {
-    const values = Object.values(event.availability)
-    return {
-      YES: values.filter((item) => item.value === "YES").length,
-      MAYBE: values.filter((item) => item.value === "MAYBE").length,
-      NO: values.filter((item) => item.value === "NO").length,
-    }
-  }, [event])
-
-  const conversation = state.conversations.find(
-    (item) => item.eventId === event.id,
-  )
-
-  async function runTransition(to: Event["state"], reason: string) {
-    setPending(to)
+  async function runTransition(action: "postpone" | "reschedule" | "cancel" | "restore") {
+    setPendingAction(action)
     setLifecycleError("")
     try {
-      await transition(to, reason)
-    } catch {
-      setLifecycleError("No pudimos aplicar el cambio. Volvé a intentar.")
-    } finally {
-      setPending(null)
+      if (action === "postpone") await fetchPostponeEvent(eventId)
+      else if (action === "reschedule") await fetchRescheduleEvent(eventId)
+      else if (action === "cancel") await fetchCancelEvent(eventId)
+      else await fetchRestoreEvent(eventId)
+      await reload()
       setSheet(null)
+    } catch (err) {
+      setLifecycleError(err instanceof Error ? err.message : "No se pudo aplicar el cambio")
+    } finally {
+      setPendingAction(null)
     }
   }
 
-  const { transitionEvent } = useProduct()
-
-  async function transition(to: Event["state"], reason: string) {
-    await transitionEvent(eventId_, to, reason)
+  if (loading) {
+    return <div className="mx-auto max-w-3xl"><p className="gei-meta">Cargando el evento…</p></div>
   }
-
-  /* ── Composición distinta para estados sin vida operativa ── */
-  if (isTerminal) {
+  if (error || !event) {
     return (
-      <div className="gei-stack-page mx-auto max-w-3xl">
-        <PageContextHeader
-          context={TYPE_LABEL[event.type]}
-          title={eventName(event)}
-          back="/calendar"
-          action={<StateBadge value={event.state} emphasis />}
-        />
-
-        <TerminalNotice event={event} />
-
-        <Surface className="grid gap-2">
-          <p className="gei-meta">Cómo estaba-coordinate</p>
-          <RowStatic
-            title="Fecha"
-            detail={`${dateLabel(event.date, true)} · ${
-              event.state === "POSTPONED" ? "sin horario vigente" : event.time
-            }`}
-          />
-          <RowStatic
-            title="Sede"
-            detail={`${venue?.name ?? "Sin sede"} · ${venue?.address ?? ""}`}
-          />
-          <RowStatic title="Destino" detail={eventTargetsText(state, event)} />
-        </Surface>
-
-        {event.state === "COMPLETED" && event.record.state === "FINAL" && (
-          <DetailSection title="Resultado final">
-            <p className="gei-l5 tabular-nums">
-              {event.record.gei}–{event.record.opponent}
-            </p>
-            {event.record.observations && (
-              <p className="gei-body">{event.record.observations}</p>
-            )}
-          </DetailSection>
-        )}
-
-        <div className="flex flex-wrap gap-2">
-          <Button variant="secondary" onClick={() => setSheet("history")}>
-            <History size={16} aria-hidden />
-            Ver historial
-          </Button>
-          {canOperate && event.state === "CANCELLED" && (
-            <Button
-              variant="secondary"
-              onClick={() =>
-                runTransition("SCHEDULED", "Restauración del evento cancelado")
-              }
-              busy={pending === "SCHEDULED"}
-            >
-              Restaurar el evento
-            </Button>
-          )}
-        </div>
-
-        {lifecycleError && (
-          <Banner tone="danger" title="No pudimos aplicar el cambio">
-            <span className="text-ink-strong">{lifecycleError}</span>
-          </Banner>
-        )}
-
-        {sheet === "history" && (
-          <Modal title="Historial del evento" onClose={() => setSheet(null)}>
-            <HistoryList
-              entries={event.history.map((line) => ({
-                action: line.text,
-                actor: line.actor,
-                at: dateTimeLabel(line.at),
-              }))}
-              emptyText="Sin movimientos registrados."
-            />
-          </Modal>
-        )}
+      <div className="mx-auto max-w-3xl">
+        <Empty title="Ese evento ya no está" detail="Puede que se haya archivado o que el enlace esté incompleto. Volvé a la agenda." />
+        <div className="mt-4"><Button variant="secondary" onClick={() => navigate("/calendar")}>Ir a la agenda</Button></div>
       </div>
     )
   }
 
-  /* ── Composición operativa ── */
+  const { date, time } = startEndFromDto(event)
+  const venue = event.venue
+
   return (
     <div className="gei-stack-page mx-auto max-w-4xl">
       <PageContextHeader
         context={TYPE_LABEL[event.type]}
-        title={eventName(event)}
-        lead={`${dateLabel(event.date, true)} · ${
-          hasLiveSchedule(event) ? event.time : "sin horario vigente"
-        } · ${venue?.name ?? "Sin sede"}`}
+        title={event.type === "MATCH" ? `GEI vs. ${event.opponent ?? "Rival a definir"}` : event.title}
+        lead={`${dateLabel(date, true)} · ${event.state === "POSTPONED" ? "sin horario vigente" : time} · ${venue?.name ?? "Sin sede"}`}
+        back="/calendar"
         action={
           <div className="flex items-center gap-2">
             <StateBadge value={event.state} />
-            {canOperate && (
+            {(canOperate || canEditLogistics) && !isTerminal && (
               <Menu
                 label="Acciones"
                 items={[
-                  {
-                    label: "Editar evento",
-                    onSelect: () => navigate(`/events/${event.id}/edit`),
-                  },
-                  ...(authority.canTransitionEvent(event, "POSTPONED")
-                    ? [
-                        {
-                          label: "Postergar",
-                          onSelect: () => setSheet("lifecycle"),
-                        },
-                      ]
-                    : []),
-                  ...(authority.canTransitionEvent(event, "CANCELLED")
-                    ? [
-                        {
-                          label: "Cancelar evento",
-                          danger: true,
-                          onSelect: () => setSheet("lifecycle"),
-                        },
-                      ]
-                    : []),
+                  ...(canOperate ? [{ label: "Editar evento", onSelect: () => navigate(`/events/${event.id}/edit`) }] : []),
+                  ...(!canOperate && canEditLogistics ? [{ label: "Editar logística", onSelect: () => navigate(`/events/${event.id}/edit`) }] : []),
+                  ...(event.state === "SCHEDULED" ? [{ label: "Postergar", onSelect: () => setSheet("lifecycle") }] : []),
+                  ...(event.state === "POSTPONED" ? [{ label: "Reprogramar", onSelect: () => setSheet("lifecycle") }] : []),
+                  ...(event.state === "SCHEDULED" || event.state === "POSTPONED" ? [{ label: "Cancelar evento", danger: true, onSelect: () => setSheet("lifecycle") }] : []),
                 ]}
               />
             )}
+            {canOperate && event.state === "CANCELLED" && (
+              <Button variant="secondary" onClick={() => runTransition("restore")} busy={pendingAction === "restore"}>Restaurar</Button>
+            )}
           </div>
-        }
-        below={
-          event.state === "DRAFT" ? (
-            <Banner tone="neutral" title="Este evento todavía es un borrador">
-              <span className="text-ink-strong">
-                Todavía no tiene horario operativo: programalo para que la
-                disponibilidad y la convocatoria funcionen.
-              </span>
-            </Banner>
-          ) : undefined
         }
       />
 
+      {event.state === "CANCELLED" && (
+        <Banner tone="danger" title="Este evento fue cancelado">
+          <span className="text-ink-strong">La información queda disponible como referencia. Si la Subcomisión lo confirma, se puede restaurar.</span>
+        </Banner>
+      )}
+      {event.state === "POSTPONED" && (
+        <Banner tone="warning" title="No hay horario vigente">
+          <span className="text-ink-strong">Este evento está postergado. Cuando haya nueva fecha, la agenda lo va a mostrar de nuevo.</span>
+        </Banner>
+      )}
+      {event.state === "COMPLETED" && (
+        <Banner tone="success" title="Este evento ya se jugó">
+          <span className="text-ink-strong">El evento quedó cerrado y forma parte del historial. La información queda disponible como referencia.</span>
+        </Banner>
+      )}
+      {event.state === "ABANDONED" && (
+        <Banner tone="warning" title="El partido se suspendió antes de terminar">
+          <span className="text-ink-strong">No hay resultado oficial para este partido.</span>
+        </Banner>
+      )}
+
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="grid gap-6">
-          {/* Situación actual + acción */}
-          {meInvited && (
-            <Banner tone="selected" title="Estás convocada para este partido">
-              <span className="text-ink-strong">
-                Tu convocatoria está publicada. Si algo cambia, te avisamos y
-                podés volver a confirmar.
-              </span>
-            </Banner>
-          )}
-
-          {canRespondHere && event.state === "SCHEDULED" && (
-            <Surface>
-              <VasControl event={event} personId={actor.id} />
-            </Surface>
-          )}
-
-          {!canRespondHere && event.state === "SCHEDULED" && (
-            <Surface className="grid gap-1">
-              <p className="gei-body-strong">¿Vas?</p>
-              <p className="gei-meta">
-                Vos no jugás este evento, así que no respondés disponibilidad. Abajo está lo que dijo cada jugadora.
-              </p>
-            </Surface>
-          )}
-
-          {canOperate && (
-            <Surface className="grid gap-3">
-              <SectionHeader
-                title="Operación pendiente"
-                meta={
-                  event.published === null
-                    ? "Convocatoria sin publicar"
-                    : event.type === "MATCH" &&
-                        authority.canManageRecord(event) &&
-                        event.record.state !== "FINAL"
-                      ? "Resultado sin finalizar"
-                      : event.attendanceClosedAt
-                        ? "Asistencia cerrada"
-                        : !event.attendanceOpened && authority.canManageAttendance(event)
-                          ? "Asistencia sin abrir"
-                          : "Convocatoria publicada"
-                }
-              />
-              <ul className="grid gap-1">
-                <RowLink
-                  to={`/events/${event.id}/selection`}
-                  title="Convocadas"
-                  detail={
-                    event.published === null
-                      ? "Todavía no hay convocatoria publicada."
-                      : `${event.published.length} convocadas${
-                          selectionConflictsList.length > 0
-                            ? ` · ${selectionConflictsList.length} con un problema a revisar`
-                            : ""
-                        }`
-                  }
-                  leading={<Users size={17} aria-hidden className="text-ink-faint" />}
-                />
-                {authority.canManageAttendance(event) && (
-                  <RowLink
-                    to={`/events/${event.id}/attendance`}
-                    title="Asistencia"
-                    detail={
-                      event.attendanceClosedAt
-                        ? "Cerrada. Las correcciones quedan registradas."
-                        : Object.keys(event.attendance).length > 0
-                          ? `${Object.keys(event.attendance).length} de ${
-                              myTeams.length
-                            } registradas`
-                          : "Todavía no se registró asistencia"
-                    }
-                  />
-                )}
-                {event.type === "MATCH" && authority.canManageRecord(event) && (
-                  <RowLink
-                    to={`/events/${event.id}/match-record`}
-                    title="Resultado"
-                    detail={
-                      event.record.state === "FINAL"
-                        ? `${event.record.gei}–${event.record.opponent} · Finalizado`
-                        : "Borrador: todavía no cuenta como resultado oficial"
-                    }
-                  />
-                )}
-              </ul>
-            </Surface>
-          )}
-
-          {official && !coach && (
-            <Surface className="grid gap-3">
-              <SectionHeader title="Coordinación oficial" />
-              <ul className="grid gap-1">
-                {event.competitionId && (
-                  <RowStatic
-                    title="Competencia"
-                    detail={
-                      state.competitions.find(
-                        (competition) => competition.id === event.competitionId,
-                      )?.name ?? "Competencia sin datos"
-                    }
-                  />
-                )}
-                <RowLink
-                  to={`/communication/announcements/new?event=${event.id}`}
-                  title="Comunicar un cambio"
-                  detail="Publicar un comunicado para las personas alcanzadas por este evento."
-                  leading={<Megaphone size={17} aria-hidden className="text-ink-faint" />}
-                />
-              </ul>
-            </Surface>
-          )}
-
-          {/* Participación en lectura */}
-<Surface className="grid gap-3">
-            <SectionHeader
-              title="Quién dijo qué"
-              meta={`${Object.keys(event.availability).length} respondieron`}
-            />
-            <ul className="grid">
-              {BUCKETS.map((item) => (
-                <RowStatic
-                  key={item.key}
-                  title={item.label}
-                  leading={
-                    <span
-                      aria-hidden
-                      className={cx(
-                        "size-2.5 shrink-0 rounded-pill",
-                        item.tone === "success" && "bg-success",
-                        item.tone === "warning" && "bg-warning",
-                        item.tone === "danger" && "bg-danger",
-                      )}
-                    />
-                  }
-                  trailing={
-                    <span className="gei-body-strong tabular-nums">
-                      {counts[item.key]}
-                    </span>
-                  }
-                />
-              ))}
-              <RowStatic
-                title="Sin responder"
-                trailing={
-                  <span className="gei-body-strong tabular-nums">
-                    {Math.max(
-                      0,
-                      activeTeamAssignments(state, actor.id)
-                        .filter((assignment) =>
-                          event.targetTeams.includes(assignment.teamId),
-                        ).length -
-                        Object.keys(event.availability).length,
-                    )}
-                  </span>
-                }
-              />
-            </ul>
+          <Surface className="grid gap-2">
+            <p className="gei-meta">Coordinación</p>
+            <RowStatic title="Revisión de coordinación" detail={String(event.coordinationRevision)} />
+            <RowStatic title="Versión" detail={String(event.version)} />
+            {event.competitionName && <RowStatic title="Competencia" detail={event.competitionName} />}
+            {event.opponent && <RowStatic title="Rival" detail={event.opponent} />}
           </Surface>
 
-          {/* Logística */}
           <DetailSection title="Logística">
             <dl className="grid">
-              <RowStatic
-                title="Dónde y cuándo"
-                detail={`${venue?.name ?? "Sin sede"} · ${venue?.address ?? ""}${
-                  venue?.fieldLabel ? ` · ${venue.fieldLabel}` : ""
-                }`}
-              />
-              <RowStatic
-                title="Encuentro"
-                detail={
-                  event.meeting
-                    ? `${event.meeting}${
-                        event.departure ? ` · salida ${event.departure}` : ""
-                      }`
-                    : "Sin horario de encuentro definido"
-                }
-              />
-              <RowStatic title="Punto de encuentro" detail={event.point || "Sin definir"} />
-              <RowStatic title="Cómo se llega" detail={event.transport || "Sin definir"} />
-              <RowStatic
-                title="Cómo llegar a la cancha"
-                detail={event.arrival || "Sin definir"}
-              />
+              <RowStatic title="Encuentro" detail={event.logistics?.meetingAt ? dateTimeLabel(event.logistics.meetingAt) : "Sin definir"} />
+              <RowStatic title="Salida" detail={event.logistics?.departureAt ? dateTimeLabel(event.logistics.departureAt) : "Sin definir"} />
+              <RowStatic title="Punto de encuentro" detail={event.logistics?.meetingPoint || "Sin definir"} />
+              <RowStatic title="Cómo se llega" detail={event.logistics?.transportNote || "Sin definir"} />
+              <RowStatic title="Cómo llegar a la cancha" detail={event.logistics?.arrivalInstructions || "Sin definir"} />
             </dl>
           </DetailSection>
 
-          {/* Conversación del evento */}
-          {conversation && authority.canChat && (
-            <DetailSection title="Mensajes de este evento">
-              <ul className="grid gap-2">
-                {conversation.messages.slice(-2).map((message) => {
-                  const author = state.people.find(
-                    (person) => person.id === message.author,
-                  )
-                  return (
-                    <li key={message.id} className="rounded-control bg-control px-3 py-2">
-                      <p className="text-meta font-semibold text-ink">
-                        {author?.name ?? ""}
-                      </p>
-                      <p className="gei-body text-ink-strong">
-                        {message.deletedAt ? "Mensaje eliminado" : message.body}
-                      </p>
-                    </li>
-                  )
-                })}
-              </ul>
-              <Link
-                to={`/conversations/${conversation.id}`}
-                className="gei-target inline-flex items-center gap-1.5 rounded-control px-1 text-meta font-semibold text-interactive hover:underline"
-              >
-                Abrir la conversación
-                <ArrowRight size={13} aria-hidden />
-              </Link>
-            </DetailSection>
-          )}
-
-          <DetailSection
-            title="Historial"
-            action={
-              <Button variant="quiet" onClick={() => setSheet("history")}>
-                Ver todo
-              </Button>
-            }
-          >
-            {event.history.length === 0 ? (
-              <p className="gei-meta">Todavía no hay movimientos.</p>
-            ) : (
-              <ul className="grid">
-                {event.history.slice(0, 3).map((line, index) => (
-                  <li
-                    key={index}
-                    className="border-b border-line py-2.5 last:border-b-0"
-                  >
-                    <div>
-                    <p className="gei-body text-ink-strong">{line.text}</p>
-                    <p className="gei-meta">
-                      {line.actor} · {dateTimeLabel(line.at)}
-                    </p>
-                  </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </DetailSection>
+          <Surface className="grid gap-2">
+            <SectionHeader title="Participación" />
+            <p className="gei-meta">La disponibilidad y la convocatoria llegan con la siguiente etapa (T04).</p>
+          </Surface>
         </div>
 
         <aside className="grid content-start gap-3">
-          <Surface className="grid gap-3">
+          <Surface className="grid gap-2">
             <p className="gei-body-strong">Resumen</p>
-            <dl className="grid gap-2">
-              <RowStatic
-                title="Destino"
-                detail={eventTargetsText(state, event)}
-              />
-              {canRespondHere && (
-                <RowStatic title="Tu respuesta" detail={stateText(view)} />
-              )}
-              <RowStatic
-                title="Convocatoria"
-                detail={
-                  event.published === null
-                    ? "Sin publicar"
-                    : `${event.published.length} personas`
-                }
-              />
-              {series && (
-                <RowStatic
-                  title="Serie"
-                  detail={`${series.name} · ${seriesOccurrences(state, event.id, "ENTIRE_SERIES").length} eventos`}
-                />
-              )}
-            </dl>
+            <RowStatic title="Destino" detail={event.clubWideTarget ? "Todo el club" : event.targets.teams.length > 0 ? event.targets.teams.map((t) => t.name ?? "Equipo").join(" + ") : `${event.targets.persons.length} personas`} />
+            <RowStatic title="Revisión" detail={`coord. ${event.coordinationRevision} · v${event.version}`} />
+            {event.seriesId && (
+              <RowStatic title="Serie" detail={`Ocurrencia ${(event.occurrenceIndex ?? 0) + 1}`} />
+            )}
           </Surface>
-
-          {canOperate && (
-            <Surface className="grid gap-2">
-              <p className="gei-body-strong">Qué podés hacer acá</p>
-              <ul className="grid gap-1.5">
-                <li className="gei-body text-ink-strong">Editar los datos del evento</li>
-                <li className="gei-body text-ink-strong">Administrar la convocatoria</li>
-                {authority.canManageAttendance(event) && (
-                  <li className="gei-body text-ink-strong">Tomar asistencia</li>
-                )}
-                {event.type === "MATCH" && authority.canManageRecord(event) && (
-                  <li className="gei-body text-ink-strong">Cargar el resultado</li>
-                )}
-                <li className="gei-body text-ink-strong">Postergar o cancelar</li>
-              </ul>
-            </Surface>
+          {event.seriesId && (
+            <SeriesPanel seriesId={event.seriesId} eventId={event.id} onEnded={reload} />
           )}
+          {event.state === "SCHEDULED" && <VasControl />}
         </aside>
       </div>
-
-      {sheet === "history" && (
-        <Modal title="Historial del evento" onClose={() => setSheet(null)}>
-          <HistoryList
-            entries={event.history.map((line) => ({
-              action: line.text,
-              actor: line.actor,
-              at: dateTimeLabel(line.at),
-            }))}
-            emptyText="Sin movimientos registrados."
-          />
-        </Modal>
-      )}
 
       {sheet === "lifecycle" && (
         <Sheet
@@ -790,333 +342,171 @@ export function EventDetail() {
           description="Estas acciones cambian la situación para todo el club."
           onClose={() => setSheet(null)}
         >
-          <LifecycleActions
-            event={event}
-            onPick={(to, reason) => runTransition(to, reason)}
-            pending={pending}
-            error={lifecycleError}
-          />
+          <div className="grid gap-3">
+            {event.state === "SCHEDULED" && (
+              <Button variant="secondary" onClick={() => runTransition("postpone")} busy={pendingAction === "postpone"}>
+                Postergar el evento
+              </Button>
+            )}
+            {event.state === "POSTPONED" && (
+              <Button variant="secondary" onClick={() => runTransition("reschedule")} busy={pendingAction === "reschedule"}>
+                Reprogramar (volver a programado)
+              </Button>
+            )}
+            {(event.state === "SCHEDULED" || event.state === "POSTPONED") && (
+              <Button variant="danger" onClick={() => runTransition("cancel")} busy={pendingAction === "cancel"}>
+                Cancelar el evento
+              </Button>
+            )}
+            {lifecycleError && (
+              <Banner tone="danger" title="No se pudo aplicar el cambio"><span className="text-ink-strong">{lifecycleError}</span></Banner>
+            )}
+          </div>
         </Sheet>
       )}
     </div>
   )
 }
 
-function TerminalNotice({ event }: { event: Event }) {
-  if (event.state === "CANCELLED")
-    return (
-      <Banner tone="danger" title="Este evento fue cancelado">
-        <span className="text-ink-strong">
-          La información que estaba antes queda disponible como referencia, pero
-          el evento ya no forma parte de la temporada.
-        </span>
-      </Banner>
-    )
-  if (event.state === "ABANDONED")
-    return (
-      <Banner tone="warning" title="El partido se suspendió antes de terminar">
-        <span className="text-ink-strong">
-          No hay resultado oficial. El motivo queda registrado en el historial.
-        </span>
-      </Banner>
-    )
-  if (event.state === "COMPLETED")
-    return (
-      <Banner tone="success" title="Este evento ya se jugó">
-        <span className="text-ink-strong">
-          La convocatoria y la asistencia quedaron cerradas. Cualquier
-          corrección pide un motivo y queda registrada.
-        </span>
-      </Banner>
-    )
-  return (
-    <Banner tone="warning" title="No hay horario vigente">
-      <span className="text-ink-strong">
-        Este evento está postergado. Cuando la Subcomisión defina la nueva fecha
-        vuelve a aparecer en la agenda y las respuestas anteriores piden
-        confirmación.
-      </span>
-    </Banner>
-  )
-}
 
-function LifecycleActions({
-  event,
-  onPick,
-  pending,
-  error,
-}: {
-  event: Event
-  onPick: (to: Event["state"], reason: string) => void
-  pending: Event["state"] | null
-  error: string
-}) {
-  const { authority } = useProduct()
-  const options: Array<{
-    to: Event["state"]
-    label: string
-    consequence: string
-    danger?: boolean
-    requiresReason: boolean
-  }> = []
-  if (authority.canTransitionEvent(event, "POSTPONED"))
-    options.push({
-      to: "POSTPONED",
-      label: "Postergar",
-      consequence:
-        "El evento deja de tener horario vigente y todas las respuestas anteriores piden confirmación de nuevo.",
-      requiresReason: true,
-    })
-  if (authority.canTransitionEvent(event, "CANCELLED"))
-    options.push({
-      to: "CANCELLED",
-      label: "Cancelar",
-      consequence:
-        "El evento sale de la temporada. La información queda como referencia y se puede restaurar después.",
-      danger: true,
-      requiresReason: true,
-    })
-  if (authority.canTransitionEvent(event, "COMPLETED"))
-    options.push({
-      to: "COMPLETED",
-      label: "Dar por terminado",
-      consequence: "El evento queda cerrado y pasa al historial.",
-      requiresReason: true,
-    })
-  if (authority.canTransitionEvent(event, "ABANDONED"))
-    options.push({
-      to: "ABANDONED",
-      label: "Suspender",
-      consequence: "El partido no llegó a terminar. No hay resultado oficial.",
-      danger: true,
-      requiresReason: true,
-    })
-
-  const [active, setActive] = useState<(typeof options)[number] | null>(null)
-  const [reason, setReason] = useState("")
-
-  if (options.length === 0)
-    return (
-      <Banner tone="neutral" title="No hay transiciones disponibles desde acá">
-        <span className="text-ink-strong">
-          Tu rol no permite cambiar el estado de este evento en esta situación.
-        </span>
-      </Banner>
-    )
-
-  return (
-    <div className="grid gap-3">
-      {options.map((option) => (
-        <button
-          key={option.to}
-          type="button"
-          onClick={() => setActive(option)}
-          className={cx(
-            "gei-target grid gap-1 rounded-surface border p-4 text-left transition-colors",
-            option.danger
-              ? "border-danger-line bg-danger-soft hover:border-danger"
-              : "border-line-strong bg-surface hover:border-ink-faint",
-          )}
-        >
-          <span
-            className={cx(
-              "text-body font-semibold",
-              option.danger ? "text-danger" : "text-ink",
-            )}
-          >
-            {option.label}
-          </span>
-          <span className="gei-meta text-ink-strong">{option.consequence}</span>
-        </button>
-      ))}
-      {error && (
-        <Banner tone="danger" title="No pudimos aplicar el cambio">
-          <span className="text-ink-strong">{error}</span>
-        </Banner>
-      )}
-      {active && (
-        <ConfirmDialog
-          title={active.label}
-          consequence={active.consequence}
-          confirmLabel={active.label}
-          requireReason={active.requiresReason}
-          reasonLabel="Por qué lo hacés"
-          pending={pending === active.to}
-          onClose={() => {
-            setActive(null)
-            setReason("")
-          }}
-          onConfirm={(value) => {
-            onPick(active.to, value || reason)
-            setActive(null)
-          }}
-          extra={
-            <TextArea
-              label="Detalle"
-              rows={3}
-              value={reason}
-              onChange={(event) => setReason(event.target.value)}
-              hint="Queda en el historial junto con tu nombre."
-            />
-          }
-        />
-      )}
-    </div>
-  )
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   FORMULARIO DE EVENTO
-   Material vs no material · alcance de serie · conflict workspace
-   ═══════════════════════════════════════════════════════════════ */
+/* ---------------------------------------------
+   FORMULARIO DE EVENTO — alta y edición real
+   --------------------------------------------- */
 
 type FormState = {
   title: string
   date: string
   time: string
   end: string
+  timeZone: string
   venueId: string
   targetTeams: string[]
   clubWide: boolean
   opponent: string
+  competitionId: string
   meeting: string
   departure: string
   point: string
   transport: string
   arrival: string
-  seriesId: string
 }
 
-function initialForm(event: Event | undefined): FormState {
-  if (!event)
-    return {
-      title: "",
-      date: "",
-      time: "",
-      end: "",
-      venueId: "v1",
-      targetTeams: [],
-      clubWide: false,
-      opponent: "",
-      meeting: "",
-      departure: "",
-      point: "",
-      transport: "",
-      arrival: "",
-      seriesId: "",
-    }
+const EMPTY_FORM: FormState = {
+  title: "",
+  date: "",
+  time: "",
+  end: "",
+  timeZone: "America/Argentina/Buenos_Aires",
+  venueId: "",
+  targetTeams: [],
+  clubWide: false,
+  opponent: "",
+  competitionId: "",
+  meeting: "",
+  departure: "",
+  point: "",
+  transport: "",
+  arrival: "",
+}
+
+function formFromDetail(detail: EventDetailDto): FormState {
+  const tz = detail.timeZone
+  const start = utcIsoToZonedParts(detail.startAt, tz) ?? { date: "", time: "" }
+  const end = utcIsoToZonedParts(detail.endAt, tz)
+  const meeting = utcIsoToZonedParts(detail.logistics?.meetingAt, tz)
+  const departure = utcIsoToZonedParts(detail.logistics?.departureAt, tz)
   return {
-    title: event.title,
-    date: event.date,
-    time: event.time,
-    end: event.end,
-    venueId: event.venueId,
-    targetTeams: [...event.targetTeams],
-    clubWide: event.clubWide,
-    opponent: event.opponent,
-    meeting: event.meeting,
-    departure: event.departure,
-    point: event.point,
-    transport: event.transport,
-    arrival: event.arrival,
-    seriesId: event.seriesId ?? "",
+    title: detail.title,
+    date: start.date,
+    time: start.time,
+    end: end?.time ?? "",
+    timeZone: tz,
+    venueId: detail.venueId ?? "",
+    targetTeams: detail.targets.teams.map((t) => t.teamId),
+    clubWide: detail.clubWideTarget,
+    opponent: detail.opponent ?? "",
+    competitionId: detail.competitionId ?? "",
+    meeting: meeting?.time ?? "",
+    departure: departure?.time ?? "",
+    point: detail.logistics?.meetingPoint ?? "",
+    transport: detail.logistics?.transportNote ?? "",
+    arrival: detail.logistics?.arrivalInstructions ?? "",
   }
 }
 
-function diffForm(base: FormState, next: FormState) {
-  const patch: Partial<Event> = {}
+function diffForm(base: FormState, next: FormState): Record<string, unknown> {
+  const patch: Record<string, unknown> = {}
   if (base.title !== next.title) patch.title = next.title
-  if (base.date !== next.date) patch.date = next.date
-  if (base.time !== next.time) patch.time = next.time
-  if (base.end !== next.end) patch.end = next.end
-  if (base.venueId !== next.venueId) patch.venueId = next.venueId
-  if (base.targetTeams.join("|") !== next.targetTeams.join("|"))
-    patch.targetTeams = next.targetTeams
-  if (base.clubWide !== next.clubWide) patch.clubWide = next.clubWide
-  if (base.opponent !== next.opponent) patch.opponent = next.opponent
-  if (base.meeting !== next.meeting) patch.meeting = next.meeting
-  if (base.departure !== next.departure) patch.departure = next.departure
-  if (base.point !== next.point) patch.point = next.point
-  if (base.transport !== next.transport) patch.transport = next.transport
-  if (base.arrival !== next.arrival) patch.arrival = next.arrival
+  const startIso = next.date && next.time ? zonedLocalInputToIso(next.date, next.time, next.timeZone) : null
+  const baseStartIso = base.date && base.time ? zonedLocalInputToIso(base.date, base.time, base.timeZone) : null
+  if (startIso !== baseStartIso) patch.startAt = startIso
+  const endIso = next.end ? zonedLocalInputToIso(next.date, next.end, next.timeZone) : null
+  const baseEndIso = base.end ? zonedLocalInputToIso(base.date, base.end, base.timeZone) : null
+  if (endIso !== baseEndIso) patch.endAt = endIso
+  if (base.timeZone !== next.timeZone) patch.timeZone = next.timeZone
+  if (base.venueId !== next.venueId) patch.venueId = next.venueId || null
+  if (base.targetTeams.join("|") !== next.targetTeams.join("|")) patch.targetTeamIds = next.targetTeams
+  if (base.clubWide !== next.clubWide) patch.clubWideTarget = next.clubWide
+  if (base.opponent !== next.opponent) patch.opponent = next.opponent || null
+  if (base.competitionId !== next.competitionId) patch.competitionId = next.competitionId || null
+  const normTime = (value: string) => (value.trim() === "" ? null : value)
+  const normText = (value: string) => (value.trim() === "" ? null : value)
+  const logistics: Record<string, unknown> = {}
+  if (normTime(base.meeting) !== normTime(next.meeting)) logistics.meetingAt = next.meeting ? zonedLocalInputToIso(next.date, next.meeting, next.timeZone) : null
+  if (normTime(base.departure) !== normTime(next.departure)) logistics.departureAt = next.departure ? zonedLocalInputToIso(next.date, next.departure, next.timeZone) : null
+  if (normText(base.point) !== normText(next.point)) logistics.meetingPoint = next.point.trim() === "" ? null : next.point.trim()
+  if (normText(base.transport) !== normText(next.transport)) logistics.transportNote = next.transport.trim() === "" ? null : next.transport.trim()
+  if (normText(base.arrival) !== normText(next.arrival)) logistics.arrivalInstructions = next.arrival.trim() === "" ? null : next.arrival.trim()
+  if (Object.keys(logistics).length > 0) patch.logistics = logistics
   return patch
 }
 
 export function EventForm() {
-  const { eventId } = useParams()
+  const { eventId = "" } = useParams()
+  const editing = Boolean(eventId)
   const navigate = useNavigate()
-  const { state, authority, applyEventChange, patchEventMeta, update } = useProduct()
-  const [queryTeam] = [null]
-  void queryTeam
 
-  const editing = !!eventId
-  const event = state.events.find((item) => item.id === eventId)
-  const baseline = useRef<FormState>(initialForm(event))
-  const [form, setForm] = useState<FormState>(baseline.current)
-  const [type, setType] = useState<Event["type"]>(event?.type ?? "TRAINING")
+  const structure = useFetch(() => fetchStructure(), [])
+  const existing = useFetch(() => (editing ? fetchEventDetail(eventId) : Promise.resolve(null)), [eventId])
+  const me = useFetch(() => fetchMe(), [])
+
+  const [form, setForm] = useState<FormState>(EMPTY_FORM)
+  const [loaded, setLoaded] = useState(false)
+  const [type, setType] = useState<"TRAINING" | "MATCH" | "CLUB_EVENT">("TRAINING")
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [formError, setFormError] = useState("")
   const [pending, setPending] = useState(false)
   const [dirty, setDirty] = useState(false)
-  const [scopeDialog, setScopeDialog] = useState(false)
-  const [impact, setImpact] = useState<Impact | null>(null)
-  const [conflict, setConflict] = useState<{
-    baseline: Record<string, unknown>
-    local: Record<string, unknown>
-    latest: Record<string, unknown>
-  } | null>(null)
-  const [discardOpen, setDiscardOpen] = useState(false)
-  const [formError, setFormError] = useState("")
+  const [conflict, setConflict] = useState<{ baseline: FormState; local: FormState; latest: FormState; latestVersion: number } | null>(null)
+  const [repeat, setRepeat] = useState(false)
+  const [repeatFreq, setRepeatFreq] = useState<"DAILY" | "WEEKLY" | "MONTHLY">("WEEKLY")
+  const [repeatCount, setRepeatCount] = useState(8)
+  const baselineRef = useRef<FormState>(EMPTY_FORM)
   const firstErrorRef = useRef<string | null>(null)
 
-  const seriesCandidates = event?.seriesId
-    ? state.eventSeries.filter((series) => series.id === event.seriesId)
-    : []
+  useEffect(() => {
+    if (existing.data && !loaded) {
+      const next = formFromDetail(existing.data)
+      baselineRef.current = next
+      setForm(next)
+      setType(existing.data.type)
+      setLoaded(true)
+    }
+  }, [existing.data, loaded])
 
-  const scopeOptions: SeriesScopeOption[] = event
-    ? (["ONLY_THIS", "THIS_AND_FOLLOWING", "ENTIRE_SERIES"] as const).map(
-        (scope) => ({
-          value: scope,
-          title:
-            scope === "ONLY_THIS"
-              ? "Sólo este evento"
-              : scope === "THIS_AND_FOLLOWING"
-                ? "Este y los siguientes"
-                : "Toda la serie",
-          detail:
-            scope === "ONLY_THIS"
-              ? "El resto de la serie queda como está."
-              : scope === "THIS_AND_FOLLOWING"
-                ? "Se aplica desde acá en adelante. Lo anterior no se toca."
-                : "Se aplica a todos los eventos de la serie.",
-          count: seriesOccurrences(state, event.id, scope).length,
-        }),
-      )
-    : []
-
-  const canEditThis = event ? authority.canEditEvent(event) : authority.canCreateEvent
-
-  if (editing && !event)
-    return (
-      <div className="mx-auto max-w-3xl">
-        <Empty
-          title="Ese evento ya no está"
-          detail="Puede que se haya cancelado o que el enlace esté incompleto."
-        />
-      </div>
-    )
-
-  // Narrowing explícito: en alta no existe `target` y no se usa.
-  const target = event as Event
-
-  if (!canEditThis)
-    return (
-      <div className="mx-auto max-w-3xl">
-        <Empty
-          title="No podés editar este evento"
-          detail="Tu rol no tiene alcance sobre este equipo o evento. Pedile a la Subcomisión o al entrenador."
-        />
-      </div>
-    )
+  const teams = useMemo(() => (structure.data?.teams ?? []).filter((team) => team.state === "ACTIVE"), [structure.data])
+  const myCoachTeamIds = useMemo(
+    () => new Set((me.data?.roleAssignments ?? []).filter((r) => r.role === "COACH" && r.scopeType === "TEAM").map((r) => r.scopeRefId)),
+    [me.data],
+  )
+  const visibleTeams = useMemo(
+    () => (me.data?.isSubcommittee ? teams : teams.filter((team) => myCoachTeamIds.has(team.id))),
+    [teams, me.data, myCoachTeamIds],
+  )
+  const venues = useMemo(() => (structure.data?.venues ?? []).filter((venue) => !venue.archivedAt), [structure.data])
+  const competitions = useMemo(() => (structure.data?.competitions ?? []).filter((competition) => !competition.archivedAt), [structure.data])
+  const canCreateClubWide = Boolean(me.data?.isSubcommittee)
+  const canCreateClubEvent = Boolean(me.data?.isSubcommittee)
 
   function set<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((current) => ({ ...current, [key]: value }))
@@ -1135,929 +525,534 @@ export function EventForm() {
     if (!form.date) found.date = "Elegí la fecha."
     if (!form.time) found.time = "Elegí la hora de inicio."
     if (form.end && form.end <= form.time) found.end = "La hora de fin tiene que ser posterior a la de inicio."
-    if (!form.clubWide && form.targetTeams.length === 0)
-      found.targetTeams = "Elegí al menos un equipo destino."
-    if (type === "MATCH" && !form.opponent.trim())
-      found.opponent = "Escribí contra quién se juega."
+    if (type === "MATCH" && !form.opponent.trim()) found.opponent = "Escribí contra quién se juega."
+    if (!form.clubWide && form.targetTeams.length === 0) found.targetTeams = "Elegí al menos un equipo destino."
     setErrors(found)
     const first = Object.keys(found)[0]
     if (first) {
       firstErrorRef.current = first
-      window.setTimeout(() => {
-        document.getElementById(`field-${first}`)?.focus()
-      }, 0)
+      window.setTimeout(() => document.getElementById(`field-${first}`)?.focus(), 0)
     }
     return Object.keys(found).length === 0
   }
 
-  const patch = diffForm(baseline.current, form)
-  const materialFields = Object.keys(patch).filter(
-    (key) => key !== "title",
-  )
-  const isNonMaterialOnly =
-    editing && Object.keys(patch).length > 0 && materialFields.length === 0
+  const patch = diffForm(baselineRef.current, form)
+  const isNonMaterialOnly = editing && Object.keys(patch).length > 0 && Object.keys(patch).every((key) => key === "title")
 
   async function submit() {
     setFormError("")
     if (!validate()) return
-    if (!editing) {
-      // Alta simple: el alcance de serie se resuelve en la edición.
-      const id = `event-${crypto.randomUUID().slice(0, 8)}`
-      update(
-        (draft) => {
-          const teams = draft.teams
-            .filter((team) => team.state === "ACTIVE")
-            .filter((team) => form.targetTeams.includes(team.id))
-            .map((team) => {
-              const responders = draft.teamAssignments
-                .filter((a) => a.teamId === team.id && !a.validUntil)
-                .map((a) => a.personId)
-              return Object.fromEntries(
-                responders.map((personId) => [
-                  personId,
-                  {
-                    value: "YES" as const,
-                    coordinationRevision: 1,
-                    answeredAt: new Date().toISOString(),
-                  },
-                ]),
-              )
-            })
-            .reduce<Record<string, unknown>>(
-              (accumulator, item) => ({ ...accumulator, ...item }),
-              {},
-            )
-          draft.events.unshift({
-            id,
-            title: form.title,
-            type,
-            targetTeams: form.clubWide ? [] : form.targetTeams,
-            targetPersonIds: [],
-            seriesId: null,
-            venueId: form.venueId,
-            date: form.date,
-            time: form.time,
-            end: form.end || "20:30",
-            opponent: form.opponent,
-            state: "SCHEDULED",
-            coordinationRevision: 1,
-            version: 1,
-            competitionId: type === "MATCH" ? "ahba" : null,
-            meeting: form.meeting,
-            departure: form.departure,
-            point: form.point,
-            transport: form.transport,
-            arrival: form.arrival,
-            clubWide: form.clubWide,
-            availability: teams as never,
-            selection: [],
-            selectionDraftAt: null,
-            published: null,
-            publishedAt: null,
-            selectionRevisions: [],
-            attendance: {},
-            attendanceOpened: false,
-            attendanceClosedAt: null,
-            attendanceHistory: [],
-            record: {
-              state: "DRAFT",
-              status: "PLAYED",
-              gei: 0,
-              opponent: 0,
-              observations: "",
-              stats: {},
-            },
-            recordHistory: [],
-            history: [
-              {
-                id: `h-${crypto.randomUUID().slice(0, 8)}`,
-                at: new Date().toISOString(),
-                actor: authority.person.name,
-                text: "Evento creado",
-              },
-            ],
-            divergedFromSeries: false,
-          })
-        },
-        {
-          action: "Crear evento",
-          resource: form.title,
-          before: null,
-          after: form.date,
-          source: "Alta de evento",
-          route: `/events/${id}`,
-        },
-      )
-      navigate(`/events/${id}`)
-      return
-    }
-
-    if (isNonMaterialOnly) {
-      patchEventMeta(target.id, { title: form.title }, "Corrección de redacción")
-      navigate(`/events/${target.id}`)
-      return
-    }
-
     setPending(true)
     try {
-      if (target.seriesId) {
-        setScopeDialog(true)
+      const startAt = zonedLocalInputToIso(form.date, form.time, form.timeZone)!
+      const endAt = form.end ? zonedLocalInputToIso(form.date, form.end, form.timeZone) : null
+      if (editing) {
+        const current = existing.data!
+        if (Object.keys(patch).length === 0) {
+          navigate(`/events/${eventId}`)
+          return
+        }
+        const logisticsOnly = Object.keys(patch).every((key) => key === "logistics")
+        const titlePlusLogistics = Object.keys(patch).every((key) => key === "logistics" || key === "title")
+        // Logística usa CMD-EVT-16 (CAPTAIN/COACH/SUBCOMMITTEE); el resto va por CMD-EVT-05/04.
+        if (patch.logistics && titlePlusLogistics) {
+          const logisticsPatch = patch.logistics as Record<string, unknown>
+          if (Object.values(logisticsPatch).some((item) => item !== undefined && item !== null)) {
+            await fetchUpdateLogistics({
+              eventId,
+              meetingAt: logisticsPatch.meetingAt === undefined ? undefined : logisticsPatch.meetingAt as string | null,
+              departureAt: logisticsPatch.departureAt === undefined ? undefined : logisticsPatch.departureAt as string | null,
+              meetingPoint: logisticsPatch.meetingPoint === undefined ? undefined : logisticsPatch.meetingPoint as string | null,
+              transportNote: logisticsPatch.transportNote === undefined ? undefined : logisticsPatch.transportNote as string | null,
+              arrivalInstructions: logisticsPatch.arrivalInstructions === undefined ? undefined : logisticsPatch.arrivalInstructions as string | null,
+              expectedVersion: current.version,
+              idempotencyKey: crypto.randomUUID(),
+            })
+            if (titlePlusLogistics && patch.title !== undefined) {
+              await fetchEditEventMeta({ eventId, title: String(patch.title).trim(), expectedVersion: current.version + 1 })
+            }
+            navigate(`/events/${eventId}`)
+            return
+          }
+        }
+        if (logisticsOnly) {
+          // Sin campos reales de logística (todo vacío): no hay cambios — volver al detalle.
+          navigate(`/events/${eventId}`)
+          return
+        }
+        if (isNonMaterialOnly) {
+          await fetchEditEventMeta({ eventId, title: form.title.trim(), expectedVersion: current.version })
+        } else {
+          if (patch.title !== undefined) {
+            // title viaja también en el patch material: el backend lo trata como metadata (sin coordRev++).
+          }
+          await fetchMaterialChangeEvent({ eventId, patch, expectedVersion: current.version, idempotencyKey: crypto.randomUUID() })
+        }
+        navigate(`/events/${eventId}`)
         return
       }
-      const result = await applyEventChange(
-        target.id,
-        patch,
-        "ONLY_THIS",
-        "Editar evento",
-      )
-      void result
-      navigate(`/events/${target.id}`)
-    } catch (error) {
-      if (error instanceof StaleVersionError)
-        setConflict({
-          baseline: error.baseline,
-          local: error.local,
-          latest: error.latest,
+      if (repeat) {
+        await fetchCreateEventSeries({
+          recurrenceRule: `FREQ=${repeatFreq};COUNT=${repeatCount}`,
+          maxOccurrences: repeatCount,
+          type,
+          title: form.title.trim(),
+          startAt,
+          endAt,
+          timeZone: form.timeZone,
+          venueId: form.venueId || null,
+          clubWideTarget: form.clubWide,
+          targetTeamIds: form.clubWide ? undefined : form.targetTeams,
+          competitionId: type === "MATCH" ? form.competitionId || null : null,
+          opponent: type === "MATCH" ? form.opponent.trim() : null,
+          idempotencyKey: crypto.randomUUID(),
         })
-      else setFormError("No pudimos guardar. Volvé a intentar.")
+        navigate("/calendar")
+        return
+      }
+      const created = await fetchCreateEvent({
+        type,
+        title: form.title.trim(),
+        startAt,
+        endAt,
+        timeZone: form.timeZone,
+        venueId: form.venueId || null,
+        clubWideTarget: form.clubWide,
+        targetTeamIds: form.clubWide ? undefined : form.targetTeams,
+        competitionId: type === "MATCH" ? form.competitionId || null : null,
+        opponent: type === "MATCH" ? form.opponent.trim() : null,
+        logistics: {
+          meetingAt: form.meeting ? zonedLocalInputToIso(form.date, form.meeting, form.timeZone) : null,
+          departureAt: form.departure ? zonedLocalInputToIso(form.date, form.departure, form.timeZone) : null,
+          meetingPoint: form.point || null,
+          transportNote: form.transport || null,
+          arrivalInstructions: form.arrival || null,
+        },
+        idempotencyKey: crypto.randomUUID(),
+      })
+      navigate(`/events/${created.id}`)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "No se pudo guardar"
+      const code = (err as { code?: string } | null)?.code
+      if (editing && code === "OPTIMISTIC_LOCK_FAILURE" && existing.data) {
+        const fresh = await fetchEventDetail(eventId)
+        setConflict({ baseline: baselineRef.current, local: form, latest: formFromDetail(fresh), latestVersion: fresh.version })
+      } else {
+        setFormError(message)
+      }
     } finally {
       setPending(false)
     }
   }
 
-  async function chooseScope(scope: SeriesScope) {
-    setScopeDialog(false)
-    setPending(true)
-    try {
-      const result = await applyEventChange(
-        target.id,
-        patch,
-        scope,
-        "Editar evento",
-      )
-      setImpact(null)
-      navigate(`/events/${target.id}`)
-      void result
-    } catch (error) {
-      if (error instanceof StaleVersionError)
-        setConflict({
-          baseline: error.baseline,
-          local: error.local,
-          latest: error.latest,
-        })
-      else setFormError("No pudimos guardar. Volvé a intentar.")
-    } finally {
-      setPending(false)
-    }
+  if (editing && existing.error) {
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Empty title="Ese evento ya no está" detail="Puede que se haya cancelado o que el enlace está incompleto." />
+      </div>
+    )
   }
-
-  const previewImpact = event
-    ? computeImpact(state, event.id, patch, "ONLY_THIS")
-    : null
+  if (editing && !loaded) {
+    return <div className="mx-auto max-w-3xl"><p className="gei-meta">Cargando el evento…</p></div>
+  }
+  if (structure.loading || me.loading) {
+    return <div className="mx-auto max-w-3xl"><p className="gei-meta">Cargando equipos y sedes…</p></div>
+  }
+  if (structure.error) {
+    return (
+      <div className="mx-auto max-w-3xl">
+        <Banner tone="danger" title="No pudimos cargar la estructura del club"><span className="text-ink-strong">{structure.error}</span></Banner>
+      </div>
+    )
+  }
 
   return (
     <div className="gei-stack-page mx-auto max-w-3xl">
       <PageContextHeader
-        context={editing ? "Editar evento" : "Nuevo evento"}
-        title={editing ? "Editar evento" : "Crear evento"}
-        lead={
-          editing
-            ? "Los cambios de horario, sede, destino o logística se aplican a toda la serie si corresponde."
-            : "Cargá lo mínimo: el resto se completa a medida que avance la organización."
-        }
-        back={editing ? `/events/${target.id}` : "/calendar"}
-        below={
-          dirty ? (
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-meta font-medium text-attention">
-                Hay cambios sin guardar
-              </span>
-              <Button variant="quiet" onClick={() => setDiscardOpen(true)}>
-                Descartar
-              </Button>
-            </div>
-          ) : undefined
+        context={editing ? `Editar ${TYPE_LABEL[type]}` : `Nuevo ${TYPE_LABEL[type]}`}
+        title={editing ? existing.data?.title ?? "Editar evento" : "Nuevo evento"}
+        back={editing ? `/events/${eventId}` : "/calendar"}
+        action={
+          <Button variant="primary" onClick={submit} busy={pending}>
+            <Save size={16} aria-hidden />
+            {editing ? "Guardar cambios" : "Crear evento"}
+          </Button>
         }
       />
 
-      <form
-        onSubmit={(event_) => {
-          event_.preventDefault()
-          void submit()
-        }}
-        noValidate
-        className="grid gap-5"
-      >
-        {formError && (
-          <Banner tone="danger" title="No pudimos guardar el evento">
-            <span className="text-ink-strong">{formError}</span>
-          </Banner>
-        )}
+      {formError && (
+        <Banner tone="danger" title="No se pudo guardar"><span className="text-ink-strong">{formError}</span></Banner>
+      )}
 
-        <Surface className="grid gap-4">
-          <SectionHeader title="Qué es" />
-          <TextField
-            id="field-title"
-            label="Título"
-            required
-            value={form.title}
-            error={errors.title}
-            placeholder="Entrenamiento de la Sexta A"
-            onChange={(next) => set("title", next.target.value)}
-          />
-          <RadioGroup
-            legend="Tipo de evento"
-            name="event-type"
-            columns={3}
-            value={type}
-            onChange={(value) => {
-              setType(value)
-              setDirty(true)
-            }}
-            options={[
-              { value: "TRAINING", label: "Entrenamiento" },
-              { value: "MATCH", label: "Partido" },
-              { value: "CLUB_EVENT", label: "Evento del club" },
-            ]}
-          />
-          {type === "MATCH" && (
-            <TextField
-              id="field-opponent"
-              label="Rival"
-              required
-              value={form.opponent}
-              error={errors.opponent}
-              placeholder="Nombre del club"
-              onChange={(next) => set("opponent", next.target.value)}
-            />
-          )}
-        </Surface>
-
-        <Surface className="grid gap-4">
-          <SectionHeader title="Cuándo y dónde" />
-          <div className="grid gap-4 sm:grid-cols-3">
-            <TextField
-              id="field-date"
-              label="Fecha"
-              type="date"
-              required
-              value={form.date}
-              error={errors.date}
-              onChange={(next) => set("date", next.target.value)}
-            />
-            <TextField
-              id="field-time"
-              label="Hora de inicio"
-              type="time"
-              required
-              value={form.time}
-              error={errors.time}
-              onChange={(next) => set("time", next.target.value)}
-            />
-            <TextField
-              id="field-end"
-              label="Hora de fin"
-              type="time"
-              value={form.end}
-              error={errors.end}
-              onChange={(next) => set("end", next.target.value)}
-            />
-          </div>
-          <Select
-            id="field-venueId"
-            label="Sede"
-            value={form.venueId}
-            error={errors.venueId}
-            onChange={(next) => set("venueId", next.target.value)}
-          >
-            {state.venues.map((venue) => (
-              <option key={venue.id} value={venue.id}>
-                {venue.name} · {venue.address}
-              </option>
-            ))}
-          </Select>
-        </Surface>
-
-        <Surface className="grid gap-4">
-          <SectionHeader title="Quiénes van" />
-          <RadioGroup
-            legend="Destino"
-            name="event-audience"
-            columns={2}
-            value={form.clubWide ? "CLUB" : "TEAMS"}
-            onChange={(value) => {
-              set("clubWide", value === "CLUB")
-            }}
-            options={[
-              { value: "TEAMS", label: "Equipos concretos" },
-              { value: "CLUB", label: "Todo el hockey" },
-            ]}
-          />
-          {!form.clubWide && (
-            <fieldset className="grid gap-2" id="field-targetTeams">
-              <legend className="mb-1 text-body font-semibold">Equipos destino</legend>
-              {errors.targetTeams && (
-                <p className="text-meta font-medium text-danger">
-                  {errors.targetTeams}
-                </p>
+      {!editing && (
+        <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Tipo de evento">
+          {(["TRAINING", "MATCH", "CLUB_EVENT"] as const).map((value) => (
+            <button
+              key={value}
+              type="button"
+              role="radio"
+              aria-checked={type === value}
+              onClick={() => setType(value)}
+              className={cx(
+                "gei-target rounded-pill border px-4 text-body font-semibold transition-colors",
+                type === value ? "border-selected-line bg-selected-soft text-selected" : "border-line bg-surface text-ink-muted hover:text-ink",
               )}
-              <div className="grid gap-2 sm:grid-cols-2">
-                {state.teams
-                  .filter((team) => team.state === "ACTIVE")
-                  .map((team) => {
-                    const checked = form.targetTeams.includes(team.id)
-                    return (
-                      <label
-                        key={team.id}
-                        className={cx(
-                          "gei-target flex cursor-pointer items-center gap-2.5 rounded-control border px-3 text-body font-medium transition-colors",
-                          checked
-                            ? "border-selected-line bg-selected-soft text-selected"
-                            : "border-line-strong bg-surface hover:border-ink-faint",
-                        )}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={checked}
-                          onChange={(next) =>
-                            set(
-                              "targetTeams",
-                              next.target.checked
-                                ? [...form.targetTeams, team.id]
-                                : form.targetTeams.filter((id) => id !== team.id),
-                            )
-                          }
-                          className="size-5 accent-interactive"
-                        />
-                        {teamName(state, team.id)}
-                      </label>
-                    )
-                  })}
+            >
+              {TYPE_LABEL[value]}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="grid gap-4">
+        <Surface className="grid gap-4">
+          <TextField id="field-title" label="Título" value={form.title} onChange={(e) => set("title", e.target.value)} error={errors.title} placeholder="Ej.: Entrenamiento táctico" />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <TextField id="field-date" label="Fecha" type="date" value={form.date} onChange={(e) => set("date", e.target.value)} error={errors.date} />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <TextField id="field-time" label="Inicio" type="time" value={form.time} onChange={(e) => set("time", e.target.value)} error={errors.time} />
+              <TextField id="field-end" label="Fin" type="time" value={form.end} onChange={(e) => set("end", e.target.value)} error={errors.end} />
+            </div>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Select id="field-timeZone" label="Zona horaria" value={form.timeZone} onChange={(e) => set("timeZone", e.target.value)}>
+              {CANONICAL_ZONES.map((zone) => <option key={zone} value={zone}>{zone.replace(/_/g, " ")}</option>)}
+            </Select>
+            <Select id="field-venueId" label="Sede" value={form.venueId} onChange={(e) => set("venueId", e.target.value)}>
+              <option value="">Sin sede</option>
+              {venues.map((venue) => <option key={venue.id} value={venue.id}>{venue.name}</option>)}
+            </Select>
+          </div>
+        </Surface>
+
+        <Surface className="grid gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="gei-section-title">Destino</p>
+              <p className="gei-meta mt-1">¿Quiénes tienen que enterarse de este evento?</p>
+            </div>
+            {canCreateClubWide && type !== "MATCH" && (
+              <div className="flex gap-2" role="radiogroup" aria-label="Alcance">
+                <button type="button" role="radio" aria-checked={!form.clubWide} onClick={() => set("clubWide", false)}
+                  className={cx("gei-target rounded-pill border px-3 text-meta font-semibold", !form.clubWide ? "border-selected-line bg-selected-soft text-selected" : "border-line text-ink-muted")}>
+                  Equipos elegidos
+                </button>
+                <button type="button" role="radio" aria-checked={form.clubWide} onClick={() => set("clubWide", true)}
+                  className={cx("gei-target rounded-pill border px-3 text-meta font-semibold", form.clubWide ? "border-selected-line bg-selected-soft text-selected" : "border-line text-ink-muted")}>
+                  Todo el club
+                </button>
               </div>
+            )}
+          </div>
+          {!form.clubWide && (
+            <fieldset className="grid gap-2">
+              <legend className="gei-meta font-semibold">Equipos</legend>
+              {visibleTeams.length === 0 && <p className="gei-meta">{me.data?.isSubcommittee ? "No hay equipos activos." : "No sos entrenador de ningún equipo activo. Pedile a la administración o a la Subcomisión que te asigne."}</p>}
+              {visibleTeams.map((team) => (
+                <label key={team.id} className="flex cursor-pointer items-center gap-3 rounded-control border border-line px-3 py-2.5 hover:border-interactive">
+                  <input
+                    type="checkbox"
+                    checked={form.targetTeams.includes(team.id)}
+                    onChange={(event) => {
+                      const next = event.target.checked ? [...form.targetTeams, team.id] : form.targetTeams.filter((id) => id !== team.id)
+                      set("targetTeams", next)
+                    }}
+                    className="size-4 accent-[var(--color-interactive)]"
+                  />
+                  <span className="text-body text-ink">{team.name}</span>
+                </label>
+              ))}
+              {errors.targetTeams && <p className="text-meta font-medium text-danger">{errors.targetTeams}</p>}
             </fieldset>
           )}
+          {type === "MATCH" && (
+            <>
+              <TextField id="field-opponent" label="Rival" value={form.opponent} onChange={(e) => set("opponent", e.target.value)} error={errors.opponent} placeholder="Ej.: Racing" />
+              <Select id="field-competitionId" label="Competencia (opcional)" value={form.competitionId} onChange={(e) => set("competitionId", e.target.value)}>
+                <option value="">Sin competencia</option>
+                {competitions.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </Select>
+            </>
+          )}
         </Surface>
 
         <Surface className="grid gap-4">
-          <SectionHeader title="Logística" hint="Se puede completar más adelante." />
+          <p className="gei-section-title">Logística <span className="gei-meta font-normal">(opcional)</span></p>
           <div className="grid gap-4 sm:grid-cols-2">
-            <TextField
-              id="field-meeting"
-              label="Hora de encuentro"
-              type="time"
-              value={form.meeting}
-              onChange={(next) => set("meeting", next.target.value)}
-            />
-            <TextField
-              id="field-departure"
-              label="Hora de salida"
-              type="time"
-              value={form.departure}
-              onChange={(next) => set("departure", next.target.value)}
-            />
+            <TextField id="field-meeting" label="Hora de encuentro" type="time" value={form.meeting} onChange={(e) => set("meeting", e.target.value)} />
+            <TextField id="field-departure" label="Hora de salida" type="time" value={form.departure} onChange={(e) => set("departure", e.target.value)} />
           </div>
-          <TextField
-            id="field-point"
-            label="Punto de encuentro"
-            value={form.point}
-            onChange={(next) => set("point", next.target.value)}
-          />
-          <TextArea
-            id="field-transport"
-            label="Cómo se llega"
-            rows={2}
-            value={form.transport}
-            onChange={(next) => set("transport", next.target.value)}
-          />
-          <TextArea
-            id="field-arrival"
-            label="Cómo llegar a la cancha"
-            rows={2}
-            value={form.arrival}
-            onChange={(next) => set("arrival", next.target.value)}
-          />
+          <TextField id="field-point" label="Punto de encuentro" value={form.point} onChange={(e) => set("point", e.target.value)} placeholder="Ej.: Puerta del club" />
+          <TextField id="field-transport" label="Como se llega" value={form.transport} onChange={(e) => set("transport", e.target.value)} />
+          <TextField id="field-arrival" label="Cómo llegar a la cancha" value={form.arrival} onChange={(e) => set("arrival", e.target.value)} />
         </Surface>
 
-        {editing && previewImpact && previewImpact.lines.length > 0 && (
-          <ImpactPreview
-            lines={previewImpact.lines}
-            occurrences={[]}
-            people={[]}
-          />
+        {!editing && (
+          <Surface className="grid gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="gei-section-title">Repetir</p>
+                <p className="gei-meta mt-1">Crea una serie de eventos reales, uno por ocurrencia.</p>
+              </div>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" checked={repeat} onChange={(e) => setRepeat(e.target.checked)} className="size-4 accent-[var(--color-interactive)]" />
+                <span className="text-body text-ink">Repetir este evento</span>
+              </label>
+            </div>
+            {repeat && (
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Select id="repeat-freq" label="Frecuencia" value={repeatFreq} onChange={(e) => setRepeatFreq(e.target.value as never)}>
+                  <option value="WEEKLY">Semanal</option>
+                  <option value="DAILY">Diaria</option>
+                  <option value="MONTHLY">Mensual</option>
+                </Select>
+                <TextField id="repeat-count" label="Cantidad de veces" type="number" value={String(repeatCount)} onChange={(e) => setRepeatCount(Math.max(1, Math.min(366, Number(e.target.value) || 1)))} />
+              </div>
+            )}
+          </Surface>
         )}
-
-        {editing && Object.keys(patch).length > 0 && (
-          <p className="gei-meta">
-            {isNonMaterialOnly
-              ? "Es una corrección de redacción: no cambia el horario, así que no avisa a nadie ni pide impact review."
-              : `Cambian ${materialFields.length} ${
-                  materialFields.length === 1 ? "campo" : "campos"
-                } con impacto real: se avisa a los alcanzados.`}
-          </p>
-        )}
-
-        <div className="sticky bottom-16 z-20 -mx-4 flex flex-wrap items-center justify-between gap-2 border-t border-line bg-surface/95 px-4 py-3 backdrop-blur-sm lg:bottom-0 lg:mx-0 lg:rounded-surface lg:border">
-          <p className="gei-meta">
-            {editing ? "Guardar" : "Crear evento"}
-          </p>
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant="quiet"
-              onClick={() => {
-                if (dirty) setDiscardOpen(true)
-                else navigate(editing ? `/events/${target.id}` : "/calendar")
-              }}
-            >
-              Cancelar
-            </Button>
-            <Button type="submit" variant="primary" busy={pending}>
-              {editing ? "Guardar cambios" : "Crear evento"}
-            </Button>
-          </div>
-        </div>
-      </form>
-
-      {seriesCandidates.length > 0 && !scopeDialog && (
-        <p className="gei-meta">
-          Este evento pertenece a la serie “{seriesCandidates[0].name}”. Al guardar
-          te vamos a preguntar el alcance.
-        </p>
-      )}
-
-      {scopeDialog && (
-        <ScopeDialog
-          options={scopeOptions}
-          onClose={() => setScopeDialog(false)}
-          onPick={chooseScope}
-        />
-      )}
-
-      {impact && (
-        <Modal title="Impacto del cambio" onClose={() => setImpact(null)}>
-          <ImpactPreview
-            lines={impact.lines}
-            occurrences={impact.occurrences}
-            people={impact.people}
-          />
-        </Modal>
-      )}
+      </div>
 
       {conflict && (
         <ConflictWorkspace
-          baseline={conflict.baseline}
-          local={conflict.local}
-          latest={conflict.latest}
-          onClose={() => setConflict(null)}
+          baseline={conflict.baseline as never}
+          local={conflict.local as never}
+          latest={conflict.latest as never}
           onKeepMine={async () => {
+            const fresh = await fetchEventDetail(eventId)
+            const latestPatch = diffForm(formFromDetail(fresh), conflict.local)
+            await fetchResolveEventConflict({ eventId, expectedVersion: conflict.latestVersion, patch: latestPatch })
             setConflict(null)
-            setPending(true)
-            try {
-              await applyEventChange(
-                target.id,
-                patch,
-                "ONLY_THIS",
-                "Editar evento",
-              )
-              navigate(`/events/${target.id}`)
-            } catch {
-              setFormError("Volvió a cambiar. Revisá de nuevo.")
-            } finally {
-              setPending(false)
-            }
+            navigate(`/events/${eventId}`)
           }}
           onTakeLatest={() => {
+            setForm(conflict.latest)
+            baselineRef.current = conflict.latest
             setConflict(null)
-            setForm({
-              ...baseline.current,
-              title: String(conflict.latest.title ?? baseline.current.title),
-              date: String(conflict.latest.date ?? baseline.current.date),
-              time: String(conflict.latest.time ?? baseline.current.time),
-              end: String(conflict.latest.end ?? baseline.current.end),
-              venueId: String(conflict.latest.venueId ?? baseline.current.venueId),
-            })
-            baseline.current = initialForm(target)
-            setDirty(false)
           }}
-        />
-      )}
-
-      {discardOpen && (
-        <ConfirmDialog
-          title="¿Descartás los cambios?"
-          consequence="Vuelves a la última versión guardada. Lo que escribiste en este formulario se pierde."
-          confirmLabel="Descartar cambios"
-          onClose={() => setDiscardOpen(false)}
-          onConfirm={() => {
-            setForm(baseline.current)
-            setDirty(false)
-            setDiscardOpen(false)
-            navigate(editing ? `/events/${target.id}` : "/calendar")
-          }}
+          onClose={() => setConflict(null)}
         />
       )}
     </div>
   )
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   JORNADA — detalle y alta
-   Una jornada agrupa partidos de una fecha operativa. No reemplaza el ciclo
-   de vida de cada partido.
-   ═══════════════════════════════════════════════════════════════ */
+/* ---------------------------------------------
+   JORNADA (R19 crear · R20 detalle/listado)
+   --------------------------------------------- */
 
 export function JornadaPage() {
-  const { jornadaId } = useParams()
-  const jornada = useProduct().state.jornadas.find(
-    (item) => item.id === jornadaId,
-  )
-  if (!jornada) return <JornadaCreate />
-  return <JornadaDetail jornadaId={jornada.id} />
+  const { jornadaId = "" } = useParams()
+  const location = useLocation()
+  const creating = location.pathname.endsWith("/new")
+  if (creating || !jornadaId) return <JornadaCreate />
+  return <JornadaDetail jornadaId={jornadaId} />
 }
 
 function JornadaDetail({ jornadaId }: { jornadaId: string }) {
   const navigate = useNavigate()
-  const { state, authority, updateJornada } = useProduct()
-  const jornada = state.jornadas.find((item) => item.id === jornadaId)!
+  const { data: jornada, loading, error } = useFetch(() => fetchJornadaDetail(jornadaId), [jornadaId])
 
-  const events = jornada.events
-    .map((id) => state.events.find((event) => event.id === id))
-    .filter((event): event is Event => !!event)
-  const season = state.structure.find((item) => item.id === jornada.seasonId)
-  const competition = jornada.competitionId
-    ? state.competitions.find((item) => item.id === jornada.competitionId)
-    : undefined
-  const canManage = authority.coachTeamIds.some((teamId) =>
-    events.some((event) => event.targetTeams.includes(teamId)),
+  if (loading) return <div className="mx-auto max-w-4xl"><p className="gei-meta">Cargando jornada…</p></div>
+  if (error || !jornada) return (
+    <div className="mx-auto max-w-3xl">
+      <Empty title="Jornada no encontrada" detail="Puede que haya cambiado o el enlace está incompleto." />
+      <div className="mt-4"><Button variant="secondary" onClick={() => navigate("/calendar")}>Volver a la agenda</Button></div>
+    </div>
   )
-  const [form, setForm] = useState({
-    meeting: jornada.meeting,
-    departure: jornada.departure,
-    point: jornada.point,
-    venueId: jornada.venueId ?? "v1",
-  })
-  const [pending, setPending] = useState(false)
-  const [impactVisible, setImpactVisible] = useState(false)
-  const [error, setError] = useState("")
-
-  const bulkChanged =
-    (jornada.venueId ?? "v1") !== form.venueId ||
-    jornada.meeting !== form.meeting
 
   return (
-    <div className="gei-stack-page mx-auto max-w-3xl">
+    <div className="gei-stack-page mx-auto max-w-4xl">
       <PageContextHeader
-        context="Jornadas"
+        context="Jornada"
         title={jornada.name}
+        lead={`${dateLabel(jornada.date, true)} · ${jornada.matches.length} ${jornada.matches.length === 1 ? "partido" : "partidos"}`}
         back="/calendar"
-        lead={
-          canManage
-            ? "Los cambios de sede o de horario se aplican a todos los partidos de la jornada y avisan a las convocadas."
-            : "Estás viendo la organización de la jornada."
-        }
       />
-
-      {error && (
-        <Banner tone="danger" title="No pudimos guardar">
-          <span className="text-ink-strong">{error}</span>
-        </Banner>
-      )}
-
-      <DetailSection title="Contexto">
-        <dl className="grid">
-          <RowStatic
-            title="Temporada"
-            detail={season ? `Temporada ${season.name}` : "Sin temporada"}
-          />
-          {competition && (
-            <RowStatic
-              title="Competencia"
-              detail={competition.name}
-              trailing={
-                <TextLink to={`/management/competitions/${competition.id}`}>
-                  Ver
-                </TextLink>
-              }
-            />
-          )}
-        </dl>
-      </DetailSection>
-
-      <DetailSection
-        title="Partidos de la jornada"
-        meta={`${events.length} ${events.length === 1 ? "partido" : "partidos"}`}
-      >
-        <ul className="grid gap-1">
-          {events.map((event) => (
-            <li key={event.id}>
+      <Surface className="grid gap-2">
+        <p className="gei-meta">Partidos de la jornada</p>
+        <ul className="grid">
+          {jornada.matches.map((match) => {
+            const parts = isoToZoned(match)
+            return (
               <RowLink
-                to={`/events/${event.id}`}
-                title={eventName(event)}
-                detail={`${dateLabel(event.date, true)} · ${
-                  hasLiveSchedule(event) ? event.time : "sin horario vigente"
-                }`}
+                key={match.id}
+                to={`/events/${match.id}`}
+                title={`GEI vs. ${match.opponent ?? "Rival a definir"}`}
+                detail={parts}
+                leading={<span aria-hidden className="size-2 rounded-pill bg-brand" />}
               />
-            </li>
-          ))}
+            )
+          })}
+          {jornada.matches.length === 0 && <p className="gei-meta">Todavía no hay partidos asignados.</p>}
         </ul>
-      </DetailSection>
-
-      {canManage ? (
-        <Surface className="grid gap-4">
-          <SectionHeader
-            title="Organización de toda la jornada"
-            meta={bulkChanged ? "Cambia los partidos de la jornada" : undefined}
-          />
-          <Select
-            label="Sede de la jornada"
-            value={form.venueId}
-            onChange={(next) =>
-              setForm((current) => ({ ...current, venueId: next.target.value }))
-            }
-          >
-            {state.venues.map((venue) => (
-              <option key={venue.id} value={venue.id}>
-                {venue.name}
-              </option>
-            ))}
-          </Select>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <TextField
-              label="Hora de encuentro"
-              type="time"
-              value={form.meeting}
-              onChange={(next) =>
-                setForm((current) => ({ ...current, meeting: next.target.value }))
-              }
-            />
-            <TextField
-              label="Hora de salida"
-              type="time"
-              value={form.departure}
-              onChange={(next) =>
-                setForm((current) => ({ ...current, departure: next.target.value }))
-              }
-            />
-          </div>
-          <TextField
-            label="Punto de encuentro"
-            value={form.point}
-            onChange={(next) =>
-              setForm((current) => ({ ...current, point: next.target.value }))
-            }
-          />
-
-          {bulkChanged && (
-            <ImpactPreview
-              lines={[
-                `Se actualizan ${events.length} ${
-                  events.length === 1 ? "partido" : "partidos"
-                } de la jornada.`,
-                "Las personas convocadas tienen que volver a confirmar disponibilidad.",
-              ]}
-              occurrences={events.map((event) => ({
-                id: event.id,
-                label: eventName(event),
-                date: event.date,
-                time: event.time,
-              }))}
-              people={[]}
-            />
-          )}
-
-          <div className="flex flex-wrap gap-2">
-            <Button
-              variant="primary"
-              busy={pending}
-              disabled={!bulkChanged}
-              onClick={() => {
-                if (!bulkChanged) return
-                setPending(true)
-                updateJornada(
-                  jornada.id,
-                  {
-                    venueId: form.venueId,
-                    meeting: form.meeting,
-                    departure: form.departure,
-                    point: form.point,
-                  },
-                  "Organización de la jornada",
-                )
-                setPending(false)
-                setImpactVisible(true)
-              }}
-            >
-              Guardar jornada
-            </Button>
-          </div>
-        </Surface>
-      ) : (
-        <Banner tone="neutral" title="Sólo lectura">
-          <span className="text-ink-strong">
-            La organización de la jornada la edita el entrenador del equipo o la
-            Subcomisión.
-          </span>
-        </Banner>
-      )}
-
-      {impactVisible && (
-        <Modal title="Jornada actualizada" onClose={() => setImpactVisible(false)}>
-          <Banner tone="success" title="Guardamos los cambios de la jornada">
-            <span className="text-ink-strong">
-              Los partidos actualizados quedaron con horario nuevo y las
-              convocadas tienen que volver a confirmar.
-            </span>
-          </Banner>
-          <ul className="mt-3 grid gap-1">
-            {events.map((event) => (
-              <li key={event.id}>
-                <RowLink to={`/events/${event.id}`} title={eventName(event)} />
-              </li>
-            ))}
-          </ul>
-        </Modal>
-      )}
+      </Surface>
     </div>
   )
 }
 
+function isoToZoned(match: EventDto): string {
+  if (!match.startAt) return "Fecha a definir"
+  const d = new Date(match.startAt)
+  return `${dateLabel(d.toISOString().slice(0, 10), true)} · ${d.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })}`
+}
+
 function JornadaCreate() {
   const navigate = useNavigate()
-  const { state, authority, createJornada } = useProduct()
-  const seasons = state.structure.filter((item) => item.type === "SEASON")
   const [name, setName] = useState("")
-  const [seasonId, setSeasonId] = useState(seasons[0]?.id ?? "")
+  const [seasonId, setSeasonId] = useState("")
   const [competitionId, setCompetitionId] = useState("")
-  const [selected, setSelected] = useState<string[]>([])
-  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [date, setDate] = useState("")
+  const [selected, setSelected] = useState<Record<string, boolean>>({})
+  const [rangeFrom, setRangeFrom] = useState(() => new Date(Date.now() + 86_400_000).toISOString().slice(0, 10))
+  const [rangeTo, setRangeTo] = useState(() => new Date(Date.now() + 60 * 86_400_000).toISOString().slice(0, 10))
+  const [error, setError] = useState("")
   const [pending, setPending] = useState(false)
 
-  if (!authority.canCreateEvent)
-    return (
-      <div className="mx-auto max-w-3xl">
-        <Empty
-          title="No podés crear jornadas"
-          detail="Las jornadas las organiza la Subcomisión o el entrenador del equipo."
-        />
-      </div>
-    )
+  const structure = useFetch(() => fetchStructure(), [])
+  const matches = useFetch(
+    () => fetchCalendarRange({ from: new Date(`${rangeFrom}T00:00:00`).toISOString(), to: new Date(`${rangeTo}T23:59:59`).toISOString(), type: "MATCH", limit: 200 }),
+    [rangeFrom, rangeTo],
+  )
 
-  const candidates = state.events.filter((event) => {
-    if (event.type !== "MATCH") return false
-    const team = state.teams.find((item) => item.id === event.targetTeams[0])
-    if (!team) return false
-    if (seasonId && team.seasonId !== seasonId) return false
-    return !state.jornadas.some((item) => item.events.includes(event.id))
-  })
+  const seasons = structure.data?.seasons ?? []
+  const competitions = (structure.data?.competitions ?? []).filter((c) => !c.archivedAt && (!seasonId || c.seasonId === seasonId))
+  const available = (matches.data?.items ?? []).filter((item) => item.state !== "CANCELLED")
+
+  async function submit() {
+    setError("")
+    const eventIds = Object.entries(selected).filter(([, v]) => v).map(([k]) => k)
+    if (!name.trim()) { setError("Poné un nombre para la jornada."); return }
+    if (!seasonId) { setError("Elegí la temporada."); return }
+    if (eventIds.length === 0) { setError("Elegí al menos un partido."); return }
+    if (eventIds.length > 100) { setError("Máximo 100 partidos por jornada."); return }
+    setPending(true)
+    try {
+      const created = await fetchCreateJornada({ name: name.trim(), seasonId, competitionId: competitionId || null, date: date || undefined, eventIds, idempotencyKey: crypto.randomUUID() })
+      navigate(`/jornadas/${created.id}`)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "No se pudo crear la jornada")
+    } finally {
+      setPending(false)
+    }
+  }
+
+  const selectedCount = Object.values(selected).filter(Boolean).length
+
+  if (structure.loading) return <div className="mx-auto max-w-3xl"><p className="gei-meta">Cargando estructura…</p></div>
 
   return (
     <div className="gei-stack-page mx-auto max-w-3xl">
       <PageContextHeader
-        context="Jornadas"
-        title="Nueva jornada"
+        context="Jornada nueva"
+        title="Programar jornada"
+        lead="Agrupá los partidos de una jornada. Todos deben ser de la misma temporada. Cada partido conserva su propio ciclo de vida."
         back="/calendar"
-        lead="Agrupá los partidos de una fecha operativa. Cada partido conserva su propio ciclo de vida."
+        action={<Button variant="primary" onClick={submit} busy={pending}><CalendarPlus size={16} aria-hidden />Crear jornada ({selectedCount})</Button>}
       />
-      <form
-        noValidate
-        className="grid gap-5"
-        onSubmit={(event_) => {
-          event_.preventDefault()
-          const found: Record<string, string> = {}
-          if (!seasonId) found.seasonId = "Elegí la temporada."
-          if (selected.length === 0) found.events = "Elegí al menos un partido."
-          setErrors(found)
-          if (Object.keys(found).length > 0) {
-            window.setTimeout(
-              () =>
-                document
-                  .getElementById(`jn-${Object.keys(found)[0]}`)
-                  ?.focus(),
-              0,
-            )
-            return
-          }
-          setPending(true)
-          const result = createJornada({
-            name,
-            seasonId,
-            competitionId: competitionId || null,
-            eventIds: selected,
-          })
-          setPending(false)
-          if (result.ok && result.id) navigate(`/jornadas/${result.id}`)
-          else
-            setErrors({ form: result.error ?? "No pudimos crear la jornada." })
-        }}
-      >
-        {errors.form && (
-          <Banner tone="danger" title="No pudimos crear la jornada">
-            <span className="text-ink-strong">{errors.form}</span>
-          </Banner>
-        )}
-
-        <Surface className="grid gap-4">
-          <TextField
-            id="jn-name"
-            label="Nombre de la jornada"
-            value={name}
-            hint="Si lo dejás vacío, usamos la temporada."
-            onChange={(event_) => setName(event_.target.value)}
-          />
-          <Select
-            id="jn-seasonId"
-            label="Temporada"
-            required
-            value={seasonId}
-            error={errors.seasonId}
-            onChange={(event_) => {
-              setSeasonId(event_.target.value)
-              setSelected([])
-            }}
-          >
-            {seasons.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
+      {error && <Banner tone="danger" title="No se pudo crear la jornada"><span className="text-ink-strong">{error}</span></Banner>}
+      <Surface className="grid gap-4">
+        <TextField id="jornada-name" label="Nombre" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ej.: Jornada 12" />
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Select id="jornada-season" label="Temporada" value={seasonId} onChange={(e) => setSeasonId(e.target.value)}>
+            <option value="">Elegir…</option>
+            {seasons.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
           </Select>
-          <Select
-            id="jn-competitionId"
-            label="Competencia"
-            value={competitionId}
-            hint="Opcional: contexto deportivo de la jornada."
-            onChange={(event_) => setCompetitionId(event_.target.value)}
-          >
+          <Select id="jornada-competition" label="Competencia (opcional)" value={competitionId} onChange={(e) => setCompetitionId(e.target.value)}>
             <option value="">Sin competencia</option>
-            {state.competitions
-              .filter((item) => !item.archivedAt)
-              .map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
+            {competitions.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
           </Select>
-        </Surface>
-
-        <Surface className="grid gap-3">
-          <SectionHeader
-            title="Partidos de la jornada"
-            meta={`${selected.length} de ${candidates.length} disponibles`}
-          />
-          {errors.events && (
-            <p className="text-meta font-medium text-danger">{errors.events}</p>
-          )}
-          {candidates.length === 0 ? (
-            <p className="gei-meta">
-              No hay partidos de esa temporada fuera de una jornada.
-            </p>
-          ) : (
-            <ul className="grid">
-              {candidates.map((event) => {
-                const checked = selected.includes(event.id)
-                return (
-                  <li
-                    key={event.id}
-                    className="border-b border-line last:border-b-0"
-                  >
-                    <label className="flex min-h-14 cursor-pointer items-center gap-3 py-2">
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={(next) =>
-                          setSelected((current) =>
-                            next.target.checked
-                              ? [...current, event.id]
-                              : current.filter((id) => id !== event.id),
-                          )
-                        }
-                        className="size-5 shrink-0 accent-interactive"
-                      />
-                      <span className="min-w-0 flex-1">
-                        <span className="gei-item-title block truncate">
-                          {eventName(event)}
-                        </span>
-                        <span className="gei-meta block">
-                          {dateLabel(event.date, true)} · {event.time}
-                        </span>
-                      </span>
-                    </label>
-                  </li>
-                )
-              })}
-            </ul>
-          )}
-        </Surface>
-
-        <div className="flex flex-wrap justify-end gap-2">
-          <Button variant="quiet" onClick={() => navigate("/calendar")}>
-            Cancelar
-          </Button>
-          <Button type="submit" variant="primary" busy={pending}>
-            Crear jornada
-          </Button>
+          <TextField id="jornada-date" label="Fecha" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
         </div>
-      </form>
+      </Surface>
+
+      <Surface className="grid gap-4">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="gei-section-title">Partidos</p>
+            <p className="gei-meta mt-1">Elegí de qué rango de fechas tomar los partidos.</p>
+          </div>
+          <div className="flex gap-2">
+            <TextField id="range-from" label="Desde" type="date" value={rangeFrom} onChange={(e) => setRangeFrom(e.target.value)} />
+            <TextField id="range-to" label="Hasta" type="date" value={rangeTo} onChange={(e) => setRangeTo(e.target.value)} />
+          </div>
+        </div>
+        {matches.loading && <p className="gei-meta">Buscando partidos…</p>}
+        {matches.error && <Banner tone="danger" title="No pudimos buscar partidos"><span className="text-ink-strong">{matches.error}</span></Banner>}
+        {!matches.loading && available.length === 0 && <p className="gei-meta">No hay partidos en este rango.</p>}
+        <ul className="grid gap-2">
+          {available.map((match) => (
+            <li key={match.id}>
+              <label className="flex cursor-pointer items-center gap-3 rounded-control border border-line px-3 py-2.5 hover:border-interactive">
+                <input type="checkbox" checked={Boolean(selected[match.id])} onChange={(e) => setSelected((s) => ({ ...s, [match.id]: e.target.checked }))} className="size-4 accent-[var(--color-interactive)]" />
+                <span className="min-w-0 flex-1">
+                  <span className="block text-body text-ink">GEI vs. {match.opponent ?? "Rival a definir"}</span>
+                  <span className="block text-meta text-ink-muted">{isoToZoned(match)}{match.targets.teams[0]?.name ? ` · ${match.targets.teams[0].name}` : ""}</span>
+                </span>
+                <StateBadge value={match.state} />
+              </label>
+            </li>
+          ))}
+        </ul>
+      </Surface>
     </div>
+  )
+}
+
+/* ---------------------------------------------
+   SERIE (recurrencia) — panel de EventDetail
+   --------------------------------------------- */
+
+function SeriesPanel({ seriesId, eventId, onEnded }: { seriesId: string; eventId: string; onEnded: () => Promise<unknown> }) {
+  const navigate = useNavigate()
+  const { data: series, loading, error, reload } = useFetch(() => fetchEventSeriesDetail(seriesId), [seriesId])
+  const [confirmOpen, setConfirmOpen] = useState(false)
+  const [ending, setEnding] = useState(false)
+  const [endError, setEndError] = useState("")
+
+  async function endSeries() {
+    setEnding(true)
+    setEndError("")
+    try {
+      await fetchEndEventSeries(seriesId)
+      setConfirmOpen(false)
+      await reload()
+      await onEnded()
+    } catch (err) {
+      setEndError(err instanceof Error ? err.message : "No se pudo terminar la serie")
+    } finally {
+      setEnding(false)
+    }
+  }
+
+  if (loading) return <Surface><p className="gei-meta">Cargando serie…</p></Surface>
+  if (error || !series) return null
+
+  return (
+    <Surface className="grid gap-2">
+      <div className="flex items-center justify-between gap-2">
+        <p className="gei-body-strong">Serie</p>
+        <Tag tone={series.state === "ACTIVE" ? "selected" : "neutral"}>{series.state === "ACTIVE" ? "Activa" : "Terminada"}</Tag>
+      </div>
+      <RowStatic title="Nombre" detail={series.name} />
+      <RowStatic title="Regla" detail={series.recurrenceRule} />
+      <RowStatic title="Ocurrencias" detail={String(series.occurrences.length)} />
+      {series.state === "ACTIVE" && (
+        <Button variant="secondary" onClick={() => setConfirmOpen(true)} busy={ending}>Terminar serie</Button>
+      )}
+      {endError && <p className="text-meta font-medium text-danger">{endError}</p>}
+
+      {confirmOpen && (
+        <ConfirmDialog
+          title="Terminar la serie"
+          consequence="La serie deja de generar nuevas ocurrencias. Los eventos ya creados se conservan y el historial no se borra."
+          confirmLabel="Terminar la serie"
+          onClose={() => setConfirmOpen(false)}
+          onConfirm={() => void endSeries()}
+          tone="danger"
+          requireReason={false}
+        />
+      )}
+    </Surface>
   )
 }

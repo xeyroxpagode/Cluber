@@ -83,10 +83,10 @@ describe("C08 — jornada real", () => {
     expect(after.coordinationRevision).toBe(before.coordinationRevision)
   })
 
-  it("la pantalla de alta explica la regla de temporada y competencia", () => {
+  it("la pantalla de alta explica la regla de temporada y competencia", async () => {
     renderScreen("/jornadas/new", "/jornadas/new", <JornadaPage />)
-    expect(screen.getByText(/Cada partido conserva su propio ciclo de vida/)).toBeTruthy()
-    expect(screen.getByRole("button", { name: "Crear jornada" })).toBeTruthy()
+    expect(await screen.findByText(/Cada partido conserva su propio ciclo de vida/)).toBeTruthy()
+    expect(screen.getByRole("button", { name: /Crear jornada/ })).toBeTruthy()
   })
 })
 
@@ -222,8 +222,8 @@ describe("D7 — audiencia de comunicado real", () => {
     expect(notice.recipients).not.toContain("coach")
   })
 })
-describe("V1.1 � login por email, competencia simple, jornada opcional", () => {
-  it("el login usa Person.email m�s contrase�a, nunca username", () => {
+describe("V1.1 — login por email, competencia simple, jornada opcional", () => {
+  it("el login usa Person.email más contraseña, nunca username", () => {
     const { result } = api()
     let ok = false
     act(() => {
@@ -242,7 +242,7 @@ describe("V1.1 � login por email, competencia simple, jornada opcional", () =>
     expect(ok).toBe(false)
   })
 
-  it("sin contrase�a no hay login", () => {
+  it("sin contraseña no hay login", () => {
     const { result } = api()
     let ok = true
     act(() => {
@@ -251,7 +251,7 @@ describe("V1.1 � login por email, competencia simple, jornada opcional", () =>
     expect(ok).toBe(false)
   })
 
-  it("la competencia se crea, se edita y se archiva; archivada es s�lo lectura", () => {
+  it("la competencia se crea, se edita y se archiva; archivada es sólo lectura", () => {
     const { result } = api()
     let id = ""
     act(() => {
@@ -299,7 +299,7 @@ describe("V1.1 � login por email, competencia simple, jornada opcional", () =>
   })
 })
 
-describe("V1.1 � competencias simples y equipo admin renderizan", () => {
+describe("V1.1 — competencias simples y equipo admin renderizan", () => {
   it("la lista muestra las competencias activas y el detalle su contexto", () => {
     window.history.replaceState({}, "", "/?demo=admin")
     renderScreen(

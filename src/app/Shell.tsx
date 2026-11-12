@@ -20,7 +20,7 @@ import {
 import { useProduct } from "../lib/session-context"
 import { routeContext } from "../shared/nav-context"
 import { Avatar, Toast, cx } from "../shared/ui"
-import { relativeLabel } from "../mock/model"
+import { useUnreadCount } from "../lib/use-unread-count"
 import { RuntimeStatus } from "../shared/runtime-status"
 
 type Page = string
@@ -50,31 +50,19 @@ function sectionActive(to: string, path: string) {
 
 export function Shell() {
   const {
-    state,
     actor,
     authority,
     toastMessage,
     authenticated,
     canAccessApplication: hasAccess,
-    logout,
     loading: sessionLoading,
   } = useProduct()
   const location = useLocation()
   const navigate = useNavigate()
+  const { unread: unreadCount } = useUnreadCount()
+  const unread = unreadCount ?? 0
 
   const visibleNav = NAV.filter((item) => authority.canOpen(item.page))
-
-  const unread = state.notifications.filter(
-    (notice) =>
-      notice.recipients.includes(actor?.id ?? "") && !notice.readBy.includes(actor?.id ?? ""),
-  ).length
-  const unreadMessages = state.conversations
-    .filter(
-      (conversation) =>
-        conversation.state === "ACTIVE" &&
-        conversation.participants.includes(actor?.id ?? ""),
-    )
-    .reduce((sum, conversation) => sum + (conversation.unread[actor?.id ?? ""] ?? 0), 0)
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
@@ -212,12 +200,6 @@ export function Shell() {
               >
                 <Icon size={19} aria-hidden strokeWidth={1.9} />
                 {label}
-                {to === "/communication" && unreadMessages > 0 && (
-                  <span className="ml-auto inline-flex items-center gap-1 text-meta font-semibold text-selected">
-                    <span aria-hidden className="size-2 rounded-pill bg-unread" />
-                    {unreadMessages}
-                  </span>
-                )}
                 {to === "/more" && unread > 0 && (
                   <span className="ml-auto inline-flex items-center gap-1 text-meta font-semibold text-selected">
                     <span aria-hidden className="size-2 rounded-pill bg-unread" />
@@ -268,14 +250,6 @@ export function Shell() {
 }
 
 export function useUnreadSummary() {
-  const { state, actor } = useProduct()
-  const notices = state.notifications.filter((notice) =>
-    notice.recipients.includes(actor?.id ?? ""),
-  )
-  return {
-    unread: notices.filter((notice) => !notice.readBy.includes(actor?.id ?? "")).length,
-    newest: notices[0]
-      ? { at: relativeLabel(notices[0]!.at, new Date()), title: notices[0]!.title }
-      : null,
-  }
+  const { unread } = useUnreadCount()
+  return { unread: unread ?? 0, newest: null }
 }

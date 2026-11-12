@@ -2,17 +2,12 @@ import { useCallback, useMemo, useState } from "react"
 import { useNavigate, useParams } from "react-router"
 import { Lock, Unlock } from "lucide-react"
 import { useProduct } from "../lib/session-context"
-import { todayIso } from "../mock/clock"
+import { todayIso } from "../lib/presence"
 import {
   dateLabel,
   dateTimeLabel,
-  periodLabel,
-  roleTextOf,
-  roleText,
-  teamName,
-  type StructureType,
-} from "../mock/model"
-import { activeRoleAssignments, profileCompleteness, roleScopeLabel } from "../mock/derive"
+} from "../lib/dates"
+import { roleText, roleTextOf, periodLabel } from "../lib/presence"
 import {
   Avatar, Banner, Button, ConfirmDialog, Empty, FilterChip,
   Modal, RowLink, RowStatic, Select, Sheet, StateBadge, Surface,
@@ -23,6 +18,8 @@ import {
 } from "../shared/patterns"
 import { useQueryState } from "../shared/use-query-state"
 
+type StructureType = "SEASON" | "DIVISION" | "LINE" | "VENUE"
+
 const STRUCTURE_LABEL: Record<StructureType, string> = {
   SEASON: "Temporadas",
   DIVISION: "Divisiones",
@@ -32,6 +29,24 @@ const STRUCTURE_LABEL: Record<StructureType, string> = {
 
 function personName(p: { firstName?: string | null; lastName?: string | null }): string {
   return `${p.firstName ?? ""} ${p.lastName ?? ""}`.trim() || "Sin nombre"
+}
+
+type ProfileCompleteness = { complete: boolean; missing: Array<{ key: string; label: string }> }
+
+function completenessOf(person: { dni?: string | null; birthDate?: string | null; phone?: string | null; email?: string | null; profileCompleted?: boolean }): ProfileCompleteness {
+  if (person.profileCompleted) return { complete: true, missing: [] }
+  const missing: Array<{ key: string; label: string }> = []
+  if (!person.dni) missing.push({ key: "dni", label: "documento de identidad" })
+  if (!person.birthDate) missing.push({ key: "birthDate", label: "fecha de nacimiento" })
+  if (!person.phone) missing.push({ key: "phone", label: "teléfono de contacto" })
+  if (!person.email) missing.push({ key: "email", label: "correo electrónico" })
+  return { complete: missing.length === 0, missing }
+}
+
+function scopeLabelOf(teams: Array<{ id: string | null; name: string }>, assignment: { scopeType: string; scopeRefId: string | null }): string {
+  if (assignment.scopeType === "CLUB") return "Todo el club"
+  if (assignment.scopeType === "TEAM") return teams.find((team) => team.id === assignment.scopeRefId)?.name ?? "Equipo"
+  return "Evento"
 }
 
 function isActivePeriod(item: { validFrom: string; validUntil: string | null }): boolean {
@@ -88,7 +103,7 @@ export function ManagementHome() {
 /* PERSONAS */
 
 export function PeopleManagement() {
-  const { state, authority, fetchManagementPeople } = useProduct()
+  const { state, authority, fetchManagementPeople, fetchStructure } = useProduct()
   const navigate = useNavigate()
   const query = useQueryState()
   const q = query.get("q") ?? ""
@@ -98,7 +113,7 @@ export function PeopleManagement() {
   const profileStatus = query.get("profileStatus") ?? ""
 
   const [loaded, setLoaded] = useState(false)
-  useCallback(async () => { await fetchManagementPeople(); setLoaded(true) }, [fetchManagementPeople])()
+  useCallback(async () => { await Promise.allSettled([fetchManagementPeople(), fetchStructure()]); setLoaded(true) }, [fetchManagementPeople, fetchStructure])()
 
   if (!authority.canOpen("people"))
     return (
@@ -112,7 +127,7 @@ export function PeopleManagement() {
     .map((person) => {
       const assignments = (person.teamAssignments ?? []).filter(isActivePeriod)
       const roles = (person.roleAssignments ?? []).filter(isActivePeriod)
-      const completeness = person.profileCompleted ? { complete: true, missing: [] } : profileCompleteness({ dni: person.dni ?? null, birth: person.birthDate ?? null, phone: person.phone ?? null, email: person.email ?? null } as any)
+      const completeness = completenessOf(person)
       return { person, assignments, roles, completeness }
     })
     .filter((row) => {
@@ -125,6 +140,7 @@ export function PeopleManagement() {
     })
     .sort((a, b) => personName(a.person).localeCompare(personName(b.person)))
 
+  const structureTeams = state.teams ?? []
   const filtersOn = Boolean(q || team || role || account || profileStatus)
 
   return (
@@ -140,7 +156,7 @@ export function PeopleManagement() {
             <div className="flex flex-wrap items-end gap-2">
               <Select label="Equipo" value={team} onChange={(event) => query.set({ team: event.target.value })} className="min-w-44">
                 <option value="">Todos</option>
-                {state.teams.map((item) => (<option key={item.id} value={item.id}>{teamName(state as any, item.id)}</option>))}
+                {state.teams.map((item) => (<option key={item.id} value={item.id}>{item.name}</option>))}
               </Select>
               <Select label="Rol" value={role} onChange={(event) => query.set({ role: event.target.value })} className="min-w-44">
                 <option value="">Todos</option>
@@ -169,7 +185,7 @@ export function PeopleManagement() {
                   leading={<Avatar name={personName(person)} size="sm" />}
                   detail={
                     <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                      <span>{roles.length === 0 ? "Sin rol deportivo" : roles.map((r) => `${roleTextOf(r.role)} · ${roleScopeLabel(state as any, { ...r, scope: r.scopeType, target: r.scopeRefId } as any)}`).join("  ·  ")}</span>
+                      <span>{roles.length === 0 ? "Sin rol deportivo" : roles.map((r) => `${roleTextOf(r.role)} · ${scopeLabelOf(structureTeams, r)}`).join("  ·  ")}</span>
                     </span>
                   }
                   meta={
@@ -278,6 +294,7 @@ export function PersonAdminDetail() {
     }
   }, [fetchManagementPeople, fetchStructure])()
 
+  const structureTeams = (structure?.teams ?? state.teams ?? []) as Array<{ id: string; name: string }>
   const person = state.people.find((item) => item.id === id)
 
   if (!authority.canOpen("people"))
@@ -300,7 +317,7 @@ export function PersonAdminDetail() {
   const memberships = (person.memberships ?? [])
   const teams = (person.teamAssignments ?? [])
   const roles = (person.roleAssignments ?? [])
-  const completeness = profileCompleteness({ dni: person.dni ?? null, birth: person.birthDate ?? null, phone: person.phone ?? null, email: person.email ?? null } as any)
+  const completeness = completenessOf(person)
   const admin = authority.canManagePeople
 
   const primary = !admin ? null : memberships.length === 0
@@ -383,7 +400,7 @@ export function PersonAdminDetail() {
       {section === "equipos" && (
         <DetailSection title="Equipos" meta={`${teams.length} vigentes`}>
           {teams.length === 0 ? (<p className="gei-meta">No tiene equipos vigentes.</p>) : (
-            <ul className="grid">{teams.map((a) => (<li key={a.id}><RowStatic title={teamName(state as any, a.teamId)} detail={periodLabel(a.validFrom, a.validUntil)} /></li>))}</ul>
+            <ul className="grid">{teams.map((a) => (<li key={a.id}><RowStatic title={structureTeams.find((t) => t.id === a.teamId)?.name ?? "Equipo"} detail={periodLabel(a.validFrom, a.validUntil)} /></li>))}</ul>
           )}
         </DetailSection>
       )}
@@ -406,7 +423,7 @@ export function PersonAdminDetail() {
                 <li key={r.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-line py-2.5 last:border-b-0">
                   <div className="min-w-0 flex-1">
                     <p className="gei-body-strong text-ink">{roleTextOf(r.role)}</p>
-                    <p className="gei-meta">{roleScopeLabel(state as any, { ...r, scope: r.scopeType, target: r.scopeRefId } as any)} · {periodLabel(r.validFrom, r.validUntil)}</p>
+                    <p className="gei-meta">{scopeLabelOf(structureTeams, r)} · {periodLabel(r.validFrom, r.validUntil)}</p>
                   </div>
                   {authority.canEndRole && (
                     <Button variant="danger" size="sm" onClick={() => { setEndTarget(r.id); setEndReason(""); setDialog("role-end") }}>Finalizar</Button>

@@ -20,6 +20,10 @@ import { addAffiliationRoutes } from "../routes/affiliation-routes.js"
 import { addAuditRoutes } from "../routes/audit-routes.js"
 import { addSystemRoutes } from "../routes/system-routes.js"
 import { addIamAdminRoutes } from "../routes/iam-admin-routes.js"
+import { addEventRoutes } from "../routes/event-routes.js"
+import { addNotificationRoutes } from "../routes/notification-routes.js"
+import { addJornadaRoutes } from "../routes/jornada-routes.js"
+import { addRealtimeRoutes } from "../routes/realtime-routes.js"
 
 export async function buildRuntime(config: AppConfig): Promise<RuntimeServices> {
   const database = new DatabaseProvider(config)
@@ -56,6 +60,10 @@ export async function buildRuntime(config: AppConfig): Promise<RuntimeServices> 
   addAffiliationRoutes({ app, registry: productRoutes, services })
   addAuditRoutes({ app, registry: productRoutes, services })
   addSystemRoutes({ app, registry: productRoutes, services })
+  addEventRoutes({ app, registry: productRoutes, services })
+  addNotificationRoutes({ app, registry: productRoutes, services })
+  addJornadaRoutes({ app, registry: productRoutes, services })
+  addRealtimeRoutes({ app, registry: productRoutes, services, realtime })
   productRoutes.register(app)
 
   let ready = true

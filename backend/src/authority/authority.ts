@@ -20,6 +20,7 @@ export interface AuthoritySnapshot {
   coachTeamIds: string[]
   captainTeamIds: string[]
   playerTeamIds: string[]
+  eventScopeIds: string[]
   isAdmin: boolean
   isSubcommittee: boolean
   canAccessApplication: boolean
@@ -75,6 +76,12 @@ function currentTeamScopes(assignments: readonly RoleAssignmentSnapshot[], role:
     .map((item) => item.scopeRefId as string)))
 }
 
+function currentEventScopes(assignments: readonly RoleAssignmentSnapshot[], role: RoleName): string[] {
+  return Array.from(new Set(assignments
+    .filter((item) => item.role === role && item.scopeType === "EVENT" && item.scopeRefId)
+    .map((item) => item.scopeRefId as string)))
+}
+
 export class AuthorityService {
   async assignments(tx: Transaction<DatabaseSchema>, personId: string, instant: Date): Promise<RoleAssignmentSnapshot[]> {
     const rows = await tx.selectFrom("app.role_assignments")
@@ -90,6 +97,7 @@ export class AuthorityService {
     const coachTeamIds = currentTeamScopes(assignments, "COACH")
     const captainTeamIds = currentTeamScopes(assignments, "CAPTAIN")
     const playerTeamIds = currentTeamScopes(assignments, "PLAYER")
+    const eventScopeIds = currentEventScopes(assignments, "COACH")
     const isAdmin = roles.includes("ADMIN")
     const isSubcommittee = roles.includes("SUBCOMMITTEE")
     const teamIds = Array.from(new Set([...coachTeamIds, ...captainTeamIds, ...playerTeamIds]))
@@ -99,6 +107,7 @@ export class AuthorityService {
       coachTeamIds,
       captainTeamIds,
       playerTeamIds,
+      eventScopeIds,
       isAdmin,
       isSubcommittee,
       canAccessApplication: roles.length > 0,
@@ -116,5 +125,24 @@ export class AuthorityService {
 
   require(condition: boolean, code = "AUTHORITY_DENIED"): void {
     if (!condition) throw new AppError(code, "You do not have authority for this operation", "authorization")
+  }
+
+  /**
+   * DG-06 authority: COACH over an event requires (a) an EVENT-scope assignment on that event,
+   * or (b) a TEAM-scope assignment on at least one of the event's target teams.
+   * SUBCOMMITTEE operates CLUB-scoped. ADMIN does not inherit event authority.
+   */
+  canOperateEvent(snapshot: AuthoritySnapshot, input: { eventId: string; targetTeamIds: readonly string[] }): boolean {
+    if (snapshot.isSubcommittee) return true
+    if (snapshot.eventScopeIds.includes(input.eventId)) return true
+    return input.targetTeamIds.some((teamId) => snapshot.coachTeamIds.includes(teamId))
+  }
+
+  /** DG-08 logistics authority (CMD-EVT-16): CAPTAIN(TEAM) / COACH / SUBCOMMITTEE(CLUB). */
+  canUpdateLogistics(snapshot: AuthoritySnapshot, input: { eventId: string; targetTeamIds: readonly string[] }): boolean {
+    if (snapshot.isSubcommittee) return true
+    if (snapshot.eventScopeIds.includes(input.eventId)) return true
+    const teamScoped = input.targetTeamIds.some((teamId) => snapshot.coachTeamIds.includes(teamId) || snapshot.captainTeamIds.includes(teamId))
+    return teamScoped
   }
 }

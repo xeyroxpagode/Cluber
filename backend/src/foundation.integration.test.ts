@@ -32,7 +32,7 @@ describe("M0 and PostgreSQL semantics", () => {
       (select count(*)::int from information_schema.tables where table_schema='app') app_tables,
       (select count(*)::int from information_schema.tables where table_schema='infra') infra_tables`)
     await admin.end()
-    expect(result.rows[0]).toEqual({ anon_app: false, authenticated_infra: false, app_tables: 12, infra_tables: 5 })
+    expect(result.rows[0]).toEqual({ anon_app: false, authenticated_infra: false, app_tables: 21, infra_tables: 5 })
   })
 
   it("exposes exactly the authorized T01/T02 tables and no future tables", async () => {
@@ -66,6 +66,15 @@ describe("M0 and PostgreSQL semantics", () => {
       "app.venues",
       "app.competitions",
       "app.team_assignments",
+      "app.event_series",
+      "app.events",
+      "app.event_logistics",
+      "app.event_target_team",
+      "app.event_target_person",
+      "app.event_occurrence_overrides",
+      "app.jornadas",
+      "app.jornada_matches",
+      "app.notifications",
     ]
     for (const table of [...expectedInfra, ...expectedApp]) {
       expect(tables).toContain(table)

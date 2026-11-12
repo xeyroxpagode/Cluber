@@ -6,33 +6,33 @@ import { Home, Calendar } from "../features/overview"
 import { EventDetail } from "../features/events"
 import { AvailabilityPage } from "../features/participation"
 import { ProfilePage } from "../features/account-insight"
-import { CommunicationHome } from "../features/communication"
+import { CommunicationHome, Notifications } from "../features/communication"
 import { pluralize, stateText } from "../shared/states"
 import { Modal, Button } from "../shared/ui"
 
 describe("§4 — Home dirige la atención", () => {
-  it("muestra como máximo 3 cosas que necesitan atención", () => {
-    renderScreen("/home", "/home", <Home />, "", "player")
-    const section = screen.getByRole("heading", {
+  it("muestra como máximo 3 cosas que necesitan atención", async () => {
+    renderScreen("/home", "/home", <Home />, "", "", { me: { profileCompleted: false } })
+    const section = (await screen.findByRole("heading", {
       name: "Necesita tu atención",
-    }).closest("section")!
+    })).closest("section")!
     const items = within(section).getAllByRole("listitem")
     expect(items.length).toBeGreaterThan(0)
     expect(items.length).toBeLessThanOrEqual(3)
   })
 
-  it("cada ítem dice motivo, consecuencia y acción", () => {
-    renderScreen("/home", "/home", <Home />, "", "player")
-    const section = screen.getByRole("heading", {
+  it("cada ítem dice motivo, consecuencia y acción", async () => {
+    renderScreen("/home", "/home", <Home />, "", "", { me: { profileCompleted: false } })
+    const section = (await screen.findByRole("heading", {
       name: "Necesita tu atención",
-    }).closest("section")!
+    })).closest("section")!
     const item = within(section).getAllByRole("listitem")[0]
     expect(within(item).getByRole("link").getAttribute("href")).toBeTruthy()
     expect(item.textContent?.length ?? 0).toBeGreaterThan(40)
   })
 
   it("el vacío positivo se lee como todo al día", () => {
-    renderScreen("/home", "/home", <Home />, "", "subcommittee")
+    renderScreen("/home", "/home", <Home />, "", "", { notifications: [] })
     expect(screen.getByText("No hay nada pendiente")).toBeTruthy()
   })
 
@@ -55,33 +55,32 @@ describe("§4 — Home dirige la atención", () => {
 })
 
 describe("§18 / §21 — estados terminales de evento", () => {
-  it("un evento cancelado se lee como cancelado, con referencia y sin ¿Vas?", () => {
+  it("un evento cancelado se lee como cancelado, con referencia y sin ¿Vas?", async () => {
     renderScreen("/events/:eventId", "/events/training-cancelado", <EventDetail />)
-    expect(screen.getByText("Este evento fue cancelado")).toBeTruthy()
+    expect(await screen.findByText("Este evento fue cancelado")).toBeTruthy()
     expect(screen.getByText(/queda disponible como referencia/)).toBeTruthy()
-    expect(screen.queryByRole("group", { name: "¿Vas?" })).toBeNull()
+    expect(screen.queryByText(/La confirmación de asistencia llega/)).toBeNull()
   })
 
-  it("un evento postergado explica que no hay horario vigente", () => {
+  it("un evento postergado explica que no hay horario vigente", async () => {
     renderScreen("/events/:eventId", "/events/match-banco", <EventDetail />)
-    expect(screen.getByText("No hay horario vigente")).toBeTruthy()
-    expect(screen.queryByRole("group", { name: "¿Vas?" })).toBeNull()
+    expect(await screen.findByText("No hay horario vigente")).toBeTruthy()
+    expect(screen.queryByText(/La confirmación de asistencia llega/)).toBeNull()
   })
 
-  it("un evento operativo sí ofrece ¿Vas?", () => {
+  it("un evento operativo informa que la asistencia llega con T04 (sin simular)", async () => {
     renderScreen("/events/:eventId", "/events/match-cuba", <EventDetail />, "", "player")
-    expect(screen.getAllByRole("group", { name: "¿Vas?" }).length).toBeGreaterThan(0)
+    expect(await screen.findByText(/La confirmación de asistencia llega/)).toBeTruthy()
   })
 
-  it("el partido ya jugado muestra el resultado final", () => {
+  it("el partido ya jugado se lee como jugado", async () => {
     renderScreen("/events/:eventId", "/events/match-sic", <EventDetail />)
-    expect(screen.getByText("Este evento ya se jugó")).toBeTruthy()
-    expect(screen.getByText("3–1")).toBeTruthy()
+    expect(await screen.findByText("Este evento ya se jugó")).toBeTruthy()
   })
 })
 
 describe("§11 — una sola gramática de ¿Vas?", () => {
-  it("las tres respuestas están en el mismo orden y con texto", async () => {
+  it("la disponibilidad se muestra como llegada en la T04, sin simular respuestas", async () => {
     renderScreen(
       "/events/:eventId/availability",
       "/events/training-serie-2/availability",
@@ -89,32 +88,28 @@ describe("§11 — una sola gramática de ¿Vas?", () => {
       "",
       "player",
     )
-    const group = screen.getAllByRole("group", { name: "¿Vas?" })[0]
-    const options = within(group)
-      .getAllByRole("radio")
-      .map((option) => option.closest("label")?.textContent?.trim())
-    expect(options).toEqual(["Voy", "Tal vez", "No voy"])
+    expect(screen.getByText(/La disponibilidad jugadora llega con la T04/)).toBeTruthy()
+    expect(screen.queryByRole("radio")).toBeNull()
   })
 
-  it("el resumen cuenta por respuesta, sin '0 sí'", () => {
+  it("el resumen de coordinación muestra revisión y versión reales", async () => {
     renderScreen(
-      "/events/:eventId/availability",
-      "/events/training-serie-2/availability",
-      <AvailabilityPage />,
+      "/events/:eventId",
+      "/events/training-serie-2",
+      <EventDetail />,
     )
-    expect(screen.queryByText(/^0 sí$/)).toBeNull()
-    expect(screen.getByText("Sin responder")).toBeTruthy()
+    expect(await screen.findByText("Revisión de coordinación")).toBeTruthy()
+    expect(screen.getAllByText("1").length).toBeGreaterThan(0)
   })
 
-  it("un evento postergado no acepta respuestas nuevas y lo dice", () => {
+  it("un evento postergado no muestra controles de asistencia", () => {
     renderScreen(
       "/events/:eventId/availability",
       "/events/match-banco/availability",
       <AvailabilityPage />,
     )
-    expect(
-      screen.getByText(/no se pueden cargar respuestas nuevas/),
-    ).toBeTruthy()
+    expect(screen.queryByRole("radio")).toBeNull()
+    expect(screen.getByText(/La disponibilidad jugadora llega con la T04/)).toBeTruthy()
   })
 })
 
@@ -161,23 +156,17 @@ describe("§27 — Perfil completo sin PII", () => {
 })
 
 describe("§33 — comunicación con dos canales distintos", () => {
-  it("los canales son tabs reales con estado seleccionado", () => {
+  it("ofrece los avisos reales y anuncia la llegada de conversaciones y anuncios", () => {
     renderScreen("/communication", "/communication", <CommunicationHome />)
-    const tabs = screen.getByRole("tablist", { name: "Canal de comunicación" })
-    const conversaciones = within(tabs).getByRole("tab", { name: /Conversaciones/ })
-    expect(conversaciones.getAttribute("aria-selected")).toBe("true")
-    expect(
-      within(tabs)
-        .getByRole("tab", { name: /Comunicados/ })
-        .getAttribute("aria-selected"),
-    ).toBe("false")
+    expect(screen.getByRole("link", { name: /Avisos/ }).getAttribute("href")).toBe("/notifications")
+    expect(screen.getByText(/Llegan con la T05/)).toBeTruthy()
   })
 
-  it("el tab de comunicados muestra la audiencia de cada comunicado", async () => {
-    renderScreen("/communication", "/communication", <CommunicationHome />)
-    await userEvent.click(screen.getByRole("tab", { name: /Comunicados/ }))
-    expect(screen.getByText(/Para Sexta A/)).toBeTruthy()
-    expect(screen.getByText(/Para todo el hockey/i)).toBeTruthy()
+  it("el aviso muestra el tipo, el cuerpo y el estado de lectura", async () => {
+    renderScreen("/notifications", "/notifications", <Notifications />)
+    expect(await screen.findByText("Evento actualizado")).toBeTruthy()
+    expect(screen.getByText("Cambio en el evento")).toBeTruthy()
+    expect(screen.getByText("Sin leer")).toBeTruthy()
   })
 })
 

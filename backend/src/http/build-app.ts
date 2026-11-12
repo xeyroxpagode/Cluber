@@ -41,7 +41,7 @@ export async function buildApp(input: { config: AppConfig; database: DatabasePro
         : normalizePostgresError(error)
     const traceId = requestContext.getStore()?.traceId ?? randomUUID()
     const status = httpStatusFor(normalized)
-    if (status >= 500) app.log.error({ traceId, errorCode: normalized.code, err: { name: error instanceof Error ? error.name : "UnknownError" } }, "request failed")
+    if (status >= 500) app.log.error({ traceId, errorCode: normalized.code, err: { name: error instanceof Error ? error.name : "UnknownError", message: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined } }, "request failed")
     const retryAfter = (normalized as AppError & { retryAfter?: number }).retryAfter
     if (retryAfter) reply.header("Retry-After", retryAfter)
     void reply.status(status).send({ error: { code: normalized.code, message: normalized.message, fieldErrors: normalized.fieldErrors, traceId, retryable: normalized.retryable } })

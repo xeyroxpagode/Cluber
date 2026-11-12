@@ -13,6 +13,11 @@ import { RoleAssignmentService } from "./people/roles.js"
 import { AffiliationService } from "./people/affiliation.js"
 import { StructureService } from "./structure/structure.js"
 import { ProductReadService } from "./read/product-read.js"
+import { T03ReadService } from "./read/t03-read.js"
+import { EventService } from "./events/events.js"
+import { EventSeriesService } from "./events/series.js"
+import { JornadaService } from "./jornada/jornada.js"
+import { NotificationService } from "./notification/notification.js"
 import { AuditWriter, AuditService } from "./audit/audit.js"
 import { AuthorityService } from "./authority/authority.js"
 import type { RateLimitPolicy } from "./shared/rate-limiter.js"
@@ -38,6 +43,11 @@ export class ProductServices {
   readonly affiliations = new AffiliationService()
   readonly structure = new StructureService()
   readonly reads = new ProductReadService(this.authority)
+  readonly t03Reads = new T03ReadService(this.authority)
+  readonly events = new EventService()
+  readonly eventSeries = new EventSeriesService()
+  readonly jornada = new JornadaService()
+  readonly notificationService = new NotificationService()
 
   constructor(readonly deps: ProductDeps) {
     this.principals = new PrincipalResolver(deps.database, deps.config)
