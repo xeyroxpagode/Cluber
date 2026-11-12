@@ -61,7 +61,7 @@ export interface SeriesDetail { id: string; name: string; state: "ACTIVE" | "END
 export interface MaterialityResult { eventId: string; version: number; state: string; isMaterial: boolean; materialFields: string[]; metadataFields: string[]; classification: string }
 
 const json = () => ({ "Content-Type": "application/json" })
-const creds = () => ({ credentials: "include" as RequestCredentials, csrfToken: getCsrfToken() ?? undefined, headers: json() })
+const creds = () => ({ credentials: "include" as RequestCredentials, csrfToken: getCsrfToken() ?? undefined, headers: {} as Record<string, string> })
 
 async function get<T>(url: string): Promise<T> {
   return apiRequest<T>(url, { method: "GET", credentials: "include", csrfToken: getCsrfToken() ?? undefined, headers: { Accept: "application/json" } })

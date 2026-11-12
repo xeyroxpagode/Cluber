@@ -32,22 +32,18 @@ function headersWithCsrf(headers: HeadersInit, csrfToken: string | null): Header
   return h
 }
 
-export async function apiRequest<T>(
+async function apiRequest<T>(
   input: RequestInfo | URL,
   init: RequestInit & { csrfToken?: string; idempotencyKey?: string },
   expectedOk = true
 ): Promise<T> {
   const { csrfToken, idempotencyKey, ...rest } = init
   const headers = headersWithCsrf(rest.headers ?? {}, csrfToken ?? null)
-  let reqBody = rest.body
-  if ((init.method ?? "GET").toUpperCase() !== "GET" && reqBody === undefined) {
-    reqBody = apiJson({})
-    if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json")
-  }
+  if (rest.body === undefined || rest.body === null) headers.delete("Content-Type")
   if (idempotencyKey) headers.set("idempotency-key", idempotencyKey)
   headers.set("Accept", "application/json")
 
-  const res = await fetch(String(input), { ...rest, headers, body: reqBody })
+  const res = await fetch(String(input), { ...rest, headers })
   const ct = res.headers.get("content-type") ?? ""
   const isJson = ct.includes("application/json")
 
@@ -67,6 +63,8 @@ export async function apiRequest<T>(
   return body
 }
 
-export function apiJson(body: unknown): BodyInit {
+function apiJson(body: unknown): BodyInit {
   return JSON.stringify(body)
 }
+
+export { apiRequest, apiJson }
