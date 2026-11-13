@@ -115,6 +115,7 @@ export async function createSession(client: pg.Client, accountId: string, person
 }
 
 export async function setSessionCookie(page: Page, token: string) {
+  await page.context().clearCookies()
   await page.context().addCookies([{
     name: 'gei_session',
     value: token,
@@ -212,10 +213,11 @@ async function getOrInsertTeam(client: pg.Client, id: string, seasonId: string, 
 export async function createMinimalStructure(client: pg.Client): Promise<StructureFixture> {
   const now = new Date()
   const seasonId = await getOrInsertSeason(client, crypto.randomUUID(), `Temporada E2E ${TAG}`, now)
-  const divisionId = await getOrInsertDivision(client, crypto.randomUUID(), `Div E2E ${TAG}`, now)
+  const divisionIdA = await getOrInsertDivision(client, crypto.randomUUID(), `Div E2E A ${TAG}`, now)
+  const divisionIdB = await getOrInsertDivision(client, crypto.randomUUID(), `Div E2E B ${TAG}`, now)
   const lineId = await getOrInsertLine(client, crypto.randomUUID(), `Line E2E ${TAG}`, now)
-  const teamAId = await getOrInsertTeam(client, crypto.randomUUID(), seasonId, divisionId, lineId, now)
-  const teamBId = await getOrInsertTeam(client, crypto.randomUUID(), seasonId, divisionId, lineId, now)
+  const teamAId = await getOrInsertTeam(client, crypto.randomUUID(), seasonId, divisionIdA, lineId, now)
+  const teamBId = await getOrInsertTeam(client, crypto.randomUUID(), seasonId, divisionIdB, lineId, now)
   const venueId = crypto.randomUUID()
   const competitionId = crypto.randomUUID()
 
@@ -229,7 +231,7 @@ export async function createMinimalStructure(client: pg.Client): Promise<Structu
      values ($1,$2,$3,1,$4,$4) on conflict (id) do nothing`,
     [competitionId, seasonId, `Comp E2E ${TAG}`, now],
   )
-  return { seasonId, divisionId, lineId, teamAId, teamBId, venueId, competitionId }
+  return { seasonId, divisionId: divisionIdA, lineId, teamAId, teamBId, venueId, competitionId }
 }
 
 export async function safeQuery(client: pg.Client, text: string, params?: any[]): Promise<any> {

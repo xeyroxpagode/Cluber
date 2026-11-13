@@ -84,9 +84,10 @@ test.describe('E2E T03 obligatorios (DG-06/07/08)', () => {
     await setSessionCookie(page, sess.token)
 
     const startAt = iso(7, 18)
+    const title = `Entrenamiento equipo ajeno ${TAG}`
     const res = await apiRequest(page, 'POST', '/api/events', {
       type: 'TRAINING',
-      title: 'Entrenamiento equipo ajeno',
+      title,
       startAt,
       timeZone: 'America/Argentina/Buenos_Aires',
       targetTeamIds: [fx.teamBId],
@@ -96,7 +97,7 @@ test.describe('E2E T03 obligatorios (DG-06/07/08)', () => {
     const body = await res.body
     expect(body.error.code).toMatch(/AUTHORITY_DENIED|INVALID_TARGET/)
 
-    const rows = await client.query("select count(*)::int n from app.events where title = 'Entrenamiento equipo ajeno'")
+    const rows = await client.query("select count(*)::int n from app.events where title = $1", [title])
     expect(rows.rows[0].n).toBe(0)
   })
 
@@ -108,9 +109,10 @@ test.describe('E2E T03 obligatorios (DG-06/07/08)', () => {
     await setSessionCookie(page, sess.token)
 
     const startAt = iso(7, 19)
+    const title = `Asada del club E2E ${TAG}`
     const res = await apiRequest(page, 'POST', '/api/events', {
       type: 'CLUB_EVENT',
-      title: 'Asada del club E2E',
+      title,
       startAt,
       timeZone: 'America/Argentina/Buenos_Aires',
       clubWideTarget: true,
@@ -120,7 +122,7 @@ test.describe('E2E T03 obligatorios (DG-06/07/08)', () => {
     const body = await res.body
     expect(body.eventCreated).toBe(true)
 
-    const rows = await client.query('select id, type, state, club_wide_target from app.events where title = $1', ['Asada del club E2E'])
+    const rows = await client.query('select id, type, state, club_wide_target from app.events where title = $1', [title])
     expect(rows.rows).toHaveLength(1)
     expect(rows.rows[0].type).toBe('CLUB_EVENT')
     expect(rows.rows[0].club_wide_target).toBe(true)
@@ -134,9 +136,10 @@ test.describe('E2E T03 obligatorios (DG-06/07/08)', () => {
     await setSessionCookie(page, sess.token)
 
     const startAt = iso(7, 20)
+    const title = `Partido dos equipos ${TAG}`
     const res = await apiRequest(page, 'POST', '/api/events', {
       type: 'MATCH',
-      title: 'Partido dos equipos',
+      title,
       startAt,
       timeZone: 'America/Argentina/Buenos_Aires',
       targetTeamIds: [fx.teamAId, fx.teamBId],
@@ -146,7 +149,7 @@ test.describe('E2E T03 obligatorios (DG-06/07/08)', () => {
     expect(res.status).toBe(422)
     expect((res.body as any).error.code).toBe('INVALID_TARGET')
 
-    const rows = await client.query("select count(*)::int n from app.events where title = 'Partido dos equipos'")
+    const rows = await client.query("select count(*)::int n from app.events where title = $1", [title])
     expect(rows.rows[0].n).toBe(0)
   })
 

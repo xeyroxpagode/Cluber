@@ -132,6 +132,74 @@ describe("time zones", () => {
   })
 })
 
+describe("DST edge cases across time zones (S02.11)", () => {
+  it("America/New_York spring-forward: 02:30 does not exist (March 2030)", () => {
+    // Second Sunday of March 2030 = March 10. At 02:00 clocks jump to 03:00.
+    const rule = parseRRule("FREQ=DAILY;COUNT=2")
+    const out = generateOccurrences(rule, { year: 2030, month: 3, day: 10, hour: 2, minute: 30, second: 0 }, "America/New_York", { maxOccurrences: 366, limit: 366 })
+    expect(out).toHaveLength(2)
+    // Both occurrences must map to distinct UTC instants (no silent collapse)
+    expect(new Set(out.map((d) => d.toISOString())).size).toBe(2)
+  })
+
+  it("America/New_York fall-back ambiguous: 01:30 occurs twice (November 2030)", () => {
+    // First Sunday of November 2030 = November 3. At 02:00 clocks fall back to 01:00.
+    const rule = parseRRule("FREQ=DAILY;COUNT=2")
+    const out = generateOccurrences(rule, { year: 2030, month: 11, day: 3, hour: 1, minute: 30, second: 0 }, "America/New_York", { maxOccurrences: 366, limit: 366 })
+    expect(out).toHaveLength(2)
+    expect(new Set(out.map((d) => d.toISOString())).size).toBe(2)
+  })
+
+  it("Asia/Kolkata has no DST: round-trip preserves wall clock", () => {
+    const utc = wallClockToUtc({ year: 2030, month: 6, day: 15, hour: 10, minute: 0, second: 0 }, "Asia/Kolkata")
+    const back = wallClockInZone(utc, "Asia/Kolkata")
+    expect({ year: back.year, month: back.month, day: back.day, hour: back.hour, minute: back.minute }).toEqual({ year: 2030, month: 6, day: 15, hour: 10, minute: 0 })
+  })
+
+  it("Recurrence crosses DST boundary (New York, March to November 2030)", () => {
+    const rule = parseRRule("FREQ=WEEKLY;COUNT=26;BYDAY=WE")
+    const out = generateOccurrences(rule, { year: 2030, month: 3, day: 5, hour: 10, minute: 0, second: 0 }, "America/New_York", { maxOccurrences: 366, limit: 366 })
+    expect(out).toHaveLength(26)
+    // All UTC instants must be distinct
+    expect(new Set(out.map((d) => d.toISOString())).size).toBe(26)
+  })
+
+  it("Recurrence crosses month boundary (January to February 2030)", () => {
+    const rule = parseRRule("FREQ=DAILY;COUNT=40")
+    const out = generateOccurrences(rule, { year: 2030, month: 1, day: 25, hour: 12, minute: 0, second: 0 }, "UTC", { maxOccurrences: 366, limit: 366 })
+    expect(out).toHaveLength(40)
+    const jan = out.filter((d) => d.getUTCMonth() === 0)
+    const feb = out.filter((d) => d.getUTCMonth() === 1)
+    expect(jan.length).toBeGreaterThan(0)
+    expect(feb.length).toBeGreaterThan(0)
+  })
+
+  it("Recurrence crosses year boundary (December 2029 to January 2030)", () => {
+    const rule = parseRRule("FREQ=DAILY;Count=40")
+    const out = generateOccurrences(rule, { year: 2029, month: 12, day: 20, hour: 12, minute: 0, second: 0 }, "UTC", { maxOccurrences: 366, limit: 366 })
+    expect(out).toHaveLength(40)
+    const dec2029 = out.filter((d) => d.getUTCFullYear() === 2029)
+    const jan2030 = out.filter((d) => d.getUTCFullYear() === 2030)
+    expect(dec2029.length).toBeGreaterThan(0)
+    expect(jan2030.length).toBeGreaterThan(0)
+  })
+
+  it("Leap year 2024: February 29 exists", () => {
+    const rule = parseRRule("FREQ=DAILY;COUNT=5")
+    const out = generateOccurrences(rule, { year: 2024, month: 2, day: 27, hour: 12, minute: 0, second: 0 }, "UTC", { maxOccurrences: 366, limit: 366 })
+    expect(out).toHaveLength(5)
+    const feb29 = out.filter((d) => d.getUTCDate() === 29 && d.getUTCMonth() === 1)
+    expect(feb29.length).toBe(1)
+  })
+
+  it("Rejects COUNT greater than maxOccurrences in generateOccurrences", () => {
+    const rule = parseRRule("FREQ=DAILY;COUNT=367")
+    // parseRRule accepts COUNT=367 (valid RRULE), but generateOccurrences caps at maxOccurrences=366
+    const out = generateOccurrences(rule, { year: 2030, month: 1, day: 1, hour: 0, minute: 0, second: 0 }, "UTC", { maxOccurrences: 366, limit: 366 })
+    expect(out).toHaveLength(366)
+  })
+})
+
 describe("notification dedupe key (A-T03-05)", () => {
   it("uses originEventId|resourceType|resourceId|recipient|type for EVENT_*", () => {
     const key = notificationDedupeKey({ type: "EVENT_CHANGED", resourceType: "EVENT", resourceId: "event-1", recipientPersonId: "p-1", originEventId: "event-1" })

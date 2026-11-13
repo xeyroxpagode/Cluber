@@ -128,14 +128,14 @@ export class AuthorityService {
   }
 
   /**
-   * DG-06 authority: COACH over an event requires (a) an EVENT-scope assignment on that event,
+   * DG-06 authority: COACH/CAPTAIN over an event requires (a) an EVENT-scope assignment on that event,
    * or (b) a TEAM-scope assignment on at least one of the event's target teams.
    * SUBCOMMITTEE operates CLUB-scoped. ADMIN does not inherit event authority.
    */
   canOperateEvent(snapshot: AuthoritySnapshot, input: { eventId: string; targetTeamIds: readonly string[] }): boolean {
     if (snapshot.isSubcommittee) return true
     if (snapshot.eventScopeIds.includes(input.eventId)) return true
-    return input.targetTeamIds.some((teamId) => snapshot.coachTeamIds.includes(teamId))
+    return input.targetTeamIds.some((teamId) => snapshot.coachTeamIds.includes(teamId) || snapshot.captainTeamIds.includes(teamId))
   }
 
   /** DG-08 logistics authority (CMD-EVT-16): CAPTAIN(TEAM) / COACH / SUBCOMMITTEE(CLUB). */

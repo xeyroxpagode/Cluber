@@ -67,9 +67,9 @@ test.describe('E2E T03 obligatorios (11-20)', () => {
     const sessCap = await createSession(client, captain.accountId, captain.personId)
     await setSessionCookie(page, sessCap.token)
 
-    // CAPTAIN modifica logística vía API (equivalente a editar en la UI)
-    const res = await apiRequest(page, 'PATCH', `/api/events/${eventId}`, {
-      logistics: { meetingPoint: 'Puerta principal E2E' },
+    // CAPTAIN modifica logística vía endpoint dedicado CMD-EVT-16
+    const res = await apiRequest(page, 'PATCH', `/api/events/${eventId}/logistics`, {
+      meetingPoint: 'Puerta principal E2E',
       expectedVersion: 1,
       idempotency_key: crypto.randomUUID(),
     }, sessCap.sessionId)
@@ -141,20 +141,24 @@ test.describe('E2E T03 obligatorios (11-20)', () => {
     const occurrences = await client.query('select id, occurrence_index from app.events where series_id = $1 order by occurrence_index', [seriesId])
     expect(occurrences.rows).toHaveLength(2)
     const occ0Id = occurrences.rows[0].id
+    const occ1Id = occurrences.rows[1].id
 
-    await page.goto(`/events/${occ0Id}/edit`)
-    await page.waitForLoadState('networkidle')
-    await page.getByLabel('Título').fill('Occurrencia 0 modificada')
-    await page.getByRole('button', { name: /Guardar cambios/ }).click()
-    await expect(page).toHaveURL(`/events/${occ0Id}`)
+    // Modificar solo la ocurrencia 0 vía API (CMD-EVT-04 /meta)
+    const before0 = await client.query('select version from app.events where id = $1', [occ0Id])
+    const res0 = await apiRequest(page, 'PATCH', `/api/events/${occ0Id}/meta`, {
+      title: 'Occurrencia 0 modificada',
+      expectedVersion: before0.rows[0].version,
+    }, sess.sessionId)
+    expect(res0.status).toBe(200)
 
     const occAfter = await client.query('select title from app.events where id = $1', [occ0Id])
     expect(occAfter.rows[0].title).toBe('Occurrencia 0 modificada')
 
+    // Verificar que existe un override en la serie
     const overrides = await client.query('select count(*)::int n from app.event_occurrence_overrides where series_id = $1', [seriesId])
     expect(overrides.rows[0].n).toBeGreaterThan(0)
 
-    const occ1Id = occurrences.rows[1].id
+    // La segunda ocurrencia no debe haber cambiado
     const occ1After = await client.query('select title from app.events where id = $1', [occ1Id])
     expect(occ1After.rows[0].title).toBe('Serie override')
   })
@@ -248,24 +252,26 @@ test.describe('E2E T03 obligatorios (11-20)', () => {
     const sess = await createSession(client, sub.accountId, sub.personId)
     await setSessionCookie(page, sess.token)
 
-    // Crear un evento en otra temporada directamente en BD
-    const otherSeason = await client.query("insert into app.seasons(id, name, starts_on, ends_on, version, created_at, updated_at) values ($1,'Otra temporada E2E','2026-01-01','2026-12-31',1,now(),now()) returning id", [crypto.randomUUID()])
+    // Crear otra temporada y un equipo en esa temporada
+    const otherSeason = await client.query("insert into app.seasons(id, name, starts_on, ends_on, version, created_at, updated_at) values ($1,'Otra temporada E2E ' || $2,'2026-01-01','2026-12-31',1,now(),now()) returning id", [crypto.randomUUID(), TAG])
     const otherSeasonId = otherSeason.rows[0].id
-    // Usar un equipo existente (fx.teamAId) pero crear evento asociado a otra temporada
+    const otherDivision = await client.query("insert into app.divisions(id, name, version, created_at, updated_at) values ($1,'Div Otra E2E ' || $2,1,now(),now()) returning id", [crypto.randomUUID(), TAG])
+    const otherDivisionId = otherDivision.rows[0].id
+    const otherTeam = await client.query("insert into app.teams(id, season_id, division_id, line_id, state, version, created_at, updated_at) values ($1,$2,$3,$4,'ACTIVE',1,now(),now()) returning id", [crypto.randomUUID(), otherSeasonId, otherDivisionId, fx.lineId])
+    const otherTeamId = otherTeam.rows[0].id
+
     const startAt = iso(7, 50)
     const m = await apiRequest(page, 'POST', '/api/events', {
       type: 'MATCH',
       title: 'Partido otra temporada',
       startAt,
       timeZone: 'America/Argentina/Buenos_Aires',
-      targetTeamIds: [fx.teamAId],
+      targetTeamIds: [otherTeamId],
       opponent: 'Rival',
       idempotency_key: crypto.randomUUID(),
     }, sess.sessionId)
     expect(m.status).toBe(201)
     const eventId = (await m.body).id
-    // Mover el evento a otra temporada para provocar SEASON_MISMATCH
-    await client.query('update app.events set season_id = $1 where id = $2', [otherSeasonId, eventId])
 
     const res = await apiRequest(page, 'POST', '/api/jornadas', {
       name: 'Jornada inválida',

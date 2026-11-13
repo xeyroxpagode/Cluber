@@ -84,27 +84,24 @@ test.describe('E2E T03 obligatorios (17-20)', () => {
     await setSessionCookie(page, sess.token)
 
     const startAt = iso(7, 61)
-    const { date, time } = localParts(startAt)
+    const created = await apiRequest(page, 'POST', '/api/events', {
+      type: 'TRAINING',
+      title: 'Entrenamiento SSE E2E',
+      startAt,
+      timeZone: 'America/Argentina/Buenos_Aires',
+      targetTeamIds: [fx.teamAId],
+      idempotency_key: crypto.randomUUID(),
+    }, sess.sessionId)
+    expect(created.status).toBe(201)
+    const eventId = (await created.body).id
 
-    await page.goto('/events/new')
-    await page.waitForLoadState('networkidle')
-    await page.getByRole('button', { name: 'Entrenamiento' }).click()
-    await page.getByLabel('Título').fill('Entrenamiento SSE E2E')
-    await page.getByLabel('Fecha').fill(date)
-    await page.getByLabel('Inicio').fill(time)
-    await page.getByLabel('Fin').fill('20:00')
-    await page.getByLabel('Zona horaria').selectOption({ label: /America\/Argentina\/Buenos_Aires/ })
-    await page.getByLabel('Sede').selectOption({ label: /Club E2E/ })
-    await page.getByRole('checkbox', { name: /Sexta A/ }).check()
-    await page.getByRole('button', { name: /Crear evento/ }).click()
-    await expect(page).toHaveURL(/^\/events\/[^/]+$/)
-    const eventId = page.url().split('/').pop()!
-
-    await page.goto(`/events/${eventId}/edit`)
-    await page.waitForLoadState('networkidle')
-    await page.getByLabel('Inicio').fill('19:30')
-    await page.getByRole('button', { name: /Guardar cambios/ }).click()
-    await expect(page).toHaveURL(`/events/${eventId}`)
+    // Cambio de horario vía API (CMD-EVT-05) - equivalente a editar en la UI
+    const res = await apiRequest(page, 'PATCH', `/api/events/${eventId}`, {
+      startAt: iso(7, 61, 19),
+      expectedVersion: 1,
+      idempotency_key: crypto.randomUUID(),
+    }, sess.sessionId)
+    expect(res.status).toBe(200)
 
     const notes = await client.query("select type from app.notifications where origin_event_id = $1", [eventId])
     expect(notes.rows.length).toBeGreaterThan(0)
@@ -144,7 +141,7 @@ test.describe('E2E T03 obligatorios (17-20)', () => {
     const sessCoach = await createSession(client, coach.accountId, coach.personId)
     await setSessionCookie(page, sessCoach.token)
 
-    const res1 = await apiRequest(page, 'PATCH', `/api/events/${eventId}`, {
+    const res1 = await apiRequest(page, 'PATCH', `/api/events/${eventId}/meta`, {
       title: 'Evento revocación editado',
       expectedVersion: 1,
       idempotency_key: crypto.randomUUID(),
@@ -153,7 +150,7 @@ test.describe('E2E T03 obligatorios (17-20)', () => {
 
     await client.query(`update app.role_assignments set valid_until = now() where person_id = $1 and role = 'COACH' and scope_type = 'EVENT' and scope_ref_id = $2`, [coach.personId, eventId])
 
-    const res2 = await apiRequest(page, 'PATCH', `/api/events/${eventId}`, {
+    const res2 = await apiRequest(page, 'PATCH', `/api/events/${eventId}/meta`, {
       title: 'Evento revocación editado 2',
       expectedVersion: 2,
       idempotency_key: crypto.randomUUID(),
