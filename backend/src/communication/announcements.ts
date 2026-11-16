@@ -51,6 +51,12 @@ export class AnnouncementService {
     if (new Set(ids).size !== ids.length) fail("INVALID_TEAM", "Equipos duplicados en la audiencia")
   }
 
+  private async assertTeamsExist(tx: Tx, teamIds: string[]): Promise<void> {
+    if (teamIds.length === 0) return
+    const rows = await tx.selectFrom("app.teams").select("id").where("id", "in", teamIds).execute()
+    if (rows.length !== teamIds.length) fail("INVALID_TEAM", "Uno de los equipos de la audiencia no existe", "not_found")
+  }
+
   private async load(tx: Tx, announcementId: string, forUpdate = false): Promise<AnnouncementTable> {
     assertUuid(announcementId, "announcementId")
     let query = tx.selectFrom("app.announcements").selectAll().where("id", "=", announcementId)
@@ -128,6 +134,7 @@ export class AnnouncementService {
     const title = requireText(input.title, "title")
     const body = requireText(input.body, "body", 20_000)
     const teamIds = input.clubWide ? [] : input.teamIds
+    await this.assertTeamsExist(tx, teamIds)
 
     if (!input.announcementId) {
       const id = randomUUID()

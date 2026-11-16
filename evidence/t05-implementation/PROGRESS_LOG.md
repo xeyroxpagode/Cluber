@@ -161,4 +161,37 @@ Evidencia visual: `evidence/t05-implementation/e2e/screenshots/J01-…png`, `J02
 `pnpm test` 102/102 · `pnpm test:unit` 49/49 · `pnpm test:integration` 105/105 · `pnpm test:api` 82/82 · `pnpm typecheck` + `typecheck:backend` PASS.
 
 ### Estado I4
-**PASS** — cinco recorridos integrados y ejecutables con stack real. Continúo con I5.
+**PASS** — cinco recorridos integrados y ejecutables con stack real. Continué con I5.
+
+---
+
+## I5 — STRESS TEST, ACCEPTANCE Y AUTOCORRECCIÓN
+
+### Matrices ejecutadas
+- `evidence/t05-implementation/ST80_EXECUTED.md`: 80 ST originales + `ST-A01-UPDATE`, cada uno con prueba ejecutada y resultado PASS (generado por `scripts/generate-t05-matrices.mjs`).
+- `evidence/t05-implementation/AC30_EXECUTED.md`: AC-01..AC-30 con evidencia objetiva, 30/30 PASS.
+
+### Suites adicionales ejecutadas
+| Suite | Tests | Resultado | Log |
+|-------|-------|-----------|-----|
+| `t05-stress.test.ts` (concurrencia, idempotencia, validaciones, outbox, privacidad, estático) | 15 | 15 PASS | `raw/i5-stress.log` |
+| E2E J01–J05 + J05b (recovery SSE/500) | 7 | 7 PASS | `raw/i5-e2e-recovery.log` |
+| `pnpm test` | 102 | 102 PASS | `raw/i5-final-frontend.log` |
+| `pnpm test:unit` | 49 | 49 PASS | `raw/i5-final-unit.log` |
+| `pnpm test:integration` | 105 | 105 PASS | `raw/i5-final-integration.log` |
+| `pnpm test:api` | 82 | 82 PASS | `raw/i5-final-api.log` |
+| `pnpm typecheck` + `typecheck:backend` + `pnpm build` | — | PASS | — |
+
+### Escaneo estático (AC-22 / AC-23 / ST-F10)
+- `MESSAGE_RECEIVED`: 2 referencias, ambas en tests que verifican su ausencia. 0 en código funcional.
+- `ANNOUNCEMENT_CORRECTED`: 1 referencia, en comentario de test. 0 funcionales.
+- `Guardian`/`Eligibility`/`CompetitionEntry`: referencias Solo en comentarios de exclusión y tests de product truth. 0 funcionales.
+- `body` en logs: 0 referencias.
+
+### Autocorrecciones I5
+1. **INVALID_TEAM semántico**: audencia con equipo inexistente producía FK error/500 → se valida existencia antes de insertar y se emite `INVALID_TEAM` (failure code contractual). Revalidado en `t05-stress`.
+2. Test de reingreso con intervalo activo previo solapado → se cierra el intervalo con fecha válida y se usan fechas futuras relativas. Ajuste de prueba, no de producto.
+3. Matrices generadas desde identificadores contractuales reales, con mapeo a pruebas ejecutadas.
+
+### Estado I5
+**PASS** — ST80 + suplemento y AC30 ejecutados con evidencia; regresiones y suites adicionales verdes. Continúo con I6.
