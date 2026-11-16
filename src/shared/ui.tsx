@@ -775,13 +775,15 @@ export function Surface({
   children,
   className = "",
   flush = false,
+  ...rest
 }: {
   children: ReactNode
   className?: string
   flush?: boolean
-}) {
+} & React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
+      {...rest}
       className={cx(
         "rounded-surface border border-line bg-surface shadow-raised",
         !flush && "p-4 sm:p-5",
@@ -809,12 +811,13 @@ export function Banner({
   title,
   children,
   action,
+  ...rest
 }: {
   tone?: Tone
   title: ReactNode
   children?: ReactNode
   action?: ReactNode
-}) {
+} & Omit<React.HTMLAttributes<HTMLDivElement>, "title">) {
   const Icon =
     tone === "danger"
       ? AlertCircle
@@ -827,6 +830,7 @@ export function Banner({
             : Info
   return (
     <div
+      {...rest}
       role={tone === "danger" ? "alert" : "status"}
       className={cx(
         "flex flex-wrap items-start gap-3 rounded-surface border p-4",

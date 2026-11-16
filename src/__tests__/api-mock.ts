@@ -303,7 +303,34 @@ export function installApiMock(options: ApiMockOptions = {}) {
     if (detailMatch && method === "GET") {
       const id = decodeURIComponent(detailMatch[1]!)
       const event = findEvent(id)
-      return event ? json(event) : json({ error: { code: "EVENT_NOT_FOUND", message: "not found" } }, 404)
+      if (!event) return json({ error: { code: "EVENT_NOT_FOUND", message: "not found" } }, 404)
+      return json({
+        ...event,
+        participation: {
+          ownAvailability: {
+            eventId: id,
+            value: null,
+            state: "NO_RESPONSE",
+            respondedAt: null,
+            coordinationRevision: null,
+            eventCoordinationRevision: event.coordinationRevision,
+            needsReconfirmation: false,
+          },
+          attendance: {
+            eventId: id,
+            sheetId: "sheet-1",
+            state: "OPEN",
+            closedAt: null,
+            closedBy: null,
+            counts: { PRESENT: 1, ABSENT: 0, JUSTIFIED: 0, UNRECORDED: 1 },
+            items: [
+              { personId: "p-1", name: "Ana González", entryId: "entry-1", value: "PRESENT", state: "PRESENT", recordedAt: iso(-1), correctedAt: null, correctionReason: null, previousValue: null, corrections: [] },
+              { personId: "p-2", name: "Pedro Ramos", entryId: null, value: null, state: "UNRECORDED", recordedAt: null, correctedAt: null, correctionReason: null, previousValue: null, corrections: [] },
+            ],
+            staff: ["me-1"],
+          },
+        },
+      })
     }
     const rosterMatch = /^\/api\/teams\/([^/]+)\/roster$/.exec(path)
     if (rosterMatch && method === "GET") return json({ items: [{ assignmentId: "a-1", personId: "p-1", firstName: "Ana", lastName: "González", username: "ana", accountStatus: "ACTIVE", phone: null, email: null, dni: null, birthDate: null, validFrom: "2026-01-01", validUntil: null }] })
@@ -318,6 +345,71 @@ export function installApiMock(options: ApiMockOptions = {}) {
     }
 
     if (path === "/api/events" && method === "POST") return json({ eventCreated: true, id: "event-new", state: "SCHEDULED", type: "TRAINING" }, 201)
+
+    /* ── T04 — superficies de participación (R15..R18) ── */
+    const availabilitySummary = /^\/api\/events\/([^/]+)\/availability\/summary$/.exec(path)
+    if (availabilitySummary && method === "GET") {
+      const id = decodeURIComponent(availabilitySummary[1]!)
+      return json({
+        eventId: id,
+        eventState: "SCHEDULED",
+        coordinationRevision: 2,
+        counts: { YES: 1, MAYBE: 0, NO: 0, NO_RESPONSE: 1, NEEDS_RECONFIRMATION: 0 },
+        items: [
+          { personId: "me-1", name: "Elina Coach", value: "YES", state: "YES", respondedAt: iso(-1), coordinationRevision: 2, needsReconfirmation: false },
+          { personId: "p-2", name: "Ana González", value: null, state: "NO_RESPONSE", respondedAt: null, coordinationRevision: null, needsReconfirmation: false },
+        ],
+        total: 2,
+      })
+    }
+    const myStatus = /^\/api\/events\/([^/]+)\/selection\/my-status$/.exec(path)
+    if (myStatus && method === "GET") {
+      const id = decodeURIComponent(myStatus[1]!)
+      return json({ matchId: id, status: "SELECTED", order: 1, publishedAt: iso(-2), revisionId: "revision-1" })
+    }
+    const selectionDetail = /^\/api\/events\/([^/]+)\/selection$/.exec(path)
+    if (selectionDetail && method === "GET") {
+      const id = decodeURIComponent(selectionDetail[1]!)
+      return json({
+        selectionId: "selection-1",
+        matchId: id,
+        currentDraft: { revisionId: "revision-draft", state: "DRAFT", autosaveVersion: 1, publishedAt: null, publishedBy: null, entries: [{ personId: "p-1", role: "SELECTED", order: 1, conflicts: [] }], conflicts: [] },
+        publishedRevisions: [{ revisionId: "revision-1", state: "PUBLISHED", autosaveVersion: 0, publishedAt: iso(-2), publishedBy: "me-1", entries: [{ personId: "me-1", role: "SELECTED", order: 1, conflicts: [] }], conflicts: [] }],
+        history: [{ revisionId: "revision-1", publishedAt: iso(-2), added: ["me-1"], removed: [], changed: [] }],
+      })
+    }
+    const matchRecord = /^\/api\/events\/([^/]+)\/match-record$/.exec(path)
+    if (matchRecord && method === "GET") {
+      const id = decodeURIComponent(matchRecord[1]!)
+      return json({
+        matchRecordId: "record-1",
+        matchId: id,
+        state: "DRAFT",
+        resultType: null,
+        homeScore: null,
+        awayScore: null,
+        observations: null,
+        finalizedAt: null,
+        finalizedBy: null,
+        correctedAt: null,
+        correctedBy: null,
+        correctionReason: null,
+        previousResultType: null,
+        previousHomeScore: null,
+        previousAwayScore: null,
+        previousObservations: null,
+        event: { id, state: "SCHEDULED", version: 3, coordinationRevision: 2 },
+        playerStats: [],
+        corrections: [],
+      })
+    }
+    const startEvent = /^\/api\/events\/([^/]+)\/start$/.exec(path)
+    if (startEvent && method === "POST") {
+      const id = decodeURIComponent(startEvent[1]!)
+      return json({ eventId: id, state: "IN_PROGRESS", version: 4, coordinationRevision: 2 })
+    }
+    const attendanceSheet = /^\/api\/events\/([^/]+)\/attendance$/.exec(path)
+    if (attendanceSheet && method === "POST") return json({ entryId: "entry-1", value: "PRESENT", recordedAt: new Date().toISOString() })
 
     return json({ error: { code: "NOT_FOUND", message: `unmocked ${method} ${path}` } }, 404)
   }

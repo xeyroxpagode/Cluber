@@ -27,7 +27,9 @@
     "db:start": "node scripts/db-local.mjs start",
     "db:reset": "node scripts/db-local.mjs reset",
     "db:types": "node scripts/db-local.mjs types",
-    "db:stop": "node scripts/db-local.mjs stop"
+    "db:stop": "node scripts/db-local.mjs stop",
+    "e2e": "node scripts/e2e-run.mjs",
+    "e2e:seed": "node scripts/e2e-seed-real-users.mjs"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",

@@ -314,9 +314,29 @@ export function EventDetail() {
             </dl>
           </DetailSection>
 
-          <Surface className="grid gap-2">
+          <Surface className="grid gap-2" data-testid="event-participation-rail">
             <SectionHeader title="Participación" />
-            <p className="gei-meta">La disponibilidad y la convocatoria llegan con la siguiente etapa (T04).</p>
+            <p className="gei-meta">Disponibilidad, convocatoria, asistencia y resultado del partido.</p>
+            <ul className="grid gap-1">
+              <li>
+                <RowLink to={`/events/${event.id}/availability`} title="Disponibilidad" detail={event.participation?.ownAvailability ? `Tu respuesta: ${event.participation.ownAvailability.state === "NO_RESPONSE" ? "sin respuesta" : event.participation.ownAvailability.state}` : "Confirmá si vas"} trailing={event.participation?.ownAvailability?.needsReconfirmation ? <StateBadge value="NEEDS_RECONFIRMATION" /> : undefined} />
+              </li>
+              {event.type === "MATCH" && (
+                <li>
+                  <RowLink to={`/events/${event.id}/selection`} title="Convocatoria" detail={canOperate ? "Prepará y publicá la lista de convocados" : "Tu estado de convocatoria"} />
+                </li>
+              )}
+              {(event.type === "TRAINING" || event.type === "MATCH") && (
+                <li>
+                  <RowLink to={`/events/${event.id}/attendance`} title="Asistencia" detail={canOperate ? "Registrá y cerrá la hoja" : "Hoja de asistencia del equipo"} />
+                </li>
+              )}
+              {event.type === "MATCH" && (
+                <li>
+                  <RowLink to={`/events/${event.id}/match-record`} title="Resultado del partido" detail={canOperate ? "Acta y estadísticas" : "Resultado oficial"} />
+                </li>
+              )}
+            </ul>
           </Surface>
         </div>
 

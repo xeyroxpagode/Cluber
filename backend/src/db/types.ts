@@ -293,6 +293,130 @@ export interface NotificationTable {
   created_at: Date
 }
 
+/* ── T04 Participation (M7) ── */
+
+export interface AvailabilityResponseTable {
+  id: Generated<string>
+  event_id: string
+  person_id: string
+  value: "YES" | "MAYBE" | "NO"
+  responded_at: Generated<Date>
+  coordination_revision: number
+  created_at: Generated<Date>
+}
+
+export interface SelectionTable {
+  id: Generated<string>
+  match_id: string
+  current_draft_revision_id: string | null
+  created_at: Generated<Date>
+  updated_at: Generated<Date>
+}
+
+export interface SelectionRevisionTable {
+  id: Generated<string>
+  selection_id: string
+  state: "DRAFT" | "PUBLISHED"
+  published_at: Date | null
+  published_by_person_id: string | null
+  autosave_version: number
+  created_at: Generated<Date>
+  updated_at: Generated<Date>
+}
+
+export interface SelectionEntryTable {
+  id: Generated<string>
+  revision_id: string
+  person_id: string
+  role: "SELECTED" | "ALTERNATE"
+  order: number | null
+  created_at: Generated<Date>
+}
+
+export interface AttendanceSheetTable {
+  id: Generated<string>
+  event_id: string
+  closed_at: Date | null
+  closed_by_person_id: string | null
+  created_at: Generated<Date>
+}
+
+export interface AttendanceEntryTable {
+  id: Generated<string>
+  sheet_id: string
+  person_id: string
+  value: "PRESENT" | "ABSENT" | "JUSTIFIED" | null
+  recorded_at: Date | null
+  recorded_by_person_id: string | null
+  corrected_at: Date | null
+  corrected_by_person_id: string | null
+  correction_reason: string | null
+  previous_value: "PRESENT" | "ABSENT" | "JUSTIFIED" | null
+  created_at: Generated<Date>
+  updated_at: Generated<Date>
+}
+
+export interface AttendanceCorrectionTable {
+  id: Generated<string>
+  entry_id: string
+  previous_value: "PRESENT" | "ABSENT" | "JUSTIFIED" | null
+  new_value: "PRESENT" | "ABSENT" | "JUSTIFIED"
+  correction_reason: string
+  corrected_at: Generated<Date>
+  corrected_by_person_id: string
+}
+
+export interface MatchRecordTable {
+  id: Generated<string>
+  match_id: string
+  state: "DRAFT" | "FINAL"
+  result_type: "PLAYED" | "FORFEIT" | "ABANDONED" | null
+  home_score: number | null
+  away_score: number | null
+  observations: string | null
+  finalized_at: Date | null
+  finalized_by_person_id: string | null
+  corrected_at: Date | null
+  corrected_by_person_id: string | null
+  correction_reason: string | null
+  previous_result_type: "PLAYED" | "FORFEIT" | "ABANDONED" | null
+  previous_home_score: number | null
+  previous_away_score: number | null
+  previous_observations: string | null
+  created_at: Generated<Date>
+  updated_at: Generated<Date>
+}
+
+export interface PlayerMatchStatsTable {
+  id: Generated<string>
+  match_record_id: string
+  person_id: string
+  minutes_played: number | null
+  goals: number | null
+  assists: number | null
+  yellow_cards: number | null
+  red_cards: number | null
+  mvp: Generated<boolean>
+  created_at: Generated<Date>
+  updated_at: Generated<Date>
+}
+
+export interface MatchRecordCorrectionTable {
+  id: Generated<string>
+  match_record_id: string
+  previous_result_type: "PLAYED" | "FORFEIT" | "ABANDONED" | null
+  new_result_type: "PLAYED" | "FORFEIT" | "ABANDONED" | null
+  previous_home_score: number | null
+  new_home_score: number | null
+  previous_away_score: number | null
+  new_away_score: number | null
+  previous_observations: string | null
+  new_observations: string | null
+  correction_reason: string
+  corrected_at: Generated<Date>
+  corrected_by_person_id: string
+}
+
 export interface DatabaseSchema {
   "infra.idempotency_records": IdempotencyRecordTable
   "infra.outbox_events": OutboxEventTable
@@ -320,4 +444,14 @@ export interface DatabaseSchema {
   "app.jornadas": JornadaTable
   "app.jornada_matches": JornadaMatchTable
   "app.notifications": NotificationTable
+  "app.availability_responses": AvailabilityResponseTable
+  "app.selections": SelectionTable
+  "app.selection_revisions": SelectionRevisionTable
+  "app.selection_entries": SelectionEntryTable
+  "app.attendance_sheets": AttendanceSheetTable
+  "app.attendance_entries": AttendanceEntryTable
+  "app.attendance_corrections": AttendanceCorrectionTable
+  "app.match_records": MatchRecordTable
+  "app.player_match_stats": PlayerMatchStatsTable
+  "app.matchrecord_corrections": MatchRecordCorrectionTable
 }

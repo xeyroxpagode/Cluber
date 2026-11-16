@@ -14,6 +14,8 @@ import { AffiliationService } from "./people/affiliation.js"
 import { StructureService } from "./structure/structure.js"
 import { ProductReadService } from "./read/product-read.js"
 import { T03ReadService } from "./read/t03-read.js"
+import { T04ReadService } from "./read/t04-read.js"
+import { ParticipationService } from "./participation/participation.js"
 import { EventService } from "./events/events.js"
 import { EventSeriesService } from "./events/series.js"
 import { JornadaService } from "./jornada/jornada.js"
@@ -44,6 +46,8 @@ export class ProductServices {
   readonly structure = new StructureService()
   readonly reads = new ProductReadService(this.authority)
   readonly t03Reads = new T03ReadService(this.authority)
+  readonly participation = new ParticipationService()
+  readonly t04Reads = new T04ReadService(this.authority, this.participation)
   readonly events = new EventService()
   readonly eventSeries = new EventSeriesService()
   readonly jornada = new JornadaService()

@@ -21,6 +21,7 @@ import { addAuditRoutes } from "../routes/audit-routes.js"
 import { addSystemRoutes } from "../routes/system-routes.js"
 import { addIamAdminRoutes } from "../routes/iam-admin-routes.js"
 import { addEventRoutes } from "../routes/event-routes.js"
+import { addParticipationRoutes } from "../routes/participation-routes.js"
 import { addNotificationRoutes } from "../routes/notification-routes.js"
 import { addJornadaRoutes } from "../routes/jornada-routes.js"
 import { addRealtimeRoutes } from "../routes/realtime-routes.js"
@@ -61,6 +62,7 @@ export async function buildRuntime(config: AppConfig): Promise<RuntimeServices> 
   addAuditRoutes({ app, registry: productRoutes, services })
   addSystemRoutes({ app, registry: productRoutes, services })
   addEventRoutes({ app, registry: productRoutes, services })
+  addParticipationRoutes({ app, registry: productRoutes, services })
   addNotificationRoutes({ app, registry: productRoutes, services })
   addJornadaRoutes({ app, registry: productRoutes, services })
   addRealtimeRoutes({ app, registry: productRoutes, services, realtime })

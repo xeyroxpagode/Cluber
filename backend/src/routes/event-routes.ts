@@ -346,6 +346,41 @@ export function addEventRoutes({ app, registry, services }: RouteInput): void {
     },
   })
 
+  /* ── CMD-EVT-17 — start match (SCHEDULED -> IN_PROGRESS) ── */
+  registry.add({
+    method: "POST",
+    url: "/api/events/:eventId/start",
+    security: { operationId: "CMD-EVT-17", kind: "command", auth: "required", csrf: "required", idempotency: "supported", cache: "no-store" },
+    schema: {
+      params: Type.Object({ eventId: Uuid }),
+      body: Type.Object({
+        expectedVersion: Type.Optional(Type.Integer({ minimum: 1 })),
+        idempotency_key: Type.Optional(Type.String({ minLength: 1, maxLength: 128 })),
+      }),
+      response: { 200: SilentResponse, 400: SilentResponse, 403: SilentResponse, 404: SilentResponse, 409: SilentResponse, 422: SilentResponse, 500: SilentResponse },
+    },
+    async handler(request: any, reply: any) {
+      const principal = await services.principals.require(request, new Date())
+      const eventId = String(request.params.eventId)
+      const key = String(request.body?.idempotency_key ?? "")
+      let status = 200
+      let bodyOut: any = null
+      await services.deps.runner.run("COMMAND_STANDARD", principal.sessionId, async ({ tx, evaluationInstant }) => {
+        await services.principals.requireInTx(tx, request, evaluationInstant)
+        let acquired: any = null
+        if (key) {
+          acquired = await services.deps.idempotencyCoordinator.acquire(tx, { scopeKey: "CMD-EVT-17", commandId: "CMD-EVT-17", key, input: { eventId, expectedVersion: request.body?.expectedVersion } }, evaluationInstant)
+          if (!acquired.acquired) { status = acquired.status; bodyOut = acquired.snapshot ?? { eventUpdated: true, eventId }; return }
+        }
+        const result = await services.events.startEvent(tx, principal.personId, eventId, request.body?.expectedVersion, evaluationInstant)
+        bodyOut = { eventUpdated: true, ...result }
+        status = 200
+        if (acquired) await services.deps.idempotencyCoordinator.succeed(tx, acquired.id, 200, bodyOut)
+      }, true)
+      return reply.status(status).send(bodyOut)
+    },
+  })
+
   /* ──────────────────────────── READS (RC-*) ──────────────────────────── */
 
   /* ── RC-02 — calendar range ── */
@@ -381,7 +416,11 @@ export function addEventRoutes({ app, registry, services }: RouteInput): void {
     async handler(request: any, reply: any) {
       const principal = await services.principals.require(request, new Date())
       const eventId = String(request.params.eventId)
-      const detail = await services.deps.runner.run("READ_STANDARD", principal.sessionId, async ({ tx, evaluationInstant }) => services.t03Reads.eventDetail(tx, principal.personId, eventId, evaluationInstant))
+      const detail = await services.deps.runner.run("READ_STANDARD", principal.sessionId, async ({ tx, evaluationInstant }) => {
+        const event = await services.t03Reads.eventDetail(tx, principal.personId, eventId, evaluationInstant)
+        const participation = await services.t04Reads.participationContext(tx, principal.personId, eventId, evaluationInstant)
+        return { ...event, participation }
+      })
       return reply.status(200).send(detail)
     },
   })

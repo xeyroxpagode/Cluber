@@ -582,6 +582,51 @@ export class EventService {
     throw new AppError("MATCHRECORD_REQUIRED", "Abandoning an event requires a MatchRecord with resultType=ABANDONED, which is delivered with T04", "conflict")
   }
 
+  /**
+   * CMD-EVT-17 — startEvent (SCHEDULED -> IN_PROGRESS) para MATCH.
+   * Addendum A-D04-02: incrementa Event.version, NO incrementa coordinationRevision
+   * (el inicio no es un cambio material de coordinación) y NO emite NOT-01 automático.
+   * Autoridad exclusiva de COACH con grant vigente y scope correcto (TEAM propio o EVENT propio).
+   */
+  async startEvent(
+    tx: Transaction<DatabaseSchema>,
+    actorPersonId: string,
+    eventId: string,
+    expectedVersion: number | undefined,
+    now: Date,
+    source = "CMD-EVT-17",
+  ) {
+    const event = await loadEvent(tx, eventId)
+    if (event.type !== "MATCH") {
+      throw new AppError("INVALID_TARGET", "Only a match can be started", "domain_validation", false, { type: ["match_required"] })
+    }
+    if (event.state !== "SCHEDULED") {
+      throw new AppError("EVENT_NOT_SCHEDULED", "Only a scheduled match can be started", "conflict")
+    }
+    const current = await resolveEventTargetIds(tx, eventId)
+    const snapshot = await this.authority.snapshot(tx, actorPersonId, now)
+    assertCoachOperates(snapshot, eventId, current.teamIds)
+    if (expectedVersion !== undefined && Number(expectedVersion) !== event.version) {
+      throw new AppError("OPTIMISTIC_LOCK_FAILURE", "The event changed since you loaded it", "conflict")
+    }
+    const updated = await tx
+      .updateTable("app.events")
+      .set({ state: "IN_PROGRESS", version: event.version + 1, updated_at: now })
+      .where("id", "=", event.id)
+      .returningAll()
+      .executeTakeFirstOrThrow()
+    await this.audit.record(tx, {
+      actorPersonId,
+      action: "EVENT_STARTED",
+      targetType: "Event",
+      targetId: event.id,
+      source,
+      diff: { from: event.state, to: "IN_PROGRESS", version: updated.version, coordinationRevision: updated.coordination_revision },
+    })
+    // A-D04-02: sin NOT-01 automático y sin incremento de coordinationRevision.
+    return { eventId: updated.id, state: updated.state, version: updated.version, coordinationRevision: updated.coordination_revision }
+  }
+
   /** CMD-EVT-16 — upsert event logistics (material change, NOT-01). */
   async updateLogistics(
     tx: Transaction<DatabaseSchema>,

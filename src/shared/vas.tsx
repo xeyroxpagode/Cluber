@@ -1,7 +1,6 @@
 /**
- * ¿Vas? — disponibilidad (T04). DG-04 llega con T04; en T03 no existe backend
- * de disponibilidad, así que estos componentes muestran el estado honesto
- * en lugar de simular datos.
+ * ¿Vas? — disponibilidad (T04). La disponibilidad ya tiene backend propio: estos
+ * componentes remiten a la superficie real en lugar de simular datos.
  */
 
 export type VasValue = "YES" | "MAYBE" | "NO"
@@ -17,12 +16,12 @@ export const VAS_LABELS: Record<string, string> = {
 export function VasControl() {
   return (
     <p className="gei-meta rounded-control border border-line bg-control px-3 py-2">
-      La confirmación de asistencia llega con la próxima etapa (T04). Mientras tanto, los
-      equipos ven el calendario y los cambios del evento.
+      La disponibilidad se registra desde la pantalla del evento: abrí “Disponibilidad”
+      para confirmar si vas, y el club ve el estado en tiempo real.
     </p>
   )
 }
 
 export function VasCompact() {
-  return <p className="gei-meta">Asistencia: disponible con la T04</p>
+  return <p className="gei-meta">Disponibilidad: registrada desde el evento</p>
 }

@@ -15,12 +15,21 @@ export interface RecordNotificationInput {
   resourceType: NotificationResourceType
   resourceId: string
   originEventId?: string | null
+  /** T04 / NOT-06: revisión publicada que origina el hecho. Obligatoria para SELECTION_PUBLISHED. */
+  revisionId?: string | null
   title: string
   body: string
   occurredAt?: Date
 }
 
-export function notificationDedupeKey(input: Pick<RecordNotificationInput, "type" | "resourceType" | "resourceId" | "originEventId" | "recipientPersonId">): string {
+export function notificationDedupeKey(input: Pick<RecordNotificationInput, "type" | "resourceType" | "resourceId" | "originEventId" | "recipientPersonId" | "revisionId">): string {
+  if (input.type === "SELECTION_PUBLISHED") {
+    // H-05 / A-D04: la revisión publicada es obligatoria y diferencia publicaciones legítimas.
+    if (!input.revisionId) {
+      throw new AppError("VALIDATION_FAILED", "Selection notifications require revisionId", "domain_validation", false, { revisionId: ["required"] })
+    }
+    return `${input.resourceId}|${input.revisionId}|${input.recipientPersonId}|${input.type}`
+  }
   if (input.type.startsWith("EVENT_")) {
     if (!input.originEventId) throw new AppError("VALIDATION_FAILED", "Event notifications require originEventId", "domain_validation", false, { originEventId: ["required"] })
     return `${input.originEventId}|${input.resourceType}|${input.resourceId}|${input.recipientPersonId}|${input.type}`
@@ -43,7 +52,7 @@ export class NotificationService {
       throw new AppError("VALIDATION_FAILED", "Event notifications require originEventId", "domain_validation", false, { originEventId: ["required"] })
     }
     const occurredAt = input.occurredAt ?? new Date()
-    const dedupeKey = notificationDedupeKey({ ...input, originEventId: input.originEventId ?? null })
+    const dedupeKey = notificationDedupeKey({ ...input, originEventId: input.originEventId ?? null, revisionId: input.revisionId ?? null })
     const inserted = await tx
       .insertInto("app.notifications")
       .values({

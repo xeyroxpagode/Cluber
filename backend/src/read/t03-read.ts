@@ -172,7 +172,7 @@ export class T03ReadService {
     if (!snapshot.isSubcommittee) query = query.where(this.visibilityWhere(actorPersonId, snapshot, actorTeamIds))
     if (input.type && ["TRAINING", "MATCH", "CLUB_EVENT"].includes(input.type)) query = query.where("app.events.type", "=", input.type as EventTable["type"])
     if (input.state && ["DRAFT","SCHEDULED","POSTPONED","CANCELLED","IN_PROGRESS","COMPLETED","ABANDONED"].includes(input.state)) query = query.where("app.events.state", "=", input.state as EventTable["state"])
-    const events = await query.orderBy(sql`app.events.start_at asc nulls last`).limit(Math.min(Math.max(input.limit ?? 200, 1), 500)).execute()
+    const events = await query.orderBy(sql`app.events.start_at asc nulls last`).orderBy(sql`app.events.id asc`).limit(Math.min(Math.max(input.limit ?? 200, 1), 500)).execute()
     const targets = await this.attachTargets(tx, events)
     const allTeamIds = Array.from(new Set(events.flatMap((event) => targets.get(event.id)?.teams ?? [])))
     const [teamNames, venues, competitions] = await Promise.all([
@@ -224,7 +224,9 @@ export class T03ReadService {
       .where("app.events.state", "=", "SCHEDULED")
       .where("app.events.start_at", ">=", now)
     if (!snapshot.isSubcommittee) query = query.where(this.visibilityWhere(actorPersonId, snapshot, actorTeamIds))
-    const event = await query.orderBy("app.events.start_at", "asc").limit(1).executeTakeFirst()
+    // Orden determinista: start_at + id. Sin el desempate, dos eventos visibles con la
+    // misma hora devolvían un resultado no determinista (OBS-T04-00).
+    const event = await query.orderBy("app.events.start_at", "asc").orderBy("app.events.id", "asc").limit(1).executeTakeFirst()
     if (!event) return null
     const targets = await this.attachTargets(tx, [event])
     return this.eventDto(event, targets.get(event.id))

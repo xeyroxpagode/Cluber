@@ -27,6 +27,10 @@ export const STATE_TEXT: Record<string, string> = {
   NO_RESPONSE: "Sin respuesta",
   NEEDS_RECONFIRMATION: "Hay que volver a confirmar",
   UNRECORDED: "Sin registrar",
+  SELECTED: "Convocado",
+  ALTERNATE: "Alternante",
+  NOT_SELECTED: "Sin convocatoria",
+  MAYBE: "Tal vez",
 }
 const stateToneMap: Record<string, Tone> = {
   DRAFT: "neutral",
@@ -54,6 +58,9 @@ const stateToneMap: Record<string, Tone> = {
   ABSENT: "danger",
   JUSTIFIED: "warning",
   UNRECORDED: "neutral",
+  SELECTED: "success",
+  ALTERNATE: "warning",
+  NOT_SELECTED: "neutral",
   PLAYED: "success",
   FORFEIT: "warning",
 }

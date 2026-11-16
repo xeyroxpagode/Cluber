@@ -317,22 +317,41 @@ test.describe('T03 Real Browser Acceptance', () => {
       await page.goto(BASE + '/events/new');
       await page.waitForLoadState('networkidle');
 
-      await page.click('button:has-text("Entrenamiento")');
-      await page.fill('input[id="field-title"]', 'Evento equipo ajeno');
-      await page.fill('input[id="field-date"]', '2026-12-30');
-      await page.fill('input[id="field-time"]', '18:00');
-      await page.locator('input[type="checkbox"]').first().check();
-      await page.click('button:has-text("Crear evento")');
-      await page.waitForTimeout(3000);
+      // 1) La interfaz sólo ofrece los equipos del entrenador: no hay forma de elegir un equipo ajeno.
+      const teamCheckboxes = page.locator('fieldset input[type="checkbox"]');
+      expect(await teamCheckboxes.count()).toBe(1);
 
-      // Verificar si hay error de autoridad o si el evento no se creó
-      const errorVisible = await page.locator('.error, [role="alert"]').isVisible() ||
-        await page.locator('text=no tienes').isVisible() ||
-        await page.locator('text=Autoridad').isVisible() ||
-        await page.locator('text=AUTHORITY_DENIED').isVisible();
-      const stillOnForm = await page.url().includes('/events/new');
-      // Al menos uno de los dos: error visible o seguimos en el formulario (no se creó)
-      expect(errorVisible || stillOnForm).toBeTruthy();
+      // 2) La garantía real es del backend: crear un evento sobre un equipo ajeno se deniega.
+      const client = new pg.Client({ connectionString: DATABASE_URL });
+      await client.connect();
+      const foreign = await client.query(
+        `select t.id from app.teams t
+         where t.state = 'ACTIVE'
+           and not exists (
+             select 1 from app.role_assignments ra
+             where ra.scope_ref_id = t.id and ra.role = 'COACH'
+               and ra.person_id = (select id from app.people where email = $1)
+           )
+         order by t.id limit 1`,
+        [USERS.coach.email],
+      );
+      await client.end();
+      expect(foreign.rows.length).toBeGreaterThan(0);
+
+      const me = await (await page.request.get(BASE + '/api/me')).json();
+      const response = await page.request.post(BASE + '/api/events', {
+        headers: { origin: BASE, 'content-type': 'application/json', 'x-gei-csrf': me.csrfToken },
+        data: {
+          type: 'TRAINING',
+          title: 'Evento equipo ajeno',
+          startAt: '2026-12-30T21:00:00.000Z',
+          timeZone: 'America/Argentina/Buenos_Aires',
+          targetTeamIds: [foreign.rows[0].id],
+        },
+      });
+      expect(response.status()).toBe(403);
+      const body = await response.json();
+      expect(body.error.code).toBe('AUTHORITY_DENIED');
     });
 
     test('I3: CAPTAIN puede modificar logística de su equipo', async ({ page }) => {

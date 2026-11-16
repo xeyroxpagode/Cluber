@@ -32,10 +32,10 @@ describe("M0 and PostgreSQL semantics", () => {
       (select count(*)::int from information_schema.tables where table_schema='app') app_tables,
       (select count(*)::int from information_schema.tables where table_schema='infra') infra_tables`)
     await admin.end()
-    expect(result.rows[0]).toEqual({ anon_app: false, authenticated_infra: false, app_tables: 21, infra_tables: 5 })
+    expect(result.rows[0]).toEqual({ anon_app: false, authenticated_infra: false, app_tables: 31, infra_tables: 5 })
   })
 
-  it("exposes exactly the authorized T01/T02 tables and no future tables", async () => {
+  it("exposes exactly the authorized T01/T02/T04 tables and no future tables", async () => {
     await database.verify()
     const admin = new pg.Pool({ connectionString: config.databaseUrl })
     const rows = await admin.query<{ table_schema: string; table_name: string }>(`
@@ -75,6 +75,17 @@ describe("M0 and PostgreSQL semantics", () => {
       "app.jornadas",
       "app.jornada_matches",
       "app.notifications",
+      // T04 / M7 — participación (8 canónicas + 2 auxiliares de historial).
+      "app.availability_responses",
+      "app.selections",
+      "app.selection_revisions",
+      "app.selection_entries",
+      "app.attendance_sheets",
+      "app.attendance_entries",
+      "app.attendance_corrections",
+      "app.match_records",
+      "app.player_match_stats",
+      "app.matchrecord_corrections",
     ]
     for (const table of [...expectedInfra, ...expectedApp]) {
       expect(tables).toContain(table)

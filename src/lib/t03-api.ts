@@ -35,9 +35,44 @@ export interface EventDto {
   targets: EventTargets
 }
 
+export interface EventParticipationContext {
+  ownAvailability: {
+    eventId: string
+    value: "YES" | "MAYBE" | "NO" | null
+    state: "YES" | "MAYBE" | "NO" | "NO_RESPONSE" | "NEEDS_RECONFIRMATION"
+    respondedAt: string | null
+    coordinationRevision: number | null
+    eventCoordinationRevision: number
+    needsReconfirmation: boolean
+  } | null
+  attendance: {
+    eventId: string
+    sheetId: string | null
+    state: "OPEN" | "CLOSED"
+    closedAt: string | null
+    closedBy: string | null
+    counts: { PRESENT: number; ABSENT: number; JUSTIFIED: number; UNRECORDED: number }
+    items: Array<{
+      personId: string
+      name: string
+      entryId: string | null
+      value: "PRESENT" | "ABSENT" | "JUSTIFIED" | null
+      state: "PRESENT" | "ABSENT" | "JUSTIFIED" | "UNRECORDED"
+      recordedAt: string | null
+      correctedAt: string | null
+      correctionReason: string | null
+      previousValue: "PRESENT" | "ABSENT" | "JUSTIFIED" | null
+      corrections: Array<{ id: string; previousValue: "PRESENT" | "ABSENT" | "JUSTIFIED" | null; newValue: "PRESENT" | "ABSENT" | "JUSTIFIED"; correctionReason: string; correctedAt: string; correctedBy: string }>
+    }>
+    staff: string[]
+  } | null
+}
+
 export interface EventDetailDto extends EventDto {
   logistics: { meetingAt: string | null; departureAt: string | null; meetingPoint: string | null; transportNote: string | null; arrivalInstructions: string | null } | null
   audienceCount: number | null
+  /** T04: contexto de participación (extensión additive de RC-03). */
+  participation?: EventParticipationContext
 }
 
 export interface NotificationDto {
@@ -61,7 +96,12 @@ export interface SeriesDetail { id: string; name: string; state: "ACTIVE" | "END
 export interface MaterialityResult { eventId: string; version: number; state: string; isMaterial: boolean; materialFields: string[]; metadataFields: string[]; classification: string }
 
 const json = () => ({ "Content-Type": "application/json" })
-const creds = () => ({ credentials: "include" as RequestCredentials, csrfToken: getCsrfToken() ?? undefined, headers: {} as Record<string, string> })
+/**
+ * `Content-Type` debe viajar en las peticiones con cuerpo: sin él, `fetch` marca los
+ * cuerpos string como `text/plain` y el backend rechaza la validación de transporte.
+ * `apiRequest` elimina la cabecera cuando no hay cuerpo.
+ */
+const creds = () => ({ credentials: "include" as RequestCredentials, csrfToken: getCsrfToken() ?? undefined, headers: { "Content-Type": "application/json" } })
 
 async function get<T>(url: string): Promise<T> {
   return apiRequest<T>(url, { method: "GET", credentials: "include", csrfToken: getCsrfToken() ?? undefined, headers: { Accept: "application/json" } })

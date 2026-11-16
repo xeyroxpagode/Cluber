@@ -10,6 +10,7 @@ import { buildApp } from "../http/build-app.js"
 import { RouteRegistry } from "../http/route-registry.js"
 import { ProductServices } from "../product-services.js"
 import { addEventRoutes } from "../routes/event-routes.js"
+import { addParticipationRoutes } from "../routes/participation-routes.js"
 import { addNotificationRoutes } from "../routes/notification-routes.js"
 import { addJornadaRoutes } from "../routes/jornada-routes.js"
 
@@ -33,6 +34,7 @@ export async function buildT03TestApp() {
   }
   const services = new ProductServices(productDeps)
   addEventRoutes({ app, registry: api, services })
+  addParticipationRoutes({ app, registry: api, services })
   addNotificationRoutes({ app, registry: api, services })
   addJornadaRoutes({ app, registry: api, services })
   api.register(app)

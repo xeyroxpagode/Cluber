@@ -68,9 +68,15 @@ describe("§18 / §21 — estados terminales de evento", () => {
     expect(screen.queryByText(/La confirmación de asistencia llega/)).toBeNull()
   })
 
-  it("un evento operativo informa que la asistencia llega con T04 (sin simular)", async () => {
+  it("un evento operativo muestra el raíl real de participación (T04)", async () => {
     renderScreen("/events/:eventId", "/events/match-cuba", <EventDetail />, "", "player")
-    expect(await screen.findByText(/La confirmación de asistencia llega/)).toBeTruthy()
+    expect(await screen.findByText("Participación")).toBeTruthy()
+    expect(screen.getByText("Disponibilidad")).toBeTruthy()
+    // El raíl sólo ofrece las superficies que aplican al tipo de evento (MATCH).
+    expect(screen.getByText("Convocatoria")).toBeTruthy()
+    expect(screen.getByText("Asistencia")).toBeTruthy()
+    expect(screen.getByText("Resultado del partido")).toBeTruthy()
+    expect(screen.queryByText(/La confirmación de asistencia llega/)).toBeNull()
   })
 
   it("el partido ya jugado se lee como jugado", async () => {
@@ -80,16 +86,26 @@ describe("§18 / §21 — estados terminales de evento", () => {
 })
 
 describe("§11 — una sola gramática de ¿Vas?", () => {
-  it("la disponibilidad se muestra como llegada en la T04, sin simular respuestas", async () => {
+  const asPlayer = {
+    me: {
+      roleAssignments: [{ id: "ra-player", role: "PLAYER", scopeType: "TEAM", scopeRefId: "team-a", validFrom: "2026-01-01", validUntil: null }],
+    },
+  }
+
+  it("la disponibilidad ofrece la grilla real de respuestas, sin datos simulados", async () => {
     renderScreen(
       "/events/:eventId/availability",
       "/events/training-serie-2/availability",
       <AvailabilityPage />,
       "",
       "player",
+      asPlayer,
     )
-    expect(screen.getByText(/La disponibilidad jugadora llega con la T04/)).toBeTruthy()
-    expect(screen.queryByRole("radio")).toBeNull()
+    expect(await screen.findByText("Tu respuesta")).toBeTruthy()
+    expect(screen.getByRole("button", { name: "Voy" })).toBeTruthy()
+    expect(screen.getByRole("button", { name: "Tal vez" })).toBeTruthy()
+    expect(screen.getByRole("button", { name: "No voy" })).toBeTruthy()
+    expect(screen.queryByText(/La disponibilidad jugadora llega con la T04/)).toBeNull()
   })
 
   it("el resumen de coordinación muestra revisión y versión reales", async () => {
@@ -102,14 +118,17 @@ describe("§11 — una sola gramática de ¿Vas?", () => {
     expect(screen.getAllByText("1").length).toBeGreaterThan(0)
   })
 
-  it("un evento postergado no muestra controles de asistencia", () => {
+  it("un evento postergado no habilita controles de respuesta", async () => {
     renderScreen(
       "/events/:eventId/availability",
       "/events/match-banco/availability",
       <AvailabilityPage />,
+      "",
+      "player",
+      asPlayer,
     )
-    expect(screen.queryByRole("radio")).toBeNull()
-    expect(screen.getByText(/La disponibilidad jugadora llega con la T04/)).toBeTruthy()
+    expect(await screen.findByText("Este evento ya no admite respuestas")).toBeTruthy()
+    expect(screen.getByRole("button", { name: "Voy" })).toBeDisabled()
   })
 })
 
