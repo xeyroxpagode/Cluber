@@ -128,4 +128,37 @@ Cobertura: tablas/índices/extensión; DRAFT/PUBLISHED/ARCHIVED con publishedAt 
 | `pnpm build` | PASS (1922 módulos) | `raw/i3-build.log` |
 
 ### Estado I3
-**PASS** — superficies R21–R26 con comportamiento real, 0 placeholders funcionales. Continúo con I4.
+**PASS** — superficies R21–R26 con comportamiento real, 0 placeholders funcionales. Continué con I4.
+
+---
+
+## I4 — INTEGRACIÓN FUNCIONAL END-TO-END
+
+### Entorno real
+- PostgreSQL aislado `gei_test` (10 migraciones) + seed ficticio `scripts/t05-e2e-seed.mjs` (4 usuarios: SUBCOMMITTEE, COACH, 2 PLAYER; contraseña de prueba).
+- Backend real iniciado con `.env.e2e` (`DATABASE_URL=.../gei_test`, puerto 3001).
+- Frontend real Vite en `http://localhost:8444`.
+- Playwright Chromium con interacciones humanas (click/fill/navegación), no requests API como sustituto.
+
+### Recorridos ejecutados (`tests/e2e/t05-journeys.spec.ts`)
+| Recorrido | Resultado |
+|-----------|-----------|
+| J01 Announcements: draft→publicar→leer "Entendido"→corregir (revisión 2)→archivar | PASS |
+| J02 DIRECT canónico desde ambos extremos + GROUP con título | PASS (2 tests) |
+| J03 TEAM por COACH; SUBCOMMITTEE sin participación no ve el thread | PASS |
+| J04 Enviar mensaje con ack; sin badge propio (C19) | PASS |
+| J05 Hub, unread y responsive 390/768/1440 | PASS |
+| **Total** | **6/6 PASS** (`raw/i4-e2e-journeys.log`) |
+
+Evidencia visual: `evidence/t05-implementation/e2e/screenshots/J01-…png`, `J02-…png`, `J03-…png`, `J04-…png`, `J05-hub-390/768/1440.png`.
+
+### Correctivos I4
+1. `/api/management/people` es admin-only → R22 no tenía candidatos en la app real. Se agregó `GET /api/communication/candidates` con filtrado por autoridad real (personas con membership activa, equipos del snapshot, eventos targets/scope) y se conectó R22/R23 a él. Revalidado en E2E.
+2. `session-context.tsx` dejaba `authority.roles: []` → la UI nunca detectaba SUBCOMMITTEE (sin CTA de comunicados ni acciones de corregir/archivar). Se expusieron `roles` desde `roleAssignments` e `isSubcommittee` desde `/api/me`. Revalidado en J01.
+3. Selectores E2E: radios `sr-only` requieren `check({force:true})`; `SegmentedControl` son botones; `waitForURL` glob ambiguo reemplazado por regex de UUID. Ajustes de prueba, no de producto.
+
+### Regresiones tras I4
+`pnpm test` 102/102 · `pnpm test:unit` 49/49 · `pnpm test:integration` 105/105 · `pnpm test:api` 82/82 · `pnpm typecheck` + `typecheck:backend` PASS.
+
+### Estado I4
+**PASS** — cinco recorridos integrados y ejecutables con stack real. Continúo con I5.

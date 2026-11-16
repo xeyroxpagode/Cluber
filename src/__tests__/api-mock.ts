@@ -433,6 +433,11 @@ export function installApiMock(options: ApiMockOptions = {}) {
     const page = <T,>(items: T[]) => ({ items, hasMore: false, nextCursor: null })
 
     if (path === "/api/management/people" && method === "GET") return json({ items: t05People })
+    if (path === "/api/communication/candidates" && method === "GET") return json({
+      people: t05People.map((p) => ({ id: p.id, firstName: p.firstName, lastName: p.lastName })),
+      teams: [{ id: cannedStructure.teams[0]?.id ?? "team-1", name: "Equipo A" }],
+      events: [{ id: cannedEvents[0]?.id ?? "event-1", title: cannedEvents[0]?.title ?? "Partido" }],
+    })
     if (path === "/api/conversations" && method === "GET") return json(page(t05Conversations))
     if (path === "/api/conversations/direct" && method === "POST") return json({ id: "conv-new", type: "DIRECT", title: null, state: "ACTIVE", teamId: null, eventId: null, participantCount: 2, version: 1 }, 201)
     if (path === "/api/conversations/group" && method === "POST") return json({ id: "conv-new", type: "GROUP", title: "Grupo", state: "ACTIVE", teamId: null, eventId: null, participantCount: 2, version: 1 }, 201)

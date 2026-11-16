@@ -11,14 +11,13 @@ import {
   subscribeRealtime,
   type NotificationDto,
 } from "../lib/t03-api"
-import { fetchManagementPeople, fetchStructure, type StructureSnapshot } from "../lib/api-client"
-import { fetchCalendarRange } from "../lib/t03-api"
+
 import { relativeLabel } from "../lib/dates"
 import {
   AnnouncementDto, ConversationDto, ConversationListItem, MessageDto,
   archiveAnnouncement, archiveConversation, correctAnnouncement, createGroup,
-  deleteMessage, editMessage, fetchAnnouncement, fetchAnnouncementList, fetchConversation,
-  fetchConversationList, fetchThread, newKey, openDirect, openTeamEvent,
+  deleteMessage, editMessage, fetchAnnouncement, fetchAnnouncementList, fetchCommunicationCandidates,
+  fetchConversation, fetchConversationList, fetchThread, newKey, openDirect, openTeamEvent,
   publishAnnouncement, saveDraft, sendMessage,
 } from "../lib/t05-api"
 import {
@@ -189,17 +188,11 @@ export function NewConversation() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
-  const { data: people } = useFetch(() => fetchManagementPeople(), [])
-  const { data: structure } = useFetch(() => fetchStructure(), [])
-  const { data: events } = useFetch(() => fetchCalendarRange({
-    from: new Date(Date.now() - 30 * 86_400_000).toISOString().slice(0, 10),
-    to: new Date(Date.now() + 90 * 86_400_000).toISOString().slice(0, 10),
-    limit: 100,
-  }), [])
+  const { data: candidatesData } = useFetch(() => fetchCommunicationCandidates(), [])
 
-  const personItems = people?.items ?? []
-  const teamItems = structure?.teams ?? []
-  const eventItems = events?.items ?? []
+  const personItems = candidatesData?.people ?? []
+  const teamItems = candidatesData?.teams ?? []
+  const eventItems = candidatesData?.events ?? []
   const candidates = type === "TEAM"
     ? teamItems.map((t) => ({ id: t.id, name: t.name || "Equipo" }))
     : type === "EVENT"
@@ -272,7 +265,7 @@ export function NewConversation() {
 export function AnnouncementForm() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { data: structure } = useFetch(() => fetchStructure(), [])
+  const { data: candidatesData } = useFetch(() => fetchCommunicationCandidates(), [])
   const { data: loaded, loading, error: loadError } = useFetch(
     () => (id ? fetchAnnouncement(id) : Promise.resolve(null)), [id],
   )
@@ -289,7 +282,7 @@ export function AnnouncementForm() {
     setMode(loaded.state === "DRAFT" ? "draft" : "correct")
   }, [loaded])
 
-  const teamItems = structure?.teams ?? []
+  const teamItems = candidatesData?.teams ?? []
   const valid = state.title.trim().length > 0 && state.body.trim().length > 0 &&
     (mode === "correct" ? state.reason.trim().length > 0 : state.clubWide || state.teamIds.length > 0)
 

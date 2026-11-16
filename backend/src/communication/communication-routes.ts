@@ -312,6 +312,43 @@ export function addCommunicationRoutes({ registry, services }: Input): void {
     },
   })
 
+  // ── Candidatos R22 — accesibles a cualquier usuario autenticado ──
+  registry.add({
+    method: "GET", url: "/api/communication/candidates",
+    security: { operationId: "COMM-CANDIDATES", kind: "query", auth: "required", csrf: "none", idempotency: "forbidden", cache: "no-store" },
+    schema: { response: { 200: Silent, 403: Silent } },
+    async handler(request: FastifyRequest, reply: FastifyReply) {
+      const principal = await services.principals.require(request, new Date())
+      const data = await services.deps.runner.run("READ_STANDARD", principal.sessionId, async ({ tx, evaluationInstant }) => {
+        const snapshot = await services.authority.snapshot(tx, principal.personId, evaluationInstant)
+        const persons = await tx.selectFrom("app.people")
+          .innerJoin("app.memberships", "app.memberships.person_id", "app.people.id")
+          .select(["app.people.id", "app.people.first_name", "app.people.last_name"])
+          .where("app.memberships.valid_from", "<=", evaluationInstant)
+          .where((eb) => eb.or([
+            eb("app.memberships.valid_until", "is", null),
+            eb("app.memberships.valid_until", ">", evaluationInstant),
+          ]))
+          .orderBy("app.people.first_name", "asc").execute()
+        const teams = snapshot.teamIds.length > 0
+          ? await tx.selectFrom("app.teams").select(["id", "state"]).where("id", "in", snapshot.teamIds).execute()
+          : []
+        const targetPersonEvents = await tx.selectFrom("app.event_target_person").select("event_id")
+          .where("person_id", "=", principal.personId).execute()
+        const eventIds = Array.from(new Set([...snapshot.eventScopeIds, ...targetPersonEvents.map((r) => r.event_id)]))
+        const events = eventIds.length > 0
+          ? await tx.selectFrom("app.events").select(["id", "title"]).where("id", "in", eventIds).execute()
+          : []
+        return {
+          people: persons.map((p) => ({ id: p.id, firstName: p.first_name, lastName: p.last_name })),
+          teams: teams.map((t) => ({ id: t.id, name: t.state })),
+          events: events.map((e) => ({ id: e.id, title: e.title })),
+        }
+      })
+      return reply.status(200).send(data)
+    },
+  })
+
   // ── RC-06 CONVERSATION LIST ──
   registry.add({
     method: "GET", url: "/api/conversations",

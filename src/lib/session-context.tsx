@@ -39,6 +39,7 @@ export interface ProductContextValue {
   authority: {
     canOpen: (page: string) => boolean
     roles: Role[]
+    isSubcommittee: boolean
     isAdmin: boolean
     canViewAudit: boolean
     canAssignRole: boolean
@@ -111,7 +112,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     error: null,
     toastMessage: null,
     actor: null,
-    authority: { canOpen: () => false, roles: [], isAdmin: false, canViewAudit: false, canManagePeople: false, canManageCompetitions: false, canAssignRole: false, canEndRole: false, isAuthenticated: false },
+    authority: { canOpen: () => false, roles: [], isSubcommittee: false, isAdmin: false, canViewAudit: false, canManagePeople: false, canManageCompetitions: false, canAssignRole: false, canEndRole: false, isAuthenticated: false },
     me: meApi,
     login: loginApi,
     activate: activateApi,
@@ -182,7 +183,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
                 if (page === "teams") return operations.length > 0
                 return m.authenticated
               },
-              roles: [],
+              roles: (m.roleAssignments ?? []).map((assignment) => assignment.role).filter((role): role is Role =>
+                role === "PLAYER" || role === "CAPTAIN" || role === "COACH" || role === "ADMIN" || role === "SUBCOMMITTEE"),
+              isSubcommittee: m.isSubcommittee === true,
               isAdmin,
               canViewAudit: operations.includes("RC-12"),
         canAssignRole: (m.canAssignRole ?? false) || (m.isAdmin ?? false) || (m.isSubcommittee ?? false),
@@ -238,7 +241,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       ...v,
       authenticated: false, principal: null, csrfToken: null, operations: [], canAccessApplication: false,
       state: emptyState(), loading: false, error: null, toastMessage: null, actor: null,
-      authority: { canOpen: () => false, roles: [], isAdmin: false, canViewAudit: false, canManagePeople: false, canManageCompetitions: false, canAssignRole: false, canEndRole: false, isAuthenticated: false },
+      authority: { canOpen: () => false, roles: [], isSubcommittee: false, isAdmin: false, canViewAudit: false, canManagePeople: false, canManageCompetitions: false, canAssignRole: false, canEndRole: false, isAuthenticated: false },
     }))
   }, [login, activate])
 

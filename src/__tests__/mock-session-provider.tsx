@@ -17,6 +17,7 @@ const emptyValue: ProductContextValue = {
   authority: {
     canOpen: () => false,
     roles: [],
+    isSubcommittee: false,
     isAdmin: false,
     canViewAudit: false,
     canManagePeople: false,
@@ -115,6 +116,7 @@ function valueFor(demo: string): ProductContextValue {
         return true
       },
       roles: operations.filter((o) => ["ADMIN", "SUBCOMMITTEE", "COACH", "CAPTAIN", "PLAYER"].includes(o)) as any[],
+      isSubcommittee: isSub,
       isAdmin,
       canViewAudit: operations.includes("RC-12"),
       canManagePeople: operations.includes("RC-08"),

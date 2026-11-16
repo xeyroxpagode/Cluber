@@ -79,6 +79,16 @@ function patch<T>(url: string, body?: unknown, idempotencyKey?: string): Promise
 function get<T>(url: string): Promise<T> { return apiRequest<T>(url, { method: "GET", ...creds() }) }
 export const newKey = () => crypto.randomUUID()
 
+export interface CommunicationCandidates {
+  people: Array<{ id: string; firstName: string; lastName: string }>
+  teams: Array<{ id: string; name: string }>
+  events: Array<{ id: string; title: string }>
+}
+/** Candidatos R22 filtrados por autoridad real (no por person.role/team del mock). */
+export function fetchCommunicationCandidates(): Promise<CommunicationCandidates> {
+  return get("/api/communication/candidates")
+}
+
 // ── DG-13 ──
 export function fetchAnnouncementList(includeDrafts = false): Promise<Page<AnnouncementDto>> {
   return get(`/api/announcements${includeDrafts ? "?includeDrafts=true" : ""}`)
