@@ -174,11 +174,13 @@ describe("§27 — Perfil completo sin PII", () => {
   })
 })
 
-describe("§33 — comunicación con dos canales distintos", () => {
-  it("ofrece los avisos reales y anuncia la llegada de conversaciones y anuncios", () => {
+describe("§33 — comunicación con dos canales distintos (T05)", () => {
+  it("muestra dos canales separados con CTA real por pestaña", () => {
     renderScreen("/communication", "/communication", <CommunicationHome />)
-    expect(screen.getByRole("link", { name: /Avisos/ }).getAttribute("href")).toBe("/notifications")
-    expect(screen.getByText(/Llegan con la T05/)).toBeTruthy()
+    // R21: tabs separadas y CTA primario de conversaciones (antes: placeholder "Llegan con la T05").
+    expect(screen.getByRole("tab", { name: /Conversaciones/ })).toBeTruthy()
+    expect(screen.getByRole("tab", { name: /Comunicados/ })).toBeTruthy()
+    expect(screen.getByRole("link", { name: /Nuevo mensaje/ }).getAttribute("href")).toBe("/communication/conversations/new")
   })
 
   it("el aviso muestra el tipo, el cuerpo y el estado de lectura", async () => {

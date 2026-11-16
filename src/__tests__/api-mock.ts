@@ -411,6 +411,55 @@ export function installApiMock(options: ApiMockOptions = {}) {
     const attendanceSheet = /^\/api\/events\/([^/]+)\/attendance$/.exec(path)
     if (attendanceSheet && method === "POST") return json({ entryId: "entry-1", value: "PRESENT", recordedAt: new Date().toISOString() })
 
+    /* ── T05 — DG-13 Announcements + DG-14 Conversations (R21..R26) ── */
+    const t05People = [
+      { id: "me-1", firstName: "Elina", lastName: "Coach", username: "elina", accountStatus: "ACTIVE", phone: null, email: null, dni: null, birthDate: null },
+      { id: "p-1", firstName: "Ana", lastName: "González", username: "ana", accountStatus: "ACTIVE", phone: null, email: null, dni: null, birthDate: null },
+      { id: "p-2", firstName: "Pedro", lastName: "Ramos", username: "pedro", accountStatus: "ACTIVE", phone: null, email: null, dni: null, birthDate: null },
+    ]
+    const t05Conversations = [{
+      id: "conv-1", type: "DIRECT", title: null, state: "ACTIVE", teamId: null, eventId: null,
+      participantCount: 2, version: 1, lastActivityAt: iso(-1), unreadCount: 2,
+    }]
+    const t05Messages = [{
+      id: "msg-1", conversationId: "conv-1", authorPersonId: "p-2", body: "Hola del mock",
+      state: "SENT", sentAt: iso(-2), editedAt: null, deletedAt: null, deletionReason: null,
+    }]
+    const t05Announcements = [{
+      id: "ann-1", title: "Comunicado de prueba", body: "Contenido del comunicado", state: "PUBLISHED",
+      publishedAt: iso(-1), publishedByPersonId: "me-1", archivedAt: null, revision: 1, version: 2,
+      clubWide: true, audienceSnapshot: [], readState: { readAt: null },
+    }]
+    const page = <T,>(items: T[]) => ({ items, hasMore: false, nextCursor: null })
+
+    if (path === "/api/management/people" && method === "GET") return json({ items: t05People })
+    if (path === "/api/conversations" && method === "GET") return json(page(t05Conversations))
+    if (path === "/api/conversations/direct" && method === "POST") return json({ id: "conv-new", type: "DIRECT", title: null, state: "ACTIVE", teamId: null, eventId: null, participantCount: 2, version: 1 }, 201)
+    if (path === "/api/conversations/group" && method === "POST") return json({ id: "conv-new", type: "GROUP", title: "Grupo", state: "ACTIVE", teamId: null, eventId: null, participantCount: 2, version: 1 }, 201)
+    if (path === "/api/conversations/team-event" && method === "POST") return json({ id: "conv-new", type: "TEAM", title: null, state: "ACTIVE", teamId: cannedStructure.teams[0]?.id ?? "team-1", eventId: null, participantCount: 3, version: 1 }, 201)
+    const threadMatch = /^\/api\/conversations\/([^/]+)\/thread$/.exec(path)
+    if (threadMatch && method === "GET") return json(page(t05Messages))
+    const messagePost = /^\/api\/conversations\/([^/]+)\/messages$/.exec(path)
+    if (messagePost && method === "POST") return json({ ...t05Messages[0], id: "msg-new", body: "Hola", authorPersonId: "me-1" }, 201)
+    const messageMatch = /^\/api\/messages\/([^/]+)$/.exec(path)
+    if (messageMatch && method === "PATCH") return json({ ...t05Messages[0], state: "EDITED", editedAt: iso(0) })
+    if (messageMatch && method === "DELETE") return json({ ...t05Messages[0], body: null, state: "DELETED", deletedAt: iso(0), deletionReason: "Eliminado" })
+    const convMatch = /^\/api\/conversations\/([^/]+)$/.exec(path)
+    if (convMatch && method === "GET") return json(t05Conversations[0])
+    if (convMatch && method === "POST") return json({ ...t05Conversations[0], state: "ARCHIVED" })
+    if (path === "/api/announcements" && method === "GET") return json(page(t05Announcements))
+    if (path === "/api/announcements/draft" && method === "POST") return json({ ...t05Announcements[0], state: "DRAFT", publishedAt: null, version: 1 }, 201)
+    const draftMatch = /^\/api\/announcements\/draft\/([^/]+)$/.exec(path)
+    if (draftMatch && method === "PATCH") return json({ ...t05Announcements[0], state: "DRAFT", version: 2, title: "Borrador editado" })
+    const publishMatch = /^\/api\/announcements\/([^/]+)\/publish$/.exec(path)
+    if (publishMatch && method === "POST") return json({ ...t05Announcements[0], state: "PUBLISHED", publishedAt: iso(0), version: 3 })
+    const archiveMatch = /^\/api\/announcements\/([^/]+)\/archive$/.exec(path)
+    if (archiveMatch && method === "POST") return json({ ...t05Announcements[0], state: "ARCHIVED", archivedAt: iso(0) })
+    const correctMatch = /^\/api\/announcements\/([^/]+)\/correct$/.exec(path)
+    if (correctMatch && method === "PATCH") return json({ ...t05Announcements[0], revision: 2 })
+    const announcementMatch = /^\/api\/announcements\/([^/]+)$/.exec(path)
+    if (announcementMatch && method === "GET") return json(t05Announcements[0])
+
     return json({ error: { code: "NOT_FOUND", message: `unmocked ${method} ${path}` } }, 404)
   }
 

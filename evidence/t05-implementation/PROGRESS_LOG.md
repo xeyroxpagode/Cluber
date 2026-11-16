@@ -104,4 +104,28 @@ Cobertura: tablas/índices/extensión; DRAFT/PUBLISHED/ARCHIVED con publishedAt 
 | `pnpm typecheck:backend` | — | PASS | — |
 
 ### Estado I2
-**PASS** — backend funcionalmente integrado y verificado contra PostgreSQL real. Continúo con I3.
+**PASS** — backend funcionalmente integrado y verificado contra PostgreSQL real. Continué con I3.
+
+---
+
+## I3 — FRONTEND Y UX REAL
+
+### Implementado
+- `src/lib/t05-api.ts`: 20 funciones tipadas contra los DTOs reales del backend (announcements, conversations, messages, reads). Idempotency-Key generado por operación; `patch`/`post` con CSRF y `credentials: include`.
+- `src/features/communication.tsx` (rewrite): R21 Hub (2 tabs, CTA sticky por tab, listas reales, badges C19, SSE), R22 New Conversation (DIRECT/GROUP/TEAM/EVENT con candidatos reales, summary, findOrOpen), R23/R25 AnnouncementForm (audiencia FIRST, club-wide explícito, DRAFT create/update CC-T05-C10, diff + reason en corrección), R24 Detail (audiencia visible, "Entendido" → CMD-COM-12, 403), R26 Conversation (thread real, composer sticky, optimistic send, estados Enviando/Enviado/Fallido sin Entregado/Leído, reintento con misma key, paginación real, edit/delete propios). RC-18 conservado y con tipos.
+- Sin mocks como fuente funcional: todos los datos vienen de la API real; el mock solo existe en `src/__tests__/` para tests de componentes.
+
+### Ajustes de tests legítimos
+- `ux-contracts.test.tsx`: la aserción `/Llegan con la T05/` (placeholder) se reemplazó por verificación de tabs + CTA reales.
+- `api-mock.ts`: añadidas rutas T05 para tests de componentes.
+- `t05-components.test.tsx`: 6 tests nuevos R21–R26.
+
+### Pruebas ejecutadas
+| Verificación | Resultado | Log |
+|--------------|-----------|-----|
+| `pnpm typecheck` + `pnpm typecheck:backend` | PASS | — |
+| `pnpm test` (6 archivos) | **102/102 PASS** | `raw/i3-frontend-components.log` |
+| `pnpm build` | PASS (1922 módulos) | `raw/i3-build.log` |
+
+### Estado I3
+**PASS** — superficies R21–R26 con comportamiento real, 0 placeholders funcionales. Continúo con I4.
