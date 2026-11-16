@@ -194,4 +194,24 @@ Evidencia visual: `evidence/t05-implementation/e2e/screenshots/J01-…png`, `J02
 3. Matrices generadas desde identificadores contractuales reales, con mapeo a pruebas ejecutadas.
 
 ### Estado I5
-**PASS** — ST80 + suplemento y AC30 ejecutados con evidencia; regresiones y suites adicionales verdes. Continúo con I6.
+**PASS** — ST80 + suplemento y AC30 ejecutados con evidencia; regresiones y suites adicionales verdes. Continué con I6.
+
+---
+
+## I6 — REVISIÓN FINAL Y HANDOFF
+
+### Revisión de diffs
+- 0 `console.log`/`debugger`/`TODO`/`DEBUG_` en código productivo (`src/`, `backend/src/`).
+- 0 secretos versionados: `.env` y `.env.e2e` ignorados; solo `.env.example` en Git.
+- 0 referencias funcionales a `MESSAGE_RECEIVED`, `ANNOUNCEMENT_CORRECTED`, Guardian/Eligibility/CompetitionEntry; 0 body en logs.
+- 0 mocks como fuente funcional: `src/__tests__/api-mock.ts` solo para tests de componentes.
+- Grafos de commits: baseline `410af42` → I0/I1 `6fbde7a` → I2 `01bbec6` → I3 `d0ba97e` → I4 `cf4239a` → I5 `c26a733` → evidencia I6 `0dfb2c0` → cierre. Sin push/merge/deploy.
+
+### Entregables en `evidence/t05-implementation/`
+`TECHNICAL_REPORT.md`, `ST80_EXECUTED.md`, `AC30_EXECUTED.md`, `CORRECTIVES.md`, `PROGRESS_LOG.md`, `MANIFEST.json`, `raw/*.log`, `e2e/screenshots/*.png`.
+
+### Estado final Git
+Worktree `gei/t05-communication`, `git status --short` vacío, `git diff --check` limpio. Repo original T04 con HEAD `410af42` y cambios preexistentes idénticos a I0.
+
+### Veredicto I6
+**READY FOR ACTOR B ACCEPTANCE** — T05 implementado, integrado y probado en una sola sesión; sin defectos bloqueantes abiertos. La aceptación global corresponde a Actor B y Actor A.
