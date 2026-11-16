@@ -25,6 +25,7 @@ import { addParticipationRoutes } from "../routes/participation-routes.js"
 import { addNotificationRoutes } from "../routes/notification-routes.js"
 import { addJornadaRoutes } from "../routes/jornada-routes.js"
 import { addRealtimeRoutes } from "../routes/realtime-routes.js"
+import { addCommunicationRoutes } from "../communication/communication-routes.js"
 
 export async function buildRuntime(config: AppConfig): Promise<RuntimeServices> {
   const database = new DatabaseProvider(config)
@@ -65,6 +66,7 @@ export async function buildRuntime(config: AppConfig): Promise<RuntimeServices> 
   addParticipationRoutes({ app, registry: productRoutes, services })
   addNotificationRoutes({ app, registry: productRoutes, services })
   addJornadaRoutes({ app, registry: productRoutes, services })
+  addCommunicationRoutes({ app, registry: productRoutes, services })
   addRealtimeRoutes({ app, registry: productRoutes, services, realtime })
   productRoutes.register(app)
 

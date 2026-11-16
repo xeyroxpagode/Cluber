@@ -418,7 +418,7 @@ export interface MatchRecordCorrectionTable {
 }
 
 export interface AnnouncementTable {
-  id: Generated<string>
+  id: string
   title: string
   body: string
   state: "DRAFT" | "PUBLISHED" | "ARCHIVED"
@@ -427,47 +427,47 @@ export interface AnnouncementTable {
   archived_at: Date | null
   revision: number
   version: number
-  created_at: Generated<Date>
-  updated_at: Generated<Date>
+  created_at: Date
+  updated_at: Date
 }
 
 export interface AnnouncementTargetTeamTable {
-  id: Generated<string>
+  id: string
   announcement_id: string
   team_id: string
-  added_at: Generated<Date>
+  added_at: Date
   added_by_person_id: string
 }
 
 export interface ConversationTable {
-  id: Generated<string>
+  id: string
   type: "DIRECT" | "GROUP" | "TEAM" | "EVENT"
   title: string | null
   state: "ACTIVE" | "ARCHIVED"
   direct_pair_key: string | null
   team_id: string | null
   event_id: string | null
-  created_at: Generated<Date>
+  created_at: Date
   created_by_person_id: string
   version: number
 }
 
 export interface ConversationParticipantTable {
-  id: Generated<string>
+  id: string
   conversation_id: string
   person_id: string
-  joined_at: Generated<Date>
+  joined_at: Date
   left_at: Date | null
   last_read_at: Date | null
 }
 
 export interface MessageTable {
-  id: Generated<string>
+  id: string
   conversation_id: string
   author_person_id: string
   body: string
   state: "SENT" | "EDITED" | "DELETED"
-  sent_at: Generated<Date>
+  sent_at: Date
   edited_at: Date | null
   deleted_at: Date | null
   deletion_reason: string | null

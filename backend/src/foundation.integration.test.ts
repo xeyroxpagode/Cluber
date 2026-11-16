@@ -32,10 +32,11 @@ describe("M0 and PostgreSQL semantics", () => {
       (select count(*)::int from information_schema.tables where table_schema='app') app_tables,
       (select count(*)::int from information_schema.tables where table_schema='infra') infra_tables`)
     await admin.end()
-    expect(result.rows[0]).toEqual({ anon_app: false, authenticated_infra: false, app_tables: 31, infra_tables: 5 })
+    // T05/M8 incorpora 5 tablas de comunicación autorizadas (31 → 36).
+    expect(result.rows[0]).toEqual({ anon_app: false, authenticated_infra: false, app_tables: 36, infra_tables: 5 })
   })
 
-  it("exposes exactly the authorized T01/T02/T04 tables and no future tables", async () => {
+  it("exposes exactly the authorized T01-T05 tables and no unapproved tables", async () => {
     await database.verify()
     const admin = new pg.Pool({ connectionString: config.databaseUrl })
     const rows = await admin.query<{ table_schema: string; table_name: string }>(`
@@ -86,6 +87,12 @@ describe("M0 and PostgreSQL semantics", () => {
       "app.match_records",
       "app.player_match_stats",
       "app.matchrecord_corrections",
+      // T05 / M8 — comunicación (DG-13 + DG-14).
+      "app.announcements",
+      "app.announcement_target_teams",
+      "app.conversations",
+      "app.conversation_participants",
+      "app.messages",
     ]
     for (const table of [...expectedInfra, ...expectedApp]) {
       expect(tables).toContain(table)

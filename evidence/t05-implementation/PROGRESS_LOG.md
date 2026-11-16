@@ -67,4 +67,41 @@ Nota: el reporte T04 citaba 349/349 incluyendo suites E2E/Playwright, no ejecuta
 Cobertura: tablas/índices/extensión; DRAFT/PUBLISHED/ARCHIVED con publishedAt conservado; título/cuerpo vacíos rechazados; publicación sin metadatos rechazada; audiencia única y FK; DIRECT canónica y duplicados; identidades contextuales inválidas; TEAM/EVENT únicos; GROUP archivable; reingreso con 2 intervalos; solapamiento rechazado (`23P01`); `left_at <= joined_at` rechazado; SENT→EDITED→DELETED con `edited_at` preservado; estados incoherentes, body vacío y FKs inválidos rechazados.
 
 ### Estado I1
-**PASS** — migración real aplicada y validada;integridad demostrada con ejecución, no inspección textual. Continúo con I2.
+**PASS** — migración real aplicada y validada; integridad demostrada con ejecución, no inspección textual. Continué con I2.
+
+---
+
+## I2 — BACKEND, API Y AUTHORITY
+
+### Implementado
+- `backend/src/communication/`: `types.ts`, `announcements.ts` (CMD-COM-01..04), `conversations.ts` (05..08), `messages.ts` (09..11), `queries.ts` (RC-06/07/19/26/27), `sync.ts` (sync TEAM/EVENT + `assertConversationAccess` con recheck), `read-cursor.ts`, `communication-routes.ts` (16 endpoints), `m8.integration.test.ts`, `t05.integration.test.ts`, `t05.api.test.ts`.
+- Reutilización real (sin sistemas paralelos): `AuthorityService.snapshot`, `AuditWriter.record` (body siempre redactado), `NotificationService.recordForAudience` (NOT-07 con dedupe `resourceId|recipient|type`), `OutboxWriter.enqueue`, `IdempotencyCoordinator.acquire/succeed`, `TransactionRunner`, `resolveEventAudience`/`unionAudiences`, `RealtimeHub` vía `invalidate[]`.
+- Integrado en `build-runtime.ts` y `testing/test-app.ts`.
+
+### Decisiones aplicadas
+- **CC-T05-C10**: `CMD-COM-01` hace CREATE (announcementId ausente) o UPDATE de DRAFT (announcementId presente) con optimistic lock `version` y Audit de la operación. Idempotency-Key = retry de la misma operación (hash + scope por operación), no upsert funcional.
+- **CC-T05-C19**: `unreadCount` = `COUNT(messages WHERE sent_at > COALESCE(last_read_at,joined_at) AND state<>'DELETED' AND author_person_id<>viewer)`. Enviar mensaje propio no avanza cursor; el cursor avanza solo con vista autorizada del thread (`touchConversationReadCursor`).
+
+### Seguridad
+- ADMIN no tiene acceso universal: RC-06/07/26/27 y TEAM/EVENT revalidan fuente canónica + participación activa en cada request (ST-B12, COM-015).
+- `Message.body` nunca en Audit (redactado), logs ni payload realtime (`conversation.changed` sin body). Enviar mensaje no crea Audit ni Notification.
+- Tombstone irreversible; `EDITED→DELETED` conserva `edited_at` (correctivo I1).
+
+### Correctivos I2
+1. `source: "communication"` violaba `ck_audit_entries__source` → se usa el operationId (`CMD-COM-0X`). Causa: constraint M2 no documentado en el contrato T05. Revalidado en integración y API.
+2. `touchConversationReadCursor` dentro de `READ_STANDARD` (read-only) fallaba → RC-07 usa `COMMAND_STANDARD`. Causa: perfil transaccional incorrecto. Revalidado.
+3. `createSessionFor` por test duplicaba cuenta (`uq_accounts__person_id`) → caché de sesiones por persona en el test API. Causa: diseño del fixture de prueba, no del producto.
+4. `foundation.integration.test.ts` asumía "no future tables" → se actualizó la lista esperada a 36 tablas app (31 + 5 de M8). No se relajaron grants.
+
+### Pruebas ejecutadas (PostgreSQL real `gei_test`)
+| Suite | Tests | Resultado | Log |
+|-------|-------|-----------|-----|
+| `pnpm test:unit` | 49 | 49 PASS | — |
+| `pnpm test:integration` (T04 + M8 + T05) | 105 | 105 PASS | `raw/i2-all-integration.log` |
+| `pnpm test:api` (T04 + T05) | 82 | 82 PASS | `raw/i2-all-api.log` |
+| T05 integración focalizada | 11 | 11 PASS | `raw/i2-t05-integration.log` |
+| T05 API focalizada | 6 | 6 PASS | `raw/i2-t05-api.log` |
+| `pnpm typecheck:backend` | — | PASS | — |
+
+### Estado I2
+**PASS** — backend funcionalmente integrado y verificado contra PostgreSQL real. Continúo con I3.

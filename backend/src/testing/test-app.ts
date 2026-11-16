@@ -13,6 +13,7 @@ import { addEventRoutes } from "../routes/event-routes.js"
 import { addParticipationRoutes } from "../routes/participation-routes.js"
 import { addNotificationRoutes } from "../routes/notification-routes.js"
 import { addJornadaRoutes } from "../routes/jornada-routes.js"
+import { addCommunicationRoutes } from "../communication/communication-routes.js"
 
 /**
  * In-process full wiring of the T03 HTTP surface for API tests.
@@ -37,6 +38,7 @@ export async function buildT03TestApp() {
   addParticipationRoutes({ app, registry: api, services })
   addNotificationRoutes({ app, registry: api, services })
   addJornadaRoutes({ app, registry: api, services })
+  addCommunicationRoutes({ app, registry: api, services })
   api.register(app)
   return { app, database, services, runner, config }
 }
