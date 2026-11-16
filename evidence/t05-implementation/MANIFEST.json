@@ -1,0 +1,102 @@
+{
+  "name": "GEI_T05_R3_IMPLEMENTATION_MANIFEST",
+  "actor": "Actor C — ETAPA 2 single-session implementation",
+  "source_package": {
+    "path": "C:\\Users\\thega\\Desktop\\GEI-T05-R3-PREIMPLEMENTATION-FINAL-APPROVED-DECISIONS.zip",
+    "sha256": "42946AA9F11739947848FE26920629E19C2DA0FE4FE7887A2CEB9B8706F74EF2",
+    "verified": true
+  },
+  "git": {
+    "worktree": "C:\\Users\\thega\\Desktop\\Gei-Hockey-T05-Implementation",
+    "branch": "gei/t05-communication",
+    "head": "c26a733fdfde4d758c8819273223a2615e6116e6",
+    "baseline": "410af4247b5573448674e98b07b49fde940e7fde",
+    "commits": [
+      "c26a733fdfde4d758c8819273223a2615e6116e6 test(t05): execute ST80/AC30, stress suites and recovery journeys (I5)",
+      "cf4239a6f387c378a57db7244cf22f944b889c33 feat(t05): end-to-end journeys J01-J05 with real stack (I4)",
+      "d0ba97ebfdddf09e310cee646068450b4f2f45cd feat(t05): implement R21-R26 real frontend and API client (I3)",
+      "01bbec6b71b7f885a080a168542590f79e800540 feat(t05): implement DG-13/DG-14 backend, API and authority (I2)",
+      "6fbde7ac6c68ff8a26a8e927db1c937f565cd4a0 feat(t05): add M8 communication schema and integrity tests (I0-I1)"
+    ],
+    "pushed": false
+  },
+  "decisions": [
+    "CC-T05-C10 (UPDATE DRAFT)",
+    "CC-T05-C19 (unread excluye autor)"
+  ],
+  "coverage": {
+    "stress_tests": "80 originales + ST-A01-UPDATE — PASS",
+    "acceptance_gates": "30/30 PASS",
+    "e2e_browsers": "Chromium — 7/7 PASS (J01..J05 + J05b)",
+    "regression": "49 unit + 105 integration + 82 API + 102 frontend — PASS",
+    "typecheck_build": "PASS"
+  },
+  "files": [
+    {
+      "path": "supabase/migrations/20261116000100_m8_communication.sql",
+      "sha256": "00D45DF9D6AF2B71FC9A36051C9EF07C0F09689294EF0566EB636D55EE6721EE"
+    },
+    {
+      "path": "backend/src/communication/announcements.ts",
+      "sha256": "F3F5BBAA2B85CD6685DE564B46DE54D3EE55E56B0EF60B286D559D00F97422E1"
+    },
+    {
+      "path": "backend/src/communication/conversations.ts",
+      "sha256": "E2B37B7D6C0B3EFCCBC461DFD4760BD5A41BFF28995B5CAA64F2CD2A042B0732"
+    },
+    {
+      "path": "backend/src/communication/messages.ts",
+      "sha256": "9AF3F8A915DBB46E019AFD3487C119DE496A0E0F53AB8A5467E195E550965CD1"
+    },
+    {
+      "path": "backend/src/communication/queries.ts",
+      "sha256": "2D7EFF386AD88D6FF95D97DEAE852CFB3D6781D989E841209BBDEE14A6B9084F"
+    },
+    {
+      "path": "backend/src/communication/sync.ts",
+      "sha256": "DE789181C67FBBD03D4CEC2341248753DD88C71C90E8E730F2E4B736891D8F9C"
+    },
+    {
+      "path": "backend/src/communication/read-cursor.ts",
+      "sha256": "F5A87D397D8291802AD31B50D45860025416214427218C4D2415338ADBC6806D"
+    },
+    {
+      "path": "backend/src/communication/communication-routes.ts",
+      "sha256": "A67B7EF5859D939A3BAFAB721DDA061F87204A6F49A0CA0C960180FB9CB90600"
+    },
+    {
+      "path": "src/features/communication.tsx",
+      "sha256": "4BDFDA4B6A7578515BD0AB8B041D1A3DF7AF30CC5D3D463E5B241871043C03DB"
+    },
+    {
+      "path": "src/lib/t05-api.ts",
+      "sha256": "6E63A4549560055C67AFF50D817BBEB513774EB79BB5FEE16BB510B04D238AD0"
+    },
+    {
+      "path": "tests/e2e/t05-journeys.spec.ts",
+      "sha256": "E9286B1EEE14363CB117AA478984B7944619AD22EACEC27361CDF18EA2DACC89"
+    },
+    {
+      "path": "evidence/t05-implementation/ST80_EXECUTED.md",
+      "sha256": "D51F215EE77568B76BD589FB7AA3553D9D8CC7259561E4181FF2CF590072CFBF"
+    },
+    {
+      "path": "evidence/t05-implementation/AC30_EXECUTED.md",
+      "sha256": "27BB4D10467668DA7CD83922A9C516C25822A186D01EB70470F6918C88C038FD"
+    },
+    {
+      "path": "evidence/t05-implementation/TECHNICAL_REPORT.md",
+      "sha256": "5660069987EF98189167F82F884B87DA78693C40950AAEBAFC50370CDF20BE62"
+    },
+    {
+      "path": "evidence/t05-implementation/CORRECTIVES.md",
+      "sha256": "DDABD19DD2C8B5DFB39645B8DAC42E894A5087CE65F8EEFA7D4F9EE8799C3A21"
+    },
+    {
+      "path": "evidence/t05-implementation/PROGRESS_LOG.md",
+      "sha256": "DF924548DC855A92E94B6F7E2C1598BA9B342F9C7C19D2A55ADE867E0373C94A"
+    }
+  ],
+  "evidence_dir": "evidence/t05-implementation",
+  "generated_at": "2026-11-16T23:55:13.651Z"
+}

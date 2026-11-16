@@ -145,6 +145,39 @@ test.describe('J04 — Messaging: enviar, editar, eliminar y recuperar', () => {
   })
 })
 
+test.describe('J05b — Recuperación: realtime caído y fallo API (ST-F07/F08, AC-26)', () => {
+  test('refetch autorizado y reintento seguro sin falso éxito', async ({ browser }) => {
+    const ctx = await browser.newContext()
+    const page = await ctx.newPage()
+    await login(page, PLAYER_A)
+    // SSE bloqueado: el hub debe seguir funcionando con refetch/fetch inicial.
+    await page.route('**/api/realtime/stream', (route) => route.abort())
+    await page.goto('/communication')
+    await expect(page.getByRole('tab', { name: /Conversaciones/ })).toBeVisible()
+    await page.goto('/communication/conversations/new')
+    await page.getByRole('radio', { name: /Belén/ }).check({ force: true })
+    await page.getByRole('button', { name: /Crear conversación/ }).click()
+    await page.waitForURL((url) => /\/conversations\/[0-9a-f-]{36}/.test(url.pathname), { timeout: 20_000 })
+
+    // Falla transitoria del envío: la UI muestra error y ofrece reintentar (sin check falso).
+    let failOnce = true
+    await page.route('**/messages', async (route) => {
+      if (route.request().method() === 'POST' && failOnce) {
+        failOnce = false
+        await route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ error: { code: 'INTERNAL_ERROR', message: 'Falla simulada', traceId: 'e2e', retryable: true } }) })
+        return
+      }
+      await route.continue()
+    })
+    await page.getByPlaceholder('Escribí un mensaje…').fill('Mensaje con reintento')
+    await page.getByRole('button', { name: /Enviar mensaje/ }).click()
+    await expect(page.getByText(/Falló el envío|No se pudo enviar/)).toBeVisible({ timeout: 20_000 })
+    await page.getByRole('button', { name: 'Reintentar' }).click()
+    await expect(page.getByText('Mensaje con reintento').first()).toBeVisible({ timeout: 20_000 })
+    await ctx.close()
+  })
+})
+
 test.describe('J05 — Hub, lecturas y estados responsive', () => {
   test('navegación real, unread y 3 viewports', async ({ browser }) => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } })
