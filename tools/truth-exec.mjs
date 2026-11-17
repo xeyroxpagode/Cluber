@@ -43,8 +43,7 @@ function fingerprint() {
 const pre = { runId, label, startedAt: new Date().toISOString(), command: cmd.join(" "), fingerprint: fingerprint() }
 fs.writeFileSync(path.join(RUN, `${label}.pre.json`), JSON.stringify(pre, null, 2) + "\n")
 
-const [bin, ...args] = cmd
-const result = spawnSync(bin, args, { cwd: ROOT, encoding: "utf8", maxBuffer: 50_000_000, env: process.env })
+const result = spawnSync(cmd.join(" "), { cwd: ROOT, encoding: "utf8", maxBuffer: 50_000_000, env: process.env, shell: true })
 const stdout = result.stdout ?? ""
 const stderr = result.stderr ?? ""
 fs.writeFileSync(path.join(DIR, "logs", `${label}.log`), stdout + "\n--- STDERR ---\n" + stderr)
