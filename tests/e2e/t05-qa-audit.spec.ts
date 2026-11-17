@@ -116,6 +116,8 @@ test.describe('J04 — Messaging', () => {
     await pa.getByPlaceholder('Escribí un mensaje…').fill('Mensaje A->B')
     await pa.getByRole('button', { name: /Enviar mensaje/ }).click()
     await expect(pa.getByText('Mensaje A->B').first()).toBeVisible({ timeout: 15000 })
+    // A sale del thread: si permanece, el refetch SSE vuelve a ejecutar RC-07 y avanza su cursor.
+    await pa.goto('/home')
 
     const cb = await browser.newContext()
     const pb = await cb.newPage()
