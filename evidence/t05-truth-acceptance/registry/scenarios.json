@@ -10,7 +10,10 @@
             "CC-T05-C10: crea y actualiza DRAFT"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(created.state).toBe(\"DRAFT\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(created.state).toBe(\"DRAFT\")"
+          ]
         }
       ]
     },
@@ -24,7 +27,10 @@
             "ST-A02/A11"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "await expect(announcements.draft(tx, fx.subcommitteeId, new Date(), { title: \"\", body: \"x\", clubWide: true, teamIds: [] }))"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(announcements.draft(tx, fx.subcommitteeId, new Date(), { title: \"\", body: \"x\", clubWide: true, teamIds: [] }))"
+          ]
         }
       ]
     },
@@ -38,7 +44,10 @@
             "rechaza audiencia inválida y actores sin autoridad"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(pending.state).toBe(\"DRAFT\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(pending.state).toBe(\"DRAFT\")"
+          ]
         }
       ]
     },
@@ -52,6 +61,10 @@
             "J01"
           ],
           "file": "tests/e2e/t05-qa-j01.spec.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(page.locator('#ann-title')).toHaveAttribute('required', '')"
+          ],
           "browser": "chromium"
         }
       ]
@@ -66,7 +79,10 @@
             "publica con NOT-07 deduplicada"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(published.state).toBe(\"PUBLISHED\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(published.state).toBe(\"PUBLISHED\")"
+          ]
         }
       ]
     },
@@ -80,7 +96,10 @@
             "audiencia única por announcement"
           ],
           "file": "backend/src/communication/m8.integration.test.ts",
-          "assertionRef": "expect(c.version).toBe(1)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(c.version).toBe(1)"
+          ]
         }
       ]
     },
@@ -94,7 +113,10 @@
             "ST-A07/A12"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(announcements.draft(tx, fx.subcommitteeId, new Date(), { title: \"A\", body: \"B\", clubWide: false, teamIds: [randomUUID()] }))"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(announcements.draft(tx, fx.subcommitteeId, new Date(), { title: \"A\", body: \"B\", clubWide: false, teamIds: [randomUUID()] }))"
+          ]
         }
       ]
     },
@@ -108,7 +130,10 @@
             "ST-A08/A09"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(results.filter((r) => r.status === \"fulfilled\")).toHaveLength(1)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(results.filter((r) => r.status === \"fulfilled\")).toHaveLength(1)"
+          ]
         }
       ]
     },
@@ -122,7 +147,10 @@
             "CMD-COM-01/02"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(created.statusCode).toBe(201)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(created.statusCode).toBe(201)"
+          ]
         }
       ]
     },
@@ -136,7 +164,10 @@
             "ST-A10"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "await expect(run(({ tx }) => failing.publish(tx, fx.subcommitteeId, new Date(), id, true))).rejects.toThrow()"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(run(({ tx }) => failing.publish(tx, fx.subcommitteeId, new Date(), id, true))).rejects.toThrow()"
+          ]
         }
       ]
     },
@@ -150,7 +181,10 @@
             "CMD-COM-03/04"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(corrected.statusCode).toBe(200)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(corrected.statusCode).toBe(200)"
+          ]
         }
       ]
     },
@@ -164,7 +198,10 @@
             "ST-A07/A12"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(announcements.draft(tx, fx.subcommitteeId, new Date(), { title: \"A\", body: \"B\", clubWide: false, teamIds: [randomUUID()] }))"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(announcements.draft(tx, fx.subcommitteeId, new Date(), { title: \"A\", body: \"B\", clubWide: false, teamIds: [randomUUID()] }))"
+          ]
         }
       ]
     },
@@ -178,7 +215,10 @@
             "ST-A13/A14"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(published.state).toBe(\"ARCHIVED\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(published.state).toBe(\"ARCHIVED\")"
+          ]
         }
       ]
     },
@@ -192,7 +232,10 @@
             "ST-A13/A14"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(published.state).toBe(\"ARCHIVED\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(published.state).toBe(\"ARCHIVED\")"
+          ]
         }
       ]
     },
@@ -206,7 +249,10 @@
             "RC-19: audiencia"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(list.statusCode).toBe(200)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(list.statusCode).toBe(200)"
+          ]
         }
       ]
     },
@@ -220,7 +266,10 @@
             "ST-A16"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(after).toEqual(before)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(after).toEqual(before)"
+          ]
         }
       ]
     },
@@ -234,7 +283,10 @@
             "CMD-COM-05 DIRECT"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(same).toBe(directId)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(same).toBe(directId)"
+          ]
         }
       ]
     },
@@ -248,7 +300,10 @@
             "CMD-COM-05/06/07"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(direct.statusCode).toBe(201)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(direct.statusCode).toBe(201)"
+          ]
         }
       ]
     },
@@ -262,7 +317,10 @@
             "ST-B03"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(new Set(ids).size).toBe(1)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(new Set(ids).size).toBe(1)"
+          ]
         }
       ]
     },
@@ -276,7 +334,10 @@
             "CMD-COM-05 DIRECT"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(same).toBe(directId)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(same).toBe(directId)"
+          ]
         }
       ]
     },
@@ -290,7 +351,10 @@
             "CMD-COM-06 GROUP"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(count.length).toBe(2)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(count.length).toBe(2)"
+          ]
         }
       ]
     },
@@ -304,7 +368,10 @@
             "ST-B06/B07"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "await expect(conversations.createGroup(tx, fx.playerId, { title: \"\", participantPersonIds: [fx.player2Id] }, new Date()))"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(conversations.createGroup(tx, fx.playerId, { title: \"\", participantPersonIds: [fx.player2Id] }, new Date()))"
+          ]
         }
       ]
     },
@@ -318,7 +385,10 @@
             "ST-B06/B07"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "await expect(conversations.createGroup(tx, fx.playerId, { title: \"\", participantPersonIds: [fx.player2Id] }, new Date()))"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(conversations.createGroup(tx, fx.playerId, { title: \"\", participantPersonIds: [fx.player2Id] }, new Date()))"
+          ]
         }
       ]
     },
@@ -332,7 +402,10 @@
             "ST-B08"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(conv.participantCount).toBeGreaterThanOrEqual(2)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(conv.participantCount).toBeGreaterThanOrEqual(2)"
+          ]
         }
       ]
     },
@@ -346,7 +419,10 @@
             "CMD-COM-05/06/07"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(direct.statusCode).toBe(201)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(direct.statusCode).toBe(201)"
+          ]
         }
       ]
     },
@@ -360,7 +436,11 @@
             "J03"
           ],
           "file": "tests/e2e/t05-qa-audit.spec.ts",
-          "browser": "chromium"
+          "requireAssertion": true,
+          "browser": "chromium",
+          "assertionRefs": [
+            "expect(eventUrl).not.toBe(teamUrl)"
+          ]
         }
       ]
     },
@@ -374,7 +454,10 @@
             "ST-B11"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(new Set(ids).size).toBe(1)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(new Set(ids).size).toBe(1)"
+          ]
         }
       ]
     },
@@ -388,7 +471,10 @@
             "CMD-COM-07 TEAM canónica"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(again).toBe(teamConvId)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(again).toBe(teamConvId)"
+          ]
         }
       ]
     },
@@ -402,7 +488,10 @@
             "CMD-COM-06 GROUP"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(count.length).toBe(2)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(count.length).toBe(2)"
+          ]
         }
       ]
     },
@@ -416,7 +505,10 @@
             "CMD-COM-06 GROUP"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(count.length).toBe(2)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(count.length).toBe(2)"
+          ]
         }
       ]
     },
@@ -430,7 +522,10 @@
             "CMD-COM-07 TEAM canónica"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(again).toBe(teamConvId)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(again).toBe(teamConvId)"
+          ]
         }
       ]
     },
@@ -443,7 +538,11 @@
           "testIdPatterns": [
             "revocación temporal"
           ],
-          "file": "backend/src/communication/t05.integration.test.ts"
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expectDenied(queries.conversationThread(tx, fx.playerId, teamConvId, later(7 * 60 * 60_000), {}), \"NO_TEAM_CONVERSATION_AUTHORITY\")"
+          ]
         }
       ]
     },
@@ -457,7 +556,10 @@
             "acepta salida y reingreso"
           ],
           "file": "backend/src/communication/m8.integration.test.ts",
-          "assertionRef": "expect(rows.rows[0].n).toBe(2)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(rows.rows[0].n).toBe(2)"
+          ]
         }
       ]
     },
@@ -471,7 +573,10 @@
             "ST-C04/C05"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(page.items.some((m) => m.body === \"fuera de período\")).toBe(false)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(page.items.some((m) => m.body === \"fuera de período\")).toBe(false)"
+          ]
         }
       ]
     },
@@ -485,7 +590,10 @@
             "ST-C04/C05"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(page.items.some((m) => m.body === \"fuera de período\")).toBe(false)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(page.items.some((m) => m.body === \"fuera de período\")).toBe(false)"
+          ]
         }
       ]
     },
@@ -498,7 +606,11 @@
           "testIdPatterns": [
             "revocación temporal"
           ],
-          "file": "backend/src/communication/t05.integration.test.ts"
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expectDenied(queries.conversationThread(tx, fx.playerId, teamConvId, later(7 * 60 * 60_000), {}), \"NO_TEAM_CONVERSATION_AUTHORITY\")"
+          ]
         }
       ]
     },
@@ -512,7 +624,10 @@
             "ST-C07"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(rows.filter((r) => r.person_id === fx.playerId && r.left_at === null).length).toBe(0)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(rows.filter((r) => r.person_id === fx.playerId && r.left_at === null).length).toBe(0)"
+          ]
         }
       ]
     },
@@ -526,7 +641,10 @@
             "ST-C08"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(rows.map((r) => r.person_id)).toContain(fx.playerId)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(rows.map((r) => r.person_id)).toContain(fx.playerId)"
+          ]
         }
       ]
     },
@@ -539,7 +657,11 @@
           "testIdPatterns": [
             "revocación temporal"
           ],
-          "file": "backend/src/communication/t05.integration.test.ts"
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expectDenied(queries.conversationThread(tx, fx.playerId, teamConvId, later(7 * 60 * 60_000), {}), \"NO_TEAM_CONVERSATION_AUTHORITY\")"
+          ]
         }
       ]
     },
@@ -553,7 +675,10 @@
             "ST-C10"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(messages.send(tx, fx.playerId, conv, \"denegado\", new Date())).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(messages.send(tx, fx.playerId, conv, \"denegado\", new Date())).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+          ]
         }
       ]
     },
@@ -567,7 +692,10 @@
             "ST-C11"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(new Date(sorted[i].joined_at).getTime()).toBeGreaterThanOrEqual(new Date(sorted[i - 1].left_at ?? 0).getTime())"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(new Date(sorted[i].joined_at).getTime()).toBeGreaterThanOrEqual(new Date(sorted[i - 1].left_at ?? 0).getTime())"
+          ]
         }
       ]
     },
@@ -581,7 +709,10 @@
             "ST-C03/C12"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(rows.length).toBeGreaterThanOrEqual(2)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(rows.length).toBeGreaterThanOrEqual(2)"
+          ]
         }
       ]
     },
@@ -595,7 +726,10 @@
             "CMD-COM-09 no crea Audit"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(sent.state).toBe(\"SENT\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(sent.state).toBe(\"SENT\")"
+          ]
         }
       ]
     },
@@ -609,7 +743,10 @@
             "CMD-COM-09..11"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(sent.statusCode).toBe(201)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(sent.statusCode).toBe(201)"
+          ]
         }
       ]
     },
@@ -623,7 +760,10 @@
             "ST-D03/D11"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "await expect(messages.send(tx, fx.playerId, convId, \"  \", new Date())).rejects.toMatchObject({ code: \"BODY_REQUIRED\" })"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(messages.send(tx, fx.playerId, convId, \"  \", new Date())).rejects.toMatchObject({ code: \"BODY_REQUIRED\" })"
+          ]
         }
       ]
     },
@@ -637,7 +777,10 @@
             "CMD-COM-09..11"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(sent.statusCode).toBe(201)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(sent.statusCode).toBe(201)"
+          ]
         }
       ]
     },
@@ -651,7 +794,10 @@
             "CMD-COM-09..11"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(sent.statusCode).toBe(201)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(sent.statusCode).toBe(201)"
+          ]
         }
       ]
     },
@@ -665,7 +811,10 @@
             "CMD-COM-09..11"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(sent.statusCode).toBe(201)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(sent.statusCode).toBe(201)"
+          ]
         }
       ]
     },
@@ -679,7 +828,10 @@
             "ST-D07/D10"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "await expect(messages.edit(tx, fx.player2Id, sent.id, \"ajeno\", new Date())).rejects.toMatchObject({ code: \"NOT_AUTHOR\" })"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(messages.edit(tx, fx.player2Id, sent.id, \"ajeno\", new Date())).rejects.toMatchObject({ code: \"NOT_AUTHOR\" })"
+          ]
         }
       ]
     },
@@ -693,7 +845,10 @@
             "CMD-COM-09 no crea Audit"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(sent.state).toBe(\"SENT\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(sent.state).toBe(\"SENT\")"
+          ]
         }
       ]
     },
@@ -707,7 +862,10 @@
             "persiste SENT → EDITED → DELETED"
           ],
           "file": "backend/src/communication/m8.integration.test.ts",
-          "assertionRef": "expect(r.rows[0].state).toBe(\"SENT\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(r.rows[0].state).toBe(\"SENT\")"
+          ]
         }
       ]
     },
@@ -721,7 +879,10 @@
             "ST-D07/D10"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "await expect(messages.edit(tx, fx.player2Id, sent.id, \"ajeno\", new Date())).rejects.toMatchObject({ code: \"NOT_AUTHOR\" })"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(messages.edit(tx, fx.player2Id, sent.id, \"ajeno\", new Date())).rejects.toMatchObject({ code: \"NOT_AUTHOR\" })"
+          ]
         }
       ]
     },
@@ -735,7 +896,10 @@
             "ST-D03/D11"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "await expect(messages.send(tx, fx.playerId, convId, \"  \", new Date())).rejects.toMatchObject({ code: \"BODY_REQUIRED\" })"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(messages.send(tx, fx.playerId, convId, \"  \", new Date())).rejects.toMatchObject({ code: \"BODY_REQUIRED\" })"
+          ]
         }
       ]
     },
@@ -749,7 +913,10 @@
             "CMD-COM-09 no crea Audit"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(sent.state).toBe(\"SENT\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(sent.state).toBe(\"SENT\")"
+          ]
         }
       ]
     },
@@ -763,7 +930,10 @@
             "CMD-COM-09 no crea Audit"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(sent.state).toBe(\"SENT\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(sent.state).toBe(\"SENT\")"
+          ]
         }
       ]
     },
@@ -777,7 +947,10 @@
             "CMD-COM-09..11"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(sent.statusCode).toBe(201)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(sent.statusCode).toBe(201)"
+          ]
         }
       ]
     },
@@ -791,14 +964,62 @@
             "ST-D15"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(Number(after?.n)).toBe(Number(before?.n))"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(Number(after?.n)).toBe(Number(before?.n))"
+          ]
         }
       ]
     },
     "ST-D16": {
       "contractSource": "04_T05_STRESS_TEST_80_V2.md#D16",
       "expected": "UI Sending/Sent/Failed sin estados falsos",
-      "criteria": []
+      "criteria": [
+        {
+          "id": "sending",
+          "testIdPatterns": [
+            "Caso A"
+          ],
+          "file": "tests/e2e/t05-st-d16.spec.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(page.getByText('Enviando…')).toBeVisible({ timeout: 5000 })"
+          ]
+        },
+        {
+          "id": "sent",
+          "testIdPatterns": [
+            "Caso A"
+          ],
+          "file": "tests/e2e/t05-st-d16.spec.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(page.getByText(body)).toHaveCount(1, { timeout: 15000 })"
+          ]
+        },
+        {
+          "id": "failed",
+          "testIdPatterns": [
+            "Caso B"
+          ],
+          "file": "tests/e2e/t05-st-d16.spec.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(persisted.rows[0].n).toBe(0)"
+          ]
+        },
+        {
+          "id": "retry",
+          "testIdPatterns": [
+            "Caso B"
+          ],
+          "file": "tests/e2e/t05-st-d16.spec.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(page.getByText(body)).toHaveCount(1, { timeout: 15000 })"
+          ]
+        }
+      ]
     },
     "ST-E01": {
       "contractSource": "04_T05_STRESS_TEST_80_V2.md#E01",
@@ -810,7 +1031,10 @@
             "CC-T05-C19: unreadCount"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(before.items.find((c) => c.id === directId)?.unreadCount).toBe(1)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(before.items.find((c) => c.id === directId)?.unreadCount).toBe(1)"
+          ]
         }
       ]
     },
@@ -824,7 +1048,10 @@
             "ST-E02/E10"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(queries.conversationThread(tx, fx.adminId, outsiderConv, new Date(), {})).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(queries.conversationThread(tx, fx.adminId, outsiderConv, new Date(), {})).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+          ]
         }
       ]
     },
@@ -838,7 +1065,10 @@
             "ST-E03/E04"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(times).toEqual([...times].sort((a, b) => b - a))"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(times).toEqual([...times].sort((a, b) => b - a))"
+          ]
         }
       ]
     },
@@ -852,7 +1082,10 @@
             "ST-E03/E04"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(times).toEqual([...times].sort((a, b) => b - a))"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(times).toEqual([...times].sort((a, b) => b - a))"
+          ]
         }
       ]
     },
@@ -866,7 +1099,10 @@
             "CC-T05-C19: unreadCount"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(before.items.find((c) => c.id === directId)?.unreadCount).toBe(1)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(before.items.find((c) => c.id === directId)?.unreadCount).toBe(1)"
+          ]
         }
       ]
     },
@@ -880,7 +1116,10 @@
             "ST-E06"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(countBefore).toBeGreaterThan(0)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(countBefore).toBeGreaterThan(0)"
+          ]
         }
       ]
     },
@@ -894,7 +1133,10 @@
             "CC-T05-C19: unreadCount"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(before.items.find((c) => c.id === directId)?.unreadCount).toBe(1)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(before.items.find((c) => c.id === directId)?.unreadCount).toBe(1)"
+          ]
         }
       ]
     },
@@ -908,6 +1150,10 @@
             "J01"
           ],
           "file": "tests/e2e/t05-qa-j01.spec.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(page.locator('#ann-title')).toHaveAttribute('required', '')"
+          ],
           "browser": "chromium"
         }
       ]
@@ -922,6 +1168,10 @@
             "J01"
           ],
           "file": "tests/e2e/t05-qa-j01.spec.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(page.locator('#ann-title')).toHaveAttribute('required', '')"
+          ],
           "browser": "chromium"
         }
       ]
@@ -936,7 +1186,10 @@
             "ST-E02/E10"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(queries.conversationThread(tx, fx.adminId, outsiderConv, new Date(), {})).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(queries.conversationThread(tx, fx.adminId, outsiderConv, new Date(), {})).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+          ]
         }
       ]
     },
@@ -950,7 +1203,10 @@
             "ST-E11/F10"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(files).not.toMatch(/MESSAGE_RECEIVED|ANNOUNCEMENT_CORRECTED|Guardian|Eligibility|CompetitionEntry/)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(files).not.toMatch(/MESSAGE_RECEIVED|ANNOUNCEMENT_CORRECTED|Guardian|Eligibility|CompetitionEntry/)"
+          ]
         }
       ]
     },
@@ -964,7 +1220,10 @@
             "ST-E12"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(JSON.stringify(rows[0].payload)).not.toContain(\"body\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(JSON.stringify(rows[0].payload)).not.toContain(\"body\")"
+          ]
         }
       ]
     },
@@ -978,7 +1237,10 @@
             "crea las 5 tablas"
           ],
           "file": "backend/src/communication/m8.integration.test.ts",
-          "assertionRef": "expect(tables.rows.map((r) => r.table_name)).toEqual(["
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(tables.rows.map((r) => r.table_name)).toEqual(["
+          ]
         }
       ]
     },
@@ -992,7 +1254,10 @@
             "ST-F02"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(row?.id).toBe(id)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(row?.id).toBe(id)"
+          ]
         }
       ]
     },
@@ -1006,7 +1271,11 @@
             "J02"
           ],
           "file": "tests/e2e/t05-qa-audit.spec.ts",
-          "browser": "chromium"
+          "requireAssertion": true,
+          "browser": "chromium",
+          "assertionRefs": [
+            "await expect(pb.getByText(/1 sin leer/)).toBeVisible({ timeout: 15000 })"
+          ]
         }
       ]
     },
@@ -1020,7 +1289,11 @@
             "J02"
           ],
           "file": "tests/e2e/t05-qa-audit.spec.ts",
-          "browser": "chromium"
+          "requireAssertion": true,
+          "browser": "chromium",
+          "assertionRefs": [
+            "await expect(pa.getByText('Grupo QA J02')).toBeVisible()"
+          ]
         }
       ]
     },
@@ -1034,7 +1307,11 @@
             "J05"
           ],
           "file": "tests/e2e/t05-qa-audit.spec.ts",
-          "browser": "chromium"
+          "requireAssertion": true,
+          "browser": "chromium",
+          "assertionRefs": [
+            "expect(measured).toBe(width)"
+          ]
         },
         {
           "id": "vp2",
@@ -1042,7 +1319,11 @@
             "J05"
           ],
           "file": "tests/e2e/t05-qa-audit.spec.ts",
-          "browser": "firefox"
+          "requireAssertion": true,
+          "browser": "firefox",
+          "assertionRefs": [
+            "expect(measured).toBe(width)"
+          ]
         },
         {
           "id": "vp3",
@@ -1050,7 +1331,11 @@
             "J05"
           ],
           "file": "tests/e2e/t05-qa-audit.spec.ts",
-          "browser": "msedge"
+          "requireAssertion": true,
+          "browser": "msedge",
+          "assertionRefs": [
+            "expect(measured).toBe(width)"
+          ]
         }
       ]
     },
@@ -1064,7 +1349,10 @@
             "R26: thread real"
           ],
           "file": "src/__tests__/t05-components.test.tsx",
-          "assertionRef": "expect(await screen.findByText(\"Hola del mock\")).toBeTruthy()"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(await screen.findByText(\"Hola del mock\")).toBeTruthy()"
+          ]
         }
       ]
     },
@@ -1077,7 +1365,11 @@
           "testIdPatterns": [
             "J05b"
           ],
-          "file": "tests/e2e/t05-journeys.spec.ts"
+          "file": "tests/e2e/t05-journeys.spec.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(page.getByText(/Falló el envío|No se pudo enviar/)).toBeVisible({ timeout: 20_000 })"
+          ]
         }
       ]
     },
@@ -1090,7 +1382,11 @@
           "testIdPatterns": [
             "J05b"
           ],
-          "file": "tests/e2e/t05-journeys.spec.ts"
+          "file": "tests/e2e/t05-journeys.spec.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(page.getByText(/Falló el envío|No se pudo enviar/)).toBeVisible({ timeout: 20_000 })"
+          ]
         }
       ]
     },
@@ -1103,7 +1399,11 @@
           "testIdPatterns": [
             "M0 and PostgreSQL semantics"
           ],
-          "file": "backend/src/foundation.integration.test.ts"
+          "file": "backend/src/foundation.integration.test.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(unexpected).toEqual([])"
+          ]
         }
       ]
     },
@@ -1117,7 +1417,10 @@
             "ST-E11/F10"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(files).not.toMatch(/MESSAGE_RECEIVED|ANNOUNCEMENT_CORRECTED|Guardian|Eligibility|CompetitionEntry/)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(files).not.toMatch(/MESSAGE_RECEIVED|ANNOUNCEMENT_CORRECTED|Guardian|Eligibility|CompetitionEntry/)"
+          ]
         }
       ]
     },
@@ -1131,7 +1434,10 @@
             "CC-T05-C10: crea y actualiza DRAFT"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(created.state).toBe(\"DRAFT\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(created.state).toBe(\"DRAFT\")"
+          ]
         }
       ]
     }
@@ -1146,7 +1452,11 @@
           "testIdPatterns": [
             "M0 and PostgreSQL semantics"
           ],
-          "file": "backend/src/foundation.integration.test.ts"
+          "file": "backend/src/foundation.integration.test.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(unexpected).toEqual([])"
+          ]
         }
       ]
     },
@@ -1160,7 +1470,10 @@
             "AC-22"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(sql).toContain(\"ANNOUNCEMENT_PUBLISHED\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(sql).toContain(\"ANNOUNCEMENT_PUBLISHED\")"
+          ]
         }
       ]
     },
@@ -1174,7 +1487,10 @@
             "crea las 5 tablas"
           ],
           "file": "backend/src/communication/m8.integration.test.ts",
-          "assertionRef": "expect(tables.rows.map((r) => r.table_name)).toEqual(["
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(tables.rows.map((r) => r.table_name)).toEqual(["
+          ]
         }
       ]
     },
@@ -1188,7 +1504,10 @@
             "CC-T05-C10: crea y actualiza DRAFT"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(created.state).toBe(\"DRAFT\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(created.state).toBe(\"DRAFT\")"
+          ]
         },
         {
           "id": "e2e",
@@ -1196,6 +1515,10 @@
             "J01"
           ],
           "file": "tests/e2e/t05-qa-j01.spec.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(page.locator('#ann-title')).toHaveAttribute('required', '')"
+          ],
           "browser": "chromium"
         }
       ]
@@ -1210,7 +1533,10 @@
             "CMD-COM-01/02"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(created.statusCode).toBe(201)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(created.statusCode).toBe(201)"
+          ]
         }
       ]
     },
@@ -1224,7 +1550,10 @@
             "ST-A08/A09"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(results.filter((r) => r.status === \"fulfilled\")).toHaveLength(1)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(results.filter((r) => r.status === \"fulfilled\")).toHaveLength(1)"
+          ]
         }
       ]
     },
@@ -1238,7 +1567,10 @@
             "ST-A10"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(notes.length).toBeGreaterThan(0)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(notes.length).toBeGreaterThan(0)"
+          ]
         }
       ]
     },
@@ -1252,7 +1584,10 @@
             "RC-19: audiencia"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(list.statusCode).toBe(200)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(list.statusCode).toBe(200)"
+          ]
         }
       ]
     },
@@ -1266,6 +1601,10 @@
             "J01"
           ],
           "file": "tests/e2e/t05-qa-j01.spec.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(page.locator('#ann-title')).toHaveAttribute('required', '')"
+          ],
           "browser": "chromium"
         }
       ]
@@ -1280,7 +1619,10 @@
             "CMD-COM-03/04"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(corrected.statusCode).toBe(200)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(corrected.statusCode).toBe(200)"
+          ]
         }
       ]
     },
@@ -1294,7 +1636,10 @@
             "ST-A13/A14"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(published.state).toBe(\"ARCHIVED\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(published.state).toBe(\"ARCHIVED\")"
+          ]
         }
       ]
     },
@@ -1308,7 +1653,10 @@
             "CMD-COM-05/06/07"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(direct.statusCode).toBe(201)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(direct.statusCode).toBe(201)"
+          ]
         }
       ]
     },
@@ -1322,7 +1670,10 @@
             "CMD-COM-06 GROUP"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(count.length).toBe(2)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(count.length).toBe(2)"
+          ]
         }
       ]
     },
@@ -1336,7 +1687,10 @@
             "CMD-COM-05/06/07"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(direct.statusCode).toBe(201)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(direct.statusCode).toBe(201)"
+          ]
         },
         {
           "id": "event",
@@ -1344,7 +1698,11 @@
             "J03"
           ],
           "file": "tests/e2e/t05-qa-audit.spec.ts",
-          "browser": "chromium"
+          "requireAssertion": true,
+          "browser": "chromium",
+          "assertionRefs": [
+            "expect(eventUrl).not.toBe(teamUrl)"
+          ]
         }
       ]
     },
@@ -1358,7 +1716,10 @@
             "acepta salida y reingreso"
           ],
           "file": "backend/src/communication/m8.integration.test.ts",
-          "assertionRef": "expect(rows.rows[0].n).toBe(2)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(rows.rows[0].n).toBe(2)"
+          ]
         }
       ]
     },
@@ -1371,7 +1732,11 @@
           "testIdPatterns": [
             "revocación temporal"
           ],
-          "file": "backend/src/communication/t05.integration.test.ts"
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expectDenied(queries.conversationThread(tx, fx.playerId, teamConvId, later(7 * 60 * 60_000), {}), \"NO_TEAM_CONVERSATION_AUTHORITY\")"
+          ]
         }
       ]
     },
@@ -1385,7 +1750,10 @@
             "ST-E02/E10"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(queries.conversationThread(tx, fx.adminId, outsiderConv, new Date(), {})).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(queries.conversationThread(tx, fx.adminId, outsiderConv, new Date(), {})).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+          ]
         }
       ]
     },
@@ -1399,7 +1767,10 @@
             "CMD-COM-09 no crea Audit"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(sent.state).toBe(\"SENT\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(sent.state).toBe(\"SENT\")"
+          ]
         }
       ]
     },
@@ -1413,7 +1784,10 @@
             "ST-D07/D10"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "await expect(messages.edit(tx, fx.player2Id, sent.id, \"ajeno\", new Date())).rejects.toMatchObject({ code: \"NOT_AUTHOR\" })"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(messages.edit(tx, fx.player2Id, sent.id, \"ajeno\", new Date())).rejects.toMatchObject({ code: \"NOT_AUTHOR\" })"
+          ]
         }
       ]
     },
@@ -1427,7 +1801,10 @@
             "CMD-COM-09..11"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(sent.statusCode).toBe(201)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(sent.statusCode).toBe(201)"
+          ]
         }
       ]
     },
@@ -1441,7 +1818,10 @@
             "CMD-COM-09..11"
           ],
           "file": "backend/src/communication/t05.api.test.ts",
-          "assertionRef": "expect(sent.statusCode).toBe(201)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(sent.statusCode).toBe(201)"
+          ]
         }
       ]
     },
@@ -1455,7 +1835,10 @@
             "AC-22"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(sql).toContain(\"ANNOUNCEMENT_PUBLISHED\")"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(sql).toContain(\"ANNOUNCEMENT_PUBLISHED\")"
+          ]
         }
       ]
     },
@@ -1469,7 +1852,10 @@
             "ST-E11/F10"
           ],
           "file": "backend/src/communication/t05-truth-gaps.test.ts",
-          "assertionRef": "expect(files).not.toMatch(/MESSAGE_RECEIVED|ANNOUNCEMENT_CORRECTED|Guardian|Eligibility|CompetitionEntry/)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(files).not.toMatch(/MESSAGE_RECEIVED|ANNOUNCEMENT_CORRECTED|Guardian|Eligibility|CompetitionEntry/)"
+          ]
         },
         {
           "id": "audit",
@@ -1477,7 +1863,10 @@
             "ST-E02/E10"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(queries.conversationThread(tx, fx.adminId, outsiderConv, new Date(), {})).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(queries.conversationThread(tx, fx.adminId, outsiderConv, new Date(), {})).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+          ]
         }
       ]
     },
@@ -1491,7 +1880,10 @@
             "CC-T05-C19: unreadCount"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(before.items.find((c) => c.id === directId)?.unreadCount).toBe(1)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(before.items.find((c) => c.id === directId)?.unreadCount).toBe(1)"
+          ]
         },
         {
           "id": "order",
@@ -1499,7 +1891,10 @@
             "ST-E03/E04"
           ],
           "file": "backend/src/communication/t05-stress.test.ts",
-          "assertionRef": "expect(times).toEqual([...times].sort((a, b) => b - a))"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(times).toEqual([...times].sort((a, b) => b - a))"
+          ]
         }
       ]
     },
@@ -1513,7 +1908,10 @@
             "RC-07 paginación estable"
           ],
           "file": "backend/src/communication/t05.integration.test.ts",
-          "assertionRef": "expect(page.items.length).toBeLessThanOrEqual(2)"
+          "requireAssertion": true,
+          "assertionRefs": [
+            "expect(page.items.length).toBeLessThanOrEqual(2)"
+          ]
         }
       ]
     },
@@ -1526,7 +1924,11 @@
           "testIdPatterns": [
             "J05b"
           ],
-          "file": "tests/e2e/t05-journeys.spec.ts"
+          "file": "tests/e2e/t05-journeys.spec.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(page.getByText(/Falló el envío|No se pudo enviar/)).toBeVisible({ timeout: 20_000 })"
+          ]
         }
       ]
     },
@@ -1540,6 +1942,10 @@
             "J01"
           ],
           "file": "tests/e2e/t05-qa-j01.spec.ts",
+          "requireAssertion": true,
+          "assertionRefs": [
+            "await expect(page.locator('#ann-title')).toHaveAttribute('required', '')"
+          ],
           "browser": "chromium"
         }
       ]
@@ -1554,7 +1960,11 @@
             "J05"
           ],
           "file": "tests/e2e/t05-qa-audit.spec.ts",
-          "browser": "chromium"
+          "requireAssertion": true,
+          "browser": "chromium",
+          "assertionRefs": [
+            "expect(measured).toBe(width)"
+          ]
         },
         {
           "id": "vp2",
@@ -1562,7 +1972,11 @@
             "J05"
           ],
           "file": "tests/e2e/t05-qa-audit.spec.ts",
-          "browser": "firefox"
+          "requireAssertion": true,
+          "browser": "firefox",
+          "assertionRefs": [
+            "expect(measured).toBe(width)"
+          ]
         },
         {
           "id": "vp3",
@@ -1570,7 +1984,11 @@
             "J05"
           ],
           "file": "tests/e2e/t05-qa-audit.spec.ts",
-          "browser": "msedge"
+          "requireAssertion": true,
+          "browser": "msedge",
+          "assertionRefs": [
+            "expect(measured).toBe(width)"
+          ]
         }
       ]
     },
@@ -1584,7 +2002,11 @@
             "J02"
           ],
           "file": "tests/e2e/t05-qa-audit.spec.ts",
-          "browser": "chromium"
+          "requireAssertion": true,
+          "browser": "chromium",
+          "assertionRefs": [
+            "await expect(pb.getByText(/1 sin leer/)).toBeVisible({ timeout: 15000 })"
+          ]
         }
       ]
     },

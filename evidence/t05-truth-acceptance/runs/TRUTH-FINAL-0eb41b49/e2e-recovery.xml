@@ -1,0 +1,18 @@
+<testsuites id="" name="" tests="7" failures="0" skipped="0" errors="0" time="17.953512000000003">
+<testsuite name="t05-journeys.spec.ts" timestamp="2026-11-17T19:08:27.430Z" hostname="chromium" tests="7" failures="0" skipped="0" time="16.204" errors="0">
+<testcase name="J01 — Announcements: crear, publicar, leer, corregir y archivar › flujo completo SUBCOMMITTEE + lector" classname="t05-journeys.spec.ts" time="2.884">
+</testcase>
+<testcase name="J02 — DIRECT/GROUP: conversaciones canónicas › DIRECT se reutiliza desde ambos extremos" classname="t05-journeys.spec.ts" time="6.89">
+</testcase>
+<testcase name="J02 — DIRECT/GROUP: conversaciones canónicas › GROUP con título y dos participantes" classname="t05-journeys.spec.ts" time="1.244">
+</testcase>
+<testcase name="J03 — TEAM/EVENT: autoridad temporal › COACH abre TEAM; SUBCOMMITTEE crea pero no lee sin participación" classname="t05-journeys.spec.ts" time="1.633">
+</testcase>
+<testcase name="J04 — Messaging: enviar, editar, eliminar y recuperar › ciclo de mensaje con estados honestos" classname="t05-journeys.spec.ts" time="1.279">
+</testcase>
+<testcase name="J05b — Recuperación: realtime caído y fallo API (ST-F07/F08, AC-26) › refetch autorizado y reintento seguro sin falso éxito" classname="t05-journeys.spec.ts" time="1.364">
+</testcase>
+<testcase name="J05 — Hub, lecturas y estados responsive › navegación real, unread y 3 viewports" classname="t05-journeys.spec.ts" time="0.91">
+</testcase>
+</testsuite>
+</testsuites>

@@ -1,0 +1,44 @@
+<testsuites id="" name="" tests="15" failures="0" skipped="0" errors="0" time="98.13990400000002">
+<testsuite name="t05-qa-audit.spec.ts" timestamp="2026-11-17T19:06:33.123Z" hostname="chromium" tests="4" failures="0" skipped="0" time="16.465" errors="0">
+<testcase name="J02 — DIRECT y GROUP › DIRECT canónico A→B y B→A; GROUP mínimo y archivado" classname="t05-qa-audit.spec.ts" time="3.77">
+</testcase>
+<testcase name="J03 — TEAM y EVENT › TEAM y EVENT canónicos desde UI; sin participación y ADMIN denegados" classname="t05-qa-audit.spec.ts" time="5.115">
+</testcase>
+<testcase name="J04 — Messaging › envío, unread C19 intercalado, edición, borrado SENT/EDITED y paginación real" classname="t05-qa-audit.spec.ts" time="5.343">
+</testcase>
+<testcase name="J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles" classname="t05-qa-audit.spec.ts" time="2.237">
+</testcase>
+</testsuite>
+<testsuite name="t05-qa-j01.spec.ts" timestamp="2026-11-17T19:06:33.123Z" hostname="chromium" tests="1" failures="0" skipped="0" time="5.001" errors="0">
+<testcase name="J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado" classname="t05-qa-j01.spec.ts" time="5.001">
+</testcase>
+</testsuite>
+<testsuite name="t05-qa-audit.spec.ts" timestamp="2026-11-17T19:06:33.123Z" hostname="firefox" tests="4" failures="0" skipped="0" time="35.13" errors="0">
+<testcase name="J02 — DIRECT y GROUP › DIRECT canónico A→B y B→A; GROUP mínimo y archivado" classname="t05-qa-audit.spec.ts" time="8.07">
+</testcase>
+<testcase name="J03 — TEAM y EVENT › TEAM y EVENT canónicos desde UI; sin participación y ADMIN denegados" classname="t05-qa-audit.spec.ts" time="10.212">
+</testcase>
+<testcase name="J04 — Messaging › envío, unread C19 intercalado, edición, borrado SENT/EDITED y paginación real" classname="t05-qa-audit.spec.ts" time="11.133">
+</testcase>
+<testcase name="J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles" classname="t05-qa-audit.spec.ts" time="5.715">
+</testcase>
+</testsuite>
+<testsuite name="t05-qa-j01.spec.ts" timestamp="2026-11-17T19:06:33.123Z" hostname="firefox" tests="1" failures="0" skipped="0" time="8.416" errors="0">
+<testcase name="J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado" classname="t05-qa-j01.spec.ts" time="8.416">
+</testcase>
+</testsuite>
+<testsuite name="t05-qa-audit.spec.ts" timestamp="2026-11-17T19:06:33.123Z" hostname="msedge" tests="4" failures="0" skipped="0" time="20.741" errors="0">
+<testcase name="J02 — DIRECT y GROUP › DIRECT canónico A→B y B→A; GROUP mínimo y archivado" classname="t05-qa-audit.spec.ts" time="4.79">
+</testcase>
+<testcase name="J03 — TEAM y EVENT › TEAM y EVENT canónicos desde UI; sin participación y ADMIN denegados" classname="t05-qa-audit.spec.ts" time="6.627">
+</testcase>
+<testcase name="J04 — Messaging › envío, unread C19 intercalado, edición, borrado SENT/EDITED y paginación real" classname="t05-qa-audit.spec.ts" time="6.456">
+</testcase>
+<testcase name="J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles" classname="t05-qa-audit.spec.ts" time="2.868">
+</testcase>
+</testsuite>
+<testsuite name="t05-qa-j01.spec.ts" timestamp="2026-11-17T19:06:33.123Z" hostname="msedge" tests="1" failures="0" skipped="0" time="6.129" errors="0">
+<testcase name="J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado" classname="t05-qa-j01.spec.ts" time="6.129">
+</testcase>
+</testsuite>
+</testsuites>

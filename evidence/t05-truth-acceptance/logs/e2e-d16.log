@@ -1,0 +1,8 @@
+
+Running 2 tests using 1 worker
+
+[1/2] [chromium] › tests\e2e\t05-st-d16.spec.ts:24:1 › ST-D16 Caso A — Sending visible y transición a Sent con persistencia única
+[2/2] [chromium] › tests\e2e\t05-st-d16.spec.ts:45:1 › ST-D16 Caso B — Failed controlado, sin falso éxito y retry sin duplicados
+  2 passed (4.7s)
+
+--- STDERR ---

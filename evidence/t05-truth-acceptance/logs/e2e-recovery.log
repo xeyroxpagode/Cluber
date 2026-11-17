@@ -1,0 +1,13 @@
+
+Running 7 tests using 1 worker
+
+[1/7] [chromium] › tests\e2e\t05-journeys.spec.ts:27:3 › J01 — Announcements: crear, publicar, leer, corregir y archivar › flujo completo SUBCOMMITTEE + lector
+[2/7] [chromium] › tests\e2e\t05-journeys.spec.ts:65:3 › J02 — DIRECT/GROUP: conversaciones canónicas › DIRECT se reutiliza desde ambos extremos
+[3/7] [chromium] › tests\e2e\t05-journeys.spec.ts:88:3 › J02 — DIRECT/GROUP: conversaciones canónicas › GROUP con título y dos participantes
+[4/7] [chromium] › tests\e2e\t05-journeys.spec.ts:108:3 › J03 — TEAM/EVENT: autoridad temporal › COACH abre TEAM; SUBCOMMITTEE crea pero no lee sin participación
+[5/7] [chromium] › tests\e2e\t05-journeys.spec.ts:132:3 › J04 — Messaging: enviar, editar, eliminar y recuperar › ciclo de mensaje con estados honestos
+[6/7] [chromium] › tests\e2e\t05-journeys.spec.ts:152:3 › J05b — Recuperación: realtime caído y fallo API (ST-F07/F08, AC-26) › refetch autorizado y reintento seguro sin falso éxito
+[7/7] [chromium] › tests\e2e\t05-journeys.spec.ts:185:3 › J05 — Hub, lecturas y estados responsive › navegación real, unread y 3 viewports
+  7 passed (18.0s)
+
+--- STDERR ---

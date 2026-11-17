@@ -1,0 +1,8 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="4.654534">
+<testsuite name="t05-st-d16.spec.ts" timestamp="2026-11-17T19:08:49.807Z" hostname="chromium" tests="2" failures="0" skipped="0" time="2.762" errors="0">
+<testcase name="ST-D16 Caso A — Sending visible y transición a Sent con persistencia única" classname="t05-st-d16.spec.ts" time="1.353">
+</testcase>
+<testcase name="ST-D16 Caso B — Failed controlado, sin falso éxito y retry sin duplicados" classname="t05-st-d16.spec.ts" time="1.409">
+</testcase>
+</testsuite>
+</testsuites>

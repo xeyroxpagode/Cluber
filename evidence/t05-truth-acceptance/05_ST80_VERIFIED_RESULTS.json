@@ -1,6 +1,6 @@
 {
-  "runId": "TRUTH-20261117-181500-fbcb6b76",
-  "head": "fbcb6b76c0dd590bc70e0dbecf31864f779fc745",
+  "runId": "TRUTH-FINAL-0eb41b49",
+  "head": "0eb41b495091eee341804a8eddf012171d6b402a",
   "results": {
     "ST-A01": {
       "status": "PASS",
@@ -11,7 +11,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; CC-T05-C10: crea y actualiza DRAFT con version++ y Audiencia válida"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; CC-T05-C10: crea y actualiza DRAFT con version++ y Audiencia válida"
           ]
         }
       ],
@@ -27,7 +27,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A02/A11: DRAFT sin title se rechaza; corrección sin cambios se rechaza"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A02/A11: DRAFT sin title se rechaza; corrección sin cambios se rechaza"
           ]
         }
       ],
@@ -43,7 +43,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; rechaza audiencia inválida y actores sin autoridad (PLAYER/ADMIN)"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; rechaza audiencia inválida y actores sin autoridad (PLAYER/ADMIN)"
           ]
         }
       ],
@@ -59,7 +59,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:e2e-browser.xml:J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado"
+            "TRUTH-FINAL-0eb41b49:e2e-browser.xml:J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado"
           ]
         }
       ],
@@ -75,7 +75,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; publica con NOT-07 deduplicada, corrige con revision++ y archiva preservando metadatos"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; publica con NOT-07 deduplicada, corrige con revision++ y archiva preservando metadatos"
           ]
         }
       ],
@@ -91,7 +91,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M8 — physical schema (I1) &gt; Announcements &gt; audiencia única por announcement y FK válidos"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M8 — physical schema (I1) &gt; Announcements &gt; audiencia única por announcement y FK válidos"
           ]
         }
       ],
@@ -107,7 +107,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A07/A12: equipo inexistente y audiencia inmutable en corrección"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A07/A12: equipo inexistente y audiencia inmutable en corrección"
           ]
         }
       ],
@@ -123,7 +123,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A08/A09: publicación concurrente → 1 éxito, 1 conflicto; retry no duplica NOT-07"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A08/A09: publicación concurrente → 1 éxito, 1 conflicto; retry no duplica NOT-07"
           ]
         }
       ],
@@ -139,7 +139,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-01/02: draft → update → publish con idempotencia y NOT-07"
+            "TRUTH-FINAL-0eb41b49:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-01/02: draft → update → publish con idempotencia y NOT-07"
           ]
         }
       ],
@@ -155,7 +155,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-A10: falla NotificationWriter → sin publicación incoherente"
+            "TRUTH-FINAL-0eb41b49:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-A10: falla NotificationWriter → sin publicación incoherente"
           ]
         }
       ],
@@ -171,7 +171,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-03/04: corrección revision++ y archivado histórico"
+            "TRUTH-FINAL-0eb41b49:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-03/04: corrección revision++ y archivado histórico"
           ]
         }
       ],
@@ -187,7 +187,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A07/A12: equipo inexistente y audiencia inmutable en corrección"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A07/A12: equipo inexistente y audiencia inmutable en corrección"
           ]
         }
       ],
@@ -203,7 +203,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A13/A14: ARCHIVED conserva publishedAt y no se puede corregir"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A13/A14: ARCHIVED conserva publishedAt y no se puede corregir"
           ]
         }
       ],
@@ -219,7 +219,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A13/A14: ARCHIVED conserva publishedAt y no se puede corregir"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A13/A14: ARCHIVED conserva publishedAt y no se puede corregir"
           ]
         }
       ],
@@ -235,7 +235,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; RC-19: audiencia como access control"
+            "TRUTH-FINAL-0eb41b49:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; RC-19: audiencia como access control"
           ]
         }
       ],
@@ -251,7 +251,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-A16: publicación congela audiencia aunque cambie TeamAssignment"
+            "TRUTH-FINAL-0eb41b49:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-A16: publicación congela audiencia aunque cambie TeamAssignment"
           ]
         }
       ],
@@ -267,7 +267,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-05 DIRECT canónica por pareja no ordenada"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-05 DIRECT canónica por pareja no ordenada"
           ]
         }
       ],
@@ -283,7 +283,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-05/06/07: DIRECT canónica, GROUP y TEAM por COACH"
+            "TRUTH-FINAL-0eb41b49:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-05/06/07: DIRECT canónica, GROUP y TEAM por COACH"
           ]
         }
       ],
@@ -299,7 +299,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-B03: aperturas DIRECT concurrentes no duplican"
+            "TRUTH-FINAL-0eb41b49:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-B03: aperturas DIRECT concurrentes no duplican"
           ]
         }
       ],
@@ -315,7 +315,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-05 DIRECT canónica por pareja no ordenada"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-05 DIRECT canónica por pareja no ordenada"
           ]
         }
       ],
@@ -331,7 +331,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-06 GROUP ≥2 con creador auto-incluido y CMD-COM-08 archiva"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-06 GROUP ≥2 con creador auto-incluido y CMD-COM-08 archiva"
           ]
         }
       ],
@@ -347,7 +347,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-B06/B07: título vacío y participantes duplicados se rechazan"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-B06/B07: título vacío y participantes duplicados se rechazan"
           ]
         }
       ],
@@ -363,7 +363,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-B06/B07: título vacío y participantes duplicados se rechazan"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-B06/B07: título vacío y participantes duplicados se rechazan"
           ]
         }
       ],
@@ -379,7 +379,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:truth-gaps.xml:TRUTH — cobertura temporal y canónica adicional &gt; ST-B08: GROUP entre divisiones permitido si ambos autorizados"
+            "TRUTH-FINAL-0eb41b49:truth-gaps.xml:TRUTH — cobertura temporal y canónica adicional &gt; ST-B08: GROUP entre divisiones permitido si ambos autorizados"
           ]
         }
       ],
@@ -395,7 +395,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-05/06/07: DIRECT canónica, GROUP y TEAM por COACH"
+            "TRUTH-FINAL-0eb41b49:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-05/06/07: DIRECT canónica, GROUP y TEAM por COACH"
           ]
         }
       ],
@@ -411,7 +411,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:e2e-browser.xml:J03 — TEAM y EVENT › TEAM y EVENT canónicos desde UI; sin participación y ADMIN denegados"
+            "TRUTH-FINAL-0eb41b49:e2e-browser.xml:J03 — TEAM y EVENT › TEAM y EVENT canónicos desde UI; sin participación y ADMIN denegados"
           ]
         }
       ],
@@ -427,7 +427,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-B11: apertura concurrente TEAM → 1 sola conversación"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-B11: apertura concurrente TEAM → 1 sola conversación"
           ]
         }
       ],
@@ -443,7 +443,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-07 TEAM canónica + sync atómico; SUBCOMMITTEE/ADMIN sin acceso universal"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-07 TEAM canónica + sync atómico; SUBCOMMITTEE/ADMIN sin acceso universal"
           ]
         }
       ],
@@ -459,7 +459,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-06 GROUP ≥2 con creador auto-incluido y CMD-COM-08 archiva"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-06 GROUP ≥2 con creador auto-incluido y CMD-COM-08 archiva"
           ]
         }
       ],
@@ -475,7 +475,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-06 GROUP ≥2 con creador auto-incluido y CMD-COM-08 archiva"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-06 GROUP ≥2 con creador auto-incluido y CMD-COM-08 archiva"
           ]
         }
       ],
@@ -491,7 +491,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-07 TEAM canónica + sync atómico; SUBCOMMITTEE/ADMIN sin acceso universal"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-07 TEAM canónica + sync atómico; SUBCOMMITTEE/ADMIN sin acceso universal"
           ]
         }
       ],
@@ -507,7 +507,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; revocación temporal: Alice pierde acceso en el siguiente request"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; revocación temporal: Alice pierde acceso en el siguiente request"
           ]
         }
       ],
@@ -523,7 +523,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M8 — physical schema (I1) &gt; Participants y temporalidad &gt; acepta salida y reingreso como intervalos distintos"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M8 — physical schema (I1) &gt; Participants y temporalidad &gt; acepta salida y reingreso como intervalos distintos"
           ]
         }
       ],
@@ -539,7 +539,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:truth-gaps.xml:TRUTH — cobertura temporal y canónica adicional &gt; ST-C04/C05: RC-07 excluye mensajes fuera del período del participante"
+            "TRUTH-FINAL-0eb41b49:truth-gaps.xml:TRUTH — cobertura temporal y canónica adicional &gt; ST-C04/C05: RC-07 excluye mensajes fuera del período del participante"
           ]
         }
       ],
@@ -555,7 +555,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:truth-gaps.xml:TRUTH — cobertura temporal y canónica adicional &gt; ST-C04/C05: RC-07 excluye mensajes fuera del período del participante"
+            "TRUTH-FINAL-0eb41b49:truth-gaps.xml:TRUTH — cobertura temporal y canónica adicional &gt; ST-C04/C05: RC-07 excluye mensajes fuera del período del participante"
           ]
         }
       ],
@@ -571,7 +571,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; revocación temporal: Alice pierde acceso en el siguiente request"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; revocación temporal: Alice pierde acceso en el siguiente request"
           ]
         }
       ],
@@ -587,7 +587,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:truth-gaps.xml:TRUTH — cobertura temporal y canónica adicional &gt; ST-C07: cambio de TeamAssignment cierra el intervalo del participante"
+            "TRUTH-FINAL-0eb41b49:truth-gaps.xml:TRUTH — cobertura temporal y canónica adicional &gt; ST-C07: cambio de TeamAssignment cierra el intervalo del participante"
           ]
         }
       ],
@@ -603,7 +603,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-C08: cambio de Event targets sincroniza participación"
+            "TRUTH-FINAL-0eb41b49:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-C08: cambio de Event targets sincroniza participación"
           ]
         }
       ],
@@ -619,7 +619,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; revocación temporal: Alice pierde acceso en el siguiente request"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; revocación temporal: Alice pierde acceso en el siguiente request"
           ]
         }
       ],
@@ -635,7 +635,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-C10: ex-participante no puede enviar"
+            "TRUTH-FINAL-0eb41b49:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-C10: ex-participante no puede enviar"
           ]
         }
       ],
@@ -651,7 +651,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:truth-gaps.xml:TRUTH — cobertura temporal y canónica adicional &gt; ST-C11: dos syncs simultáneos conservan períodos sin solapamiento"
+            "TRUTH-FINAL-0eb41b49:truth-gaps.xml:TRUTH — cobertura temporal y canónica adicional &gt; ST-C11: dos syncs simultáneos conservan períodos sin solapamiento"
           ]
         }
       ],
@@ -667,7 +667,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-C03/C12: reingreso crea intervalo nuevo y historia queda acotada al período"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-C03/C12: reingreso crea intervalo nuevo y historia queda acotada al período"
           ]
         }
       ],
@@ -683,7 +683,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-09 no crea Audit ni Notification; CMD-COM-10/11 Audit con body redactado"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-09 no crea Audit ni Notification; CMD-COM-10/11 Audit con body redactado"
           ]
         }
       ],
@@ -699,7 +699,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
+            "TRUTH-FINAL-0eb41b49:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
           ]
         }
       ],
@@ -715,7 +715,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D03/D11: body vacío y delete sin reason se rechazan"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D03/D11: body vacío y delete sin reason se rechazan"
           ]
         }
       ],
@@ -731,7 +731,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
+            "TRUTH-FINAL-0eb41b49:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
           ]
         }
       ],
@@ -747,7 +747,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
+            "TRUTH-FINAL-0eb41b49:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
           ]
         }
       ],
@@ -763,7 +763,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
+            "TRUTH-FINAL-0eb41b49:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
           ]
         }
       ],
@@ -779,7 +779,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D07/D10: no autor no puede editar ni eliminar"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D07/D10: no autor no puede editar ni eliminar"
           ]
         }
       ],
@@ -795,7 +795,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-09 no crea Audit ni Notification; CMD-COM-10/11 Audit con body redactado"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-09 no crea Audit ni Notification; CMD-COM-10/11 Audit con body redactado"
           ]
         }
       ],
@@ -811,7 +811,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M8 — physical schema (I1) &gt; Messages &gt; persiste SENT → EDITED → DELETED con tombstone"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M8 — physical schema (I1) &gt; Messages &gt; persiste SENT → EDITED → DELETED con tombstone"
           ]
         }
       ],
@@ -827,7 +827,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D07/D10: no autor no puede editar ni eliminar"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D07/D10: no autor no puede editar ni eliminar"
           ]
         }
       ],
@@ -843,7 +843,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D03/D11: body vacío y delete sin reason se rechazan"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D03/D11: body vacío y delete sin reason se rechazan"
           ]
         }
       ],
@@ -859,7 +859,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-09 no crea Audit ni Notification; CMD-COM-10/11 Audit con body redactado"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-09 no crea Audit ni Notification; CMD-COM-10/11 Audit con body redactado"
           ]
         }
       ],
@@ -875,7 +875,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-09 no crea Audit ni Notification; CMD-COM-10/11 Audit con body redactado"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-09 no crea Audit ni Notification; CMD-COM-10/11 Audit con body redactado"
           ]
         }
       ],
@@ -891,7 +891,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
+            "TRUTH-FINAL-0eb41b49:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
           ]
         }
       ],
@@ -907,7 +907,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D15: enviar mensaje NO crea Notification (MESSAGE_RECEIVED prohibido)"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D15: enviar mensaje NO crea Notification (MESSAGE_RECEIVED prohibido)"
           ]
         }
       ],
@@ -915,9 +915,42 @@
       "expected": "Sin MESSAGE_RECEIVED"
     },
     "ST-D16": {
-      "status": "NOT RUN",
-      "reason": "sin criterios",
-      "criteria": [],
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "sending",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-FINAL-0eb41b49:e2e-d16.xml:ST-D16 Caso A — Sending visible y transición a Sent con persistencia única"
+          ]
+        },
+        {
+          "id": "sent",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-FINAL-0eb41b49:e2e-d16.xml:ST-D16 Caso A — Sending visible y transición a Sent con persistencia única"
+          ]
+        },
+        {
+          "id": "failed",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-FINAL-0eb41b49:e2e-d16.xml:ST-D16 Caso B — Failed controlado, sin falso éxito y retry sin duplicados"
+          ]
+        },
+        {
+          "id": "retry",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-FINAL-0eb41b49:e2e-d16.xml:ST-D16 Caso B — Failed controlado, sin falso éxito y retry sin duplicados"
+          ]
+        }
+      ],
       "contractSource": "04_T05_STRESS_TEST_80_V2.md#D16",
       "expected": "UI Sending/Sent/Failed sin estados falsos"
     },
@@ -930,7 +963,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CC-T05-C19: unreadCount excluye propios y el cursor solo avanza con lectura"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CC-T05-C19: unreadCount excluye propios y el cursor solo avanza con lectura"
           ]
         }
       ],
@@ -946,7 +979,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E02/E10: no participante DENY; audit de mensajes sin body"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E02/E10: no participante DENY; audit de mensajes sin body"
           ]
         }
       ],
@@ -962,7 +995,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E03/E04: orden estable y lastActivityAt DESC"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E03/E04: orden estable y lastActivityAt DESC"
           ]
         }
       ],
@@ -978,7 +1011,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E03/E04: orden estable y lastActivityAt DESC"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E03/E04: orden estable y lastActivityAt DESC"
           ]
         }
       ],
@@ -994,7 +1027,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CC-T05-C19: unreadCount excluye propios y el cursor solo avanza con lectura"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CC-T05-C19: unreadCount excluye propios y el cursor solo avanza con lectura"
           ]
         }
       ],
@@ -1010,7 +1043,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-E06: mensaje DELETED no computa en unreadCount"
+            "TRUTH-FINAL-0eb41b49:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-E06: mensaje DELETED no computa en unreadCount"
           ]
         }
       ],
@@ -1026,7 +1059,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CC-T05-C19: unreadCount excluye propios y el cursor solo avanza con lectura"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CC-T05-C19: unreadCount excluye propios y el cursor solo avanza con lectura"
           ]
         }
       ],
@@ -1042,7 +1075,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:e2e-browser.xml:J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado"
+            "TRUTH-FINAL-0eb41b49:e2e-browser.xml:J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado"
           ]
         }
       ],
@@ -1058,7 +1091,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:e2e-browser.xml:J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado"
+            "TRUTH-FINAL-0eb41b49:e2e-browser.xml:J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado"
           ]
         }
       ],
@@ -1074,7 +1107,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E02/E10: no participante DENY; audit de mensajes sin body"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E02/E10: no participante DENY; audit de mensajes sin body"
           ]
         }
       ],
@@ -1090,7 +1123,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:truth-gaps.xml:TRUTH — invariantes estáticos &gt; ST-E11/F10: sin body en logs ni funcionalidades OUT"
+            "TRUTH-FINAL-0eb41b49:truth-gaps.xml:TRUTH — invariantes estáticos &gt; ST-E11/F10: sin body en logs ni funcionalidades OUT"
           ]
         }
       ],
@@ -1106,7 +1139,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E12: payload realtime de mensaje no contiene body"
+            "TRUTH-FINAL-0eb41b49:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E12: payload realtime de mensaje no contiene body"
           ]
         }
       ],
@@ -1122,7 +1155,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M8 — physical schema (I1) &gt; crea las 5 tablas, constraints e índices contractuales"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M8 — physical schema (I1) &gt; crea las 5 tablas, constraints e índices contractuales"
           ]
         }
       ],
@@ -1138,7 +1171,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:truth-gaps.xml:TRUTH — cobertura temporal y canónica adicional &gt; ST-F02: los datos persisten al abrir una nueva conexión (simula reinicio)"
+            "TRUTH-FINAL-0eb41b49:truth-gaps.xml:TRUTH — cobertura temporal y canónica adicional &gt; ST-F02: los datos persisten al abrir una nueva conexión (simula reinicio)"
           ]
         }
       ],
@@ -1154,7 +1187,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:e2e-browser.xml:J02 — DIRECT y GROUP › DIRECT canónico A→B y B→A; GROUP mínimo y archivado"
+            "TRUTH-FINAL-0eb41b49:e2e-browser.xml:J02 — DIRECT y GROUP › DIRECT canónico A→B y B→A; GROUP mínimo y archivado"
           ]
         }
       ],
@@ -1170,7 +1203,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:e2e-browser.xml:J02 — DIRECT y GROUP › DIRECT canónico A→B y B→A; GROUP mínimo y archivado"
+            "TRUTH-FINAL-0eb41b49:e2e-browser.xml:J02 — DIRECT y GROUP › DIRECT canónico A→B y B→A; GROUP mínimo y archivado"
           ]
         }
       ],
@@ -1186,7 +1219,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:e2e-browser.xml:J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles"
+            "TRUTH-FINAL-0eb41b49:e2e-browser.xml:J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles"
           ]
         },
         {
@@ -1194,7 +1227,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:e2e-browser.xml:J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles"
+            "TRUTH-FINAL-0eb41b49:e2e-browser.xml:J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles"
           ]
         },
         {
@@ -1202,7 +1235,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:e2e-browser.xml:J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles"
+            "TRUTH-FINAL-0eb41b49:e2e-browser.xml:J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles"
           ]
         }
       ],
@@ -1218,7 +1251,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:frontend.xml:T05 R21–R26 — superficies reales con API &gt; R26: thread real, composer sticky y envío con ack del servidor"
+            "TRUTH-FINAL-0eb41b49:frontend.xml:T05 R21–R26 — superficies reales con API &gt; R26: thread real, composer sticky y envío con ack del servidor"
           ]
         }
       ],
@@ -1234,7 +1267,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:e2e-recovery.xml:J05b — Recuperación: realtime caído y fallo API (ST-F07/F08, AC-26) › refetch autorizado y reintento seguro sin falso éxito"
+            "TRUTH-FINAL-0eb41b49:e2e-recovery.xml:J05b — Recuperación: realtime caído y fallo API (ST-F07/F08, AC-26) › refetch autorizado y reintento seguro sin falso éxito"
           ]
         }
       ],
@@ -1250,7 +1283,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:e2e-recovery.xml:J05b — Recuperación: realtime caído y fallo API (ST-F07/F08, AC-26) › refetch autorizado y reintento seguro sin falso éxito"
+            "TRUTH-FINAL-0eb41b49:e2e-recovery.xml:J05b — Recuperación: realtime caído y fallo API (ST-F07/F08, AC-26) › refetch autorizado y reintento seguro sin falso éxito"
           ]
         }
       ],
@@ -1266,17 +1299,17 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M0 and PostgreSQL semantics &gt; uses the limited runtime role and denies browser roles",
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M0 and PostgreSQL semantics &gt; exposes exactly the authorized T01-T05 tables and no unapproved tables",
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M0 and PostgreSQL semantics &gt; keeps app schema grants restricted to the runtime role",
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M0 and PostgreSQL semantics &gt; commits and rolls back atomically with one PostgreSQL evaluation instant",
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M0 and PostgreSQL semantics &gt; enforces a shared rate limit under concurrent connections",
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M0 and PostgreSQL semantics &gt; replays equal idempotent requests and rejects key reuse",
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M0 and PostgreSQL semantics &gt; serializes concurrent idempotency acquisition to one effect",
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M0 and PostgreSQL semantics &gt; recovers durable outbox work after handler failure and prevents double claims",
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M0 and PostgreSQL semantics &gt; marks an outbox row permanently failed at attempt ten",
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M0 and PostgreSQL semantics &gt; receives commit-time LISTEN notifications on a dedicated client",
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:M0 and PostgreSQL semantics &gt; housekeeps only expired technical rows in bounded batches"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M0 and PostgreSQL semantics &gt; uses the limited runtime role and denies browser roles",
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M0 and PostgreSQL semantics &gt; exposes exactly the authorized T01-T05 tables and no unapproved tables",
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M0 and PostgreSQL semantics &gt; keeps app schema grants restricted to the runtime role",
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M0 and PostgreSQL semantics &gt; commits and rolls back atomically with one PostgreSQL evaluation instant",
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M0 and PostgreSQL semantics &gt; enforces a shared rate limit under concurrent connections",
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M0 and PostgreSQL semantics &gt; replays equal idempotent requests and rejects key reuse",
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M0 and PostgreSQL semantics &gt; serializes concurrent idempotency acquisition to one effect",
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M0 and PostgreSQL semantics &gt; recovers durable outbox work after handler failure and prevents double claims",
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M0 and PostgreSQL semantics &gt; marks an outbox row permanently failed at attempt ten",
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M0 and PostgreSQL semantics &gt; receives commit-time LISTEN notifications on a dedicated client",
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:M0 and PostgreSQL semantics &gt; housekeeps only expired technical rows in bounded batches"
           ]
         }
       ],
@@ -1292,7 +1325,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:truth-gaps.xml:TRUTH — invariantes estáticos &gt; ST-E11/F10: sin body en logs ni funcionalidades OUT"
+            "TRUTH-FINAL-0eb41b49:truth-gaps.xml:TRUTH — invariantes estáticos &gt; ST-E11/F10: sin body en logs ni funcionalidades OUT"
           ]
         }
       ],
@@ -1308,7 +1341,7 @@
           "status": "PASS",
           "reason": "ejecución verificada",
           "executions": [
-            "TRUTH-20261117-181500-fbcb6b76:backend-integration.xml:DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; CC-T05-C10: crea y actualiza DRAFT con version++ y Audiencia válida"
+            "TRUTH-FINAL-0eb41b49:backend-integration.xml:DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; CC-T05-C10: crea y actualiza DRAFT con version++ y Audiencia válida"
           ]
         }
       ],

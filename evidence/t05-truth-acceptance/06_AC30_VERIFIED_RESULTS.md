@@ -1,6 +1,6 @@
 # 06 — AC30 Verified Results
 
-runId: TRUTH-20261117-181500-fbcb6b76 · codeRevision: fbcb6b76c0dd590bc70e0dbecf31864f779fc745
+runId: TRUTH-FINAL-0eb41b49 · codeRevision: 0eb41b495091eee341804a8eddf012171d6b402a
 
 Cada gate se aprueba solo si TODOS sus criterios están PASS.
 

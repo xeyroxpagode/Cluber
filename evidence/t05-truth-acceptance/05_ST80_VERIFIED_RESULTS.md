@@ -1,6 +1,6 @@
 # 05 — ST80 Verified Results
 
-runId: TRUTH-20261117-181500-fbcb6b76 · codeRevision: fbcb6b76c0dd590bc70e0dbecf31864f779fc745
+runId: TRUTH-FINAL-0eb41b49 · codeRevision: 0eb41b495091eee341804a8eddf012171d6b402a
 
 Estados calculados por `tools/truth-verifier.mjs` desde ejecuciones reales. Sin PASS predeterminado.
 
@@ -63,7 +63,7 @@ Estados calculados por `tools/truth-verifier.mjs` desde ejecuciones reales. Sin 
 | ST-D13 | PASS | Eliminar dos veces sin cambio inconsistente | twice:PASS |
 | ST-D14 | PASS | Tombstone DTO sin body | dto:PASS |
 | ST-D15 | PASS | Sin MESSAGE_RECEIVED | notif:PASS |
-| ST-D16 | NOT RUN | UI Sending/Sent/Failed sin estados falsos | sin criterios |
+| ST-D16 | PASS | UI Sending/Sent/Failed sin estados falsos | sending:PASS, sent:PASS, failed:PASS, retry:PASS |
 | ST-E01 | PASS | ConversationList sólo autorizadas | list:PASS |
 | ST-E02 | PASS | Thread por ID ajeno → DENY | deny:PASS |
 | ST-E03 | PASS | Orden determinista con igual sentAt | order:PASS |
@@ -88,4 +88,4 @@ Estados calculados por `tools/truth-verifier.mjs` desde ejecuciones reales. Sin 
 | ST-F10 | PASS | Sin Guardian/Eligibility/CompetitionEntry | scan:PASS |
 | ST-A01-UPDATE | PASS | UPDATE DRAFT con versión (CC-T05-C10) | update:PASS |
 
-Totales derivados: PASS=80, FAIL=0, BLOCKED=0, NOT RUN=1, INVALID EVIDENCE=0 · suma=81 de 81 registros.
+Totales derivados: PASS=81, FAIL=0, BLOCKED=0, NOT RUN=0, INVALID EVIDENCE=0 · suma=81 de 81 registros.

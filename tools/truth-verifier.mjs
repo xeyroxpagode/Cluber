@@ -90,7 +90,8 @@ export function evaluateCriterion(criterion, ctx) {
     const refs = criterion.assertionRefs || (criterion.assertionRef ? [criterion.assertionRef] : [])
     if (refs.length) {
       let source = ""
-      try { source = readFile(e.file || criterion.file || "") } catch { /* sin fuente */ }
+      const srcPath = e.file && e.file.includes("/") ? e.file : (criterion.file || e.file || "")
+      try { source = readFile(srcPath) } catch { /* sin fuente */ }
       for (const ref of refs) {
         if (/expect\((true|1)\)\.toBe\((true|1)\)/.test(ref)) {
           return { status: "INVALID EVIDENCE", reason: "aserción trivial no acredita requisito", executions: [e.executionId] }

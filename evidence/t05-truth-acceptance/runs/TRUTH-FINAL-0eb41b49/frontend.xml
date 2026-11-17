@@ -1,0 +1,1046 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="102" failures="0" errors="0" time="5.2499167">
+    <testsuite name="src/__tests__/domain-truth.test.tsx" timestamp="2026-11-17T19:06:07.714Z" hostname="pcdegaby" tests="37" failures="0" errors="0" skipped="0" time="2.0474931">
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D1 — alcance de serie real &gt; la serie tiene 4 ocurrencias ordenadas por fecha" time="0.0041682">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D1 — alcance de serie real &gt; ONLY_THIS resuelve exactamente 1 ocurrencia" time="0.0009315">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D1 — alcance de serie real &gt; THIS_AND_FOLLOWING corta en la ocurrencia de origen" time="0.0123457">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D1 — alcance de serie real &gt; ENTIRE_SERIES devuelve las 4 ocurrencias, nunca 1" time="0.0007688">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D1 — alcance de serie real &gt; el impacto de toda la serie lista las 4 ocurrencias con fecha real" time="0.0013029">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D1 — alcance de serie real &gt; cambiar sólo el horario invalida la disponibilidad previa" time="0.0003727">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D1 — alcance de serie real &gt; cambiar sólo logística NO invalida disponibilidad" time="0.0002878">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D1 — alcance de serie real &gt; cambiar el título no es cambio material" time="0.0002649">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D1 — mutación efectiva según alcance &gt; toda la serie de 4 cambia 4 eventos (no 1)" time="0.4249821">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D1 — mutación efectiva según alcance &gt; este y los siguientes cambia 3 de 4 y deja intacto el anterior" time="0.3980148">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D1 — mutación efectiva según alcance &gt; un cambio material de horario sube coordinationRevision de cada ocurrencia" time="0.3999406">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D1 — mutación efectiva según alcance &gt; un cambio no material no sube coordinationRevision ni notifica" time="0.0065227">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D1 — mutación efectiva según alcance &gt; la reconfirmación deriva del coordinationRevision, no de un flag global" time="0.3980228">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D1 — mutación efectiva según alcance &gt; un cambio de logística no dispara reconfirmación" time="0.3883439">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§16 — verdad de persona derivada, no legada &gt; Person ya no expone role ni team" time="0.000234">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§16 — verdad de persona derivada, no legada &gt; roles vienen de RoleAssignment con alcance resuelto" time="0.0002837">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§16 — verdad de persona derivada, no legada &gt; pertenencia y equipo son cosas distintas" time="0.0003434">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§16 — verdad de persona derivada, no legada &gt; el nombre del equipo se deriva de división y línea" time="0.0001809">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D2 — Membership &gt; crear una persona no alcanza: la pertenencia se opera aparte" time="0.0003702">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="V1.1 — Competition simple, sin inscripciones ni lifecycle &gt; la competencia es crear, editar, archivar y consultar" time="0.0002212">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="V1.1 — Competition simple, sin inscripciones ni lifecycle &gt; Match y Jornada referencian directo por competitionId opcional" time="0.000139">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D5 / D6 — autoridad de campo y completitud de perfil &gt; sólo ADMIN ve documento" time="0.0002789">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="D5 / D6 — autoridad de campo y completitud de perfil &gt; un perfil incompleto dice exactamente qué falta" time="0.0002618">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="V1.1 — alcance propio, sin representación delegada &gt; cada jugadora ve los eventos de su propio equipo" time="0.0003391">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="V1.1 — alcance propio, sin representación delegada &gt; el alcance sale de asignaciones propias, no de un menor seleccionado" time="0.0001618">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="V1.1 — alcance propio, sin representación delegada &gt; cada jugadora responde sólo su propia disponibilidad" time="0.0001625">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§15 — una sola fuente de autoridad &gt; el entrenador administra su equipo y no otro" time="0.0002642">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§15 — una sola fuente de autoridad &gt; la jugadora no administra nada" time="0.0001895">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§15 — una sola fuente de autoridad &gt; Subcomisión publica comunicados pero no administra personas" time="0.0001951">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§15 — una sola fuente de autoridad &gt; administración no es superusuario deportivo" time="0.0001632">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§15 — una sola fuente de autoridad &gt; el gating de páginas coincide con la autoridad" time="0.0001879">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§44 — conflictos de convocatoria en lenguaje usuario (V1.1) &gt; sólo sobreviven NO_LONGER_EVENT_TARGET y NO_LONGER_TEAM_AFFILIATED" time="0.0005187">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§44 — conflictos de convocatoria en lenguaje usuario (V1.1) &gt; sin cambios de destino no hay conflictos" time="0.0002926">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§38 — objetivos de fecha y verdad derived &gt; el seed usa fechas relativas al día real" time="0.0002167">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§38 — objetivos de fecha y verdad derived &gt; no quedan marcas de fecha congelada del audit anterior" time="0.0005692">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§38 — objetivos de fecha y verdad derived &gt; el texto de destino se deriva del modelo" time="0.0002091">
+        </testcase>
+        <testcase classname="src/__tests__/domain-truth.test.tsx" name="§38 — objetivos de fecha y verdad derived &gt; el alcance de eventos por persona sale de teamAssignments" time="0.0003366">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/flows-stage6.test.tsx" timestamp="2026-11-17T19:06:07.726Z" hostname="pcdegaby" tests="20" failures="0" errors="0" skipped="0" time="0.5010654">
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="C08 — jornada real &gt; rechaza una jornada sin partidos y lo explica" time="0.0324891">
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="C08 — jornada real &gt; rechaza un entrenamiento dentro de una jornada" time="0.0060007">
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="C08 — jornada real &gt; rechaza un partido de otra temporada" time="0.0054205">
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="C08 — jornada real &gt; crea la jornada con los partidos elegidos y no toca el ciclo de los eventos" time="0.0100937">
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="C08 — jornada real &gt; la pantalla de alta explica la regla de temporada y competencia" time="0.2405299">
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="C06 — ficha administrativa V1.1, sin habilitación &gt; la Subcomisión no abre fichas de personas" time="0.0121373">
+            <system-err>
+An update to PersonAdminDetail inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to PersonAdminDetail inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="C06 — ficha administrativa V1.1, sin habilitación &gt; la ficha no tiene sección de habilitación ni de representación" time="0.0285365">
+            <system-err>
+An update to PersonAdminDetail inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to PersonAdminDetail inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="D6 — perfil incompleto recuperable desde administración &gt; administración ve qué falta y tiene la acción para corregirlo" time="0.0248643">
+            <system-err>
+An update to PersonAdminDetail inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to PersonAdminDetail inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="D6 — perfil incompleto recuperable desde administración &gt; la jugadora ve el motivo pero no los campos protegidos" time="0.0063126">
+            <system-err>
+An update to PersonAdminDetail inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to PersonAdminDetail inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="D7 — audiencia de comunicado real &gt; publicar captura el snapshot y corregir no lo cambia" time="0.007358">
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="D7 — audiencia de comunicado real &gt; corregir un comunicado publicado exige motivo" time="0.0050017">
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="D7 — audiencia de comunicado real &gt; publicar notifica sólo a los alcanzados por la audiencia" time="0.013216">
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="V1.1 — login por email, competencia simple, jornada opcional &gt; el login usa Person.email más contraseña, nunca username" time="0.0078835">
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="V1.1 — login por email, competencia simple, jornada opcional &gt; el username no autentica aunque exista" time="0.0044073">
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="V1.1 — login por email, competencia simple, jornada opcional &gt; sin contraseña no hay login" time="0.0028083">
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="V1.1 — login por email, competencia simple, jornada opcional &gt; la competencia se crea, se edita y se archiva; archivada es sólo lectura" time="0.005734">
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="V1.1 — login por email, competencia simple, jornada opcional &gt; la jornada admite competencia opcional" time="0.0064978">
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="V1.1 — competencias simples y equipo admin renderizan &gt; la lista muestra las competencias activas y el detalle su contexto" time="0.0224108">
+            <system-err>
+An update to CompetitionsPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to CompetitionsPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="V1.1 — competencias simples y equipo admin renderizan &gt; el detalle de competencia lista jornadas y partidos que la referencian" time="0.039831">
+            <system-err>
+An update to CompetitionsPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to CompetitionsPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/flows-stage6.test.tsx" name="V1.1 — competencias simples y equipo admin renderizan &gt; el equipo admin muestra identidad y personas sin inscripciones" time="0.0106663">
+            <system-err>
+An update to TeamAdmin inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to TeamAdmin inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/runtime-status.test.tsx" timestamp="2026-11-17T19:06:07.731Z" hostname="pcdegaby" tests="4" failures="0" errors="0" skipped="0" time="0.1149859">
+        <testcase classname="src/__tests__/runtime-status.test.tsx" name="RuntimeStatus &gt; distinguishes HTTP and response states" time="0.0592921">
+        </testcase>
+        <testcase classname="src/__tests__/runtime-status.test.tsx" name="RuntimeStatus &gt; distinguishes HTTP and response states" time="0.0204781">
+        </testcase>
+        <testcase classname="src/__tests__/runtime-status.test.tsx" name="RuntimeStatus &gt; distinguishes HTTP and response states" time="0.0151451">
+        </testcase>
+        <testcase classname="src/__tests__/runtime-status.test.tsx" name="RuntimeStatus &gt; reports a transport failure without fake success" time="0.01534">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/smoke.test.tsx" timestamp="2026-11-17T19:06:07.732Z" hostname="pcdegaby" tests="7" failures="0" errors="0" skipped="0" time="0.2793046">
+        <testcase classname="src/__tests__/smoke.test.tsx" name="smoke — el simulador arranca sin backend &gt; el provider monta y expone estado" time="0.0636675">
+        </testcase>
+        <testcase classname="src/__tests__/smoke.test.tsx" name="smoke — el simulador arranca sin backend &gt; Modal es diálogo accesible con nombre" time="0.1631256">
+        </testcase>
+        <testcase classname="src/__tests__/smoke.test.tsx" name="smoke — el simulador arranca sin backend &gt; ConfirmDialog explica la consecuencia antes de pedir confirmación" time="0.0349073">
+        </testcase>
+        <testcase classname="src/__tests__/smoke.test.tsx" name="smoke — el simulador arranca sin backend &gt; Banner expone el estado crítico también en texto" time="0.009212">
+        </testcase>
+        <testcase classname="src/__tests__/smoke.test.tsx" name="smoke — el simulador arranca sin backend &gt; el contexto de ruta usa vocabulario de usuario" time="0.002361">
+        </testcase>
+        <testcase classname="src/__tests__/smoke.test.tsx" name="smoke — el simulador arranca sin backend &gt; los estados desconocidos no hacen fallback silencioso" time="0.0014553">
+            <system-err>
+[GEI] estado de dominio desconocido en UI: SOMETHING_UNKNOWN
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/smoke.test.tsx" name="smoke — el simulador arranca sin backend &gt; el reloj usa la fecha real, no una fecha congelada" time="0.0003682">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/t05-components.test.tsx" timestamp="2026-11-17T19:06:07.734Z" hostname="pcdegaby" tests="6" failures="0" errors="0" skipped="0" time="1.2159842">
+        <testcase classname="src/__tests__/t05-components.test.tsx" name="T05 R21–R26 — superficies reales con API &gt; R21: muestra conversaciones con badge unread y CTA de nuevo mensaje" time="0.2564897">
+        </testcase>
+        <testcase classname="src/__tests__/t05-components.test.tsx" name="T05 R21–R26 — superficies reales con API &gt; R22: selector de tipo, resumen obligatorio y creación de DIRECT" time="0.1886541">
+            <system-err>
+No routes matched location &quot;/conversations/conv-new&quot; 
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/t05-components.test.tsx" name="T05 R21–R26 — superficies reales con API &gt; R23: audiencia first, título/cuerpo y acciones de borrador y publicación" time="0.0497277">
+            <system-err>
+An update to AnnouncementForm inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+An update to AnnouncementForm inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to AnnouncementForm inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/t05-components.test.tsx" name="T05 R21–R26 — superficies reales con API &gt; R25: corrección muestra audiencia inmutable, motivo y diff" time="0.3582294">
+        </testcase>
+        <testcase classname="src/__tests__/t05-components.test.tsx" name="T05 R21–R26 — superficies reales con API &gt; R24: detalle con audiencia visible y acción &apos;Entendido&apos;" time="0.0302293">
+        </testcase>
+        <testcase classname="src/__tests__/t05-components.test.tsx" name="T05 R21–R26 — superficies reales con API &gt; R26: thread real, composer sticky y envío con ack del servidor" time="0.3252651">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/ux-contracts.test.tsx" timestamp="2026-11-17T19:06:07.736Z" hostname="pcdegaby" tests="28" failures="0" errors="0" skipped="0" time="1.0910835">
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§4 — Home dirige la atención &gt; muestra como máximo 3 cosas que necesitan atención" time="0.2873187">
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§4 — Home dirige la atención &gt; cada ítem dice motivo, consecuencia y acción" time="0.1074935">
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§4 — Home dirige la atención &gt; el vacío positivo se lee como todo al día" time="0.0237642">
+            <system-err>
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§4 — Home dirige la atención &gt; no deja huecos de 200 px cuando hoy no hay eventos" time="0.0336012">
+            <system-err>
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§4 — Home dirige la atención &gt; no repite &apos;Temporada 2026&apos; como decoración" time="0.0100793">
+            <system-err>
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Home inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§18 / §21 — estados terminales de evento &gt; un evento cancelado se lee como cancelado, con referencia y sin ¿Vas?" time="0.0436755">
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§18 / §21 — estados terminales de evento &gt; un evento postergado explica que no hay horario vigente" time="0.0314895">
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§18 / §21 — estados terminales de evento &gt; un evento operativo muestra el raíl real de participación (T04)" time="0.0406598">
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§18 / §21 — estados terminales de evento &gt; el partido ya jugado se lee como jugado" time="0.0337969">
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§11 — una sola gramática de ¿Vas? &gt; la disponibilidad ofrece la grilla real de respuestas, sin datos simulados" time="0.0481138">
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§11 — una sola gramática de ¿Vas? &gt; el resumen de coordinación muestra revisión y versión reales" time="0.0215436">
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§11 — una sola gramática de ¿Vas? &gt; un evento postergado no habilita controles de respuesta" time="0.0297169">
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§27 — Perfil completo sin PII &gt; el perfil tiene las secciones del freeze" time="0.0415858">
+            <system-err>
+An update to ProfilePage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to ProfilePage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§27 — Perfil completo sin PII &gt; el perfil nunca muestra documento ni fecha de nacimiento" time="0.0155922">
+            <system-err>
+An update to ProfilePage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to ProfilePage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§27 — Perfil completo sin PII &gt; la seguridad muestra sesión actual y sesiones activas con texto" time="0.0280867">
+            <system-err>
+An update to ProfilePage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to ProfilePage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§27 — Perfil completo sin PII &gt; el perfil no tiene secciones de representación delegada" time="0.0127843">
+            <system-err>
+An update to ProfilePage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to ProfilePage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§27 — Perfil completo sin PII &gt; un perfil incompleto dice qué falta y no lo hace editable" time="0.0109333">
+            <system-err>
+An update to ProfilePage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to ProfilePage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§33 — comunicación con dos canales distintos (T05) &gt; muestra dos canales separados con CTA real por pestaña" time="0.0144965">
+            <system-err>
+An update to CommunicationHome inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to CommunicationHome inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to CommunicationHome inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to CommunicationHome inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+An update to CommunicationHome inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to CommunicationHome inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§33 — comunicación con dos canales distintos (T05) &gt; el aviso muestra el tipo, el cuerpo y el estado de lectura" time="0.0227689">
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§37 — copy con concordancia y sin jerga &gt; pluraliza bien para 1 y para muchos" time="0.0002887">
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§37 — copy con concordancia y sin jerga &gt; los estados tienen un único vocabulario" time="0.000394">
+            <system-err>
+[GEI] estado de dominio desconocido en UI: DESCONOCIDO
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§20 — calendario usable &gt; el título del mes es una fecha real, no una fecha inválida" time="0.0257772">
+            <system-err>
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§20 — calendario usable &gt; el control de vista muestra el estado seleccionado sin contradecir la grilla" time="0.0323043">
+            <system-err>
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§20 — calendario usable &gt; la agenda explica cómo se leen los estados sin mentir sobre el color" time="0.0206499">
+            <system-err>
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Calendar inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§20 — calendario usable &gt; los filtros viven en la URL" time="0.1301886">
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§8 / §41 — accesibilidad de los primitivos &gt; Modal es diálogo accesible y arranca en un control útil" time="0.0091653">
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§8 / §41 — accesibilidad de los primitivos &gt; las acciones destructivas se ven como tales y piden confirmación" time="0.0054728">
+        </testcase>
+        <testcase classname="src/__tests__/ux-contracts.test.tsx" name="§8 / §41 — accesibilidad de los primitivos &gt; los botones respetan el objetivo táctil mínimo" time="0.0051944">
+        </testcase>
+    </testsuite>
+</testsuites>

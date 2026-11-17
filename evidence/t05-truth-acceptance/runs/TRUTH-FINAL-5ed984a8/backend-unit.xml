@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="49" failures="0" errors="0" time="0.2850803">
+    <testsuite name="backend/src/bootstrap-setup.unit.test.ts" timestamp="2026-11-17T19:00:17.827Z" hostname="pcdegaby" tests="1" failures="0" errors="0" skipped="0" time="0.1150844">
+        <testcase classname="backend/src/bootstrap-setup.unit.test.ts" name="development setup &gt; creates strong local configuration once and preserves it on repeat" time="0.1138656">
+        </testcase>
+    </testsuite>
+    <testsuite name="backend/src/events/events.unit.test.ts" timestamp="2026-11-17T19:00:17.831Z" hostname="pcdegaby" tests="34" failures="0" errors="0" skipped="0" time="0.0804462">
+        <testcase classname="backend/src/events/events.unit.test.ts" name="materiality classification (DV-13 / INV-16) &gt; treats schedule fields as material-schedule" time="0.0020277">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="materiality classification (DV-13 / INV-16) &gt; treats coordination fields as material-coordination" time="0.0003518">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="materiality classification (DV-13 / INV-16) &gt; treats title as metadata, never material" time="0.0007141">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="materiality classification (DV-13 / INV-16) &gt; classifies mixed patches as schedule when any schedule field changes" time="0.0001741">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="materiality classification (DV-13 / INV-16) &gt; classifies empty patches as none" time="0.0001956">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="materiality classification (DV-13 / INV-16) &gt; ignores unknown keys" time="0.0001423">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="RRULE parsing and occurrence generation (S02.11) &gt; parses a weekly rule with BYDAY" time="0.0004864">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="RRULE parsing and occurrence generation (S02.11) &gt; rejects an invalid frequency" time="0.0003398">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="RRULE parsing and occurrence generation (S02.11) &gt; rejects mismatched COUNT and UNTIL" time="0.0002291">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="RRULE parsing and occurrence generation (S02.11) &gt; generates DAILY occurrences honoring COUNT" time="0.0156395">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="RRULE parsing and occurrence generation (S02.11) &gt; generates WEEKLY occurrences on the right weekdays" time="0.0019187">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="RRULE parsing and occurrence generation (S02.11) &gt; generates MONTHLY occurrences with ordinal BYDAY (first Saturday)" time="0.0011661">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="RRULE parsing and occurrence generation (S02.11) &gt; stops at UNTIL inclusive" time="0.0009682">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="RRULE parsing and occurrence generation (S02.11) &gt; survives spring-forward gaps deterministically (Europe/Madrid)" time="0.0008317">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="time zones &gt; accepts IANA zones and rejects junk" time="0.0004829">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="time zones &gt; round-trips wall clock in a DST zone" time="0.0005108">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="DST edge cases across time zones (S02.11) &gt; America/New_York spring-forward: 02:30 does not exist (March 2030)" time="0.0007429">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="DST edge cases across time zones (S02.11) &gt; America/New_York fall-back ambiguous: 01:30 occurs twice (November 2030)" time="0.0006143">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="DST edge cases across time zones (S02.11) &gt; Asia/Kolkata has no DST: round-trip preserves wall clock" time="0.000444">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="DST edge cases across time zones (S02.11) &gt; Recurrence crosses DST boundary (New York, March to November 2030)" time="0.0091158">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="DST edge cases across time zones (S02.11) &gt; Recurrence crosses month boundary (January to February 2030)" time="0.003664">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="DST edge cases across time zones (S02.11) &gt; Recurrence crosses year boundary (December 2029 to January 2030)" time="0.0036553">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="DST edge cases across time zones (S02.11) &gt; Leap year 2024: February 29 exists" time="0.0006567">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="DST edge cases across time zones (S02.11) &gt; Rejects COUNT greater than maxOccurrences in generateOccurrences" time="0.0290889">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="notification dedupe key (A-T03-05) &gt; uses originEventId|resourceType|resourceId|recipient|type for EVENT_*" time="0.0002283">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="notification dedupe key (A-T03-05) &gt; uses resourceId|recipient|type for other types" time="0.0000887">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="notification dedupe key (A-T03-05) &gt; distinguishes different fact types for the same recipient" time="0.0002355">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="create-event authority (AUTH-EVT-01) &gt; allows COACH to create for their own team" time="0.0006264">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="create-event authority (AUTH-EVT-01) &gt; denies COACH to create for another team" time="0.0002773">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="create-event authority (AUTH-EVT-01) &gt; denies COACH to create club-wide events" time="0.0001814">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="create-event authority (AUTH-EVT-01) &gt; denies CAPTAIN to create events" time="0.0001765">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="create-event authority (AUTH-EVT-01) &gt; allows SUBCOMMITTEE to create club events and TRAINING" time="0.000202">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="create-event authority (AUTH-EVT-01) &gt; denies ADMIN to create club events (authority is deliberate)" time="0.0001704">
+        </testcase>
+        <testcase classname="backend/src/events/events.unit.test.ts" name="create-event authority (AUTH-EVT-01) &gt; denies PLAYER to create events" time="0.0001783">
+        </testcase>
+    </testsuite>
+    <testsuite name="backend/src/foundation.unit.test.ts" timestamp="2026-11-17T19:00:17.838Z" hostname="pcdegaby" tests="5" failures="0" errors="0" skipped="0" time="0.0846761">
+        <testcase classname="backend/src/foundation.unit.test.ts" name="foundation primitives &gt; fails fast for missing or weak secrets" time="0.0029907">
+        </testcase>
+        <testcase classname="backend/src/foundation.unit.test.ts" name="foundation primitives &gt; creates stable canonical hashes and session-bound CSRF tokens" time="0.0017278">
+        </testcase>
+        <testcase classname="backend/src/foundation.unit.test.ts" name="foundation primitives &gt; rejects duplicate operation IDs and unsafe authenticated commands" time="0.0004435">
+        </testcase>
+        <testcase classname="backend/src/foundation.unit.test.ts" name="foundation primitives &gt; fails closed for missing or mismatched browser origin and CSRF" time="0.0008185">
+        </testcase>
+        <testcase classname="backend/src/foundation.unit.test.ts" name="foundation primitives &gt; hashes passwords with Argon2id and freezes secure cookie attributes" time="0.0769985">
+        </testcase>
+    </testsuite>
+    <testsuite name="backend/src/t04.unit.test.ts" timestamp="2026-11-17T19:00:17.839Z" hostname="pcdegaby" tests="9" failures="0" errors="0" skipped="0" time="0.0048736">
+        <testcase classname="backend/src/t04.unit.test.ts" name="T04 — derivación del estado de disponibilidad (A-D04-01) &gt; sin fila persistida el estado es NO_RESPONSE (nunca persistido)" time="0.0013915">
+        </testcase>
+        <testcase classname="backend/src/t04.unit.test.ts" name="T04 — derivación del estado de disponibilidad (A-D04-01) &gt; con la misma revisión de coordinación conserva el valor respondido" time="0.0001898">
+        </testcase>
+        <testcase classname="backend/src/t04.unit.test.ts" name="T04 — derivación del estado de disponibilidad (A-D04-01) &gt; con una revisión anterior deriva NEEDS_RECONFIRMATION" time="0.0001516">
+        </testcase>
+        <testcase classname="backend/src/t04.unit.test.ts" name="T04 — derivación del estado de disponibilidad (A-D04-01) &gt; una revisión superior nunca degrada a NO_RESPONSE" time="0.0001405">
+        </testcase>
+        <testcase classname="backend/src/t04.unit.test.ts" name="T04 — clave de dedupe de NOT-06 (H-05) &gt; la revisión publicada es obligatoria y forma parte de la clave" time="0.0003633">
+        </testcase>
+        <testcase classname="backend/src/t04.unit.test.ts" name="T04 — clave de dedupe de NOT-06 (H-05) &gt; la clave distingue dos publicaciones legítimas de la misma convocatoria" time="0.0006128">
+        </testcase>
+        <testcase classname="backend/src/t04.unit.test.ts" name="T04 — clave de dedupe de NOT-06 (H-05) &gt; dos personas distintas del mismo aviso no comparten clave" time="0.0001754">
+        </testcase>
+        <testcase classname="backend/src/t04.unit.test.ts" name="T04 — clave de dedupe de NOT-06 (H-05) &gt; los tipos EVENT conservan su clave con originEventId" time="0.0001304">
+        </testcase>
+        <testcase classname="backend/src/t04.unit.test.ts" name="T04 — registro de errores del contrato &gt; mapea los códigos de T04 al status HTTP del contrato" time="0.0003485">
+        </testcase>
+    </testsuite>
+</testsuites>
