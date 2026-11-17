@@ -1,0 +1,65 @@
+{
+  "generatedAt": "2026-11-17T17:55:43.771Z",
+  "results": [
+    {
+      "id": "NEG-01",
+      "expected": "PASS",
+      "actual": "PASS",
+      "ok": true
+    },
+    {
+      "id": "NEG-02",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "ok": true
+    },
+    {
+      "id": "NEG-03",
+      "expected": "NOT RUN",
+      "actual": "NOT RUN",
+      "ok": true
+    },
+    {
+      "id": "NEG-04",
+      "expected": "INVALID EVIDENCE",
+      "actual": "INVALID EVIDENCE",
+      "ok": true
+    },
+    {
+      "id": "NEG-05",
+      "expected": "INVALID EVIDENCE",
+      "actual": "INVALID EVIDENCE",
+      "ok": true
+    },
+    {
+      "id": "NEG-06",
+      "expected": "INVALID EVIDENCE",
+      "actual": "INVALID EVIDENCE",
+      "ok": true
+    },
+    {
+      "id": "NEG-07",
+      "expected": "INVALID EVIDENCE",
+      "actual": "INVALID EVIDENCE",
+      "ok": true
+    },
+    {
+      "id": "NEG-08",
+      "expected": "NOT RUN",
+      "actual": "NOT RUN",
+      "ok": true
+    },
+    {
+      "id": "NEG-09",
+      "expected": "INVALID EVIDENCE",
+      "actual": "INVALID EVIDENCE",
+      "ok": true
+    },
+    {
+      "id": "NEG-10",
+      "expected": "INVALID EVIDENCE",
+      "actual": "INVALID EVIDENCE",
+      "ok": true
+    }
+  ]
+}

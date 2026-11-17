@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="15" failures="0" errors="0" time="11.1068002">
+    <testsuite name="backend/src/communication/t05-stress.test.ts" timestamp="2026-11-17T17:41:00.724Z" hostname="pcdegaby" tests="15" failures="0" errors="0" skipped="0" time="11.1068002">
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-A — Announcements (estrés) &gt; ST-A02/A11: DRAFT sin title se rechaza; corrección sin cambios se rechaza" time="2.0982902">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-A — Announcements (estrés) &gt; ST-A07/A12: equipo inexistente y audiencia inmutable en corrección" time="2.2535028">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-A — Announcements (estrés) &gt; ST-A08/A09: publicación concurrente → 1 éxito, 1 conflicto; retry no duplica NOT-07" time="2.862028">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-A — Announcements (estrés) &gt; ST-A10: NOT-07 queda en outbox con dedupe key canónica" time="2.1399996">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-A — Announcements (estrés) &gt; ST-A13/A14: ARCHIVED conserva publishedAt y no se puede corregir" time="1.4398074">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-B06/B07: título vacío y participantes duplicados se rechazan" time="0.0046239">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-B11: apertura concurrente TEAM → 1 sola conversación" time="0.0263327">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-C03/C12: reingreso crea intervalo nuevo y historia queda acotada al período" time="0.0243533">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D03/D11: body vacío y delete sin reason se rechazan" time="0.0184079">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D07/D10: no autor no puede editar ni eliminar" time="0.0183091">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D15: enviar mensaje NO crea Notification (MESSAGE_RECEIVED prohibido)" time="0.0276527">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E02/E10: no participante DENY; audit de mensajes sin body" time="0.0376748">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E03/E04: orden estable y lastActivityAt DESC" time="0.0179452">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E12: payload realtime de mensaje no contiene body" time="0.0060043">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-stress.test.ts" name="ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-F01: M8 presente con 5 tablas y 3 índices únicos parciales" time="0.0077181">
+        </testcase>
+    </testsuite>
+</testsuites>

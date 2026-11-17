@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="14" failures="0" errors="0" time="0.2269882">
+    <testsuite name="backend/src/communication/m8.integration.test.ts" timestamp="2026-11-17T17:39:45.707Z" hostname="pcdegaby" tests="14" failures="0" errors="0" skipped="0" time="0.2269882">
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; crea las 5 tablas, constraints e índices contractuales" time="0.0234998">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Announcements &gt; crea DRAFT y conserva publishedAt al archivar (C18)" time="0.014062">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Announcements &gt; rechaza título/cuerpo vacíos" time="0.004399">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Announcements &gt; rechaza PUBLICADO sin published_at y DRAFT con published_at" time="0.0084753">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Announcements &gt; rechaza ARCHIVED sin archived_at" time="0.0073745">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Announcements &gt; audiencia única por announcement y FK válidos" time="0.0106891">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Conversations &gt; crea DIRECT canónica con direct_pair_key" time="0.0059957">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Conversations &gt; impide identidades contextuales nulas o incompatibles" time="0.0071521">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Conversations &gt; impide ARCHIVED en no-GROUP y duplicados TEAM/EVENT" time="0.0130299">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Conversations &gt; GROUP permite ARCHIVED y conserva historia" time="0.0086412">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Participants y temporalidad &gt; acepta salida y reingreso como intervalos distintos" time="0.0118904">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Participants y temporalidad &gt; rechaza solapamiento e intervalo inválido (exclusion constraint)" time="0.0047976">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Messages &gt; persiste SENT → EDITED → DELETED con tombstone" time="0.0144207">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Messages &gt; rechaza estados incoherentes, body vacío y FKs inválidos" time="0.0123504">
+        </testcase>
+    </testsuite>
+</testsuites>

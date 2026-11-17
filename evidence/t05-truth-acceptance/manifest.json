@@ -1,0 +1,20 @@
+{
+  "runId": "TRUTH-20261117-143641-e1e83c0c",
+  "generatedAt": "2026-11-17T17:58:25.929Z",
+  "head": "e1e83c0c961b082307bb4fb0fbee0ecda265fca8",
+  "artifacts": {
+    "evidence/t05-truth-acceptance/runs/TRUTH-20261117-143641-e1e83c0c/backend-api.xml": "07d47484980ccfa450cc091b061ecb5ea7982c262470290e3e159631a4327143",
+    "evidence/t05-truth-acceptance/runs/TRUTH-20261117-143641-e1e83c0c/backend-integration.xml": "1b9ceb283e461c83edb31165a83d30a6027e58b991ca92aeaf3a188b15d92ac8",
+    "evidence/t05-truth-acceptance/runs/TRUTH-20261117-143641-e1e83c0c/backend-stress.xml": "43bf190a0a574f961bb1312c25c3b1624e1598ce461c0cce35b36d6893839b22",
+    "evidence/t05-truth-acceptance/runs/TRUTH-20261117-143641-e1e83c0c/backend-unit.xml": "f658fb6c8e7c3421b0207cd945fa03f74a1c0ad63309d72fbb51a8b136e9668b",
+    "evidence/t05-truth-acceptance/runs/TRUTH-20261117-143641-e1e83c0c/e2e-browser.xml": "0716e51e2d91da1725f1553ca96f0b13064ee03d1ce5279d2bfc9c8ae5ad1c47",
+    "evidence/t05-truth-acceptance/runs/TRUTH-20261117-143641-e1e83c0c/e2e-recovery.xml": "abc2a19324b27fa861c3d833823a195a4ae54f1e4537d911284a72015d9c2a99",
+    "evidence/t05-truth-acceptance/runs/TRUTH-20261117-143641-e1e83c0c/frontend.xml": "6458f42cc359aa3f7fff47c4453f80ac239b8a44ac3723003223eb1da13aed42",
+    "evidence/t05-truth-acceptance/runs/TRUTH-20261117-143641-e1e83c0c/truth-gaps.xml": "7a79044202ebb2e333d03f3c771471223e18c2476c51c0526da2996a2329b4e9",
+    "evidence/t05-truth-acceptance/screenshots/RUN-hub-390.png": "7f0a9f4e89fdc30c7c67d4906927dedadf1091cc43034409f247da8dda61a4b9",
+    "evidence/t05-truth-acceptance/screenshots/RUN-hub-768.png": "9dacbe29f86d888abbe4d59daefbe7fe5c63de4f9495893b016a98e1b88bac7c",
+    "evidence/t05-truth-acceptance/screenshots/RUN-hub-comunicados-1440.png": "5063d36aa4c3fdf87166496c65b0bc2ee357500eaaa59ab0540cd99a75d3a76c",
+    "evidence/t05-truth-acceptance/logs/run-metadata.txt": "3ea62fd611dd68d21e385a2442f2fb98614c131c071e30dec3db3b197dbf37a9",
+    "evidence/t05-truth-acceptance/verifier-fixtures/negative-tests.json": "6a9947498db083b72a3f459820af6560811099354b96e4135e5d2d974363d31b"
+  }
+}

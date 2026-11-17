@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="13" failures="0" errors="0" time="0.4949318">
+    <testsuite name="backend/src/communication/t05-truth-gaps.test.ts" timestamp="2026-11-17T18:02:31.260Z" hostname="pcdegaby" tests="13" failures="0" errors="0" skipped="0" time="0.4949318">
+        <testcase classname="backend/src/communication/t05-truth-gaps.test.ts" name="TRUTH — huecos de evidencia &gt; ST-A10: falla NotificationWriter → sin publicación incoherente" time="0.0471505">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-truth-gaps.test.ts" name="TRUTH — huecos de evidencia &gt; ST-A16: publicación congela audiencia aunque cambie TeamAssignment" time="0.0779214">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-truth-gaps.test.ts" name="TRUTH — huecos de evidencia &gt; ST-B03: aperturas DIRECT concurrentes no duplican" time="0.0253914">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-truth-gaps.test.ts" name="TRUTH — huecos de evidencia &gt; ST-C08: cambio de Event targets sincroniza participación" time="0.0386357">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-truth-gaps.test.ts" name="TRUTH — huecos de evidencia &gt; ST-C10: ex-participante no puede enviar" time="0.0252101">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-truth-gaps.test.ts" name="TRUTH — huecos de evidencia &gt; ST-E06: mensaje DELETED no computa en unreadCount" time="0.0540624">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-truth-gaps.test.ts" name="TRUTH — cobertura temporal y canónica adicional &gt; ST-B08: GROUP entre divisiones permitido si ambos autorizados" time="0.0131648">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-truth-gaps.test.ts" name="TRUTH — cobertura temporal y canónica adicional &gt; ST-C04/C05: RC-07 excluye mensajes fuera del período del participante" time="0.0251282">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-truth-gaps.test.ts" name="TRUTH — cobertura temporal y canónica adicional &gt; ST-C07: cambio de TeamAssignment cierra el intervalo del participante" time="0.0402858">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-truth-gaps.test.ts" name="TRUTH — cobertura temporal y canónica adicional &gt; ST-C11: dos syncs simultáneos conservan períodos sin solapamiento" time="0.0242584">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-truth-gaps.test.ts" name="TRUTH — cobertura temporal y canónica adicional &gt; ST-F02: los datos persisten al abrir una nueva conexión (simula reinicio)" time="0.0272885">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-truth-gaps.test.ts" name="TRUTH — invariantes estáticos &gt; ST-E11/F10: sin body en logs ni funcionalidades OUT" time="0.0067131">
+        </testcase>
+        <testcase classname="backend/src/communication/t05-truth-gaps.test.ts" name="TRUTH — invariantes estáticos &gt; AC-22: enum de notificaciones canónico" time="0.0011153">
+        </testcase>
+    </testsuite>
+</testsuites>

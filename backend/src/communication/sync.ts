@@ -84,6 +84,7 @@ export async function assertConversationAccess(
   personId: string,
   instant: Date,
   authority: { snapshot: (tx: Tx, personId: string, instant: Date) => Promise<import("../authority/authority.js").AuthoritySnapshot>; require: (condition: boolean, code?: string) => void },
+  options: { allowHistory?: boolean } = {},
 ): Promise<{ conversation: import("../db/types.js").ConversationTable; participantId: string; lastReadAt: Date | null; joinedAt: Date; leftAt: Date | null }> {
   const conversation = await tx.selectFrom("app.conversations").selectAll()
     .where("id", "=", conversationId).executeTakeFirst()
@@ -112,11 +113,14 @@ export async function assertConversationAccess(
     authority.require(snapshot.eventScopeIds.includes(conversation.event_id ?? "") || isTarget, "NO_EVENT_CONVERSATION_AUTHORITY")
   }
 
-  const participant = await tx.selectFrom("app.conversation_participants")
+  let participantQuery = tx.selectFrom("app.conversation_participants")
     .selectAll().where("conversation_id", "=", conversationId).where("person_id", "=", personId)
     .where("joined_at", "<=", instant)
-    .where((eb) => eb.or([eb("left_at", "is", null), eb("left_at", ">", instant)]))
-    .orderBy("joined_at", "desc").executeTakeFirst()
+  // C15: la lectura histórica permite el período [joinedAt,leftAt); las escrituras exigen participación activa.
+  if (!options.allowHistory) {
+    participantQuery = participantQuery.where((eb) => eb.or([eb("left_at", "is", null), eb("left_at", ">", instant)]))
+  }
+  const participant = await participantQuery.orderBy("joined_at", "desc").executeTakeFirst()
   if (!participant) throw new AppError("NOT_PARTICIPANT", "No sos participante de esta conversación", "authorization")
 
   return {

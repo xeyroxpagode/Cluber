@@ -1,0 +1,1265 @@
+{
+  "runId": "TRUTH-20261117-143641-e1e83c0c",
+  "head": "e1e83c0c961b082307bb4fb0fbee0ecda265fca8",
+  "results": {
+    "ST-A01": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "draft",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; CC-T05-C10: crea y actualiza DRAFT con version++ y Audiencia válida"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A01",
+      "expected": "DRAFT real, Audit YES"
+    },
+    "ST-A02": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "valid",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A02/A11: DRAFT sin title se rechaza; corrección sin cambios se rechaza"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A02",
+      "expected": "DRAFT incompleto rechazado, sin escritura parcial"
+    },
+    "ST-A03": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "deny",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; rechaza audiencia inválida y actores sin autoridad (PLAYER/ADMIN)"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A03",
+      "expected": "Publicar sin SUBCOMMITTEE denegado"
+    },
+    "ST-A04": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "club",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A04",
+      "expected": "Club-wide explícito"
+    },
+    "ST-A05": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "team",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; publica con NOT-07 deduplicada, corrige con revision++ y archiva preservando metadatos"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A05",
+      "expected": "Audiencia por Team válida"
+    },
+    "ST-A06": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "teamset",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M8 — physical schema (I1) &gt; Announcements &gt; audiencia única por announcement y FK válidos"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A06",
+      "expected": "TeamSet sin strings libres"
+    },
+    "ST-A07": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "invalid",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A07/A12: equipo inexistente y audiencia inmutable en corrección"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A07",
+      "expected": "Audiencia inexistente rechazada"
+    },
+    "ST-A08": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "race",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A08/A09: publicación concurrente → 1 éxito, 1 conflicto; retry no duplica NOT-07"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A08",
+      "expected": "Publicación concurrente: un único hecho"
+    },
+    "ST-A09": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "retry",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-01/02: draft → update → publish con idempotencia y NOT-07"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A09",
+      "expected": "Retry publish sin NOT-07 duplicada"
+    },
+    "ST-A10": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "fault",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-A10: falla NotificationWriter → sin publicación incoherente"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A10",
+      "expected": "Falla NotificationWriter sin publicación incoherente"
+    },
+    "ST-A11": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "correct",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-03/04: corrección revision++ y archivado histórico"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A11",
+      "expected": "Corrección revision++ y Audit sin NOT"
+    },
+    "ST-A12": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "immutable",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A07/A12: equipo inexistente y audiencia inmutable en corrección"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A12",
+      "expected": "Corrección de audiencia publicada rechazada"
+    },
+    "ST-A13": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "archive",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A13/A14: ARCHIVED conserva publishedAt y no se puede corregir"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A13",
+      "expected": "ARCHIVED conserva publishedAt y audiencia"
+    },
+    "ST-A14": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "archive-deny",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A13/A14: ARCHIVED conserva publishedAt y no se puede corregir"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A14",
+      "expected": "Edición de ARCHIVED rechazada"
+    },
+    "ST-A15": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "idor",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; RC-19: audiencia como access control"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A15",
+      "expected": "URL directa fuera de audiencia → DENY"
+    },
+    "ST-A16": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "snapshot",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-A16: publicación congela audiencia aunque cambie TeamAssignment"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A16",
+      "expected": "Snapshot no cambia; lectura reconcilia"
+    },
+    "ST-B01": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "direct",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-05 DIRECT canónica por pareja no ordenada"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B01",
+      "expected": "DIRECT A-B canónica"
+    },
+    "ST-B02": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "direct2",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-05/06/07: DIRECT canónica, GROUP y TEAM por COACH"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B02",
+      "expected": "DIRECT B-A misma ID"
+    },
+    "ST-B03": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "race",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-B03: aperturas DIRECT concurrentes no duplican"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B03",
+      "expected": "Dos DIRECT concurrentes sin duplicado"
+    },
+    "ST-B04": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "self",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-05 DIRECT canónica por pareja no ordenada"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B04",
+      "expected": "DIRECT consigo mismo rechazado"
+    },
+    "ST-B05": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "group",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-06 GROUP ≥2 con creador auto-incluido y CMD-COM-08 archiva"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B05",
+      "expected": "GROUP mínimo con creador incluido"
+    },
+    "ST-B06": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "title",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-B06/B07: título vacío y participantes duplicados se rechazan"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B06",
+      "expected": "GROUP título vacío rechazado"
+    },
+    "ST-B07": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "dup",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-B06/B07: título vacío y participantes duplicados se rechazan"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B07",
+      "expected": "Participantes repetidos rechazados"
+    },
+    "ST-B08": {
+      "status": "NOT RUN",
+      "reason": "sin criterios",
+      "criteria": [],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B08",
+      "expected": "GROUP cross-división si autorizado"
+    },
+    "ST-B09": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "team",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-05/06/07: DIRECT canónica, GROUP y TEAM por COACH"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B09",
+      "expected": "TEAM canónica por Team"
+    },
+    "ST-B10": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "event",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J03 — TEAM y EVENT › TEAM y EVENT canónicos desde UI; sin participación y ADMIN denegados"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B10",
+      "expected": "EVENT canónica por Event"
+    },
+    "ST-B11": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "race",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-B11: apertura concurrente TEAM → 1 sola conversación"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B11",
+      "expected": "Aperturas TEAM concurrentes sin duplicados"
+    },
+    "ST-B12": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "nouniversal",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-07 TEAM canónica + sync atómico; SUBCOMMITTEE/ADMIN sin acceso universal"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B12",
+      "expected": "Crear contexto no da acceso a hilos"
+    },
+    "ST-B13": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "archive",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-06 GROUP ≥2 con creador auto-incluido y CMD-COM-08 archiva"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B13",
+      "expected": "Archivar GROUP preserva historia"
+    },
+    "ST-B14": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "nogroup",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-06 GROUP ≥2 con creador auto-incluido y CMD-COM-08 archiva"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B14",
+      "expected": "Archivar no-GROUP rechazado"
+    },
+    "ST-C01": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "join",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-07 TEAM canónica + sync atómico; SUBCOMMITTEE/ADMIN sin acceso universal"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C01",
+      "expected": "Alta de participante con intervalo válido"
+    },
+    "ST-C02": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "leave",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; revocación temporal: Alice pierde acceso en el siguiente request"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C02",
+      "expected": "Baja con leftAt válido"
+    },
+    "ST-C03": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "rejoin",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M8 — physical schema (I1) &gt; Participants y temporalidad &gt; acepta salida y reingreso como intervalos distintos"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C03",
+      "expected": "Reingreso: nuevo período no solapado"
+    },
+    "ST-C04": {
+      "status": "NOT RUN",
+      "reason": "sin criterios",
+      "criteria": [],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C04",
+      "expected": "Historia anterior a joinedAt no legible"
+    },
+    "ST-C05": {
+      "status": "NOT RUN",
+      "reason": "sin criterios",
+      "criteria": [],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C05",
+      "expected": "Historia de período no autorizado no legible"
+    },
+    "ST-C06": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "revoke",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; revocación temporal: Alice pierde acceso en el siguiente request"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C06",
+      "expected": "RoleAssignment revocado → DENY"
+    },
+    "ST-C07": {
+      "status": "NOT RUN",
+      "reason": "sin criterios",
+      "criteria": [],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C07",
+      "expected": "Transferencia de Team actualiza acceso"
+    },
+    "ST-C08": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "event",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-C08: cambio de Event targets sincroniza participación"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C08",
+      "expected": "Cambio Event targets sincroniza participantes"
+    },
+    "ST-C09": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "recheck",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; revocación temporal: Alice pierde acceso en el siguiente request"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C09",
+      "expected": "Proyección obsoleta no concede acceso"
+    },
+    "ST-C10": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "ex",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-C10: ex-participante no puede enviar"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C10",
+      "expected": "Ex-participante no puede enviar"
+    },
+    "ST-C11": {
+      "status": "NOT RUN",
+      "reason": "sin criterios",
+      "criteria": [],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C11",
+      "expected": "Dos sync simultáneos: integridad de períodos"
+    },
+    "ST-C12": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "history",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-B/C — Conversaciones y temporalidad (estrés) &gt; ST-C03/C12: reingreso crea intervalo nuevo y historia queda acotada al período"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C12",
+      "expected": "Historia de ex-participante según período"
+    },
+    "ST-D01": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "send",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-09 no crea Audit ni Notification; CMD-COM-10/11 Audit con body redactado"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D01",
+      "expected": "Envío autorizado → SENT"
+    },
+    "ST-D02": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "deny",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D02",
+      "expected": "No participante → DENY"
+    },
+    "ST-D03": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "body",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D03/D11: body vacío y delete sin reason se rechazan"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D03",
+      "expected": "Body vacío rechazado"
+    },
+    "ST-D04": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "retry",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D04",
+      "expected": "Retry idempotente sin duplicación"
+    },
+    "ST-D05": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "lost",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D05",
+      "expected": "Respuesta perdida tras commit sin duplicar"
+    },
+    "ST-D06": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "edit",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D06",
+      "expected": "Autor edita SENT → EDITED"
+    },
+    "ST-D07": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "notauthor",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D07/D10: no autor no puede editar ni eliminar"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D07",
+      "expected": "No autor editar → DENY"
+    },
+    "ST-D08": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "del",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-09 no crea Audit ni Notification; CMD-COM-10/11 Audit con body redactado"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D08",
+      "expected": "Autor elimina SENT → tombstone"
+    },
+    "ST-D09": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "del2",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M8 — physical schema (I1) &gt; Messages &gt; persiste SENT → EDITED → DELETED con tombstone"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D09",
+      "expected": "Autor elimina EDITED → tombstone"
+    },
+    "ST-D10": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "notauthor",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D07/D10: no autor no puede editar ni eliminar"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D10",
+      "expected": "No autor eliminar → DENY"
+    },
+    "ST-D11": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "reason",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D03/D11: body vacío y delete sin reason se rechazan"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D11",
+      "expected": "Eliminar sin motivo rechazado"
+    },
+    "ST-D12": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "deleted",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-09 no crea Audit ni Notification; CMD-COM-10/11 Audit con body redactado"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D12",
+      "expected": "Editar DELETED rechazado"
+    },
+    "ST-D13": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "twice",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-09 no crea Audit ni Notification; CMD-COM-10/11 Audit con body redactado"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D13",
+      "expected": "Eliminar dos veces sin cambio inconsistente"
+    },
+    "ST-D14": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "dto",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D14",
+      "expected": "Tombstone DTO sin body"
+    },
+    "ST-D15": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "notif",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D15: enviar mensaje NO crea Notification (MESSAGE_RECEIVED prohibido)"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D15",
+      "expected": "Sin MESSAGE_RECEIVED"
+    },
+    "ST-D16": {
+      "status": "NOT RUN",
+      "reason": "sin criterios",
+      "criteria": [],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D16",
+      "expected": "UI Sending/Sent/Failed sin estados falsos"
+    },
+    "ST-E01": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "list",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CC-T05-C19: unreadCount excluye propios y el cursor solo avanza con lectura"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E01",
+      "expected": "ConversationList sólo autorizadas"
+    },
+    "ST-E02": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "deny",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E02/E10: no participante DENY; audit de mensajes sin body"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E02",
+      "expected": "Thread por ID ajeno → DENY"
+    },
+    "ST-E03": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "order",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E03/E04: orden estable y lastActivityAt DESC"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E03",
+      "expected": "Orden determinista con igual sentAt"
+    },
+    "ST-E04": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "order",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E03/E04: orden estable y lastActivityAt DESC"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E04",
+      "expected": "lastActivityAt DESC"
+    },
+    "ST-E05": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "unread",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CC-T05-C19: unreadCount excluye propios y el cursor solo avanza con lectura"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E05",
+      "expected": "unreadCount vs lastReadAt"
+    },
+    "ST-E06": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "deleted",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:truth-gaps.xml:TRUTH — huecos de evidencia &gt; ST-E06: mensaje DELETED no computa en unreadCount"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E06",
+      "expected": "DELETED excluido de unreadCount"
+    },
+    "ST-E07": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "c19",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CC-T05-C19: unreadCount excluye propios y el cursor solo avanza con lectura"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E07",
+      "expected": "C19: propios excluidos, intercalados"
+    },
+    "ST-E08": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "read",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E08",
+      "expected": "Notification.readAt por destinatario"
+    },
+    "ST-E09": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "not07",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E09",
+      "expected": "NOT-07 en NotificationList"
+    },
+    "ST-E10": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "audit",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E02/E10: no participante DENY; audit de mensajes sin body"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E10",
+      "expected": "Message.body redactado en Audit.diff"
+    },
+    "ST-E11": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "scan",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:truth-gaps.xml:TRUTH — invariantes estáticos &gt; ST-E11/F10: sin body en logs ni funcionalidades OUT"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E11",
+      "expected": "Message.body no filtrado en logs"
+    },
+    "ST-E12": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "realtime",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E12: payload realtime de mensaje no contiene body"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E12",
+      "expected": "Realtime sin body"
+    },
+    "ST-F01": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "m8",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M8 — physical schema (I1) &gt; crea las 5 tablas, constraints e índices contractuales"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F01",
+      "expected": "M8 limpia con constraints"
+    },
+    "ST-F02": {
+      "status": "NOT RUN",
+      "reason": "sin criterios",
+      "criteria": [],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F02",
+      "expected": "Reinicio: datos persisten"
+    },
+    "ST-F03": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "multi",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J02 — DIRECT y GROUP › DIRECT canónico A→B y B→A; GROUP mínimo y archivado"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F03",
+      "expected": "Dos sesiones browser reales"
+    },
+    "ST-F04": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "group3",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J02 — DIRECT y GROUP › DIRECT canónico A→B y B→A; GROUP mínimo y archivado"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F04",
+      "expected": "GROUP ≥3 en UI"
+    },
+    "ST-F05": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "vp",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles"
+          ]
+        },
+        {
+          "id": "vp2",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles"
+          ]
+        },
+        {
+          "id": "vp3",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F05",
+      "expected": "R21–R26 en 390/768/1440"
+    },
+    "ST-F06": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "composer",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:frontend.xml:T05 R21–R26 — superficies reales con API &gt; R26: thread real, composer sticky y envío con ack del servidor"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F06",
+      "expected": "Composer móvil usable"
+    },
+    "ST-F07": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "recovery",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-recovery.xml:J05b — Recuperación: realtime caído y fallo API (ST-F07/F08, AC-26) › refetch autorizado y reintento seguro sin falso éxito"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F07",
+      "expected": "Caída realtime → refetch"
+    },
+    "ST-F08": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "recovery",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-recovery.xml:J05b — Recuperación: realtime caído y fallo API (ST-F07/F08, AC-26) › refetch autorizado y reintento seguro sin falso éxito"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F08",
+      "expected": "Falla API sin éxito falso"
+    },
+    "ST-F09": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "baseline",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; uses the limited runtime role and denies browser roles",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; exposes exactly the authorized T01-T05 tables and no unapproved tables",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; keeps app schema grants restricted to the runtime role",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; commits and rolls back atomically with one PostgreSQL evaluation instant",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; enforces a shared rate limit under concurrent connections",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; replays equal idempotent requests and rejects key reuse",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; serializes concurrent idempotency acquisition to one effect",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; recovers durable outbox work after handler failure and prevents double claims",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; marks an outbox row permanently failed at attempt ten",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; receives commit-time LISTEN notifications on a dedicated client",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; housekeeps only expired technical rows in bounded batches"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F09",
+      "expected": "Regresión T01–T04 sin fallos"
+    },
+    "ST-F10": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "scan",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:truth-gaps.xml:TRUTH — invariantes estáticos &gt; ST-E11/F10: sin body en logs ni funcionalidades OUT"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F10",
+      "expected": "Sin Guardian/Eligibility/CompetitionEntry"
+    },
+    "ST-A01-UPDATE": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "update",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; CC-T05-C10: crea y actualiza DRAFT con version++ y Audiencia válida"
+          ]
+        }
+      ],
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A01-UPDATE",
+      "expected": "UPDATE DRAFT con versión (CC-T05-C10)"
+    }
+  }
+}

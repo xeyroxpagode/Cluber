@@ -101,7 +101,7 @@ export class CommunicationQueries {
     tx: Tx, personId: string, conversationId: string, instant: Date,
     options: { limit?: number; cursor?: string } = {},
   ): Promise<Page<MessageDto>> {
-    const access = await assertConversationAccess(tx, conversationId, personId, instant, this.authority)
+    const access = await assertConversationAccess(tx, conversationId, personId, instant, this.authority, { allowHistory: true })
     const limit = Math.min(Math.max(options.limit ?? 40, 1), 100)
     const cursor = decodeCursor(options.cursor)
     let query = tx.selectFrom("app.messages").selectAll()

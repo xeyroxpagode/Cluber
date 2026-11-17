@@ -1,0 +1,1543 @@
+{
+  "stress": {
+    "ST-A01": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A01",
+      "expected": "DRAFT real, Audit YES",
+      "criteria": [
+        {
+          "id": "draft",
+          "testIdPatterns": [
+            "CC-T05-C10: crea y actualiza DRAFT"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(created.state).toBe(\"DRAFT\")"
+        }
+      ]
+    },
+    "ST-A02": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A02",
+      "expected": "DRAFT incompleto rechazado, sin escritura parcial",
+      "criteria": [
+        {
+          "id": "valid",
+          "testIdPatterns": [
+            "ST-A02/A11"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "await expect(announcements.draft(tx, fx.subcommitteeId, new Date(), { title: \"\", body: \"x\", clubWide: true, teamIds: [] }))"
+        }
+      ]
+    },
+    "ST-A03": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A03",
+      "expected": "Publicar sin SUBCOMMITTEE denegado",
+      "criteria": [
+        {
+          "id": "deny",
+          "testIdPatterns": [
+            "rechaza audiencia inválida y actores sin autoridad"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(pending.state).toBe(\"DRAFT\")"
+        }
+      ]
+    },
+    "ST-A04": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A04",
+      "expected": "Club-wide explícito",
+      "criteria": [
+        {
+          "id": "club",
+          "testIdPatterns": [
+            "J01"
+          ],
+          "file": "tests/e2e/t05-qa-j01.spec.ts",
+          "browser": "chromium"
+        }
+      ]
+    },
+    "ST-A05": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A05",
+      "expected": "Audiencia por Team válida",
+      "criteria": [
+        {
+          "id": "team",
+          "testIdPatterns": [
+            "publica con NOT-07 deduplicada"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(published.state).toBe(\"PUBLISHED\")"
+        }
+      ]
+    },
+    "ST-A06": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A06",
+      "expected": "TeamSet sin strings libres",
+      "criteria": [
+        {
+          "id": "teamset",
+          "testIdPatterns": [
+            "audiencia única por announcement"
+          ],
+          "file": "backend/src/communication/m8.integration.test.ts",
+          "assertionRef": "expect(c.version).toBe(1)"
+        }
+      ]
+    },
+    "ST-A07": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A07",
+      "expected": "Audiencia inexistente rechazada",
+      "criteria": [
+        {
+          "id": "invalid",
+          "testIdPatterns": [
+            "ST-A07/A12"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(announcements.draft(tx, fx.subcommitteeId, new Date(), { title: \"A\", body: \"B\", clubWide: false, teamIds: [randomUUID()] }))"
+        }
+      ]
+    },
+    "ST-A08": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A08",
+      "expected": "Publicación concurrente: un único hecho",
+      "criteria": [
+        {
+          "id": "race",
+          "testIdPatterns": [
+            "ST-A08/A09"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(results.filter((r) => r.status === \"fulfilled\")).toHaveLength(1)"
+        }
+      ]
+    },
+    "ST-A09": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A09",
+      "expected": "Retry publish sin NOT-07 duplicada",
+      "criteria": [
+        {
+          "id": "retry",
+          "testIdPatterns": [
+            "CMD-COM-01/02"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(created.statusCode).toBe(201)"
+        }
+      ]
+    },
+    "ST-A10": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A10",
+      "expected": "Falla NotificationWriter sin publicación incoherente",
+      "criteria": [
+        {
+          "id": "fault",
+          "testIdPatterns": [
+            "ST-A10"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "await expect(run(({ tx }) => failing.publish(tx, fx.subcommitteeId, new Date(), id, true))).rejects.toThrow()"
+        }
+      ]
+    },
+    "ST-A11": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A11",
+      "expected": "Corrección revision++ y Audit sin NOT",
+      "criteria": [
+        {
+          "id": "correct",
+          "testIdPatterns": [
+            "CMD-COM-03/04"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(corrected.statusCode).toBe(200)"
+        }
+      ]
+    },
+    "ST-A12": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A12",
+      "expected": "Corrección de audiencia publicada rechazada",
+      "criteria": [
+        {
+          "id": "immutable",
+          "testIdPatterns": [
+            "ST-A07/A12"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(announcements.draft(tx, fx.subcommitteeId, new Date(), { title: \"A\", body: \"B\", clubWide: false, teamIds: [randomUUID()] }))"
+        }
+      ]
+    },
+    "ST-A13": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A13",
+      "expected": "ARCHIVED conserva publishedAt y audiencia",
+      "criteria": [
+        {
+          "id": "archive",
+          "testIdPatterns": [
+            "ST-A13/A14"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(published.state).toBe(\"ARCHIVED\")"
+        }
+      ]
+    },
+    "ST-A14": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A14",
+      "expected": "Edición de ARCHIVED rechazada",
+      "criteria": [
+        {
+          "id": "archive-deny",
+          "testIdPatterns": [
+            "ST-A13/A14"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(published.state).toBe(\"ARCHIVED\")"
+        }
+      ]
+    },
+    "ST-A15": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A15",
+      "expected": "URL directa fuera de audiencia → DENY",
+      "criteria": [
+        {
+          "id": "idor",
+          "testIdPatterns": [
+            "RC-19: audiencia"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(list.statusCode).toBe(200)"
+        }
+      ]
+    },
+    "ST-A16": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A16",
+      "expected": "Snapshot no cambia; lectura reconcilia",
+      "criteria": [
+        {
+          "id": "snapshot",
+          "testIdPatterns": [
+            "ST-A16"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(after).toEqual(before)"
+        }
+      ]
+    },
+    "ST-B01": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B01",
+      "expected": "DIRECT A-B canónica",
+      "criteria": [
+        {
+          "id": "direct",
+          "testIdPatterns": [
+            "CMD-COM-05 DIRECT"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(same).toBe(directId)"
+        }
+      ]
+    },
+    "ST-B02": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B02",
+      "expected": "DIRECT B-A misma ID",
+      "criteria": [
+        {
+          "id": "direct2",
+          "testIdPatterns": [
+            "CMD-COM-05/06/07"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(direct.statusCode).toBe(201)"
+        }
+      ]
+    },
+    "ST-B03": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B03",
+      "expected": "Dos DIRECT concurrentes sin duplicado",
+      "criteria": [
+        {
+          "id": "race",
+          "testIdPatterns": [
+            "ST-B03"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(new Set(ids).size).toBe(1)"
+        }
+      ]
+    },
+    "ST-B04": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B04",
+      "expected": "DIRECT consigo mismo rechazado",
+      "criteria": [
+        {
+          "id": "self",
+          "testIdPatterns": [
+            "CMD-COM-05 DIRECT"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(same).toBe(directId)"
+        }
+      ]
+    },
+    "ST-B05": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B05",
+      "expected": "GROUP mínimo con creador incluido",
+      "criteria": [
+        {
+          "id": "group",
+          "testIdPatterns": [
+            "CMD-COM-06 GROUP"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(count.length).toBe(2)"
+        }
+      ]
+    },
+    "ST-B06": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B06",
+      "expected": "GROUP título vacío rechazado",
+      "criteria": [
+        {
+          "id": "title",
+          "testIdPatterns": [
+            "ST-B06/B07"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "await expect(conversations.createGroup(tx, fx.playerId, { title: \"\", participantPersonIds: [fx.player2Id] }, new Date()))"
+        }
+      ]
+    },
+    "ST-B07": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B07",
+      "expected": "Participantes repetidos rechazados",
+      "criteria": [
+        {
+          "id": "dup",
+          "testIdPatterns": [
+            "ST-B06/B07"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "await expect(conversations.createGroup(tx, fx.playerId, { title: \"\", participantPersonIds: [fx.player2Id] }, new Date()))"
+        }
+      ]
+    },
+    "ST-B08": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B08",
+      "expected": "GROUP cross-división si autorizado",
+      "criteria": []
+    },
+    "ST-B09": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B09",
+      "expected": "TEAM canónica por Team",
+      "criteria": [
+        {
+          "id": "team",
+          "testIdPatterns": [
+            "CMD-COM-05/06/07"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(direct.statusCode).toBe(201)"
+        }
+      ]
+    },
+    "ST-B10": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B10",
+      "expected": "EVENT canónica por Event",
+      "criteria": [
+        {
+          "id": "event",
+          "testIdPatterns": [
+            "J03"
+          ],
+          "file": "tests/e2e/t05-qa-audit.spec.ts",
+          "browser": "chromium"
+        }
+      ]
+    },
+    "ST-B11": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B11",
+      "expected": "Aperturas TEAM concurrentes sin duplicados",
+      "criteria": [
+        {
+          "id": "race",
+          "testIdPatterns": [
+            "ST-B11"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(new Set(ids).size).toBe(1)"
+        }
+      ]
+    },
+    "ST-B12": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B12",
+      "expected": "Crear contexto no da acceso a hilos",
+      "criteria": [
+        {
+          "id": "nouniversal",
+          "testIdPatterns": [
+            "CMD-COM-07 TEAM canónica"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(again).toBe(teamConvId)"
+        }
+      ]
+    },
+    "ST-B13": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B13",
+      "expected": "Archivar GROUP preserva historia",
+      "criteria": [
+        {
+          "id": "archive",
+          "testIdPatterns": [
+            "CMD-COM-06 GROUP"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(count.length).toBe(2)"
+        }
+      ]
+    },
+    "ST-B14": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#B14",
+      "expected": "Archivar no-GROUP rechazado",
+      "criteria": [
+        {
+          "id": "nogroup",
+          "testIdPatterns": [
+            "CMD-COM-06 GROUP"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(count.length).toBe(2)"
+        }
+      ]
+    },
+    "ST-C01": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C01",
+      "expected": "Alta de participante con intervalo válido",
+      "criteria": [
+        {
+          "id": "join",
+          "testIdPatterns": [
+            "CMD-COM-07 TEAM canónica"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(again).toBe(teamConvId)"
+        }
+      ]
+    },
+    "ST-C02": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C02",
+      "expected": "Baja con leftAt válido",
+      "criteria": [
+        {
+          "id": "leave",
+          "testIdPatterns": [
+            "revocación temporal"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts"
+        }
+      ]
+    },
+    "ST-C03": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C03",
+      "expected": "Reingreso: nuevo período no solapado",
+      "criteria": [
+        {
+          "id": "rejoin",
+          "testIdPatterns": [
+            "acepta salida y reingreso"
+          ],
+          "file": "backend/src/communication/m8.integration.test.ts",
+          "assertionRef": "expect(rows.rows[0].n).toBe(2)"
+        }
+      ]
+    },
+    "ST-C04": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C04",
+      "expected": "Historia anterior a joinedAt no legible",
+      "criteria": []
+    },
+    "ST-C05": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C05",
+      "expected": "Historia de período no autorizado no legible",
+      "criteria": []
+    },
+    "ST-C06": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C06",
+      "expected": "RoleAssignment revocado → DENY",
+      "criteria": [
+        {
+          "id": "revoke",
+          "testIdPatterns": [
+            "revocación temporal"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts"
+        }
+      ]
+    },
+    "ST-C07": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C07",
+      "expected": "Transferencia de Team actualiza acceso",
+      "criteria": []
+    },
+    "ST-C08": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C08",
+      "expected": "Cambio Event targets sincroniza participantes",
+      "criteria": [
+        {
+          "id": "event",
+          "testIdPatterns": [
+            "ST-C08"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(rows.map((r) => r.person_id)).toContain(fx.playerId)"
+        }
+      ]
+    },
+    "ST-C09": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C09",
+      "expected": "Proyección obsoleta no concede acceso",
+      "criteria": [
+        {
+          "id": "recheck",
+          "testIdPatterns": [
+            "revocación temporal"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts"
+        }
+      ]
+    },
+    "ST-C10": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C10",
+      "expected": "Ex-participante no puede enviar",
+      "criteria": [
+        {
+          "id": "ex",
+          "testIdPatterns": [
+            "ST-C10"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(messages.send(tx, fx.playerId, conv, \"denegado\", new Date())).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+        }
+      ]
+    },
+    "ST-C11": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C11",
+      "expected": "Dos sync simultáneos: integridad de períodos",
+      "criteria": []
+    },
+    "ST-C12": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#C12",
+      "expected": "Historia de ex-participante según período",
+      "criteria": [
+        {
+          "id": "history",
+          "testIdPatterns": [
+            "ST-C03/C12"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(rows.length).toBeGreaterThanOrEqual(2)"
+        }
+      ]
+    },
+    "ST-D01": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D01",
+      "expected": "Envío autorizado → SENT",
+      "criteria": [
+        {
+          "id": "send",
+          "testIdPatterns": [
+            "CMD-COM-09 no crea Audit"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(sent.state).toBe(\"SENT\")"
+        }
+      ]
+    },
+    "ST-D02": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D02",
+      "expected": "No participante → DENY",
+      "criteria": [
+        {
+          "id": "deny",
+          "testIdPatterns": [
+            "CMD-COM-09..11"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(sent.statusCode).toBe(201)"
+        }
+      ]
+    },
+    "ST-D03": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D03",
+      "expected": "Body vacío rechazado",
+      "criteria": [
+        {
+          "id": "body",
+          "testIdPatterns": [
+            "ST-D03/D11"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "await expect(messages.send(tx, fx.playerId, convId, \"  \", new Date())).rejects.toMatchObject({ code: \"BODY_REQUIRED\" })"
+        }
+      ]
+    },
+    "ST-D04": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D04",
+      "expected": "Retry idempotente sin duplicación",
+      "criteria": [
+        {
+          "id": "retry",
+          "testIdPatterns": [
+            "CMD-COM-09..11"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(sent.statusCode).toBe(201)"
+        }
+      ]
+    },
+    "ST-D05": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D05",
+      "expected": "Respuesta perdida tras commit sin duplicar",
+      "criteria": [
+        {
+          "id": "lost",
+          "testIdPatterns": [
+            "CMD-COM-09..11"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(sent.statusCode).toBe(201)"
+        }
+      ]
+    },
+    "ST-D06": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D06",
+      "expected": "Autor edita SENT → EDITED",
+      "criteria": [
+        {
+          "id": "edit",
+          "testIdPatterns": [
+            "CMD-COM-09..11"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(sent.statusCode).toBe(201)"
+        }
+      ]
+    },
+    "ST-D07": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D07",
+      "expected": "No autor editar → DENY",
+      "criteria": [
+        {
+          "id": "notauthor",
+          "testIdPatterns": [
+            "ST-D07/D10"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "await expect(messages.edit(tx, fx.player2Id, sent.id, \"ajeno\", new Date())).rejects.toMatchObject({ code: \"NOT_AUTHOR\" })"
+        }
+      ]
+    },
+    "ST-D08": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D08",
+      "expected": "Autor elimina SENT → tombstone",
+      "criteria": [
+        {
+          "id": "del",
+          "testIdPatterns": [
+            "CMD-COM-09 no crea Audit"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(sent.state).toBe(\"SENT\")"
+        }
+      ]
+    },
+    "ST-D09": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D09",
+      "expected": "Autor elimina EDITED → tombstone",
+      "criteria": [
+        {
+          "id": "del2",
+          "testIdPatterns": [
+            "persiste SENT → EDITED → DELETED"
+          ],
+          "file": "backend/src/communication/m8.integration.test.ts",
+          "assertionRef": "expect(r.rows[0].state).toBe(\"SENT\")"
+        }
+      ]
+    },
+    "ST-D10": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D10",
+      "expected": "No autor eliminar → DENY",
+      "criteria": [
+        {
+          "id": "notauthor",
+          "testIdPatterns": [
+            "ST-D07/D10"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "await expect(messages.edit(tx, fx.player2Id, sent.id, \"ajeno\", new Date())).rejects.toMatchObject({ code: \"NOT_AUTHOR\" })"
+        }
+      ]
+    },
+    "ST-D11": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D11",
+      "expected": "Eliminar sin motivo rechazado",
+      "criteria": [
+        {
+          "id": "reason",
+          "testIdPatterns": [
+            "ST-D03/D11"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "await expect(messages.send(tx, fx.playerId, convId, \"  \", new Date())).rejects.toMatchObject({ code: \"BODY_REQUIRED\" })"
+        }
+      ]
+    },
+    "ST-D12": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D12",
+      "expected": "Editar DELETED rechazado",
+      "criteria": [
+        {
+          "id": "deleted",
+          "testIdPatterns": [
+            "CMD-COM-09 no crea Audit"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(sent.state).toBe(\"SENT\")"
+        }
+      ]
+    },
+    "ST-D13": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D13",
+      "expected": "Eliminar dos veces sin cambio inconsistente",
+      "criteria": [
+        {
+          "id": "twice",
+          "testIdPatterns": [
+            "CMD-COM-09 no crea Audit"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(sent.state).toBe(\"SENT\")"
+        }
+      ]
+    },
+    "ST-D14": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D14",
+      "expected": "Tombstone DTO sin body",
+      "criteria": [
+        {
+          "id": "dto",
+          "testIdPatterns": [
+            "CMD-COM-09..11"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(sent.statusCode).toBe(201)"
+        }
+      ]
+    },
+    "ST-D15": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D15",
+      "expected": "Sin MESSAGE_RECEIVED",
+      "criteria": [
+        {
+          "id": "notif",
+          "testIdPatterns": [
+            "ST-D15"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(Number(after?.n)).toBe(Number(before?.n))"
+        }
+      ]
+    },
+    "ST-D16": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#D16",
+      "expected": "UI Sending/Sent/Failed sin estados falsos",
+      "criteria": []
+    },
+    "ST-E01": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E01",
+      "expected": "ConversationList sólo autorizadas",
+      "criteria": [
+        {
+          "id": "list",
+          "testIdPatterns": [
+            "CC-T05-C19: unreadCount"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(before.items.find((c) => c.id === directId)?.unreadCount).toBe(1)"
+        }
+      ]
+    },
+    "ST-E02": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E02",
+      "expected": "Thread por ID ajeno → DENY",
+      "criteria": [
+        {
+          "id": "deny",
+          "testIdPatterns": [
+            "ST-E02/E10"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(queries.conversationThread(tx, fx.adminId, outsiderConv, new Date(), {})).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+        }
+      ]
+    },
+    "ST-E03": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E03",
+      "expected": "Orden determinista con igual sentAt",
+      "criteria": [
+        {
+          "id": "order",
+          "testIdPatterns": [
+            "ST-E03/E04"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(times).toEqual([...times].sort((a, b) => b - a))"
+        }
+      ]
+    },
+    "ST-E04": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E04",
+      "expected": "lastActivityAt DESC",
+      "criteria": [
+        {
+          "id": "order",
+          "testIdPatterns": [
+            "ST-E03/E04"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(times).toEqual([...times].sort((a, b) => b - a))"
+        }
+      ]
+    },
+    "ST-E05": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E05",
+      "expected": "unreadCount vs lastReadAt",
+      "criteria": [
+        {
+          "id": "unread",
+          "testIdPatterns": [
+            "CC-T05-C19: unreadCount"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(before.items.find((c) => c.id === directId)?.unreadCount).toBe(1)"
+        }
+      ]
+    },
+    "ST-E06": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E06",
+      "expected": "DELETED excluido de unreadCount",
+      "criteria": [
+        {
+          "id": "deleted",
+          "testIdPatterns": [
+            "ST-E06"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(countBefore).toBeGreaterThan(0)"
+        }
+      ]
+    },
+    "ST-E07": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E07",
+      "expected": "C19: propios excluidos, intercalados",
+      "criteria": [
+        {
+          "id": "c19",
+          "testIdPatterns": [
+            "CC-T05-C19: unreadCount"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(before.items.find((c) => c.id === directId)?.unreadCount).toBe(1)"
+        }
+      ]
+    },
+    "ST-E08": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E08",
+      "expected": "Notification.readAt por destinatario",
+      "criteria": [
+        {
+          "id": "read",
+          "testIdPatterns": [
+            "J01"
+          ],
+          "file": "tests/e2e/t05-qa-j01.spec.ts",
+          "browser": "chromium"
+        }
+      ]
+    },
+    "ST-E09": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E09",
+      "expected": "NOT-07 en NotificationList",
+      "criteria": [
+        {
+          "id": "not07",
+          "testIdPatterns": [
+            "J01"
+          ],
+          "file": "tests/e2e/t05-qa-j01.spec.ts",
+          "browser": "chromium"
+        }
+      ]
+    },
+    "ST-E10": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E10",
+      "expected": "Message.body redactado en Audit.diff",
+      "criteria": [
+        {
+          "id": "audit",
+          "testIdPatterns": [
+            "ST-E02/E10"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(queries.conversationThread(tx, fx.adminId, outsiderConv, new Date(), {})).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+        }
+      ]
+    },
+    "ST-E11": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E11",
+      "expected": "Message.body no filtrado en logs",
+      "criteria": [
+        {
+          "id": "scan",
+          "testIdPatterns": [
+            "ST-E11/F10"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(files).not.toMatch(/MESSAGE_RECEIVED|ANNOUNCEMENT_CORRECTED|Guardian|Eligibility|CompetitionEntry/)"
+        }
+      ]
+    },
+    "ST-E12": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#E12",
+      "expected": "Realtime sin body",
+      "criteria": [
+        {
+          "id": "realtime",
+          "testIdPatterns": [
+            "ST-E12"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(JSON.stringify(rows[0].payload)).not.toContain(\"body\")"
+        }
+      ]
+    },
+    "ST-F01": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F01",
+      "expected": "M8 limpia con constraints",
+      "criteria": [
+        {
+          "id": "m8",
+          "testIdPatterns": [
+            "crea las 5 tablas"
+          ],
+          "file": "backend/src/communication/m8.integration.test.ts",
+          "assertionRef": "expect(tables.rows.map((r) => r.table_name)).toEqual(["
+        }
+      ]
+    },
+    "ST-F02": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F02",
+      "expected": "Reinicio: datos persisten",
+      "criteria": []
+    },
+    "ST-F03": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F03",
+      "expected": "Dos sesiones browser reales",
+      "criteria": [
+        {
+          "id": "multi",
+          "testIdPatterns": [
+            "J02"
+          ],
+          "file": "tests/e2e/t05-qa-audit.spec.ts",
+          "browser": "chromium"
+        }
+      ]
+    },
+    "ST-F04": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F04",
+      "expected": "GROUP ≥3 en UI",
+      "criteria": [
+        {
+          "id": "group3",
+          "testIdPatterns": [
+            "J02"
+          ],
+          "file": "tests/e2e/t05-qa-audit.spec.ts",
+          "browser": "chromium"
+        }
+      ]
+    },
+    "ST-F05": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F05",
+      "expected": "R21–R26 en 390/768/1440",
+      "criteria": [
+        {
+          "id": "vp",
+          "testIdPatterns": [
+            "J05"
+          ],
+          "file": "tests/e2e/t05-qa-audit.spec.ts",
+          "browser": "chromium"
+        },
+        {
+          "id": "vp2",
+          "testIdPatterns": [
+            "J05"
+          ],
+          "file": "tests/e2e/t05-qa-audit.spec.ts",
+          "browser": "firefox"
+        },
+        {
+          "id": "vp3",
+          "testIdPatterns": [
+            "J05"
+          ],
+          "file": "tests/e2e/t05-qa-audit.spec.ts",
+          "browser": "msedge"
+        }
+      ]
+    },
+    "ST-F06": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F06",
+      "expected": "Composer móvil usable",
+      "criteria": [
+        {
+          "id": "composer",
+          "testIdPatterns": [
+            "R26: thread real"
+          ],
+          "file": "src/__tests__/t05-components.test.tsx",
+          "assertionRef": "expect(await screen.findByText(\"Hola del mock\")).toBeTruthy()"
+        }
+      ]
+    },
+    "ST-F07": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F07",
+      "expected": "Caída realtime → refetch",
+      "criteria": [
+        {
+          "id": "recovery",
+          "testIdPatterns": [
+            "J05b"
+          ],
+          "file": "tests/e2e/t05-journeys.spec.ts"
+        }
+      ]
+    },
+    "ST-F08": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F08",
+      "expected": "Falla API sin éxito falso",
+      "criteria": [
+        {
+          "id": "recovery",
+          "testIdPatterns": [
+            "J05b"
+          ],
+          "file": "tests/e2e/t05-journeys.spec.ts"
+        }
+      ]
+    },
+    "ST-F09": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F09",
+      "expected": "Regresión T01–T04 sin fallos",
+      "criteria": [
+        {
+          "id": "baseline",
+          "testIdPatterns": [
+            "M0 and PostgreSQL semantics"
+          ],
+          "file": "backend/src/foundation.integration.test.ts"
+        }
+      ]
+    },
+    "ST-F10": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#F10",
+      "expected": "Sin Guardian/Eligibility/CompetitionEntry",
+      "criteria": [
+        {
+          "id": "scan",
+          "testIdPatterns": [
+            "ST-E11/F10"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(files).not.toMatch(/MESSAGE_RECEIVED|ANNOUNCEMENT_CORRECTED|Guardian|Eligibility|CompetitionEntry/)"
+        }
+      ]
+    },
+    "ST-A01-UPDATE": {
+      "contractSource": "04_T05_STRESS_TEST_80_V2.md#A01-UPDATE",
+      "expected": "UPDATE DRAFT con versión (CC-T05-C10)",
+      "criteria": [
+        {
+          "id": "update",
+          "testIdPatterns": [
+            "CC-T05-C10: crea y actualiza DRAFT"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(created.state).toBe(\"DRAFT\")"
+        }
+      ]
+    }
+  },
+  "acceptance": {
+    "1": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-01",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "baseline",
+          "testIdPatterns": [
+            "M0 and PostgreSQL semantics"
+          ],
+          "file": "backend/src/foundation.integration.test.ts"
+        }
+      ]
+    },
+    "2": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-02",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "scan",
+          "testIdPatterns": [
+            "AC-22"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(sql).toContain(\"ANNOUNCEMENT_PUBLISHED\")"
+        }
+      ]
+    },
+    "3": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-03",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "m8",
+          "testIdPatterns": [
+            "crea las 5 tablas"
+          ],
+          "file": "backend/src/communication/m8.integration.test.ts",
+          "assertionRef": "expect(tables.rows.map((r) => r.table_name)).toEqual(["
+        }
+      ]
+    },
+    "4": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-04",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "draft",
+          "testIdPatterns": [
+            "CC-T05-C10: crea y actualiza DRAFT"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(created.state).toBe(\"DRAFT\")"
+        },
+        {
+          "id": "e2e",
+          "testIdPatterns": [
+            "J01"
+          ],
+          "file": "tests/e2e/t05-qa-j01.spec.ts",
+          "browser": "chromium"
+        }
+      ]
+    },
+    "5": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-05",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "aud",
+          "testIdPatterns": [
+            "CMD-COM-01/02"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(created.statusCode).toBe(201)"
+        }
+      ]
+    },
+    "6": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-06",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "race",
+          "testIdPatterns": [
+            "ST-A08/A09"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(results.filter((r) => r.status === \"fulfilled\")).toHaveLength(1)"
+        }
+      ]
+    },
+    "7": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-07",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "not07",
+          "testIdPatterns": [
+            "ST-A10"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(notes.length).toBeGreaterThan(0)"
+        }
+      ]
+    },
+    "8": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-08",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "idor",
+          "testIdPatterns": [
+            "RC-19: audiencia"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(list.statusCode).toBe(200)"
+        }
+      ]
+    },
+    "9": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-09",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "read",
+          "testIdPatterns": [
+            "J01"
+          ],
+          "file": "tests/e2e/t05-qa-j01.spec.ts",
+          "browser": "chromium"
+        }
+      ]
+    },
+    "10": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-10",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "correct",
+          "testIdPatterns": [
+            "CMD-COM-03/04"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(corrected.statusCode).toBe(200)"
+        }
+      ]
+    },
+    "11": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-11",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "archive",
+          "testIdPatterns": [
+            "ST-A13/A14"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(published.state).toBe(\"ARCHIVED\")"
+        }
+      ]
+    },
+    "12": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-12",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "direct",
+          "testIdPatterns": [
+            "CMD-COM-05/06/07"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(direct.statusCode).toBe(201)"
+        }
+      ]
+    },
+    "13": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-13",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "group",
+          "testIdPatterns": [
+            "CMD-COM-06 GROUP"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(count.length).toBe(2)"
+        }
+      ]
+    },
+    "14": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-14",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "team",
+          "testIdPatterns": [
+            "CMD-COM-05/06/07"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(direct.statusCode).toBe(201)"
+        },
+        {
+          "id": "event",
+          "testIdPatterns": [
+            "J03"
+          ],
+          "file": "tests/e2e/t05-qa-audit.spec.ts",
+          "browser": "chromium"
+        }
+      ]
+    },
+    "15": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-15",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "rejoin",
+          "testIdPatterns": [
+            "acepta salida y reingreso"
+          ],
+          "file": "backend/src/communication/m8.integration.test.ts",
+          "assertionRef": "expect(rows.rows[0].n).toBe(2)"
+        }
+      ]
+    },
+    "16": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-16",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "revoke",
+          "testIdPatterns": [
+            "revocación temporal"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts"
+        }
+      ]
+    },
+    "17": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-17",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "deny",
+          "testIdPatterns": [
+            "ST-E02/E10"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(queries.conversationThread(tx, fx.adminId, outsiderConv, new Date(), {})).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+        }
+      ]
+    },
+    "18": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-18",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "states",
+          "testIdPatterns": [
+            "CMD-COM-09 no crea Audit"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(sent.state).toBe(\"SENT\")"
+        }
+      ]
+    },
+    "19": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-19",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "author",
+          "testIdPatterns": [
+            "ST-D07/D10"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "await expect(messages.edit(tx, fx.player2Id, sent.id, \"ajeno\", new Date())).rejects.toMatchObject({ code: \"NOT_AUTHOR\" })"
+        }
+      ]
+    },
+    "20": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-20",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "tomb",
+          "testIdPatterns": [
+            "CMD-COM-09..11"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(sent.statusCode).toBe(201)"
+        }
+      ]
+    },
+    "21": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-21",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "retry",
+          "testIdPatterns": [
+            "CMD-COM-09..11"
+          ],
+          "file": "backend/src/communication/t05.api.test.ts",
+          "assertionRef": "expect(sent.statusCode).toBe(201)"
+        }
+      ]
+    },
+    "22": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-22",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "scan",
+          "testIdPatterns": [
+            "AC-22"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(sql).toContain(\"ANNOUNCEMENT_PUBLISHED\")"
+        }
+      ]
+    },
+    "23": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-23",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "scan",
+          "testIdPatterns": [
+            "ST-E11/F10"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(files).not.toMatch(/MESSAGE_RECEIVED|ANNOUNCEMENT_CORRECTED|Guardian|Eligibility|CompetitionEntry/)"
+        },
+        {
+          "id": "audit",
+          "testIdPatterns": [
+            "ST-E02/E10"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(queries.conversationThread(tx, fx.adminId, outsiderConv, new Date(), {})).rejects.toMatchObject({ code: \"NOT_PARTICIPANT\" }))"
+        }
+      ]
+    },
+    "24": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-24",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "c19",
+          "testIdPatterns": [
+            "CC-T05-C19: unreadCount"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(before.items.find((c) => c.id === directId)?.unreadCount).toBe(1)"
+        },
+        {
+          "id": "order",
+          "testIdPatterns": [
+            "ST-E03/E04"
+          ],
+          "file": "backend/src/communication/t05-stress.test.ts",
+          "assertionRef": "expect(times).toEqual([...times].sort((a, b) => b - a))"
+        }
+      ]
+    },
+    "25": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-25",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "page",
+          "testIdPatterns": [
+            "RC-07 paginación estable"
+          ],
+          "file": "backend/src/communication/t05.integration.test.ts",
+          "assertionRef": "expect(page.items.length).toBeLessThanOrEqual(2)"
+        }
+      ]
+    },
+    "26": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-26",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "recovery",
+          "testIdPatterns": [
+            "J05b"
+          ],
+          "file": "tests/e2e/t05-journeys.spec.ts"
+        }
+      ]
+    },
+    "27": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-27",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "e2e",
+          "testIdPatterns": [
+            "J01"
+          ],
+          "file": "tests/e2e/t05-qa-j01.spec.ts",
+          "browser": "chromium"
+        }
+      ]
+    },
+    "28": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-28",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "vp",
+          "testIdPatterns": [
+            "J05"
+          ],
+          "file": "tests/e2e/t05-qa-audit.spec.ts",
+          "browser": "chromium"
+        },
+        {
+          "id": "vp2",
+          "testIdPatterns": [
+            "J05"
+          ],
+          "file": "tests/e2e/t05-qa-audit.spec.ts",
+          "browser": "firefox"
+        },
+        {
+          "id": "vp3",
+          "testIdPatterns": [
+            "J05"
+          ],
+          "file": "tests/e2e/t05-qa-audit.spec.ts",
+          "browser": "msedge"
+        }
+      ]
+    },
+    "29": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-29",
+      "expected": "criterios contractuales",
+      "criteria": [
+        {
+          "id": "multi",
+          "testIdPatterns": [
+            "J02"
+          ],
+          "file": "tests/e2e/t05-qa-audit.spec.ts",
+          "browser": "chromium"
+        }
+      ]
+    },
+    "30": {
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-30",
+      "expected": "criterios contractuales",
+      "criteria": []
+    }
+  }
+}

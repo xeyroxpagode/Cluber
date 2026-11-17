@@ -1,0 +1,26 @@
+import { chromium } from '@playwright/test'
+import fs from 'node:fs'
+import path from 'node:path'
+
+const OUT = path.resolve('evidence/t05-truth-acceptance/screenshots')
+fs.mkdirSync(OUT, { recursive: true })
+const browser = await chromium.launch()
+const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } })
+const page = await ctx.newPage()
+await page.goto('http://localhost:8444/login')
+await page.getByLabel('Correo electrónico').fill('t05-sub@example.com')
+await page.getByLabel('Contraseña').fill('GeiDemo2026!Demo')
+await page.getByRole('button', { name: 'Entrar' }).click()
+await page.waitForURL('**/home', { timeout: 20000 })
+await page.goto('http://localhost:8444/communication')
+await page.getByRole('tab', { name: /Comunicados/ }).click()
+await page.waitForTimeout(600)
+await page.screenshot({ path: path.join(OUT, 'RUN-hub-comunicados-1440.png'), fullPage: true })
+await page.setViewportSize({ width: 390, height: 844 })
+await page.waitForTimeout(400)
+await page.screenshot({ path: path.join(OUT, 'RUN-hub-390.png'), fullPage: true })
+await page.setViewportSize({ width: 768, height: 1024 })
+await page.waitForTimeout(400)
+await page.screenshot({ path: path.join(OUT, 'RUN-hub-768.png'), fullPage: true })
+await browser.close()
+console.log('screenshots:', fs.readdirSync(OUT).join(', '))

@@ -1,0 +1,535 @@
+{
+  "runId": "TRUTH-20261117-143641-e1e83c0c",
+  "head": "e1e83c0c961b082307bb4fb0fbee0ecda265fca8",
+  "results": {
+    "1": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "baseline",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; uses the limited runtime role and denies browser roles",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; exposes exactly the authorized T01-T05 tables and no unapproved tables",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; keeps app schema grants restricted to the runtime role",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; commits and rolls back atomically with one PostgreSQL evaluation instant",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; enforces a shared rate limit under concurrent connections",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; replays equal idempotent requests and rejects key reuse",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; serializes concurrent idempotency acquisition to one effect",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; recovers durable outbox work after handler failure and prevents double claims",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; marks an outbox row permanently failed at attempt ten",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; receives commit-time LISTEN notifications on a dedicated client",
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M0 and PostgreSQL semantics &gt; housekeeps only expired technical rows in bounded batches"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-01",
+      "expected": "criterios contractuales"
+    },
+    "2": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "scan",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:truth-gaps.xml:TRUTH — invariantes estáticos &gt; AC-22: enum de notificaciones canónico"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-02",
+      "expected": "criterios contractuales"
+    },
+    "3": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "m8",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M8 — physical schema (I1) &gt; crea las 5 tablas, constraints e índices contractuales"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-03",
+      "expected": "criterios contractuales"
+    },
+    "4": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "draft",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; CC-T05-C10: crea y actualiza DRAFT con version++ y Audiencia válida"
+          ]
+        },
+        {
+          "id": "e2e",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-04",
+      "expected": "criterios contractuales"
+    },
+    "5": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "aud",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-01/02: draft → update → publish con idempotencia y NOT-07"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-05",
+      "expected": "criterios contractuales"
+    },
+    "6": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "race",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A08/A09: publicación concurrente → 1 éxito, 1 conflicto; retry no duplica NOT-07"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-06",
+      "expected": "criterios contractuales"
+    },
+    "7": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "not07",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A10: NOT-07 queda en outbox con dedupe key canónica"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-07",
+      "expected": "criterios contractuales"
+    },
+    "8": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "idor",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; RC-19: audiencia como access control"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-08",
+      "expected": "criterios contractuales"
+    },
+    "9": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "read",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-09",
+      "expected": "criterios contractuales"
+    },
+    "10": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "correct",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-03/04: corrección revision++ y archivado histórico"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-10",
+      "expected": "criterios contractuales"
+    },
+    "11": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "archive",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-A — Announcements (estrés) &gt; ST-A13/A14: ARCHIVED conserva publishedAt y no se puede corregir"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-11",
+      "expected": "criterios contractuales"
+    },
+    "12": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "direct",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-05/06/07: DIRECT canónica, GROUP y TEAM por COACH"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-12",
+      "expected": "criterios contractuales"
+    },
+    "13": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "group",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-06 GROUP ≥2 con creador auto-incluido y CMD-COM-08 archiva"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-13",
+      "expected": "criterios contractuales"
+    },
+    "14": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "team",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-05/06/07: DIRECT canónica, GROUP y TEAM por COACH"
+          ]
+        },
+        {
+          "id": "event",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J03 — TEAM y EVENT › TEAM y EVENT canónicos desde UI; sin participación y ADMIN denegados"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-14",
+      "expected": "criterios contractuales"
+    },
+    "15": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "rejoin",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:M8 — physical schema (I1) &gt; Participants y temporalidad &gt; acepta salida y reingreso como intervalos distintos"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-15",
+      "expected": "criterios contractuales"
+    },
+    "16": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "revoke",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; revocación temporal: Alice pierde acceso en el siguiente request"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-16",
+      "expected": "criterios contractuales"
+    },
+    "17": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "deny",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E02/E10: no participante DENY; audit de mensajes sin body"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-17",
+      "expected": "criterios contractuales"
+    },
+    "18": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "states",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CMD-COM-09 no crea Audit ni Notification; CMD-COM-10/11 Audit con body redactado"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-18",
+      "expected": "criterios contractuales"
+    },
+    "19": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "author",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-D07/D10: no autor no puede editar ni eliminar"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-19",
+      "expected": "criterios contractuales"
+    },
+    "20": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "tomb",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-20",
+      "expected": "criterios contractuales"
+    },
+    "21": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "retry",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-api.xml:T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-21",
+      "expected": "criterios contractuales"
+    },
+    "22": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "scan",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:truth-gaps.xml:TRUTH — invariantes estáticos &gt; AC-22: enum de notificaciones canónico"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-22",
+      "expected": "criterios contractuales"
+    },
+    "23": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "scan",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:truth-gaps.xml:TRUTH — invariantes estáticos &gt; ST-E11/F10: sin body en logs ni funcionalidades OUT"
+          ]
+        },
+        {
+          "id": "audit",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E02/E10: no participante DENY; audit de mensajes sin body"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-23",
+      "expected": "criterios contractuales"
+    },
+    "24": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "c19",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; CC-T05-C19: unreadCount excluye propios y el cursor solo avanza con lectura"
+          ]
+        },
+        {
+          "id": "order",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-stress.xml:ST-D/E/F — Mensajes, privacidad y recovery (estrés) &gt; ST-E03/E04: orden estable y lastActivityAt DESC"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-24",
+      "expected": "criterios contractuales"
+    },
+    "25": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "page",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:backend-integration.xml:DG-14 Conversations &amp; Messaging &gt; RC-07 paginación estable y tombstone sin body"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-25",
+      "expected": "criterios contractuales"
+    },
+    "26": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "recovery",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-recovery.xml:J05b — Recuperación: realtime caído y fallo API (ST-F07/F08, AC-26) › refetch autorizado y reintento seguro sin falso éxito"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-26",
+      "expected": "criterios contractuales"
+    },
+    "27": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "e2e",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J01 — DRAFT sin audiencia, recuperación, publicación, notificación, corrección y archivado"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-27",
+      "expected": "criterios contractuales"
+    },
+    "28": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "vp",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles"
+          ]
+        },
+        {
+          "id": "vp2",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles"
+          ]
+        },
+        {
+          "id": "vp3",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J05 — Hub, roles y responsive real › viewports 390/768/1440 reportados por el navegador y roles"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-28",
+      "expected": "criterios contractuales"
+    },
+    "29": {
+      "status": "PASS",
+      "reason": "agregado por criterios",
+      "criteria": [
+        {
+          "id": "multi",
+          "status": "PASS",
+          "reason": "ejecución verificada",
+          "executions": [
+            "TRUTH-20261117-143641-e1e83c0c:e2e-browser.xml:J02 — DIRECT y GROUP › DIRECT canónico A→B y B→A; GROUP mínimo y archivado"
+          ]
+        }
+      ],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-29",
+      "expected": "criterios contractuales"
+    },
+    "30": {
+      "status": "NOT RUN",
+      "reason": "sin criterios",
+      "criteria": [],
+      "contractSource": "05_T05_ACCEPTANCE_30_V2.md#AC-30",
+      "expected": "criterios contractuales"
+    }
+  }
+}
