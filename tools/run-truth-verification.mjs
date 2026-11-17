@@ -14,7 +14,18 @@ const executions = []
 for (const f of xmls) {
   const rel = path.posix.join("evidence/t05-truth-acceptance/runs", RUN, f)
   const xml = fs.readFileSync(path.join(RUN_DIR, f), "utf8")
-  executions.push(...parseJUnit(xml, { runId: RUN, artifactPath: rel, codeRevision: head, collectedAt }))
+  const label = f.replace(/\.xml$/, "")
+  const prePath = path.join(RUN_DIR, `${label}.pre.json`)
+  const attested = fs.existsSync(prePath)
+  const pre = attested ? JSON.parse(fs.readFileSync(prePath, "utf8")) : null
+  const postPath = path.join(RUN_DIR, `${label}.post.json`)
+  const post = fs.existsSync(postPath) ? JSON.parse(fs.readFileSync(postPath, "utf8")) : null
+  const changed = fs.existsSync(path.join(RUN_DIR, `${label}.INVALID.json`))
+  // TRUTH-CLOSE-01: la revisión se toma de la atestación PRE, nunca del HEAD actual.
+  const codeRevision = pre?.fingerprint?.head ?? "UNATTESTED"
+  const cases = parseJUnit(xml, { runId: RUN, artifactPath: rel, codeRevision, collectedAt })
+  for (const c of cases) { c.runnerExitCode = post?.exitCode ?? (pre ? undefined : 1); c.codeChanged = changed }
+  executions.push(...cases)
 }
 fs.writeFileSync(path.join(RUN_DIR, "executions.json"), JSON.stringify({ runId: RUN, head, collectedAt, executions }, null, 2) + "\n")
 

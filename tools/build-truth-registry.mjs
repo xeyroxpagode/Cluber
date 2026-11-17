@@ -14,6 +14,7 @@ const F = {
   e2e1: "tests/e2e/t05-qa-j01.spec.ts",
   e2e2: "tests/e2e/t05-qa-audit.spec.ts",
   recovery: "tests/e2e/t05-journeys.spec.ts",
+  d16: "tests/e2e/t05-st-d16.spec.ts",
   front: "src/__tests__/t05-components.test.tsx",
   found: "backend/src/foundation.integration.test.ts",
 }
@@ -26,7 +27,7 @@ function source(file) {
 function assertionFor(file, pattern) {
   const src = source(file)
   const lines = src.split("\n")
-  const start = lines.findIndex((l) => l.includes('it(') && l.includes(pattern))
+  const start = lines.findIndex((l) => (l.includes('it(') || l.includes('test(')) && l.includes(pattern))
   if (start < 0) return undefined
   for (let i = start; i < Math.min(start + 120, lines.length); i++) {
     const line = lines[i]
@@ -35,9 +36,9 @@ function assertionFor(file, pattern) {
   return undefined
 }
 function crit(id, file, pattern, extra = {}) {
-  const c = { id, testIdPatterns: [pattern], file }
+  const c = { id, testIdPatterns: [pattern], file, requireAssertion: true }
   const a = assertionFor(file, pattern)
-  if (a) c.assertionRef = a
+  if (a) c.assertionRefs = [a]
   return { ...c, ...extra }
 }
 function S(id, expected, criteria) {
@@ -73,20 +74,20 @@ const ST = {
   "ST-B07": S("B07", "Participantes repetidos rechazados", [crit("dup", F.stress, "ST-B06/B07")]),
   "ST-B08": S("B08", "GROUP cross-división si autorizado", [crit("cross", F.gaps, "ST-B08")]),
   "ST-B09": S("B09", "TEAM canónica por Team", [crit("team", F.api, "CMD-COM-05/06/07")]),
-  "ST-B10": S("B10", "EVENT canónica por Event", [crit("event", F.e2e2, "J03", { browser: "chromium" })]),
+  "ST-B10": S("B10", "EVENT canónica por Event", [crit("event", F.e2e2, "J03", { browser: "chromium", assertionRefs: ["expect(eventUrl).not.toBe(teamUrl)"] })]),
   "ST-B11": S("B11", "Aperturas TEAM concurrentes sin duplicados", [crit("race", F.stress, "ST-B11")]),
   "ST-B12": S("B12", "Crear contexto no da acceso a hilos", [crit("nouniversal", F.integ, "CMD-COM-07 TEAM canónica")]),
   "ST-B13": S("B13", "Archivar GROUP preserva historia", [crit("archive", F.integ, "CMD-COM-06 GROUP")]),
   "ST-B14": S("B14", "Archivar no-GROUP rechazado", [crit("nogroup", F.integ, "CMD-COM-06 GROUP")]),
   "ST-C01": S("C01", "Alta de participante con intervalo válido", [crit("join", F.integ, "CMD-COM-07 TEAM canónica")]),
-  "ST-C02": S("C02", "Baja con leftAt válido", [crit("leave", F.integ, "revocación temporal")]),
+  "ST-C02": S("C02", "Baja con leftAt válido", [crit("leave", F.integ, "revocación temporal", { assertionRefs: ['expectDenied(queries.conversationThread(tx, fx.playerId, teamConvId, later(7 * 60 * 60_000), {}), "NO_TEAM_CONVERSATION_AUTHORITY")'] })]),
   "ST-C03": S("C03", "Reingreso: nuevo período no solapado", [crit("rejoin", F.m8, "acepta salida y reingreso")]),
   "ST-C04": S("C04", "Historia anterior a joinedAt no legible", [crit("period", F.gaps, "ST-C04/C05")]),
   "ST-C05": S("C05", "Historia de período no autorizado no legible", [crit("period", F.gaps, "ST-C04/C05")]),
-  "ST-C06": S("C06", "RoleAssignment revocado → DENY", [crit("revoke", F.integ, "revocación temporal")]),
+  "ST-C06": S("C06", "RoleAssignment revocado → DENY", [crit("revoke", F.integ, "revocación temporal", { assertionRefs: ['expectDenied(queries.conversationThread(tx, fx.playerId, teamConvId, later(7 * 60 * 60_000), {}), "NO_TEAM_CONVERSATION_AUTHORITY")'] })]),
   "ST-C07": S("C07", "Transferencia de Team actualiza acceso", [crit("transfer", F.gaps, "ST-C07")]),
   "ST-C08": S("C08", "Cambio Event targets sincroniza participantes", [crit("event", F.gaps, "ST-C08")]),
-  "ST-C09": S("C09", "Proyección obsoleta no concede acceso", [crit("recheck", F.integ, "revocación temporal")]),
+  "ST-C09": S("C09", "Proyección obsoleta no concede acceso", [crit("recheck", F.integ, "revocación temporal", { assertionRefs: ['expectDenied(queries.conversationThread(tx, fx.playerId, teamConvId, later(7 * 60 * 60_000), {}), "NO_TEAM_CONVERSATION_AUTHORITY")'] })]),
   "ST-C10": S("C10", "Ex-participante no puede enviar", [crit("ex", F.gaps, "ST-C10")]),
   "ST-C11": S("C11", "Dos sync simultáneos: integridad de períodos", [crit("sync", F.gaps, "ST-C11")]),
   "ST-C12": S("C12", "Historia de ex-participante según período", [crit("history", F.stress, "ST-C03/C12")]),
@@ -105,7 +106,12 @@ const ST = {
   "ST-D13": S("D13", "Eliminar dos veces sin cambio inconsistente", [crit("twice", F.integ, "CMD-COM-09 no crea Audit")]),
   "ST-D14": S("D14", "Tombstone DTO sin body", [crit("dto", F.api, "CMD-COM-09..11")]),
   "ST-D15": S("D15", "Sin MESSAGE_RECEIVED", [crit("notif", F.stress, "ST-D15")]),
-  "ST-D16": S("D16", "UI Sending/Sent/Failed sin estados falsos", []),
+  "ST-D16": S("D16", "UI Sending/Sent/Failed sin estados falsos", [
+    crit("sending", F.d16, "Caso A", { assertionRefs: ["expect(page.getByText('Enviando…')).toBeVisible({ timeout: 5000 })"] }),
+    crit("sent", F.d16, "Caso A", { assertionRefs: ["expect(page.getByText(body)).toHaveCount(1, { timeout: 15000 })"] }),
+    crit("failed", F.d16, "Caso B", { assertionRefs: ["expect(persisted.rows[0].n).toBe(0)"] }),
+    crit("retry", F.d16, "Caso B", { assertionRefs: ["expect(page.getByText(body)).toHaveCount(1, { timeout: 15000 })"] }),
+  ]),
   "ST-E01": S("E01", "ConversationList sólo autorizadas", [crit("list", F.integ, "CC-T05-C19: unreadCount")]),
   "ST-E02": S("E02", "Thread por ID ajeno → DENY", [crit("deny", F.stress, "ST-E02/E10")]),
   "ST-E03": S("E03", "Orden determinista con igual sentAt", [crit("order", F.stress, "ST-E03/E04")]),
@@ -120,19 +126,23 @@ const ST = {
   "ST-E12": S("E12", "Realtime sin body", [crit("realtime", F.stress, "ST-E12")]),
   "ST-F01": S("F01", "M8 limpia con constraints", [crit("m8", F.m8, "crea las 5 tablas")]),
   "ST-F02": S("F02", "Reinicio: datos persisten", [crit("persist", F.gaps, "ST-F02")]),
-  "ST-F03": S("F03", "Dos sesiones browser reales", [crit("multi", F.e2e2, "J02", { browser: "chromium" })]),
-  "ST-F04": S("F04", "GROUP ≥3 en UI", [crit("group3", F.e2e2, "J02", { browser: "chromium" })]),
-  "ST-F05": S("F05", "R21–R26 en 390/768/1440", [crit("vp", F.e2e2, "J05", { browser: "chromium" }), crit("vp2", F.e2e2, "J05", { browser: "firefox" }), crit("vp3", F.e2e2, "J05", { browser: "msedge" })]),
+  "ST-F03": S("F03", "Dos sesiones browser reales", [crit("multi", F.e2e2, "J02", { browser: "chromium", assertionRefs: ["await expect(pb.getByText(/1 sin leer/)).toBeVisible({ timeout: 15000 })"] })]),
+  "ST-F04": S("F04", "GROUP ≥3 en UI", [crit("group3", F.e2e2, "J02", { browser: "chromium", assertionRefs: ["await expect(pa.getByText('Grupo QA J02')).toBeVisible()"] })]),
+  "ST-F05": S("F05", "R21–R26 en 390/768/1440", [
+    crit("vp", F.e2e2, "J05", { browser: "chromium", assertionRefs: ["expect(measured).toBe(width)"] }),
+    crit("vp2", F.e2e2, "J05", { browser: "firefox", assertionRefs: ["expect(measured).toBe(width)"] }),
+    crit("vp3", F.e2e2, "J05", { browser: "msedge", assertionRefs: ["expect(measured).toBe(width)"] }),
+  ]),
   "ST-F06": S("F06", "Composer móvil usable", [crit("composer", F.front, "R26: thread real")]),
-  "ST-F07": S("F07", "Caída realtime → refetch", [crit("recovery", F.recovery, "J05b")]),
-  "ST-F08": S("F08", "Falla API sin éxito falso", [crit("recovery", F.recovery, "J05b")]),
-  "ST-F09": S("F09", "Regresión T01–T04 sin fallos", [crit("baseline", F.found, "M0 and PostgreSQL semantics")]),
+  "ST-F07": S("F07", "Caída realtime → refetch", [crit("recovery", F.recovery, "J05b", { assertionRefs: ["await expect(page.getByText(/Falló el envío|No se pudo enviar/)).toBeVisible({ timeout: 20_000 })"] })]),
+  "ST-F08": S("F08", "Falla API sin éxito falso", [crit("recovery", F.recovery, "J05b", { assertionRefs: ["await expect(page.getByText(/Falló el envío|No se pudo enviar/)).toBeVisible({ timeout: 20_000 })"] })]),
+  "ST-F09": S("F09", "Regresión T01–T04 sin fallos", [crit("baseline", F.found, "M0 and PostgreSQL semantics", { assertionRefs: ["expect(unexpected).toEqual([])"] })]),
   "ST-F10": S("F10", "Sin Guardian/Eligibility/CompetitionEntry", [crit("scan", F.gaps, "ST-E11/F10")]),
   "ST-A01-UPDATE": S("A01-UPDATE", "UPDATE DRAFT con versión (CC-T05-C10)", [crit("update", F.integ, "CC-T05-C10: crea y actualiza DRAFT")]),
 }
 
 const AC = {
-  1: A(1, [crit("baseline", F.found, "M0 and PostgreSQL semantics")]),
+  1: A(1, [crit("baseline", F.found, "M0 and PostgreSQL semantics", { assertionRefs: ["expect(unexpected).toEqual([])"] })]),
   2: A(2, [crit("scan", F.gaps, "AC-22")]),
   3: A(3, [crit("m8", F.m8, "crea las 5 tablas")]),
   4: A(4, [crit("draft", F.integ, "CC-T05-C10: crea y actualiza DRAFT"), crit("e2e", F.e2e1, "J01", { browser: "chromium" })]),
@@ -145,9 +155,9 @@ const AC = {
   11: A(11, [crit("archive", F.stress, "ST-A13/A14")]),
   12: A(12, [crit("direct", F.api, "CMD-COM-05/06/07")]),
   13: A(13, [crit("group", F.integ, "CMD-COM-06 GROUP")]),
-  14: A(14, [crit("team", F.api, "CMD-COM-05/06/07"), crit("event", F.e2e2, "J03", { browser: "chromium" })]),
+  14: A(14, [crit("team", F.api, "CMD-COM-05/06/07"), crit("event", F.e2e2, "J03", { browser: "chromium", assertionRefs: ["expect(eventUrl).not.toBe(teamUrl)"] })]),
   15: A(15, [crit("rejoin", F.m8, "acepta salida y reingreso")]),
-  16: A(16, [crit("revoke", F.integ, "revocación temporal")]),
+  16: A(16, [crit("revoke", F.integ, "revocación temporal", { assertionRefs: ['expectDenied(queries.conversationThread(tx, fx.playerId, teamConvId, later(7 * 60 * 60_000), {}), "NO_TEAM_CONVERSATION_AUTHORITY")'] })]),
   17: A(17, [crit("deny", F.stress, "ST-E02/E10")]),
   18: A(18, [crit("states", F.integ, "CMD-COM-09 no crea Audit")]),
   19: A(19, [crit("author", F.stress, "ST-D07/D10")]),
@@ -157,10 +167,14 @@ const AC = {
   23: A(23, [crit("scan", F.gaps, "ST-E11/F10"), crit("audit", F.stress, "ST-E02/E10")]),
   24: A(24, [crit("c19", F.integ, "CC-T05-C19: unreadCount"), crit("order", F.stress, "ST-E03/E04")]),
   25: A(25, [crit("page", F.integ, "RC-07 paginación estable")]),
-  26: A(26, [crit("recovery", F.recovery, "J05b")]),
+  26: A(26, [crit("recovery", F.recovery, "J05b", { assertionRefs: ["await expect(page.getByText(/Falló el envío|No se pudo enviar/)).toBeVisible({ timeout: 20_000 })"] })]),
   27: A(27, [crit("e2e", F.e2e1, "J01", { browser: "chromium" })]),
-  28: A(28, [crit("vp", F.e2e2, "J05", { browser: "chromium" }), crit("vp2", F.e2e2, "J05", { browser: "firefox" }), crit("vp3", F.e2e2, "J05", { browser: "msedge" })]),
-  29: A(29, [crit("multi", F.e2e2, "J02", { browser: "chromium" })]),
+  28: A(28, [
+    crit("vp", F.e2e2, "J05", { browser: "chromium", assertionRefs: ["expect(measured).toBe(width)"] }),
+    crit("vp2", F.e2e2, "J05", { browser: "firefox", assertionRefs: ["expect(measured).toBe(width)"] }),
+    crit("vp3", F.e2e2, "J05", { browser: "msedge", assertionRefs: ["expect(measured).toBe(width)"] }),
+  ]),
+  29: A(29, [crit("multi", F.e2e2, "J02", { browser: "chromium", assertionRefs: ["await expect(pb.getByText(/1 sin leer/)).toBeVisible({ timeout: 15000 })"] })]),
   30: A(30, []),
 }
 

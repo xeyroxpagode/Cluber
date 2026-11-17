@@ -68,6 +68,15 @@ export function evaluateCriterion(criterion, ctx) {
 
   for (const e of matches) {
     if (e.status !== "passed") continue
+    if (e.runnerExitCode !== undefined && e.runnerExitCode !== 0) {
+      return { status: "FAIL", reason: `runner exit=${e.runnerExitCode} aunque hay resultados parciales`, executions: [e.executionId] }
+    }
+    if (e.codeChanged === true) {
+      return { status: "INVALID EVIDENCE", reason: "código modificado durante la ejecución", executions: [e.executionId] }
+    }
+    if (criterion.requireAssertion && !(criterion.assertionRefs?.length || criterion.assertionRef)) {
+      return { status: "INVALID EVIDENCE", reason: "criterio sin aserción contractual", executions: [e.executionId] }
+    }
     if (e.codeRevision && head && e.codeRevision !== head) {
       return { status: "INVALID EVIDENCE", reason: `revisión obsoleta ${e.codeRevision} != ${head}`, executions: [e.executionId] }
     }
@@ -78,11 +87,17 @@ export function evaluateCriterion(criterion, ctx) {
         manifest[e.artifactPath] !== sha256(path.resolve(baseDir, e.artifactPath))) {
       return { status: "INVALID EVIDENCE", reason: "hash de artefacto no coincide", executions: [e.executionId] }
     }
-    if (criterion.assertionRef) {
+    const refs = criterion.assertionRefs || (criterion.assertionRef ? [criterion.assertionRef] : [])
+    if (refs.length) {
       let source = ""
       try { source = readFile(e.file || criterion.file || "") } catch { /* sin fuente */ }
-      if (!source || !source.includes(criterion.assertionRef)) {
-        return { status: "INVALID EVIDENCE", reason: "asociación no demuestra el invariante (assertionRef ausente)", executions: [e.executionId] }
+      for (const ref of refs) {
+        if (/expect\((true|1)\)\.toBe\((true|1)\)/.test(ref)) {
+          return { status: "INVALID EVIDENCE", reason: "aserción trivial no acredita requisito", executions: [e.executionId] }
+        }
+        if (!source || !source.includes(ref)) {
+          return { status: "INVALID EVIDENCE", reason: "asociación no demuestra el invariante (assertionRef ausente)", executions: [e.executionId] }
+        }
       }
     }
     if (criterion.browser && e.context.browser !== criterion.browser) {
@@ -138,6 +153,26 @@ export function runNegativeTests() {
     executionId: "manual", testId: "t_manual", file: "results/manual.json", status: "passed", artifactPath: "results/manual.json",
     codeRevision: head, context: { browser: "chromium", viewport: "1440" },
   }], readFile: () => '"status": "PASS"' })
+  check("NEG-11", "INVALID EVIDENCE", { criteria: [{ id: "c", testIds: ["t_good"] }] },
+    { ...baseCtx, executions: [okExec({ codeRevision: "HEAD_BEFORE_EDIT" })] })
+  check("NEG-12", "INVALID EVIDENCE", { criteria: [{ id: "c", testIds: ["t_good"] }] },
+    { ...baseCtx, head: "HEAD_AFTER_CHANGE" })
+  const hashFixture = path.resolve(base, "evidence/t05-final-closeout/verifier-fixtures/hash-fixture.txt")
+  fs.mkdirSync(path.dirname(hashFixture), { recursive: true })
+  fs.writeFileSync(hashFixture, "original")
+  const goodHash = crypto.createHash("sha256").update(fs.readFileSync(hashFixture)).digest("hex")
+  const hashArtifact = path.relative(base, hashFixture).replace(/\\/g, "/")
+  const hashExec = okExec({ artifactPath: hashArtifact, file: hashArtifact })
+  fs.writeFileSync(hashFixture, "modified-after-hash")
+  check("NEG-13", "INVALID EVIDENCE", { criteria: [{ id: "c", testIds: ["t_good"] }] },
+    { ...baseCtx, executions: [hashExec], manifest: { [hashArtifact]: goodHash }, readFile: () => "original" })
+  check("NEG-14", "INVALID EVIDENCE", { criteria: [{ id: "c", testIds: ["t_good"], requireAssertion: true }] })
+  check("NEG-15", "INVALID EVIDENCE", { criteria: [{ id: "c", testIds: ["t_good"], assertionRef: "expect(true).toBe(true)" }] },
+    { ...baseCtx, readFile: () => "expect(true).toBe(true)" })
+  check("NEG-16", "FAIL", { criteria: [{ id: "c", testIds: ["t_good"] }] },
+    { ...baseCtx, executions: [okExec({ runnerExitCode: 1 })] })
+  check("NEG-17", "INVALID EVIDENCE", { criteria: [{ id: "c", testIds: ["t_good"] }] },
+    { ...baseCtx, executions: [okExec({ codeChanged: true })] })
   return results
 }
 

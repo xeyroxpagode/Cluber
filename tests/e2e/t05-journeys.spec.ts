@@ -92,8 +92,11 @@ test.describe('J02 — DIRECT/GROUP: conversaciones canónicas', () => {
     await page.goto('/communication/conversations/new')
     await page.getByRole('button', { name: 'Grupo' }).click()
     await page.getByLabel('Título del grupo').fill('Grupo E2E')
-    await page.getByRole('checkbox', { name: /Belén/ }).check({ force: true })
-    await page.getByRole('checkbox', { name: /César/ }).check({ force: true })
+    // Los inputs son controlados por React: se acciona el label visible y se verifica el estado.
+    await page.locator('label.gei-target').filter({ hasText: /Belén/ }).click()
+    await page.locator('label.gei-target').filter({ hasText: /César/ }).click()
+    await expect(page.getByRole('checkbox', { name: /Belén/ })).toBeChecked()
+    await expect(page.getByRole('checkbox', { name: /César/ })).toBeChecked()
     await page.getByRole('button', { name: /Crear conversación/ }).click()
     await page.waitForURL('**/conversations/**', { timeout: 20_000 })
     await expect(page.getByText(/Grupo E2E/)).toBeVisible()

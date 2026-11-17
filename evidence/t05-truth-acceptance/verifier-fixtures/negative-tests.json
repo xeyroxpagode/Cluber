@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-17T17:55:43.771Z",
+  "generatedAt": "2026-11-17T18:57:58.855Z",
   "results": [
     {
       "id": "NEG-01",
@@ -57,6 +57,48 @@
     },
     {
       "id": "NEG-10",
+      "expected": "INVALID EVIDENCE",
+      "actual": "INVALID EVIDENCE",
+      "ok": true
+    },
+    {
+      "id": "NEG-11",
+      "expected": "INVALID EVIDENCE",
+      "actual": "INVALID EVIDENCE",
+      "ok": true
+    },
+    {
+      "id": "NEG-12",
+      "expected": "INVALID EVIDENCE",
+      "actual": "INVALID EVIDENCE",
+      "ok": true
+    },
+    {
+      "id": "NEG-13",
+      "expected": "INVALID EVIDENCE",
+      "actual": "INVALID EVIDENCE",
+      "ok": true
+    },
+    {
+      "id": "NEG-14",
+      "expected": "INVALID EVIDENCE",
+      "actual": "INVALID EVIDENCE",
+      "ok": true
+    },
+    {
+      "id": "NEG-15",
+      "expected": "INVALID EVIDENCE",
+      "actual": "INVALID EVIDENCE",
+      "ok": true
+    },
+    {
+      "id": "NEG-16",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "ok": true
+    },
+    {
+      "id": "NEG-17",
       "expected": "INVALID EVIDENCE",
       "actual": "INVALID EVIDENCE",
       "ok": true
