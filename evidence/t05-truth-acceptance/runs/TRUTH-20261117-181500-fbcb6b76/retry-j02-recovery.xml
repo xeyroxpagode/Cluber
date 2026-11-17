@@ -1,0 +1,48 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="1" time="9.422324">
+<testsuite name="t05-journeys.spec.ts" timestamp="2026-11-17T18:07:14.914Z" hostname="chromium" tests="2" failures="0" skipped="0" time="7.804" errors="1">
+<testcase name="J02 — DIRECT/GROUP: conversaciones canónicas › DIRECT se reutiliza desde ambos extremos" classname="t05-journeys.spec.ts" time="6.908">
+</testcase>
+<testcase name="J02 — DIRECT/GROUP: conversaciones canónicas › GROUP con título y dos participantes" classname="t05-journeys.spec.ts" time="0.896">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\test-results\t05-journeys-J02-—-DIRECT--315c2--título-y-dos-participantes-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\test-results\t05-journeys-J02-—-DIRECT--315c2--título-y-dos-participantes-chromium\error-context.md]]
+]]>
+</system-out>
+<error message="locator.check: Clicking the checkbox did not change its state" type="Error">
+<![CDATA[  [chromium] › t05-journeys.spec.ts:88:3 › J02 — DIRECT/GROUP: conversaciones canónicas › GROUP con título y dos participantes 
+
+    Error: locator.check: Clicking the checkbox did not change its state
+    Call log:
+      - waiting for getByRole('checkbox', { name: /César/ })
+        - locator resolved to <input id="_r_6_" type="checkbox" class="mt-0.5 size-5 shrink-0 rounded-control border border-line-strong text-interactive accent-interactive"/>
+      - attempting click action
+        - scrolling into view if needed
+        - done scrolling
+        - forcing action
+        - performing click action
+        - click action done
+        - waiting for scheduled navigations to finish
+        - navigations have finished
+
+
+      94 |     await page.getByLabel('Título del grupo').fill('Grupo E2E')
+      95 |     await page.getByRole('checkbox', { name: /Belén/ }).check({ force: true })
+    > 96 |     await page.getByRole('checkbox', { name: /César/ }).check({ force: true })
+         |                                                         ^
+      97 |     await page.getByRole('button', { name: /Crear conversación/ }).click()
+      98 |     await page.waitForURL('**/conversations/**', { timeout: 20_000 })
+      99 |     await expect(page.getByText(/Grupo E2E/)).toBeVisible()
+        at C:\Users\thega\Desktop\Gei-Hockey-T05-Implementation\tests\e2e\t05-journeys.spec.ts:96:57
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\t05-journeys-J02-—-DIRECT--315c2--título-y-dos-participantes-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\t05-journeys-J02-—-DIRECT--315c2--título-y-dos-participantes-chromium\error-context.md
+]]>
+</error>
+</testcase>
+</testsuite>
+</testsuites>

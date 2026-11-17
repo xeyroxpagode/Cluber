@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="105" failures="0" errors="0" time="7.1573219">
+    <testsuite name="backend/src/communication/m8.integration.test.ts" timestamp="2026-11-17T18:03:22.168Z" hostname="pcdegaby" tests="14" failures="0" errors="0" skipped="0" time="0.1278226">
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; crea las 5 tablas, constraints e índices contractuales" time="0.0111979">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Announcements &gt; crea DRAFT y conserva publishedAt al archivar (C18)" time="0.0088779">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Announcements &gt; rechaza título/cuerpo vacíos" time="0.0022916">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Announcements &gt; rechaza PUBLICADO sin published_at y DRAFT con published_at" time="0.0056934">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Announcements &gt; rechaza ARCHIVED sin archived_at" time="0.005641">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Announcements &gt; audiencia única por announcement y FK válidos" time="0.0056312">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Conversations &gt; crea DIRECT canónica con direct_pair_key" time="0.0036847">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Conversations &gt; impide identidades contextuales nulas o incompatibles" time="0.003835">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Conversations &gt; impide ARCHIVED en no-GROUP y duplicados TEAM/EVENT" time="0.0075148">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Conversations &gt; GROUP permite ARCHIVED y conserva historia" time="0.0047144">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Participants y temporalidad &gt; acepta salida y reingreso como intervalos distintos" time="0.0071091">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Participants y temporalidad &gt; rechaza solapamiento e intervalo inválido (exclusion constraint)" time="0.0021291">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Messages &gt; persiste SENT → EDITED → DELETED con tombstone" time="0.0087612">
+        </testcase>
+        <testcase classname="backend/src/communication/m8.integration.test.ts" name="M8 — physical schema (I1) &gt; Messages &gt; rechaza estados incoherentes, body vacío y FKs inválidos" time="0.0061386">
+        </testcase>
+    </testsuite>
+    <testsuite name="backend/src/communication/t05.integration.test.ts" timestamp="2026-11-17T18:03:22.175Z" hostname="pcdegaby" tests="11" failures="0" errors="0" skipped="0" time="1.0329379">
+        <testcase classname="backend/src/communication/t05.integration.test.ts" name="DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; CC-T05-C10: crea y actualiza DRAFT con version++ y Audiencia válida" time="0.0437373">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.integration.test.ts" name="DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; rechaza audiencia inválida y actores sin autoridad (PLAYER/ADMIN)" time="0.0299319">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.integration.test.ts" name="DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; publica con NOT-07 deduplicada, corrige con revision++ y archiva preservando metadatos" time="0.3372357">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.integration.test.ts" name="DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07) &gt; RC-19: solo audiencia ve el comunicado; URL ajena → DENY (COM-015)" time="0.2925986">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.integration.test.ts" name="DG-14 Conversations &amp; Messaging &gt; CMD-COM-05 DIRECT canónica por pareja no ordenada" time="0.0288154">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.integration.test.ts" name="DG-14 Conversations &amp; Messaging &gt; CMD-COM-06 GROUP ≥2 con creador auto-incluido y CMD-COM-08 archiva" time="0.0381824">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.integration.test.ts" name="DG-14 Conversations &amp; Messaging &gt; CMD-COM-07 TEAM canónica + sync atómico; SUBCOMMITTEE/ADMIN sin acceso universal" time="0.0509953">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.integration.test.ts" name="DG-14 Conversations &amp; Messaging &gt; CMD-COM-09 no crea Audit ni Notification; CMD-COM-10/11 Audit con body redactado" time="0.0642582">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.integration.test.ts" name="DG-14 Conversations &amp; Messaging &gt; CC-T05-C19: unreadCount excluye propios y el cursor solo avanza con lectura" time="0.0507186">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.integration.test.ts" name="DG-14 Conversations &amp; Messaging &gt; RC-07 paginación estable y tombstone sin body" time="0.0133854">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.integration.test.ts" name="DG-14 Conversations &amp; Messaging &gt; revocación temporal: Alice pierde acceso en el siguiente request" time="0.0152523">
+        </testcase>
+    </testsuite>
+    <testsuite name="backend/src/foundation.integration.test.ts" timestamp="2026-11-17T18:03:22.177Z" hostname="pcdegaby" tests="11" failures="0" errors="0" skipped="0" time="1.2078849">
+        <testcase classname="backend/src/foundation.integration.test.ts" name="M0 and PostgreSQL semantics &gt; uses the limited runtime role and denies browser roles" time="0.0417814">
+        </testcase>
+        <testcase classname="backend/src/foundation.integration.test.ts" name="M0 and PostgreSQL semantics &gt; exposes exactly the authorized T01-T05 tables and no unapproved tables" time="0.020247">
+        </testcase>
+        <testcase classname="backend/src/foundation.integration.test.ts" name="M0 and PostgreSQL semantics &gt; keeps app schema grants restricted to the runtime role" time="0.0135171">
+        </testcase>
+        <testcase classname="backend/src/foundation.integration.test.ts" name="M0 and PostgreSQL semantics &gt; commits and rolls back atomically with one PostgreSQL evaluation instant" time="0.0142006">
+        </testcase>
+        <testcase classname="backend/src/foundation.integration.test.ts" name="M0 and PostgreSQL semantics &gt; enforces a shared rate limit under concurrent connections" time="0.0389424">
+        </testcase>
+        <testcase classname="backend/src/foundation.integration.test.ts" name="M0 and PostgreSQL semantics &gt; replays equal idempotent requests and rejects key reuse" time="0.0275883">
+        </testcase>
+        <testcase classname="backend/src/foundation.integration.test.ts" name="M0 and PostgreSQL semantics &gt; serializes concurrent idempotency acquisition to one effect" time="0.9712159">
+        </testcase>
+        <testcase classname="backend/src/foundation.integration.test.ts" name="M0 and PostgreSQL semantics &gt; recovers durable outbox work after handler failure and prevents double claims" time="0.030085">
+        </testcase>
+        <testcase classname="backend/src/foundation.integration.test.ts" name="M0 and PostgreSQL semantics &gt; marks an outbox row permanently failed at attempt ten" time="0.0125382">
+        </testcase>
+        <testcase classname="backend/src/foundation.integration.test.ts" name="M0 and PostgreSQL semantics &gt; receives commit-time LISTEN notifications on a dedicated client" time="0.0177913">
+        </testcase>
+        <testcase classname="backend/src/foundation.integration.test.ts" name="M0 and PostgreSQL semantics &gt; housekeeps only expired technical rows in bounded batches" time="0.0170273">
+        </testcase>
+    </testsuite>
+    <testsuite name="backend/src/iam/auth-flow.integration.test.ts" timestamp="2026-11-17T18:03:22.179Z" hostname="pcdegaby" tests="9" failures="0" errors="0" skipped="0" time="0.2314069">
+        <testcase classname="backend/src/iam/auth-flow.integration.test.ts" name="T02 Auth flow — public/private security policy &gt; 1. public login without cookie is permitted (origin ok)" time="0.0019849">
+        </testcase>
+        <testcase classname="backend/src/iam/auth-flow.integration.test.ts" name="T02 Auth flow — public/private security policy &gt; 1. public login without origin is rejected with ORIGIN_NOT_ALLOWED" time="0.0014222">
+        </testcase>
+        <testcase classname="backend/src/iam/auth-flow.integration.test.ts" name="T02 Auth flow — public/private security policy &gt; 2. invalid login yields no account and no session (canonical null-compatible path)" time="0.0691284">
+        </testcase>
+        <testcase classname="backend/src/iam/auth-flow.integration.test.ts" name="T02 Auth flow — public/private security policy &gt; 3. private operation without session is refused with SESSION_INVALID" time="0.0004642">
+        </testcase>
+        <testcase classname="backend/src/iam/auth-flow.integration.test.ts" name="T02 Auth flow — public/private security policy &gt; 4. private operation with valid cookie but origin mismatch is refused with ORIGIN_NOT_ALLOWED" time="0.0354494">
+        </testcase>
+        <testcase classname="backend/src/iam/auth-flow.integration.test.ts" name="T02 Auth flow — public/private security policy &gt; 4. private operation with valid cookie but missing/wrong CSRF is refused with CSRF_INVALID" time="0.0384707">
+        </testcase>
+        <testcase classname="backend/src/iam/auth-flow.integration.test.ts" name="T02 Auth flow — public/private security policy &gt; 5. activate with valid setup code and new password does not require session" time="0.0416149">
+        </testcase>
+        <testcase classname="backend/src/iam/auth-flow.integration.test.ts" name="T02 Auth flow — public/private security policy &gt; 6. private routes never fall back to unauthenticated access (four variants)" time="0.0007379">
+        </testcase>
+        <testcase classname="backend/src/iam/auth-flow.integration.test.ts" name="T02 Auth flow — public/private security policy &gt; 6. private route with valid session, origin and CSRF passes" time="0.0357148">
+        </testcase>
+    </testsuite>
+    <testsuite name="backend/src/integration/people-membership.integration.test.ts" timestamp="2026-11-17T18:03:22.181Z" hostname="pcdegaby" tests="6" failures="0" errors="0" skipped="0" time="0.1492836">
+        <testcase classname="backend/src/integration/people-membership.integration.test.ts" name="T02 People &amp; Membership &gt; registers person, membership, and provision account with unique email" time="0.0729517">
+        </testcase>
+        <testcase classname="backend/src/integration/people-membership.integration.test.ts" name="T02 People &amp; Membership &gt; rejects duplicate authenticable email and duplicate account per person" time="0.0213447">
+        </testcase>
+        <testcase classname="backend/src/integration/people-membership.integration.test.ts" name="T02 People &amp; Membership &gt; membership end keeps history and returns" time="0.0224272">
+        </testcase>
+        <testcase classname="backend/src/integration/people-membership.integration.test.ts" name="T02 People &amp; Membership &gt; rejects duplicate DNI when present" time="0.0080567">
+        </testcase>
+        <testcase classname="backend/src/integration/people-membership.integration.test.ts" name="T02 People &amp; Membership &gt; two persons without account may share email" time="0.008897">
+        </testcase>
+        <testcase classname="backend/src/integration/people-membership.integration.test.ts" name="T02 People &amp; Membership &gt; profile completion derived server-side" time="0.0100264">
+        </testcase>
+    </testsuite>
+    <testsuite name="backend/src/runtime-composition.integration.test.ts" timestamp="2026-11-17T18:03:22.182Z" hostname="pcdegaby" tests="1" failures="0" errors="0" skipped="0" time="0.2052342">
+        <testcase classname="backend/src/runtime-composition.integration.test.ts" name="runtime composition &gt; owns usable cross-cutting services over the shared runtime database and transaction boundary" time="0.0254981">
+        </testcase>
+    </testsuite>
+    <testsuite name="backend/src/t03.integration.test.ts" timestamp="2026-11-17T18:03:22.182Z" hostname="pcdegaby" tests="34" failures="0" errors="0" skipped="0" time="2.7024993">
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 event creation (CMD-EVT-01/02/03) &gt; creates a TRAINING for the coach&apos;s team atomically" time="0.096072">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 event creation (CMD-EVT-01/02/03) &gt; rejects a coach creating an event for another team (AUTH-EVT-01)" time="0.0300609">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 event creation (CMD-EVT-01/02/03) &gt; creates a MATCH with exactly one team and opponent" time="0.0357738">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 event creation (CMD-EVT-01/02/03) &gt; rejects a MATCH with two team targets" time="0.0276117">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 event creation (CMD-EVT-01/02/03) &gt; rejects a MATCH without opponent (OPPONENT_REQUIRED)" time="0.0256537">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 event creation (CMD-EVT-01/02/03) &gt; rejects a MATCH targeting a team from another season via competition coherence" time="0.0270633">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 event creation (CMD-EVT-01/02/03) &gt; allows only SUBCOMMITTEE to create CLUB_EVENT (E2E-03 path)" time="0.0332448">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 event creation (CMD-EVT-01/02/03) &gt; rejects person targets on a TRAINING (type invariant)" time="0.0279111">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 material change (CMD-EVT-05) + notifications (NOT-01) &gt; editing only the title does NOT bump coordinationRevision and does NOT notify" time="0.054913">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 material change (CMD-EVT-05) + notifications (NOT-01) &gt; changing startAt bumps coordinationRevision and notifies the audience (NOT-01)" time="0.1112345">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 material change (CMD-EVT-05) + notifications (NOT-01) &gt; outbox carries one notification.created event per created notification" time="0.1341665">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 material change (CMD-EVT-05) + notifications (NOT-01) &gt; rejects material change without material fields (INVALID_MATERIAL_CHANGE)" time="0.0345265">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 material change (CMD-EVT-05) + notifications (NOT-01) &gt; rejects stale expectedVersion (OPTIMISTIC_LOCK_FAILURE)" time="0.1215512">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 lifecycle (SM-EVENT-01) &gt; postpone → reschedule → cancel → restore" time="0.355264">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 lifecycle (SM-EVENT-01) &gt; rejects invalid transitions with INVALID_STATE_TRANSITION" time="0.0423017">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 lifecycle (SM-EVENT-01) &gt; complete/abandon fail closed with MATCHRECORD_REQUIRED (T04 boundary)" time="0.0315761">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 EVENT-scope authority (AUTH-EVENT-SCOPE) &gt; COACH with EVENT scope can operate only that event" time="0.2610838">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 EVENT-scope authority (AUTH-EVENT-SCOPE) &gt; COACH without any scope is denied material changes" time="0.0373832">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 EVENT-scope authority (AUTH-EVENT-SCOPE) &gt; ADMIN cannot operate events (default DENY)" time="0.0321023">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 EVENT-scope authority (AUTH-EVENT-SCOPE) &gt; revoking the EVENT scope blocks the next operation" time="0.3343278">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 notifications dedupe + CMD-COM-12 (DG-07) &gt; same fact recorded twice yields one notification (dedupeKey)" time="0.0369331">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 notifications dedupe + CMD-COM-12 (DG-07) &gt; distinct fact types for the same recipient both persist" time="0.2575281">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 notifications dedupe + CMD-COM-12 (DG-07) &gt; CMD-COM-12: recipient can mark read; non-recipient denied; missing 404; idempotent" time="0.1695567">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 recurrence (CMD-EVT-13/14) &gt; creates a weekly series with materialized occurrence events" time="0.0461241">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 recurrence (CMD-EVT-13/14) &gt; rejects more than 366 occurrences (RECURRENCE_TOO_LARGE)" time="0.0250531">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 recurrence (CMD-EVT-13/14) &gt; rejects an invalid rule (INVALID_RRULE)" time="0.0213913">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 recurrence (CMD-EVT-13/14) &gt; ends a series preserving occurrence history" time="0.0518159">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 Jornada (CMD-EVT-15) &gt; creates a jornada grouping matches atomically" time="0.0469078">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 Jornada (CMD-EVT-15) &gt; rejects &gt;100 matches (BULK_TOO_LARGE) and rolls back completely" time="0.0265639">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 Jornada (CMD-EVT-15) &gt; rejects non-MATCH events and rolls back" time="0.0366331">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 Jornada (CMD-EVT-15) &gt; rejects a match belonging to two jornadas (unicidad)" time="0.0382306">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 Jornada (CMD-EVT-15) &gt; rejects a match whose team is in another season (SEASON_MISMATCH)" time="0.0302138">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 DB constraints (negative) &gt; rejects end before start at the database level" time="0.0260761">
+        </testcase>
+        <testcase classname="backend/src/t03.integration.test.ts" name="T03 DB constraints (negative) &gt; enforces dedupe_key uniqueness in the database" time="0.0294539">
+        </testcase>
+    </testsuite>
+    <testsuite name="backend/src/t04.integration.test.ts" timestamp="2026-11-17T18:03:22.187Z" hostname="pcdegaby" tests="19" failures="0" errors="0" skipped="0" time="1.5002525">
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 M7 — schema, constraints and triggers (DB) &gt; ST-47 the ten T04 tables exist with their constraints and indexes" time="0.0726151">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 M7 — schema, constraints and triggers (DB) &gt; ST-44 a second match record for the same match violates the DB uniqueness" time="0.0796948">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 M7 — schema, constraints and triggers (DB) &gt; ST-16 a PUBLISHED selection revision is immutable at DB level" time="0.0975968">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 M7 — schema, constraints and triggers (DB) &gt; ST-16b the entries of a PUBLISHED revision cannot be modified at DB level" time="0.083975">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 M7 — schema, constraints and triggers (DB) &gt; ST-28 a CLOSED attendance sheet cannot be reopened at DB level" time="0.0536983">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 M7 — schema, constraints and triggers (DB) &gt; A-D04-01 the first availability response timestamp is immutable at DB level" time="0.057956">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 M7 — schema, constraints and triggers (DB) &gt; A-D04-03 the attendance history is append-only (trigger + permisos)" time="0.1034834">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 M7 — schema, constraints and triggers (DB) &gt; A-D04-04 the match record cannot go back from FINAL to DRAFT" time="0.0807647">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 M7 — schema, constraints and triggers (DB) &gt; A-D04-04 player statistics are frozen once the record is FINAL" time="0.0913211">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 M7 — schema, constraints and triggers (DB) &gt; UNRECORDED is an absent record, not an ABSENT value" time="0.0662372">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 M7 — schema, constraints and triggers (DB) &gt; a correction from UNRECORDED keeps a NULL previous value in the history" time="0.0743065">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 — atomicidad, concurrencia y persistencia (INTEGRATION) &gt; ST-45 an audit failure during finalize rolls the whole transaction back" time="0.0679755">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 — atomicidad, concurrencia y persistencia (INTEGRATION) &gt; ST-41 a concurrent double finalize keeps one consistent final state" time="0.0912018">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 — atomicidad, concurrencia y persistencia (INTEGRATION) &gt; ST-08 concurrent availability answers never corrupt the stored revision" time="0.0677278">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 — atomicidad, concurrencia y persistencia (INTEGRATION) &gt; ST-46 the participation data survives a new connection (persistence after restart)" time="0.0854275">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 — atomicidad, concurrencia y persistencia (INTEGRATION) &gt; ST-50 the outbox worker retries without duplicating the notification fact" time="0.108019">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 — atomicidad, concurrencia y persistencia (INTEGRATION) &gt; CMD-EVT-17 starts a match without bumping the coordination revision" time="0.0519202">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 — atomicidad, concurrencia y persistencia (INTEGRATION) &gt; CMD-EVT-17 refuses a non-match and a non-scheduled event" time="0.0613584">
+        </testcase>
+        <testcase classname="backend/src/t04.integration.test.ts" name="T04 — atomicidad, concurrencia y persistencia (INTEGRATION) &gt; ST-51 RC-23 resuelve el próximo evento de forma determinista ante empates de horario" time="0.092343">
+        </testcase>
+    </testsuite>
+</testsuites>

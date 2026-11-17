@@ -1,0 +1,6 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="7.73913">
+<testsuite name="t05-qa-audit.spec.ts" timestamp="2026-11-17T18:07:05.223Z" hostname="msedge" tests="1" failures="0" skipped="0" time="6.214" errors="0">
+<testcase name="J04 — Messaging › envío, unread C19 intercalado, edición, borrado SENT/EDITED y paginación real" classname="t05-qa-audit.spec.ts" time="6.214">
+</testcase>
+</testsuite>
+</testsuites>

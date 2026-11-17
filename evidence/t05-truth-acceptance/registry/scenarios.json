@@ -325,7 +325,16 @@
     "ST-B08": {
       "contractSource": "04_T05_STRESS_TEST_80_V2.md#B08",
       "expected": "GROUP cross-división si autorizado",
-      "criteria": []
+      "criteria": [
+        {
+          "id": "cross",
+          "testIdPatterns": [
+            "ST-B08"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(conv.participantCount).toBeGreaterThanOrEqual(2)"
+        }
+      ]
     },
     "ST-B09": {
       "contractSource": "04_T05_STRESS_TEST_80_V2.md#B09",
@@ -455,12 +464,30 @@
     "ST-C04": {
       "contractSource": "04_T05_STRESS_TEST_80_V2.md#C04",
       "expected": "Historia anterior a joinedAt no legible",
-      "criteria": []
+      "criteria": [
+        {
+          "id": "period",
+          "testIdPatterns": [
+            "ST-C04/C05"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(page.items.some((m) => m.body === \"fuera de período\")).toBe(false)"
+        }
+      ]
     },
     "ST-C05": {
       "contractSource": "04_T05_STRESS_TEST_80_V2.md#C05",
       "expected": "Historia de período no autorizado no legible",
-      "criteria": []
+      "criteria": [
+        {
+          "id": "period",
+          "testIdPatterns": [
+            "ST-C04/C05"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(page.items.some((m) => m.body === \"fuera de período\")).toBe(false)"
+        }
+      ]
     },
     "ST-C06": {
       "contractSource": "04_T05_STRESS_TEST_80_V2.md#C06",
@@ -478,7 +505,16 @@
     "ST-C07": {
       "contractSource": "04_T05_STRESS_TEST_80_V2.md#C07",
       "expected": "Transferencia de Team actualiza acceso",
-      "criteria": []
+      "criteria": [
+        {
+          "id": "transfer",
+          "testIdPatterns": [
+            "ST-C07"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(rows.filter((r) => r.person_id === fx.playerId && r.left_at === null).length).toBe(0)"
+        }
+      ]
     },
     "ST-C08": {
       "contractSource": "04_T05_STRESS_TEST_80_V2.md#C08",
@@ -524,7 +560,16 @@
     "ST-C11": {
       "contractSource": "04_T05_STRESS_TEST_80_V2.md#C11",
       "expected": "Dos sync simultáneos: integridad de períodos",
-      "criteria": []
+      "criteria": [
+        {
+          "id": "sync",
+          "testIdPatterns": [
+            "ST-C11"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(new Date(sorted[i].joined_at).getTime()).toBeGreaterThanOrEqual(new Date(sorted[i - 1].left_at ?? 0).getTime())"
+        }
+      ]
     },
     "ST-C12": {
       "contractSource": "04_T05_STRESS_TEST_80_V2.md#C12",
@@ -940,7 +985,16 @@
     "ST-F02": {
       "contractSource": "04_T05_STRESS_TEST_80_V2.md#F02",
       "expected": "Reinicio: datos persisten",
-      "criteria": []
+      "criteria": [
+        {
+          "id": "persist",
+          "testIdPatterns": [
+            "ST-F02"
+          ],
+          "file": "backend/src/communication/t05-truth-gaps.test.ts",
+          "assertionRef": "expect(row?.id).toBe(id)"
+        }
+      ]
     },
     "ST-F03": {
       "contractSource": "04_T05_STRESS_TEST_80_V2.md#F03",

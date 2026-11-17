@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="82" failures="0" errors="0" time="10.2533349">
+    <testsuite name="backend/src/communication/t05.api.test.ts" timestamp="2026-11-17T18:03:40.926Z" hostname="pcdegaby" tests="6" failures="0" errors="0" skipped="0" time="2.7310025">
+        <testcase classname="backend/src/communication/t05.api.test.ts" name="T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-01/02: draft → update → publish con idempotencia y NOT-07" time="0.6920067">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.api.test.ts" name="T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-03/04: corrección revision++ y archivado histórico" time="1.4072731">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.api.test.ts" name="T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; RC-19: audiencia como access control" time="0.324633">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.api.test.ts" name="T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-05/06/07: DIRECT canónica, GROUP y TEAM por COACH" time="0.1144843">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.api.test.ts" name="T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; CMD-COM-09..11 + RC-06/07: envío idempotente, edición, borrado y unread C19" time="0.118462">
+        </testcase>
+        <testcase classname="backend/src/communication/t05.api.test.ts" name="T05 HTTP API (routes, CSRF, idempotencia, autoridad) &gt; RC-26/RC-27 responden con autoridad real" time="0.0139591">
+        </testcase>
+    </testsuite>
+    <testsuite name="backend/src/foundation.api.test.ts" timestamp="2026-11-17T18:03:40.932Z" hostname="pcdegaby" tests="6" failures="0" errors="0" skipped="0" time="0.1346527">
+        <testcase classname="backend/src/foundation.api.test.ts" name="technical HTTP surface &gt; returns real liveness with trace and security headers" time="0.0476718">
+        </testcase>
+        <testcase classname="backend/src/foundation.api.test.ts" name="technical HTTP surface &gt; reports readiness from the real database without private details" time="0.0236046">
+        </testcase>
+        <testcase classname="backend/src/foundation.api.test.ts" name="technical HTTP surface &gt; normalizes unknown routes without leaking internals" time="0.0013863">
+        </testcase>
+        <testcase classname="backend/src/foundation.api.test.ts" name="technical HTTP surface &gt; degrades readiness when the database is unavailable" time="0.0106605">
+        </testcase>
+        <testcase classname="backend/src/foundation.api.test.ts" name="technical HTTP surface &gt; drains an active request before graceful close completes" time="0.0086623">
+        </testcase>
+        <testcase classname="backend/src/foundation.api.test.ts" name="technical HTTP surface &gt; buildTestRuntime exposes deterministic fixtures, controlled workers, independent connections, and teardown" time="0.0402643">
+        </testcase>
+    </testsuite>
+    <testsuite name="backend/src/t03.api.test.ts" timestamp="2026-11-17T18:03:40.933Z" hostname="pcdegaby" tests="13" failures="0" errors="0" skipped="0" time="1.3527017">
+        <testcase classname="backend/src/t03.api.test.ts" name="T03 API — authentication and CSRF &gt; rejects unauthenticated command requests with 403 SESSION_INVALID" time="0.2166754">
+        </testcase>
+        <testcase classname="backend/src/t03.api.test.ts" name="T03 API — authentication and CSRF &gt; rejects a valid session with missing CSRF header with 403" time="0.0407749">
+        </testcase>
+        <testcase classname="backend/src/t03.api.test.ts" name="T03 API — authentication and CSRF &gt; rejects unauthenticated reads with 403" time="0.022218">
+        </testcase>
+        <testcase classname="backend/src/t03.api.test.ts" name="T03 API — command + query round trip &gt; creating an event with all-null logistics succeeds (frontend sends empty fields)" time="0.0610028">
+        </testcase>
+        <testcase classname="backend/src/t03.api.test.ts" name="T03 API — command + query round trip &gt; CMD-EVT-16 with only null fields is rejected with 422" time="0.0552582">
+        </testcase>
+        <testcase classname="backend/src/t03.api.test.ts" name="T03 API — command + query round trip &gt; creates, reads and lists a TRAINING end to end" time="0.0979243">
+        </testcase>
+        <testcase classname="backend/src/t03.api.test.ts" name="T03 API — command + query round trip &gt; idempotent replay of creation does not duplicate the event" time="0.0501788">
+        </testcase>
+        <testcase classname="backend/src/t03.api.test.ts" name="T03 API — command + query round trip &gt; rejects COACH creating CLUB_EVENT with 403/422 (authority is SUBCOMMITTEE)" time="0.0359997">
+        </testcase>
+        <testcase classname="backend/src/t03.api.test.ts" name="T03 API — command + query round trip &gt; allows SUBCOMMITTEE to create a CLUB_EVENT" time="0.0390924">
+        </testcase>
+        <testcase classname="backend/src/t03.api.test.ts" name="T03 API — command + query round trip &gt; material change via PATCH notifies and reflects in feed; read marks read" time="0.5551863">
+        </testcase>
+        <testcase classname="backend/src/t03.api.test.ts" name="T03 API — command + query round trip &gt; RC-30 materiality-check distinguishes metadata from material edits" time="0.0539906">
+        </testcase>
+        <testcase classname="backend/src/t03.api.test.ts" name="T03 API — command + query round trip &gt; RC-14/RC-25 jornadas are listable and creator can read detail" time="0.08653">
+        </testcase>
+        <testcase classname="backend/src/t03.api.test.ts" name="T03 API — command + query round trip &gt; MATCH with two teams is rejected with 422 INVALID_TARGET (E2E-04)" time="0.0318479">
+        </testcase>
+    </testsuite>
+    <testsuite name="backend/src/t04.api.test.ts" timestamp="2026-11-17T18:03:40.935Z" hostname="pcdegaby" tests="57" failures="0" errors="0" skipped="0" time="6.034978">
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-09 Availability &gt; ST-01 a player answers YES and the value plus coordination revision are persisted" time="0.310509">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-09 Availability &gt; ST-02 a player cannot answer on behalf of another person" time="0.1028705">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-09 Availability &gt; ST-03 a player outside the event audience is denied with NOT_OWN_RESPONSE" time="0.0669431">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-09 Availability &gt; ST-04 a postponed event rejects availability with EVENT_NOT_SCHEDULED" time="0.1140938">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-09 Availability &gt; ST-05 a material change derives NEEDS_RECONFIRMATION without losing the previous answer" time="0.1377915">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-09 Availability &gt; ST-06 reconfirming MAYBE keeps the first responded_at and snapshots the current revision" time="0.0913112">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-09 Availability &gt; ST-07 a player that never answered is derived as NO_RESPONSE" time="0.0555316">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-09 Availability &gt; ST-08 two concurrent answers keep one coherent row" time="0.0907633">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-09 Availability &gt; ST-09 answering with a stale observed revision is rejected with OPTIMISTIC_LOCK_FAILURE" time="0.0810751">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-09 Availability &gt; ST-10 replaying the same answer with the same idempotency key does not duplicate the response" time="0.0933095">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-10 Selection &gt; ST-11 the coach of the team prepares a draft convocation" time="0.0984296">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-10 Selection &gt; ST-12 a coach of another team is denied on the draft" time="0.0662567">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-10 Selection &gt; ST-13 selection is rejected on a TRAINING" time="0.0732472">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-10 Selection &gt; ST-14 a second editor with a stale autosave version is rejected" time="0.1158682">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-10 Selection &gt; ST-15 publishing with derived conflicts succeeds and returns the warning" time="0.123921">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-10 Selection &gt; ST-16 publishing twice without a new draft is rejected (PUBLISHED is immutable)" time="0.1188699">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-10 Selection &gt; ST-17 a correction creates a new published revision and preserves the previous one" time="0.1790853">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-10 Selection &gt; ST-18 retrying the same publication does not duplicate NOT-06" time="0.1334109">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-10 Selection &gt; ST-19 a second legitimate publication creates a distinct notification fact" time="0.2376798">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-10 Selection &gt; ST-20 a player only sees its own published status" time="0.1345948">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-10 Selection &gt; ST-21 a player cannot read the coach draft" time="0.081935">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-10 Selection &gt; ST-22 a failure while writing the notification rolls the publication back" time="0.0978702">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-11 Attendance &gt; ST-23 the coach marks PRESENT and the value is persisted" time="0.0676742">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-11 Attendance &gt; ST-24 ABSENT is distinct from UNRECORDED" time="0.0941217">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-11 Attendance &gt; ST-25 attendance for a CLUB_EVENT is rejected" time="0.0544464">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-11 Attendance &gt; ST-26 closing the sheet persists CLOSED and it cannot be reopened" time="0.0659678">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-11 Attendance &gt; ST-27 normal marking after CLOSED is rejected" time="0.0877408">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-11 Attendance &gt; ST-29 a correction with a reason preserves before and after" time="0.0958656">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-11 Attendance &gt; ST-30 a correction without a reason is rejected" time="0.0668233">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-11 Attendance &gt; ST-31 two concurrent closes produce a single valid close" time="0.0662718">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-11 Attendance &gt; ST-32 repeated corrections keep the full history recoverable" time="0.124845">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-11 Attendance &gt; ST-33 a revoked coach role denies the next request" time="0.0553018">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-12 MatchRecord &gt; ST-34 the coach registers a DRAFT match record" time="0.0553803">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-12 MatchRecord &gt; ST-35 valid player statistics are persisted while the record is a draft" time="0.0747694">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-12 MatchRecord &gt; ST-36 a result that is not PLAYED is rejected when statistics exist" time="0.1022244">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-12 MatchRecord &gt; ST-37 finalizing without a result type is rejected" time="0.0764731">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-12 MatchRecord &gt; ST-38 finalizing a valid result produces FINAL and a COMPLETED event" time="0.0993256">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-12 MatchRecord &gt; ST-39 statistics cannot be modified after FINAL" time="0.1015892">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-12 MatchRecord &gt; ST-40 correcting a FINAL record keeps it FINAL and preserves before/after" time="0.1150633">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-12 MatchRecord &gt; ST-40b a cross-terminal correction is denied with INVALID_CORRECTION" time="0.1089224">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-12 MatchRecord &gt; ST-41 two concurrent finalizations leave a single coherent final state" time="0.1119036">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-12 MatchRecord &gt; ST-42 finalizing while the event is still SCHEDULED is rejected" time="0.0651451">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-12 MatchRecord &gt; ST-43 an ABANDONED result moves the event to ABANDONED" time="0.0958374">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — DG-12 MatchRecord &gt; ST-44 a second match record for the same match is rejected" time="0.0643895">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — guards de contrato y semántica corregida &gt; las mutaciones de participación se rechazan en un evento terminal" time="0.5404512">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — guards de contrato y semántica corregida &gt; un jugador sin membership activa no puede responder disponibilidad" time="0.062469">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — guards de contrato y semántica corregida &gt; el roster se evalúa a la fecha del evento, no a la fecha de hoy" time="0.0644417">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — guards de contrato y semántica corregida &gt; actualizar una estadística no borra las demás" time="0.0928607">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — guards de contrato y semántica corregida &gt; el eventId de la URL debe coincidir con el acta" time="0.0809418">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — guards de contrato y semántica corregida &gt; la proyección de convocatoria exige un MATCH y un rol PLAYER vigente" time="0.0762645">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — guards de contrato y semántica corregida &gt; RC-17 cuenta sobre la audiencia completa aunque la lista se pagine" time="0.0623992">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — COR-01 authority boundaries &gt; a CAPTAIN cannot operate coach-only participation commands" time="0.062687">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — COR-01 authority boundaries &gt; an ADMIN cannot operate coach-only participation commands" time="0.0643093">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — COR-01 authority boundaries &gt; a SUBCOMMITTEE cannot operate coach-only participation commands" time="0.0731185">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — COR-01 authority boundaries &gt; ST-48 a PLAYER+COACH multi-role actor gets the union of grants" time="0.0716643">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — COR-01 authority boundaries &gt; a multi-role actor is COACH in one team only and cannot operate in the other" time="0.1197206">
+        </testcase>
+        <testcase classname="backend/src/t04.api.test.ts" name="T04 API — COR-01 authority boundaries &gt; ST-49 revoking the coach role denies the next write" time="0.1820219">
+        </testcase>
+    </testsuite>
+</testsuites>
