@@ -51,7 +51,7 @@ describe("ST-A — Announcements (estrés)", () => {
         .rejects.toMatchObject({ code: "BODY_REQUIRED" })
     })
     const id = await run(async ({ tx }) => (await announcements.draft(tx, fx.subcommitteeId, new Date(), { title: "A", body: "B", clubWide: true, teamIds: [] })).id)
-    await run(async ({ tx }) => announcements.publish(tx, fx.subcommitteeId, new Date(), id))
+    await run(async ({ tx }) => announcements.publish(tx, fx.subcommitteeId, new Date(), id, true))
     await run(async ({ tx }) =>
       expect(announcements.correct(tx, fx.subcommitteeId, new Date(), id, { reason: "x" })).rejects.toMatchObject({ code: "NO_CHANGES" }))
   })
@@ -61,7 +61,7 @@ describe("ST-A — Announcements (estrés)", () => {
     await run(async ({ tx }) =>
       expect(announcements.draft(tx, fx.subcommitteeId, new Date(), { title: "A", body: "B", clubWide: false, teamIds: [randomUUID()] }))
         .rejects.toMatchObject({ code: "INVALID_TEAM" }))
-    await run(async ({ tx }) => announcements.publish(tx, fx.subcommitteeId, new Date(), id))
+    await run(async ({ tx }) => announcements.publish(tx, fx.subcommitteeId, new Date(), id, true))
     const before = await run(async ({ tx }) => tx.selectFrom("app.announcement_target_teams").selectAll().where("announcement_id", "=", id).execute())
     await run(async ({ tx }) => announcements.correct(tx, fx.subcommitteeId, new Date(), id, { title: "C", reason: "r" }))
     const after = await run(async ({ tx }) => tx.selectFrom("app.announcement_target_teams").selectAll().where("announcement_id", "=", id).execute())
@@ -71,8 +71,8 @@ describe("ST-A — Announcements (estrés)", () => {
   it("ST-A08/A09: publicación concurrente → 1 éxito, 1 conflicto; retry no duplica NOT-07", async () => {
     const id = await run(async ({ tx }) => (await announcements.draft(tx, fx.subcommitteeId, new Date(), { title: "Conc", body: "B", clubWide: true, teamIds: [] })).id)
     const results = await Promise.allSettled([
-      run(({ tx }) => announcements.publish(tx, fx.subcommitteeId, new Date(), id)),
-      run(({ tx }) => announcements.publish(tx, fx.subcommitteeId, new Date(), id)),
+      run(({ tx }) => announcements.publish(tx, fx.subcommitteeId, new Date(), id, true)),
+      run(({ tx }) => announcements.publish(tx, fx.subcommitteeId, new Date(), id, true)),
     ])
     expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(1)
     expect(results.filter((r) => r.status === "rejected")).toHaveLength(1)
@@ -82,7 +82,7 @@ describe("ST-A — Announcements (estrés)", () => {
 
   it("ST-A10: NOT-07 queda en outbox con dedupe key canónica", async () => {
     const id = await run(async ({ tx }) => (await announcements.draft(tx, fx.subcommitteeId, new Date(), { title: "Outbox", body: "B", clubWide: true, teamIds: [] })).id)
-    await run(({ tx }) => announcements.publish(tx, fx.subcommitteeId, new Date(), id))
+    await run(({ tx }) => announcements.publish(tx, fx.subcommitteeId, new Date(), id, true))
     const notes = await run(async ({ tx }) => tx.selectFrom("app.notifications").selectAll().where("resource_id", "=", id).execute())
     expect(notes.length).toBeGreaterThan(0)
     expect(notes[0].dedupe_key).toBe(`${id}|${notes[0].recipient_person_id}|ANNOUNCEMENT_PUBLISHED`)
@@ -92,7 +92,7 @@ describe("ST-A — Announcements (estrés)", () => {
 
   it("ST-A13/A14: ARCHIVED conserva publishedAt y no se puede corregir", async () => {
     const id = await run(async ({ tx }) => (await announcements.draft(tx, fx.subcommitteeId, new Date(), { title: "Arch", body: "B", clubWide: true, teamIds: [] })).id)
-    await run(({ tx }) => announcements.publish(tx, fx.subcommitteeId, new Date(), id))
+    await run(({ tx }) => announcements.publish(tx, fx.subcommitteeId, new Date(), id, true))
     const published = await run(({ tx }) => announcements.archive(tx, fx.subcommitteeId, new Date(), id))
     expect(published.state).toBe("ARCHIVED")
     expect(published.publishedAt).not.toBeNull()

@@ -75,10 +75,10 @@ describe("T05 HTTP API (routes, CSRF, idempotencia, autoridad)", () => {
     expect(updated.json().version).toBe(2)
 
     const publishIdem = key()
-    const published = await send("POST", `/api/announcements/${id}/publish`, sub, undefined, publishIdem)
+    const published = await send("POST", `/api/announcements/${id}/publish`, sub, { clubWide: true }, publishIdem)
     expect(published.statusCode).toBe(200)
     expect(published.json().state).toBe("PUBLISHED")
-    const publishedRetry = await send("POST", `/api/announcements/${id}/publish`, sub, undefined, publishIdem)
+    const publishedRetry = await send("POST", `/api/announcements/${id}/publish`, sub, { clubWide: true }, publishIdem)
     expect(publishedRetry.json().id).toBe(id)
     const notes = await runner.run("READ_STANDARD", randomUUID(), async ({ tx }) =>
       tx.selectFrom("app.notifications").selectAll().where("resource_id", "=", id).execute())
@@ -100,7 +100,7 @@ describe("T05 HTTP API (routes, CSRF, idempotencia, autoridad)", () => {
       const { AnnouncementService } = await import("./announcements.js")
       const svc = new AnnouncementService(services.authority, services.auditWriter, services.notificationService)
       const draft = await svc.draft(tx, fx.subcommitteeId, new Date(), { title: "Corregir", body: "Cuerpo", clubWide: true, teamIds: [] })
-      await svc.publish(tx, fx.subcommitteeId, new Date(), draft.id)
+      await svc.publish(tx, fx.subcommitteeId, new Date(), draft.id, true)
       return draft.id
     })
     const corrected = await send("PATCH", `/api/announcements/${id}/correct`, sub, { title: "Corregido", reason: "typo" })
@@ -119,7 +119,7 @@ describe("T05 HTTP API (routes, CSRF, idempotencia, autoridad)", () => {
     const id = (await send("POST", "/api/announcements/draft", sub, {
       title: "Solo A", body: "Cuerpo", clubWide: false, teamIds: [fx.teamAId],
     }, key())).json().id
-    await send("POST", `/api/announcements/${id}/publish`, sub, undefined, key())
+    await send("POST", `/api/announcements/${id}/publish`, sub, { clubWide: true }, key())
     const list = await send("GET", "/api/announcements", player, undefined)
     expect(list.statusCode).toBe(200)
     expect(list.json().items.some((a: any) => a.id === id)).toBe(true)

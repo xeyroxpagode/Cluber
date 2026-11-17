@@ -294,7 +294,7 @@ export function AnnouncementForm() {
         result = await correctAnnouncement(id!, { title: state.title, body: state.body, reason: state.reason, expectedVersion: state.version })
       } else {
         result = await saveDraft({ announcementId: mode === "draft" ? id : undefined, expectedVersion: state.version, title: state.title, body: state.body, clubWide: state.clubWide, teamIds: state.teamIds })
-        if (publish) result = await publishAnnouncement(result.id)
+        if (publish) result = await publishAnnouncement(result.id, state.clubWide)
       }
       navigate(`/announcements/${result.id}`)
     } catch (e) {
@@ -343,13 +343,13 @@ export function AnnouncementForm() {
         )}
         <fieldset className="grid gap-2">
           <legend className="gei-section-title">2. Contenido</legend>
-          <TextField id="ann-title" label="Título" value={state.title} onChange={(e) => setState((s) => ({ ...s, title: e.target.value }))} maxLength={300} />
-          <TextArea id="ann-body" label="Cuerpo" value={state.body} onChange={(e) => setState((s) => ({ ...s, body: e.target.value }))} rows={8} />
+          <TextField id="ann-title" label="Título" required value={state.title} onChange={(e) => setState((s) => ({ ...s, title: e.target.value }))} maxLength={300} />
+          <TextArea id="ann-body" label="Cuerpo" required value={state.body} onChange={(e) => setState((s) => ({ ...s, body: e.target.value }))} rows={8} />
         </fieldset>
         {mode === "correct" && (
           <fieldset className="grid gap-2">
             <legend className="gei-section-title">3. Motivo de la corrección</legend>
-            <TextField id="ann-reason" label="Motivo" value={state.reason} onChange={(e) => setState((s) => ({ ...s, reason: e.target.value }))} placeholder="Qué se corrigió y por qué" />
+            <TextField id="ann-reason" label="Motivo" required value={state.reason} onChange={(e) => setState((s) => ({ ...s, reason: e.target.value }))} placeholder="Qué se corrigió y por qué" />
             <div className="rounded-surface bg-control p-3 text-meta">
               <p><strong>Antes:</strong> {loaded?.title}</p>
               <p><strong>Ahora:</strong> {state.title || "—"}</p>
@@ -414,6 +414,7 @@ export function AnnouncementDetail() {
         back="/communication"
         action={authority.roles.includes("SUBCOMMITTEE") ? (
           <div className="flex gap-2">
+            {data.state === "DRAFT" && <Button size="sm" variant="secondary" onClick={() => navigate(`/announcements/${id}/edit`)}><Pencil size={14} aria-hidden /> Editar borrador</Button>}
             {data.state === "PUBLISHED" && <Button size="sm" variant="secondary" onClick={() => navigate(`/announcements/${id}/edit`)}><Pencil size={14} aria-hidden /> Corregir</Button>}
             {data.state === "PUBLISHED" && <Button size="sm" variant="quiet" onClick={() => void archive()}>Archivar</Button>}
           </div>

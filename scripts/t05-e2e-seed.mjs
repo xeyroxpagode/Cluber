@@ -52,6 +52,8 @@ const users = [
   { email: "t05-coach@example.com", first: "César", last: "Entrenador", role: "COACH", scope: "TEAM", team: teamAId },
   { email: "t05-player-a@example.com", first: "Ana", last: "Jugadora", role: "PLAYER", scope: "TEAM", team: teamAId },
   { email: "t05-player-b@example.com", first: "Belén", last: "Jugadora", role: "PLAYER", scope: "TEAM", team: teamAId },
+  { email: "t05-player-c@example.com", first: "Carla", last: "OtroEquipo", role: "PLAYER", scope: "TEAM", team: teamBId },
+  { email: "t05-admin@example.com", first: "Alicia", last: "Administradora", role: "ADMIN", scope: "CLUB", team: null },
 ]
 const ids = {}
 for (const user of users) {
@@ -100,6 +102,19 @@ if (!event) {
     [crypto.randomUUID(), `Partido T05 ${TAG}`, new Date(Date.now() + 7 * 86_400_000), new Date(Date.now() + 7 * 86_400_000 + 7_200_000), ids["t05-coach@example.com"], now],
   )
 }
+
+// EVENT target: PLAYER A como destinatario y COACH con scope EVENT para poder abrir la conversación.
+await client.query(
+  `insert into app.event_target_person (id, event_id, person_id, added_at)
+   select $1,$2,$3,$4 where not exists (select 1 from app.event_target_person where event_id=$2 and person_id=$3)`,
+  [crypto.randomUUID(), event.id, ids["t05-player-a@example.com"], now],
+)
+await client.query(
+  `insert into app.role_assignments (id,person_id,role,scope_type,scope_ref_id,valid_from,valid_until,temporal_exclusions,created_at)
+   select $1,$2,'COACH','EVENT',$3,$4,null,'[]'::jsonb,$5 where not exists
+   (select 1 from app.role_assignments where person_id=$2 and role='COACH' and scope_type='EVENT' and scope_ref_id=$3)`,
+  [crypto.randomUUID(), ids["t05-coach@example.com"], event.id, new Date("2026-01-01"), now],
+)
 
 console.log(JSON.stringify({ password: PASSWORD, teamAId, eventId: event.id, ids }, null, 2))
 await client.end()

@@ -41,14 +41,21 @@ export class AnnouncementService {
     this.authority.require(snapshot.isSubcommittee, "NO_ANNOUNCEMENT_AUTHORITY")
   }
 
-  private validateAudience(input: { clubWide: boolean; teamIds: string[] }): void {
-    if (typeof input.clubWide !== "boolean") fail("AUDIENCE_REQUIRED", "Debe elegir explícitamente el tipo de audiencia", "transport")
+  /** Un DRAFT puede guardarse sin audiencia (C11): solo se valida coherencia de lo que se envía. */
+  private validateAudienceShape(input: { clubWide?: boolean; teamIds?: string[] }): void {
+    if (input.clubWide !== undefined && typeof input.clubWide !== "boolean") {
+      fail("AUDIENCE_REQUIRED", "Debe elegir explícitamente el tipo de audiencia", "transport")
+    }
     const ids = input.teamIds ?? []
     if (!Array.isArray(ids)) fail("INVALID_TEAM", "teamIds debe ser una lista", "transport")
-    if (input.clubWide && ids.length > 0) fail("AUDIENCE_REQUIRED", "La audiencia no puede ser club-wide y por equipos a la vez")
-    if (!input.clubWide && ids.length === 0) fail("AUDIENCE_REQUIRED", "Debe seleccionar al menos un equipo o elegir todo el club")
+    if (input.clubWide === true && ids.length > 0) fail("AUDIENCE_REQUIRED", "La audiencia no puede ser club-wide y por equipos a la vez")
     for (const id of ids) assertUuid(id, "teamId")
     if (new Set(ids).size !== ids.length) fail("INVALID_TEAM", "Equipos duplicados en la audiencia")
+  }
+
+  /** C12: la audiencia deve ser explícita al PUBLICAR, no al guardar un borrador. */
+  private requireAudienceForPublish(clubWide: boolean | undefined, teamIds: string[]): void {
+    if (!clubWide && teamIds.length === 0) fail("AUDIENCE_REQUIRED", "Debe seleccionar al menos un equipo o elegir todo el club")
   }
 
   private async assertTeamsExist(tx: Tx, teamIds: string[]): Promise<void> {
@@ -130,7 +137,7 @@ export class AnnouncementService {
   /** CMD-COM-01 — CREATE DRAFT (announcementId ausente) o UPDATE EXISTING DRAFT (CC-T05-C10). */
   async draft(tx: Tx, actorPersonId: string, instant: Date, input: DraftAnnouncementInput): Promise<AnnouncementDto> {
     await this.assertSubcommittee(tx, actorPersonId, instant)
-    this.validateAudience(input)
+    this.validateAudienceShape(input)
     const title = requireText(input.title, "title")
     const body = requireText(input.body, "body", 20_000)
     const teamIds = input.clubWide ? [] : input.teamIds
@@ -170,12 +177,13 @@ export class AnnouncementService {
   }
 
   /** CMD-COM-02 — publicación atómica con NOT-07 en la misma TX. */
-  async publish(tx: Tx, actorPersonId: string, instant: Date, announcementId: string): Promise<AnnouncementDto> {
+  async publish(tx: Tx, actorPersonId: string, instant: Date, announcementId: string, clubWide?: boolean): Promise<AnnouncementDto> {
     await this.assertSubcommittee(tx, actorPersonId, instant)
     const row = await this.load(tx, announcementId, true)
     if (row.state !== "DRAFT") fail("INVALID_STATE", "Solo se puede publicar un borrador")
     const teamIds = await this.targets(tx, announcementId)
-    // clubWide = audiencia vacía; la intención explícita se validó al crear el DRAFT (C12).
+    // C12: con audiencia vacía hace falta la intención explícita de "todo el club" al publicar.
+    this.requireAudienceForPublish(clubWide, teamIds)
     await tx.updateTable("app.announcements").set({
       state: "PUBLISHED", published_at: instant, published_by_person_id: actorPersonId,
       version: row.version + 1, updated_at: instant,

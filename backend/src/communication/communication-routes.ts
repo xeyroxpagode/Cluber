@@ -81,20 +81,24 @@ export function addCommunicationRoutes({ registry, services }: Input): void {
   registry.add({
     method: "POST", url: "/api/announcements/:announcementId/publish",
     security: { operationId: "CMD-COM-02", kind: "command", auth: "required", csrf: "required", idempotency: "required", cache: "no-store" },
-    schema: { params: Type.Object({ announcementId: Uuid }), response: { 200: Silent, 400: Silent, 403: Silent, 409: Silent, 500: Silent } },
+    schema: {
+      params: Type.Object({ announcementId: Uuid }),
+      response: { 200: Silent, 400: Silent, 403: Silent, 409: Silent, 500: Silent },
+    },
     async handler(request: FastifyRequest, reply: FastifyReply) {
       const principal = await services.principals.require(request, new Date())
       const id = String((request.params as any).announcementId)
+      const clubWide = (request.body as { clubWide?: boolean } | undefined)?.clubWide
       const key = idempotencyKey(request)
       let status = 200
       let response: any = null
       await services.deps.runner.run("COMMAND_SERIALIZABLE", principal.sessionId, async ({ tx, evaluationInstant }) => {
         await services.principals.requireInTx(tx, request, evaluationInstant)
         const acquired = await services.deps.idempotencyCoordinator.acquire(tx, {
-          scopeKey: `CMD-COM-02:${id}`, commandId: "CMD-COM-02", key, input: { id },
+          scopeKey: `CMD-COM-02:${id}`, commandId: "CMD-COM-02", key, input: { id, clubWide },
         }, evaluationInstant)
         if (!acquired.acquired) { status = acquired.status; response = acquired.snapshot; return }
-        response = await announcements.publish(tx, principal.personId, evaluationInstant, id)
+        response = await announcements.publish(tx, principal.personId, evaluationInstant, id, clubWide)
         await services.deps.idempotencyCoordinator.succeed(tx, acquired.id, status, response, { type: "Announcement", id })
       }, true)
       return reply.status(status).send(response)

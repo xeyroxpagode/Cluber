@@ -84,10 +84,14 @@ describe("DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07)", () => {
       expectDenied(announcements.draft(tx, fx.adminId, new Date(), {
         title: "x", body: "y", clubWide: true, teamIds: [],
       }), "NO_ANNOUNCEMENT_AUTHORITY"))
-    await runner.run("COMMAND_STANDARD", randomUUID(), async ({ tx }) =>
-      expectDenied(announcements.draft(tx, fx.subcommitteeId, new Date(), {
+    // T05-QA-001 / C11: el DRAFT se guarda sin audiencia; C12 la exige solo al publicar.
+    const pending = await runner.run("COMMAND_STANDARD", randomUUID(), async ({ tx }) =>
+      announcements.draft(tx, fx.subcommitteeId, new Date(), {
         title: "x", body: "y", clubWide: false, teamIds: [],
-      }), "AUDIENCE_REQUIRED"))
+      }))
+    expect(pending.state).toBe("DRAFT")
+    await runner.run("COMMAND_SERIALIZABLE", randomUUID(), async ({ tx }) =>
+      expectDenied(announcements.publish(tx, fx.subcommitteeId, new Date(), pending.id, false), "AUDIENCE_REQUIRED"))
   })
 
   it("publica con NOT-07 deduplicada, corrige con revision++ y archiva preservando metadatos", async () => {
@@ -98,7 +102,7 @@ describe("DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07)", () => {
       return draft.id
     })
     const published = await runner.run("COMMAND_SERIALIZABLE", randomUUID(), async ({ tx }) =>
-      announcements.publish(tx, fx.subcommitteeId, later(60 * 60_000), id))
+      announcements.publish(tx, fx.subcommitteeId, later(60 * 60_000), id, true))
     expect(published.state).toBe("PUBLISHED")
     expect(published.publishedAt).toBe(later(60 * 60_000).toISOString())
 
@@ -136,7 +140,7 @@ describe("DG-13 Announcements (CMD-COM-01..04, RC-19, NOT-07)", () => {
       const d = await announcements.draft(tx, fx.subcommitteeId, new Date(), {
         title: "Solo equipo A", body: "Privado", clubWide: false, teamIds: [fx.teamAId],
       })
-      await announcements.publish(tx, fx.subcommitteeId, new Date(), d.id)
+      await announcements.publish(tx, fx.subcommitteeId, new Date(), d.id, true)
       return d.id
     })
     await runner.run("READ_STANDARD", randomUUID(), async ({ tx }) => {

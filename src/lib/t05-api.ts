@@ -101,8 +101,8 @@ export function saveDraft(input: DraftInput): Promise<AnnouncementDto> {
     ? patch(`/api/announcements/draft/${encodeURIComponent(input.announcementId)}`, input, newKey())
     : post("/api/announcements/draft", input, newKey())
 }
-export function publishAnnouncement(id: string): Promise<AnnouncementDto> {
-  return post(`/api/announcements/${encodeURIComponent(id)}/publish`, undefined, newKey())
+export function publishAnnouncement(id: string, clubWide: boolean): Promise<AnnouncementDto> {
+  return post(`/api/announcements/${encodeURIComponent(id)}/publish`, { clubWide }, newKey())
 }
 export function correctAnnouncement(id: string, input: { title?: string; body?: string; reason: string; expectedVersion?: number }): Promise<AnnouncementDto> {
   return patch(`/api/announcements/${encodeURIComponent(id)}/correct`, input)
