@@ -50,7 +50,12 @@ export class ProductReadService {
     const authoritySnapshot = await this.authority.snapshot(tx, personId, evaluationInstant)
     const role = (authoritySnapshot.roles[0] ?? null) as string | null
 
-    const operations: string[] = ["RC-04", "RC-13", "RC-28"]
+    const operations: string[] = ["RC-04", "RC-13", "RC-28", "RC-01", "RC-21", "RC-22"]
+    // FR-04: Reports requieren un rol deportivo. ADMIN-only NO obtiene RC-10/RC-11.
+    // Un ADMIN con segundo rol deportivo sí los recibe por ese rol y su scope real.
+    if (authoritySnapshot.roles.some((role) => role !== "ADMIN")) {
+      operations.push("RC-10", "RC-11")
+    }
     if (authoritySnapshot.isAdmin) {
       operations.push("RC-08", "RC-12")
     }

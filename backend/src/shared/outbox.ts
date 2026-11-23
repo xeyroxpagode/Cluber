@@ -13,13 +13,22 @@ export interface OutboxPayload {
   invalidate: string[]
 }
 
+/**
+ * T06 — tokens de invalidación de los cuatro read models. Se añaden de forma
+ * central en el OutboxWriter: los productores canónicos siguen siendo los únicos
+ * emisores (no se crea un nuevo event type ni un segundo pipeline). El frame SSE
+ * no transporta payload sensible: sólo event/invalidate/resourceType/resourceId.
+ */
+export const T06_INVALIDATE_TOKENS = Object.freeze(["home", "attention", "search", "reports"] as const)
+
 export class OutboxWriter {
   async enqueue(tx: Transaction<DatabaseSchema>, input: { topic: string; aggregateType: string; aggregateId: string; payload: OutboxPayload }): Promise<string> {
+    const invalidate = Array.from(new Set([...(input.payload.invalidate ?? []), ...T06_INVALIDATE_TOKENS]))
     const row = await tx.insertInto("infra.outbox_events").values({
       topic: input.topic,
       aggregate_type: input.aggregateType,
       aggregate_id: input.aggregateId,
-      payload: input.payload as never,
+      payload: { ...input.payload, invalidate } as never,
       processed_at: null,
       last_error: null,
       failed_at: null,

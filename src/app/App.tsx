@@ -2,13 +2,14 @@ import { createBrowserRouter, Navigate, RouterProvider } from "react-router"
 import { SessionProvider } from "../lib/session-context"
 import { Shell } from "./Shell"
 import {
-  Home,
   Calendar,
   Teams,
   TeamDetail,
   PersonDetail,
-  SearchPage,
 } from "../features/overview"
+import T06Home from "../features/t06-home"
+import T06Search from "../features/t06-search"
+import { ReportsHub, AttendanceReport, PerformanceReport } from "../features/t06-reports"
 import { EventDetail, EventForm, JornadaPage } from "../features/events"
 import {
   AvailabilityPage,
@@ -39,8 +40,6 @@ import {
   LoginPage,
   ActivatePage,
   NoAccessPage,
-  ReportsPage,
-  ReportDetail,
   AuditPage,
 } from "../features/account-insight"
 import { Empty } from "../shared/ui"
@@ -54,7 +53,7 @@ const router = createBrowserRouter([
     Component: Shell,
     children: [
       { path: "/", element: <Navigate to="/home" replace /> },
-      { path: "/home", Component: Home },
+      { path: "/home", Component: T06Home },
       { path: "/calendar", Component: Calendar },
       { path: "/teams", Component: Teams },
       { path: "/teams/:teamId", element: <TeamDetail /> },
@@ -76,7 +75,7 @@ const router = createBrowserRouter([
       { path: "/conversations/:id", Component: ConversationPage },
       { path: "/conversations/new", Component: NewConversation },
       { path: "/notifications", Component: Notifications },
-      { path: "/search", Component: SearchPage },
+      { path: "/search", Component: T06Search },
       { path: "/more", Component: MorePage },
       { path: "/more/profile", Component: ProfilePage },
       { path: "/management", Component: ManagementHome },
@@ -87,9 +86,9 @@ const router = createBrowserRouter([
       { path: "/management/teams/:id", Component: TeamAdmin },
       { path: "/management/competitions", Component: CompetitionsPage },
       { path: "/management/competitions/:id", Component: CompetitionsPage },
-      { path: "/reports", Component: ReportsPage },
-      { path: "/reports/attendance", element: <ReportDetail /> },
-      { path: "/reports/performance", element: <ReportDetail performance /> },
+      { path: "/reports", Component: ReportsHub },
+      { path: "/reports/attendance", Component: AttendanceReport },
+      { path: "/reports/performance", Component: PerformanceReport },
       { path: "/audit", Component: AuditPage },
       {
         path: "*",

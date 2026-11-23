@@ -169,14 +169,8 @@ export function Home() {
       action: { label: "Completar mi perfil", to: "/more/profile" },
     })
   }
-  if ((unread ?? 0) > 0) {
-    attention.push({
-      id: "unread-notifications",
-      reason: `Tenés ${unread} ${unread === 1 ? "aviso sin leer" : "avisos sin leer"}`,
-      consequence: "Puede haber cambios en eventos que te afectan.",
-      action: { label: "Ver los avisos", to: "/notifications" },
-    })
-  }
+  // Decisión A-02 (B1): Notification.readAt NUNCA genera una fila de Attention.
+  // Los avisos sin leer permanecen como contexto/deep link en Comunicaciones.
 
   return (
     <div className="gei-stack-page mx-auto max-w-5xl">
@@ -185,7 +179,7 @@ export function Home() {
       <section aria-labelledby="atencion-pendientes" className="grid gap-3">
         <h2 id="atencion-pendientes" className="gei-section-title">Necesita tu atención</h2>
         {attention.length === 0 ? (
-          <p className="gei-meta">No hay nada pendiente</p>
+          <p className="gei-meta">Nada pendiente.</p>
         ) : (
           <ul className="grid gap-2">
             {attention.slice(0, 3).map((item) => (

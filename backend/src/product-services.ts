@@ -15,6 +15,11 @@ import { StructureService } from "./structure/structure.js"
 import { ProductReadService } from "./read/product-read.js"
 import { T03ReadService } from "./read/t03-read.js"
 import { T04ReadService } from "./read/t04-read.js"
+import { HomeReadService } from "./read/home-read.js"
+import { AttentionReadService } from "./read/attention-read.js"
+import { ReportReadService } from "./read/report-read.js"
+import { SearchCursor } from "./read/search-cursor.js"
+import { SearchReadService } from "./read/search-read.js"
 import { ParticipationService } from "./participation/participation.js"
 import { EventService } from "./events/events.js"
 import { EventSeriesService } from "./events/series.js"
@@ -48,6 +53,12 @@ export class ProductServices {
   readonly t03Reads = new T03ReadService(this.authority)
   readonly participation = new ParticipationService()
   readonly t04Reads = new T04ReadService(this.authority, this.participation)
+  /** T06 read models — proyecciones en caliente, sin persistencia paralela. */
+  readonly homeReads = new HomeReadService()
+  readonly attentionReads = new AttentionReadService()
+  readonly searchCursor: SearchCursor
+  readonly searchReads: SearchReadService
+  readonly reportReads = new ReportReadService()
   readonly events = new EventService()
   readonly eventSeries = new EventSeriesService()
   readonly jornada = new JornadaService()
@@ -56,6 +67,8 @@ export class ProductServices {
   constructor(readonly deps: ProductDeps) {
     this.principals = new PrincipalResolver(deps.database, deps.config)
     this.accounts = new AccountService(deps.config, this.passwordHasher)
+    this.searchCursor = new SearchCursor(deps.config.secrets.csrfHmacSecret.toString("hex"))
+    this.searchReads = new SearchReadService(this.searchCursor)
   }
 
   ratePolicy(name: "PRODUCT_LOGIN" | "PRODUCT_ACTIVATION" | "PRODUCT_EMAIL_CHANGE"): RateLimitPolicy {

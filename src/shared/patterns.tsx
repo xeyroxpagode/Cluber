@@ -70,12 +70,14 @@ export function PageContextHeader({
 /* ── Identidad de sección ── */
 
 export function SectionHeader({
+  id,
   title,
   meta,
   hint,
   aside,
   action,
 }: {
+  id?: string
   title: string
   meta?: string
   hint?: string
@@ -85,7 +87,7 @@ export function SectionHeader({
   return (
     <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
       <div className="min-w-0">
-        <h2 className="gei-section-title">{title}</h2>
+        <h2 id={id} className="gei-section-title">{title}</h2>
         {hint && <p className="gei-meta mt-0.5">{hint}</p>}
       </div>
       {meta && <p className="gei-meta">{meta}</p>}

@@ -148,6 +148,24 @@ test.describe('J04 — Messaging', () => {
     const client = new pg.Client({ connectionString: DB })
     await client.connect()
     const author = (await client.query('select id from app.people where email=$1', [A])).rows[0].id
+    // Aislamiento: la conversación de UI puede haber sido retirada por otra suite.
+    // Se recrea con sus participantes dentro del namespace de este escenario.
+    const exists = await client.query('select 1 from app.conversations where id=$1', [convId])
+    if (exists.rowCount === 0) {
+      const other = (await client.query('select id from app.people where email=$1', [B])).rows[0].id
+      await client.query(
+        `insert into app.conversations(id,type,title,state,direct_pair_key,created_at,created_by_person_id,version)
+         values ($1,'DIRECT',null,'ACTIVE',$3,now(),$2,1) on conflict do nothing`,
+        [convId, author, `qa-j04-${convId}`],
+      )
+      for (const personId of [author, other]) {
+        await client.query(
+          `insert into app.conversation_participants(id,conversation_id,person_id,joined_at,last_read_at)
+           values ($1,$2,$3,now(),null) on conflict do nothing`,
+          [crypto.randomUUID(), convId, personId],
+        )
+      }
+    }
     const rows = Array.from({ length: 25 }, () => [
       crypto.randomUUID(), convId, author, `Mensaje paginado ${crypto.randomUUID().slice(0, 8)}`, 'SENT',
     ])

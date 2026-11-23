@@ -242,27 +242,61 @@ export async function safeQuery(client: pg.Client, text: string, params?: any[])
   }
 }
 
-export async function cleanupE2E(client: pg.Client): Promise<void> {
-  await safeQuery(client, `delete from app.notifications where dedupe_key like $1`, [`${TAG}%`])
-  await safeQuery(client, `delete from infra.outbox_events where topic like $1`, [`${TAG}%`])
-  await safeQuery(client, `delete from app.event_occurrence_overrides where created_at > now() - interval '2 hours'`)
-  await safeQuery(client, `delete from app.event_logistics where created_at > now() - interval '2 hours'`)
-  await safeQuery(client, `delete from app.event_target_person where created_at > now() - interval '2 hours'`)
-  await safeQuery(client, `delete from app.event_target_team where created_at > now() - interval '2 hours'`)
-  await safeQuery(client, `delete from app.events where created_at > now() - interval '2 hours'`)
-  await safeQuery(client, `delete from app.event_series where created_at > now() - interval '2 hours'`)
-  await safeQuery(client, `delete from app.jornada_matches where created_at > now() - interval '2 hours'`)
-  await safeQuery(client, `delete from app.jornadas where created_at > now() - interval '2 hours'`)
-  await safeQuery(client, `delete from app.competitions where name like $1`, [`Comp E2E ${TAG}%`])
-  await safeQuery(client, `delete from app.venues where name like $1`, [`Venue E2E ${TAG}%`])
-  await safeQuery(client, `delete from app.teams where state = 'ACTIVE' and created_at > now() - interval '2 hours'`)
-  await safeQuery(client, `delete from app.lines where name like $1`, [`Line E2E ${TAG}%`])
-  await safeQuery(client, `delete from app.divisions where name like $1`, [`Div E2E ${TAG}%`])
-  await safeQuery(client, `delete from app.seasons where name like $1`, [`Temporada E2E ${TAG}%`])
-  await safeQuery(client, `delete from app.team_assignments where created_at > now() - interval '2 hours'`)
-  await safeQuery(client, `delete from app.role_assignments where created_at > now() - interval '2 hours'`)
-  await safeQuery(client, `delete from app.memberships where created_at > now() - interval '2 hours'`)
-  await safeQuery(client, `delete from app.accounts where created_at > now() - interval '2 hours' and username like $1`, [`e2e-${TAG}%`])
-  await safeQuery(client, `delete from app.people where created_at > now() - interval '2 hours' and last_name like $1`, [`${TAG}%`])
-  await safeQuery(client, `delete from infra.auth_sessions where created_at > now() - interval '2 hours'`)
+/**
+ * Limpieza POR OWNERSHIP, no por antigüedad.
+ *
+ * Cada suite tiene un TAG único. Todas las filas que crea llevan ese TAG en un
+ * nombre (personas, equipos, temporadas, etc.) o se vinculan a esas filas por FK.
+ * Así una suite nunca borra usuarios/sesiones/roles de otra suite ni las semillas
+ * compartidas: la ejecución combinada deja de ser dependiente del orden.
+ */
+export async function cleanupE2E(client: pg.Client, tag = TAG): Promise<void> {
+  const people = `select id from app.people where last_name like '${tag}%'`
+  const seasons = `select id from app.seasons where name like 'Temporada E2E ${tag}%' or name like 'Season ${tag}%'`
+  const divisions = `select id from app.divisions where name like 'Div E2E ${tag}%' or name like 'Div ${tag}%'`
+  const lines = `select id from app.lines where name like 'Line E2E ${tag}%' or name like 'Line ${tag}%'`
+  const teams = `select id from app.teams where season_id in (${seasons}) or division_id in (${divisions}) or line_id in (${lines})`
+  const events = `select id from app.events where creator_person_id in (${people}) or title like '%${tag}%'`
+  const sheets = `select id from app.attendance_sheets where event_id in (${events})`
+  const records = `select id from app.match_records where match_id in (${events})`
+  const selections = `select id from app.selections where match_id in (${events})`
+  const revisions = `select id from app.selection_revisions where selection_id in (${selections})`
+  const accounts = `select id from app.accounts where username like 'e2e-${tag}%' or person_id in (${people})`
+  const jornadas = `select id from app.jornadas where name like '%${tag}%'`
+
+  await safeQuery(client, `delete from app.notifications where dedupe_key like $1`, [`${tag}%`])
+  await safeQuery(client, `delete from infra.outbox_events where topic like $1`, [`${tag}%`])
+  await safeQuery(client, `delete from app.event_occurrence_overrides where event_id in (${events})`)
+  await safeQuery(client, `delete from app.event_logistics where event_id in (${events})`)
+  await safeQuery(client, `delete from app.event_target_person where event_id in (${events})`)
+  await safeQuery(client, `delete from app.event_target_team where event_id in (${events})`)
+  await safeQuery(client, `delete from app.availability_responses where event_id in (${events})`)
+  await safeQuery(client, `delete from app.selection_entries where revision_id in (${revisions})`)
+  await safeQuery(client, `delete from app.selection_revisions where selection_id in (${selections})`)
+  await safeQuery(client, `delete from app.selections where match_id in (${events})`)
+  await safeQuery(client, `delete from app.attendance_corrections where entry_id in (
+    select id from app.attendance_entries where sheet_id in (${sheets}))`)
+  await safeQuery(client, `delete from app.attendance_entries where sheet_id in (${sheets})`)
+  await safeQuery(client, `delete from app.attendance_sheets where event_id in (${events})`)
+  await safeQuery(client, `delete from app.player_match_stats where match_record_id in (${records})`)
+  await safeQuery(client, `delete from app.matchrecord_corrections where match_record_id in (${records})`)
+  await safeQuery(client, `delete from app.match_records where match_id in (${events})`)
+  await safeQuery(client, `delete from app.events where id in (${events})`)
+  await safeQuery(client, `delete from app.event_series where name like '%${tag}%'`)
+  await safeQuery(client, `delete from app.jornada_matches where jornada_id in (${jornadas})`)
+  await safeQuery(client, `delete from app.jornadas where id in (${jornadas})`)
+  await safeQuery(client, `delete from app.announcement_target_teams where team_id in (${teams})`)
+  await safeQuery(client, `delete from app.announcements where title like '%${tag}%'`)
+  await safeQuery(client, `delete from app.competitions where name like 'Comp E2E ${tag}%' or name like 'Copa ${tag}%'`)
+  await safeQuery(client, `delete from app.venues where name like 'Venue E2E ${tag}%' or name like 'Club ${tag}%'`)
+  await safeQuery(client, `delete from app.team_assignments where person_id in (${people}) or team_id in (${teams})`)
+  await safeQuery(client, `delete from app.role_assignments where person_id in (${people})`)
+  await safeQuery(client, `delete from app.memberships where person_id in (${people})`)
+  await safeQuery(client, `delete from infra.auth_sessions where account_id in (${accounts})`)
+  await safeQuery(client, `delete from app.accounts where id in (${accounts})`)
+  await safeQuery(client, `delete from app.people where id in (${people})`)
+  await safeQuery(client, `delete from app.teams where id in (${teams})`)
+  await safeQuery(client, `delete from app.lines where id in (${lines})`)
+  await safeQuery(client, `delete from app.divisions where id in (${divisions})`)
+  await safeQuery(client, `delete from app.seasons where id in (${seasons})`)
 }

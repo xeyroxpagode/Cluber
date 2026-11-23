@@ -181,6 +181,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
                 if (page === "management" || page === "structure" || page === "people") return operations.includes("RC-08") || m.isSubcommittee === true
                 if (page === "competitions") return operations.includes("RC-13")
                 if (page === "teams") return operations.length > 0
+                // Doble barrera (T06-TASK-010): el frontend sólo oculta; la autoridad
+                // real es el backend. ADMIN-only no tiene RC-10/RC-11.
+                if (page === "reports") return operations.includes("RC-10") || operations.includes("RC-11")
                 return m.authenticated
               },
               roles: (m.roleAssignments ?? []).map((assignment) => assignment.role).filter((role): role is Role =>

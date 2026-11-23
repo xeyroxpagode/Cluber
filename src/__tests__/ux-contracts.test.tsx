@@ -33,7 +33,8 @@ describe("§4 — Home dirige la atención", () => {
 
   it("el vacío positivo se lee como todo al día", () => {
     renderScreen("/home", "/home", <Home />, "", "", { notifications: [] })
-    expect(screen.getByText("No hay nada pendiente")).toBeTruthy()
+    // T06 / Domain 01: literal congelado «Nada pendiente.» (antes «No hay nada pendiente»).
+    expect(screen.getByText("Nada pendiente.")).toBeTruthy()
   })
 
   it("no deja huecos de 200 px cuando hoy no hay eventos", () => {
